@@ -9,40 +9,49 @@
 
 ## [fit] What's Firebase?
 
-^ Development is hard and developers are lazy
+^ What is Firebase? If you've been away from the scene for a while or you're just not familiar no sweat.
+
+^ Direct from the source, this is how Google describes Firebase.
+
+^ Firebase is a mobile platform that helps you quickly
 
 ---
 
-## Step 1: Develop
+![fit](develop-backdrop.png)
 
-- Cloud Messaging
-- Authentication
-- Realtime Database
-- Storage
-- Hosting
-- Test Lab
-- Crash Reporting
+## Develop
+
+^ develop high quality apps,
 
 ---
 
-## Step 2: Grow
+![fit](grow-backdrop.png)
 
-- Notifications
-- Remote Config
-- App Indexing
-- Dynamic Links
-- Invites
-- AdWords
+## Grow
+
+^ grow your user base,
 
 ---
 
-## Step 3: Profit
+![fit](earn-backdrop.png)
 
-- AdMob
+## Earn
+
+^ and earn more money,
+
+^ Firebase is made up of a complementary features that you can mix and match to fit your needs.
 
 ---
 
-## Setup
+## What's New?
+
+^ So what's new with Firebase? and how can you include it in your application?
+
+---
+
+## What's New?
+
+### > Setup
 
 ^ The key difference to Firebase then and Firebase now is the set up process, in that now it is fully integrated into Google Play Services.
 
@@ -50,9 +59,83 @@
 
 ---
 
-## Add Firebase to your Android app
+### Legacy SDK
+`com.firebase:firebase-client-android:2.5.2`
 
-![inline](setup-app-details.png)
+### Distributed SDK
+`com.google.firebase:firebase-core:9.8.0`
+`com.google.firebase:firebase-auth:9.8.0`
+`com.google.firebase:firebase-database:9.8.0`
+
+^ In the previous iteration of Firebase, all the functionality was provided with a single SDK,
+
+^ true to the style of Google Play Services, Google have broken these down into individual modular components.
+
+^ The original Firebase SDK also only provides the latter two components you can see here (auth and database),
+
+^ which were tightly coupled to each other, but now you specify each of the components you want to include in your application.
+
+---
+
+## What's New?
+
+### > Google Services
+
+---
+
+## build.gradle (Project)
+
+```groovy
+dependencies {
+  ...
+}
+
+apply plugin: 'com.google.gms.google-services'
+```
+
+^ Now this one is really important, the support documentation tells you to also include the Google Services plugin,
+
+^ but doesn't explain why that its important to place it *below* your dependencies do to conflicts
+
+---
+
+## Before
+
+```java
+// App Invites
+compile 'com.google.android.gms:play-services-appinvite'
+
+// AdMob by Google
+compile 'com.google.android.gms:play-services-admob'
+
+// Google Cloud Messaging
+compile 'com.google.android.gms:play-services-gcm:8.4.0'
+```
+
+^ To make use of the new integrations for Firebase Invites and AdMob you will also need to update these dependencies.
+
+---
+
+## After
+
+```java
+// Firebase Invites
+compile 'com.google.firebase:firebase-invites:9.8.0'
+
+// Firebase Ads
+compile 'com.google.firebase:firebase-ads:9.8.0'
+
+// Firebase Cloud Messaging
+compile 'com.google.firebase:firebase-messaging:9.8.0'
+```
+
+^ For Firebase Cloud Messaging you will also need to update your manifest entry and listener services,
+
+^ you can find more information about this on the Firebase migration docs site.
+
+^ Firebase now integrates with Google Play services
+
+^ Firebase configuration provided by google-play-services.json
 
 ---
 
@@ -82,9 +165,87 @@
 
 ---
 
-`FirebaseDatabase.getInstance()
-        .getReference("...")
-        .orderByChild("...");`
+## Querying Data
+
+### Ordering Data
+
+`orderByChild()`
+
+`orderByKey()`
+
+`orderByValue()`
+
+`orderByPriority()`
+
+^ Firebase will still allow you to query against your data using a variety of methods,
+
+^ but its important to remember which value you are querying against.
+
+---
+
+## Querying Data
+
+### Limiting Data
+
+`limitToFirst()`
+
+`limitToLast()`
+
+`startAt()`
+
+`endAt()`
+
+`equalTo()`
+
+---
+
+```java
+reference.addChildEventListener(new ChildEventListener() {
+
+  @Override
+  public void onChildAdded(DataSnapshot dataSnapshot, String previousChildKey) { ... }
+
+  @Override
+  public void onChildChanged(DataSnapshot dataSnapshot, String previousChildKey) { ... }
+
+  @Override
+  public void onChildRemoved(DataSnapshot dataSnapshot) { ... }
+
+  @Override
+  public void onChildMoved(DataSnapshot dataSnapshot, String previousChildKey) { ... }
+
+  @Override
+  public void onCancelled(DatabaseError databaseError) { ... }
+});
+```
+
+---
+
+```java
+reference.addValueEventListener(new ValueEventListener() {
+
+    @Override
+    public void onDataChange(DataSnapshot dataSnapshot) { ... }
+
+    @Override
+    public void onCancelled(DatabaseError databaseError) { ... }
+});
+```
+
+---
+
+```java
+reference.addListenerForSingleValueEvent(new ValueEventListener() {
+
+    @Override
+    public void onDataChange(DataSnapshot dataSnapshot) { ... }
+
+    @Override
+    public void onCancelled(DatabaseError databaseError) { ... }
+});
+```
+
+^ Firebase used with AutoValue object hydration
 
 ---
 
@@ -262,6 +423,74 @@ task.addOnFailureListener(new OnFailureListener() {
 
 ---
 
+## Analytics
+
+- Analytics funnels
+- Designed for apps
+- Event and user centric
+- Connects across Firebase
+- Free & Unlimited
+
+---
+
+## Authentication
+- Authentication & account management
+- Supports
+- Email & password
+- Google, Facebook, Twitter, GitHub
+
+---
+
+## Cloud Messaging
+
+---
+
+## Storage
+- Static asset hosting
+- Free domain transfer
+
+---
+
+## Hosting
+
+- Serve static assets
+- SSL by default
+- Custom domains
+
+---
+
+## Test Lab
+
+---
+
+## Crash Reporting
+
+---
+
+## Notifications
+
+---
+
+## Remote Config
+
+---
+
+## App Indexing
+
+---
+
+## Dynamic Links
+
+---
+
+## Invites
+
+---
+
+## AdWords
+
+---
+
 ## [fit] 🌿 Android Peppermint
 
 ### [fit] Realtime Chat
@@ -293,37 +522,3 @@ task.addOnFailureListener(new OnFailureListener() {
 ^ and the message history you are seeing is *your* personal history,
 
 ^ stored using Firebase Realtime Database.
-
----
-
-^ Firebase now integrates with Google Play services
-^ Firebase configuration provided by google-play-services.json
-^ Analytics funnels
-^ Static asset hostings with free domain transfer
-
-^ Develop
-^ - Mobile back end as a service
-^ - Quality service
-
-^ Firebase Analytics
-^ - Designed for apps
-^ - Event and user centric
-^ - Connects across Firebase
-^ - Free & Unlimited
-
-^ - Authentication
-^ - Authentication & account management
-^ - Supports
-^ - Email & password
-^ - Google, Facebook, Twitter, GitHub
-
-^ - Hosting
-^ - Serve static assets
-^ - SSL by default
-^ - Custom domains
-
-^ - Firebase Data (AutoValue)
-
-^ Migrate your existing code to the updated versions
-^ What new features you'll be able to take advantage of
-^ Any pitfalls that you can hopefully avoid!
