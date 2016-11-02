@@ -1,61 +1,55 @@
 ![inline 25%](firebase.png)
-
 # What's New in Firebase!
 ### Ash Davies
-
 ![inline 25%](immobilienscout24.png)
 
 ---
 
 ## [fit] What's Firebase?
 
-^ What is Firebase? If you've been away from the scene for a while or you're just not familiar no sweat.
-
-^ Direct from the source, this is how Google describes Firebase.
-
-^ Firebase is a mobile platform that helps you quickly
+^
+- What is Firebase? If you've been away from the scene for a while or you're just not familiar
+- Direct from the source, this is how Google describes Firebase
 
 ---
 
 ![fit](develop-backdrop.png)
-
 ## Develop
 
-^ develop high quality apps,
+^
+Firebase is a mobile platform that helps you quickly develop high quality apps,
 
 ---
 
 ![fit](grow-backdrop.png)
-
 ## Grow
 
-^ grow your user base,
+^
+grow your user base,
 
 ---
 
-![fit](earn-backdrop.png)
-
+![fit 50%](earn-backdrop.png)
 ## Earn
 
-^ and earn more money,
-
-^ Firebase is made up of a complementary features that you can mix and match to fit your needs.
-
----
-
-## What's New?
-
-^ So what's new with Firebase? and how can you include it in your application?
+^
+and earn more money, Firebase is made up of a complementary features that you can mix and match to fit your needs.
 
 ---
 
 ## What's New?
 
+^
+So what's new with Firebase? and how can you include it in your application?
+
+---
+
+## What's New?
 ### > Setup
 
-^ The key difference to Firebase then and Firebase now is the set up process, in that now it is fully integrated into Google Play Services.
-
-^ What this means is that it can interleave with the other aspects of your set up such as cloud storage, push notifications and analytics.
+^
+- The key difference to Firebase then and Firebase now is the set up process, in that now it is fully integrated into Google Play Services.
+- What this means is that it can interleave with the other aspects of your set up such as cloud storage, push notifications and analytics.
 
 ---
 
@@ -67,18 +61,15 @@
 `com.google.firebase:firebase-auth:9.8.0`
 `com.google.firebase:firebase-database:9.8.0`
 
-^ In the previous iteration of Firebase, all the functionality was provided with a single SDK,
-
-^ true to the style of Google Play Services, Google have broken these down into individual modular components.
-
-^ The original Firebase SDK also only provides the latter two components you can see here (auth and database),
-
-^ which were tightly coupled to each other, but now you specify each of the components you want to include in your application.
+^
+- In the previous iteration of Firebase, all the functionality was provided with a single SDK,
+- true to the style of Google Play Services, Google have broken these down into individual modular components.
+- The original Firebase SDK also only provides the latter two components you can see here (auth and database),
+- which were tightly coupled to each other, but now you specify each of the components you want to include in your application.
 
 ---
 
 ## What's New?
-
 ### > Google Services
 
 ---
@@ -93,9 +84,9 @@ dependencies {
 apply plugin: 'com.google.gms.google-services'
 ```
 
-^ Now this one is really important, the support documentation tells you to also include the Google Services plugin,
-
-^ but doesn't explain why that its important to place it *below* your dependencies do to conflicts
+^
+- Now this one is really important, the support documentation tells you to also include the Google Services plugin,
+- but doesn't explain why that its important to place it *below* your dependencies do to conflicts
 
 ---
 
@@ -112,7 +103,8 @@ compile 'com.google.android.gms:play-services-admob'
 compile 'com.google.android.gms:play-services-gcm:8.4.0'
 ```
 
-^ To make use of the new integrations for Firebase Invites and AdMob you will also need to update these dependencies.
+^
+To make use of the new integrations for Firebase Invites and AdMob you will also need to update these dependencies.
 
 ---
 
@@ -129,175 +121,146 @@ compile 'com.google.firebase:firebase-ads:9.8.0'
 compile 'com.google.firebase:firebase-messaging:9.8.0'
 ```
 
-^ For Firebase Cloud Messaging you will also need to update your manifest entry and listener services,
-
-^ you can find more information about this on the Firebase migration docs site.
-
-^ Firebase now integrates with Google Play services
-
-^ Firebase configuration provided by google-play-services.json
+^
+- For Firebase Cloud Messaging you will also need to update your manifest entry and listener services,
+- you can find more information about this on the Firebase migration docs site.
+- Firebase now integrates with Google Play services
+- Firebase configuration provided by google-play-services.json
 
 ---
 
 ## [fit] Firebase Origins:
-
 ## [fit] Realtime Database
 
-^ When Firebase first started out, it was mostly just a realtime database.
-
-^ Despite Firebase now describing a collective toolset of the suite of services provided now,
-
-^ the real power of using Firebase when first starting out is still that.
-
-^ The Firebase Realtime Database is a cloud hosted NoSQL utilising the strength of Google's infrastructure to power your application.
-
-^ Firebase Realtime Database allows developers to implement fully functioning application interfaces across multiple platforms,
-
-^ Without having to worry about things like realtime synchronisation and conflict resolution.
+^
+- When Firebase first started out, it was mostly just a realtime database.
+- Despite Firebase now describing a collective toolset of the suite of services provided now,
+- the real power of using Firebase when first starting out is still that.
+- The Firebase Realtime Database is a cloud hosted NoSQL utilising the strength of Google's infrastructure to power your application.
+- Firebase Realtime Database allows developers to implement fully functioning application interfaces across multiple platforms,
+- Without having to worry about things like realtime synchronisation and conflict resolution.
 
 ---
 
 ## [fit] Intuitive
-
 ## [fit] Easy to use API
 
-^ The realtime database api is stupidly simple to use, and reacts to a callback interface allowing you to simply consume the data as it is received.
+^
+The realtime database api is stupidly simple to use, and reacts to a callback interface allowing you to simply consume the data as it is received.
 
 ---
 
 ## Querying Data
-
 ### Ordering Data
+- `orderByChild()`
+- `orderByKey()`
+- `orderByValue()`
+- `orderByPriority()`
 
-`orderByChild()`
-
-`orderByKey()`
-
-`orderByValue()`
-
-`orderByPriority()`
-
-^ Firebase will still allow you to query against your data using a variety of methods,
-
-^ but its important to remember which value you are querying against.
+^
+- Firebase will still allow you to query against your data using a variety of methods,
+- but its important to remember which value you are querying against.
 
 ---
 
 ## Querying Data
-
 ### Limiting Data
+- `limitToFirst()`
+- `limitToLast()`
+- `startAt()`
+- `endAt()`
+- `equalTo()`
 
-`limitToFirst()`
-
-`limitToLast()`
-
-`startAt()`
-
-`endAt()`
-
-`equalTo()`
-
----
-
-```java
-reference.addChildEventListener(new ChildEventListener() {
-
-  @Override
-  public void onChildAdded(DataSnapshot dataSnapshot, String previousChildKey) { ... }
-
-  @Override
-  public void onChildChanged(DataSnapshot dataSnapshot, String previousChildKey) { ... }
-
-  @Override
-  public void onChildRemoved(DataSnapshot dataSnapshot) { ... }
-
-  @Override
-  public void onChildMoved(DataSnapshot dataSnapshot, String previousChildKey) { ... }
-
-  @Override
-  public void onCancelled(DatabaseError databaseError) { ... }
-});
-```
+^
+- When using Firebase persistence you can limit your data set to return a subset of data that has already been cached,
+- since Firebase may have stored locally a number greated than the amount you are requesting.
 
 ---
 
-```java
-reference.addValueEventListener(new ValueEventListener() {
+## Querying Data
+### Child Events
+- `onChildAdded()`
+- `onChildChanged()`
+- `onChildRemoved()`
+- `onChildMoved()`
+- `onCancelled()`
 
-    @Override
-    public void onDataChange(DataSnapshot dataSnapshot) { ... }
-
-    @Override
-    public void onCancelled(DatabaseError databaseError) { ... }
-});
-```
+^
+When consuming your data, much like what was available in the legacy Firebase SDK you can use these child events to manage the lifecycle.
 
 ---
 
-```java
-reference.addListenerForSingleValueEvent(new ValueEventListener() {
+## Consuming Events
 
-    @Override
-    public void onDataChange(DataSnapshot dataSnapshot) { ... }
+### Each event change
+- `addValueEventListener()`
 
-    @Override
-    public void onCancelled(DatabaseError databaseError) { ... }
-});
-```
+### First event change
+- `addListenerForSingleValueEvent()`
 
 ^ Firebase used with AutoValue object hydration
 
 ---
 
-# [fit] Offline data
-# [fit] synchronisation
+## [fit] Data Synchronisation
+- Graceful Connectivity Loss
 
-^ When your app loses connectivity, you would normally have to compose extensive amounts of logic to handle this failure gracefully.
-
-^ Even with RxJava operators considerable thought must be put into how data is cached and evaluated.
-
-^ With Firebase this is all handled for you and you can simply treat your application as though connectivity wasn't an issue.
-
-^ Since Firebase will remain responsive regardless of network latency or internet connectivity,
-
-^ and will synchronise on its own after data connectivity returns.
+^
+When your app loses connectivity, you would normally have to compose extensive amounts of logic to handle this failure gracefully.
 
 ---
 
-`FirebaseDatabase.getInstance()
-.setPersistenceEnabled(true);`
+## [fit] Data Synchronisation
+- Graceful Connectivity Loss
+- Application Data Cache
+
+^
+- Even with RxJava operators considerable thought must be put into how data is cached and evaluated.
+- With Firebase this is all handled for you and you can simply treat your application as though connectivity wasn't an issue.
+- Since Firebase will remain responsive regardless of network latency or internet connectivity,
+- and will synchronise on its own after data connectivity returns.
+- If your application used Firebase authentication, the users authentication tokens will be persisted across restarts allowing a seamless user experience.
+- If the token expires, database writes will be resumed until the user has been re-authenticated to make sure authentication rules are observed.
 
 ---
 
-## [fit] Includes authentication tokens
+## [fit] Data Synchronisation
+- Graceful Connectivity Loss
+- Application Data Cache
+- Client Synchronisation
 
-^ If your application used Firebase authentication, the users authentication tokens will be persisted across restarts allowing a seamless user experience.
-
-^ If the token expires, database writes will be resumed until the user has been re-authenticated to make sure authentication rules are observed.
+^
+- Synchronisation remains central to core principles of the Firebase Realtime Database,
+- meaning that your data is not just synchronised on the one device but across every connected client.
+- This is massively beneficial when developing cross platform applications,
+- it means all of your clients are sharing the same realtime database and will automatically received updates with the newest data.
 
 ---
 
-## [fit] Keeping data fresh
+## [fit] Data Synchronisation
+- Graceful Connectivity Loss
+- Application Data Cache
+- Client Synchronisation
+- Conflict Resolution
 
-^ Additionally you can instruct Firebase to keep a particular reference updated whilst the client still has connectivity,
+^
+Whilst Firebase doesn't yet support the ability to resolve complex conflicts, most conflicts will be automatically merged without any intervention required.
 
-^ even whilst not maintaining an active reference to this Firebase reference in your code.
+---
 
-----
+**Keeping Data Fresh**
 
 `FirebaseDatabase.getInstance()
   .getReference("...")
   .keepSynced(true);`
 
----
-
-## [fit] Acquiring
-
-## [fit] connectivity state
-
-^ Firebase even offers a way to detect your current connection state using the same API for fetching data with the .info/connected reference.
+^
+- Additionally you can instruct Firebase to keep a particular reference updated whilst the client still has connectivity,
+- even whilst not maintaining an active reference to this Firebase reference in your code.
 
 ---
+
+## Connectivity State
 
 ```java
 FirebaseDatabase.getInstance()
@@ -316,52 +279,41 @@ FirebaseDatabase.getInstance()
   });
 ```
 
----
-
-
-## 10MB
-
-^ Firebase will reserve up to 10MB by default to cache query results, and will purge this data once it reaches the configured size.
-
-^ Data that is kept in sync however will not be cached.
+^
+Firebase even offers a way to detect your current connection state using the same API for fetching data with the .info/connected reference.
 
 ---
 
-## Can I change the configured cache size?
+## 10MB Cache
 
-^ You might ask, can I increase the configured cache size to greater than 10MB?
+^
+- Firebase will reserve up to 10MB by default to cache query results, and will purge this data once it reaches the configured size.
+- Data that is kept in sync however will not be cached.
+
+---
+
+## Can I still change the configured cache size?
+
+^
+You might ask, can I still increase the configured cache size to greater than 10MB?
 
 ---
 
 ## [fit] No!
 
-^ The legacy version of Firebase offered the method setPersistenceCacheSizeBytes to override the default configuration cache size,
-
-^ but this is no longer available and it would generally be unwise to do so since this can cause application out of memory errors.
-
----
-
-## [fit] Automatic data
-## [fit] synchronisation
-
-^ Synchronisation remains central to core principles of the Firebase Realtime Database,
-
-^ meaning that your data is not just synchronised on the one device but across every connected client.
-
-^ This is massively beneficial when developing cross platform applications,
-
-^ it means all of your clients are sharing the same realtime database and will automatically received updates with the newest data.
+^
+- The legacy version of Firebase offered the method setPersistenceCacheSizeBytes to override the default configuration cache size,
+- but this is no longer available and it would generally be unwise to do so since this can cause application out of memory errors.
 
 ---
 
-## [fit] Cloud hosted
-## [fit] NoSql database
+## [fit] Cloud Hosted
+## [fit] NoSql Database
 
-^ Your data is stored in a cloud hosted NoSql database powered by Google,
-
-^ being one of the front runners for data indexing and big data infrastructures.
-
-^ NoSql data structures can provide huge increases to speed and performance but require a different way of thinking when it comes to relational data structures.
+^
+- Your data is stored in a cloud hosted NoSql database powered by Google,
+- being one of the front runners for data indexing and big data infrastructures.
+- NoSql data structures can provide huge increases to speed and performance but require a different way of thinking when it comes to relational data structures.
 
 ---
 
@@ -380,51 +332,89 @@ FirebaseDatabase.getInstance()
 }
 ```
 
-^ One of the most important things to remember about Firebase is how to structure your data.
-
-^ The Firebase Realtime Database does not offer a feasible environment for relational data,
-
-^ so as a result you must de-normalize your data structure.
-
-^ All Firebase Realtime Database data is structured as a Json tree of key, value parameters.
-
-^ It's recommended to use uuid as keys rather than using arrays since these are easier to use when calling `setValue` on your data.
+^
+- One of the most important things to remember about Firebase is how to structure your data.
+- The Firebase Realtime Database does not offer a feasible environment for relational data,
+- so as a result you must de-normalize your data structure.
+- All Firebase Realtime Database data is structured as a Json tree of key, value parameters.
+- It's recommended to use uuid as keys rather than using arrays since these are easier to use when calling `setValue` on your data.
 
 ---
 
 ## The Tasks API[^1]
-^ Since Firebase is now tied in with Google Play Services, many of its API operations use the Tasks API.
-
-^ The Tasks API provideS a meaningful semantic interface for asynchronous operations,
-
-^ which by themselves are more than enough to allow your application to follow a logical data flow.
 
 ```java
 Task<AuthResult> task = FirebaseAuth.getInstance().signInAnonymously();
 
 task.addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-
-  @Override
-  public void onSuccess(AuthResult result) {
-      /* ... */
-  }
+  @Override public void onSuccess(AuthResult result) { /* ... */ }
 });
 
 task.addOnFailureListener(new OnFailureListener() {
-
-  @Override
-  public void onFailure(@NonNull Exception exception) {
-      /* ... */
-  }
+  @Override public void onFailure(@NonNull Exception exception) { /* ... */ }
 });
 ```
 
 [^1]: https://developers.google.com/android/guides/tasks
 
+^
+- Since Firebase is now tied in with Google Play Services, many of its API operations use the Tasks API.
+- The Tasks API provideS a meaningful semantic interface for asynchronous operations,
+- which by themselves are more than enough to allow your application to follow a logical data flow.
+
 ---
 
-## Analytics
+## Remote Config
 
+^
+- Remote config is probably one of the most exciting features from this years Firebase announcements,
+- Firebase remote config allows you to update your application remotely without deploying a new version.
+
+---
+
+## [fit] Remote Config
+- Audience Customisation
+
+^
+- What brings power to Firebase remote config is being able to target your audience groups,
+- Since Firebase services integrate seamlessly with each other you can create an audience based upon analytic metrics,
+- and then deliver features only to them.
+- This can be useful for promotions by demographic.
+
+---
+
+## [fit] Remote Config
+- Audience Customisation
+- Staged Roll Out
+
+^
+- Remote config can be used to deliver a staged roll out to your users after deploying to the Play store,
+- You can even tweak your configuration to roll out to different countries based on your market strategy.
+
+---
+
+## [fit] Remote Config
+- Audience Customisation
+- Staged Roll Out
+- Feature Flags
+
+^
+- If you use feature flags for internal or public feature toggling then this can also be manipulated to the same strengths.
+
+---
+
+## [fit] Remote Config
+- Audience Customisation
+- Staged Roll Out
+- Feature Flags
+- A/B Testing
+
+^
+- Finally this could also be used for AB testing to deliver different variants.
+
+---
+
+## [fit] Analytics
 - Analytics funnels
 - Designed for apps
 - Event and user centric
@@ -459,10 +449,6 @@ task.addOnFailureListener(new OnFailureListener() {
 
 ---
 
-## Test Lab
-
----
-
 ## Crash Reporting
 
 ---
@@ -471,54 +457,46 @@ task.addOnFailureListener(new OnFailureListener() {
 
 ---
 
-## Remote Config
+## [fit] But wait, there's more!
+- App Invites
+- App Indexing
+- Dynamic Links
+- Test Lab
+- AdWords
 
----
-
-## App Indexing
-
----
-
-## Dynamic Links
-
----
-
-## Invites
-
----
-
-## AdWords
+^
+- Firebase also offers a ton of other features that I simply don't have enough time to go into,
+- all seamlessly integrated with the core components allowing you to empower your mobile app.
 
 ---
 
 ## [fit] 🌿 Android Peppermint
-
 ### [fit] Realtime Chat
-
 ### [fit] [github.com/ashdavies/peppermint](https://github.com/ashdavies/peppermint)
-
 ![right 200%](github-peppermint-qr.png)
 
 ---
 
 ## QR, SRSLY?!
 
-^ QR codes are so 2012 right?
+^
+QR codes are so 2012 right?
 
 ---
 
 ## [fit] 🌿 Android Peppermint
-
 ### ![inline 70%](https://developers.google.com/nearby/images/ic_nearby_white_2x_web_48dp.png) Google Nearby API
-
 ### ...
-
 ### [fit] [github.com/ashdavies/peppermint](https://github.com/ashdavies/peppermint)
 
-^ The sample application demonstrates usage of the Google Nearby API for Android.
+^
+- The sample application demonstrates usage of the Google Nearby API for Android.
+- So that messages you send will be broadcast to everybody in the area,
+- and the message history you are seeing is *your* personal history,
+- stored using Firebase Realtime Database.
 
-^ So that messages you send will be broadcast to everybody in the area,
+---
 
-^ and the message history you are seeing is *your* personal history,
+Thank You.
 
-^ stored using Firebase Realtime Database.
+^
