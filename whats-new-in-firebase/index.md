@@ -5,7 +5,7 @@
 
 ---
 
-## [fit] What's Firebase?
+## What's Firebase?
 
 ^
 - What is Firebase?
@@ -13,125 +13,63 @@
 
 ---
 
-![fit](develop-backdrop.png)
-## Develop
+![fit](firebase-developing-hard.png)
+
+## Developing is Hard
 
 ^
-- Firebase is a mobile platform that helps you quickly develop high quality apps
+- Developing modern apps is difficult
 
 ---
 
-![fit](grow-backdrop.png)
-## Grow
+![fit](firebase-backend-scale.png)
 
 ^
-- grow your user base
+- Need infrastructure that can scale
+- Users expect high level compliancy
 
 ---
 
-![fit 50%](earn-backdrop.png)
-## Earn
+![fit](firebase-cross-platform.png)
 
 ^
-- and earn more money,
-- Firebase is made up of a complementary features that you can mix and match to fit your needs
+- Collaboration and synchronisation across platforms
+- Web, iOS, Android form factors
+- Increasing number of platforms
 
 ---
 
-## What's New?
+![fit](firebase-auth.png)
 
 ^
-So what's new with Firebase? and how can you include it in your application?
+- Social media integration
+- Just to be considered
 
 ---
 
-## What's New?
-### > Setup
+![inline](firebase.png)
 
 ^
-- One of the key difference to Firebase then and Firebase now is the set up process
-- It is now fully integrated into Google Services
-- Meaning it can effortlessly interleave with the other aspects of your set up
+- Firebase allows you to move quickly
+- Without having to worry about the simple infrastructure
+- Series of tools to develop your apps
+- Bring users to your app
+- Grow your user base
+- Earn money
 
 ---
 
-### Legacy SDK
-`com.firebase:firebase-client-android:2.5.2`
-
-### Distributed SDK
-`com.google.firebase:firebase-core:9.8.0`
-`com.google.firebase:firebase-auth:9.8.0`
-`com.google.firebase:firebase-database:9.8.0`
+![fit](firebase-all-tools.png)
 
 ^
-- All the functionality was provided with a single SDK
-- Google have broken these down into individual modular components
-- The original Firebase SDK only provides auth and database
-- tightly coupled to each other, now you specify each of the components you want to include
+- Set of 15 features
+- Built around analytics
+- Seamlessly communicate
 
 ---
 
-## What's New?
-### > Google Services
-
----
-
-## build.gradle (Project)
-
-```groovy
-dependencies {
-  ...
-}
-
-apply plugin: 'com.google.gms.google-services'
-```
-
-^
-- Remember to include the Google Services **below** your gradle dependencies block
-
----
-
-## Before
-
-```java
-// App Invites
-compile 'com.google.android.gms:play-services-appinvite'
-
-// AdMob by Google
-compile 'com.google.android.gms:play-services-admob'
-
-// Google Cloud Messaging
-compile 'com.google.android.gms:play-services-gcm:8.4.0'
-```
-
-^
-- If you have used any of these integrations you can now use their updated counterparts
-
----
-
-## After
-
-```java
-// Firebase Invites
-compile 'com.google.firebase:firebase-invites:9.8.0'
-
-// Firebase Ads
-compile 'com.google.firebase:firebase-ads:9.8.0'
-
-// Firebase Cloud Messaging
-compile 'com.google.firebase:firebase-messaging:9.8.0'
-```
-
-^
-- For Firebase Cloud Messaging you will also need to update your manifest entry and listener services,
-- Firebase now integrates with Google Play services
-- Firebase configuration provided by google-play-services.json
-
----
-
-## [fit] Firebase Origins:
+![fit](firebase-auth.png)
 ## [fit] Authentication
-
 - Authentication & account management
 - Email & password authentication
 - Google, Facebook, Twitter, GitHub
@@ -145,7 +83,7 @@ compile 'com.google.firebase:firebase-messaging:9.8.0'
 
 ---
 
-## [fit] Firebase Origins:
+![fit](firebase-backend-scale.png)
 ## [fit] Realtime Database
 
 ^
@@ -158,68 +96,7 @@ compile 'com.google.firebase:firebase-messaging:9.8.0'
 
 ---
 
-## [fit] Intuitive
-## [fit] Easy to use API
-
-^
-- Simple api to use, callbacks allow data consumption as soon as its received.
-
----
-
-## Querying Data
-### Ordering Data
-- `orderByChild()`
-- `orderByKey()`
-- `orderByValue()`
-- `orderByPriority()`
-
-^
-- Firebase will still allow you to query against your data using a variety of methods
-- but its important to remember which value you are querying against
-
----
-
-## Querying Data
-### Limiting Data
-- `limitToFirst()`
-- `limitToLast()`
-- `startAt()`
-- `endAt()`
-- `equalTo()`
-
-^
-- When using Firebase persistence you can limit your data set to return a subset of data that has already been cached
-- Firebase may have stored locally a number greater than the amount you are requesting
-
----
-
-## Querying Data
-### Child Events
-- `onChildAdded()`
-- `onChildChanged()`
-- `onChildRemoved()`
-- `onChildMoved()`
-- `onCancelled()`
-
-^
-When consuming your data, much like what was available in the legacy Firebase SDK you can use these child events to manage the lifecycle
-
----
-
-## Consuming Events
-
-### Each event change
-- `addValueEventListener()`
-
-### First event change
-- `addListenerForSingleValueEvent()`
-
-^
-- With these methods to evaluate the value of your stored data,
-- You can use Firebase with AutoValue extensions
-
----
-
+![fit](firebase-backend-scale.png)
 ## [fit] Data Synchronisation
 - Graceful Connectivity Loss
 
@@ -228,6 +105,7 @@ When consuming your data, much like what was available in the legacy Firebase SD
 
 ---
 
+![fit](firebase-backend-scale.png)
 ## [fit] Data Synchronisation
 - Graceful Connectivity Loss
 - Application Data Cache
@@ -242,6 +120,7 @@ When consuming your data, much like what was available in the legacy Firebase SD
 
 ---
 
+![fit](firebase-backend-scale.png)
 ## [fit] Data Synchronisation
 - Graceful Connectivity Loss
 - Application Data Cache
@@ -255,6 +134,7 @@ When consuming your data, much like what was available in the legacy Firebase SD
 
 ---
 
+![fit](firebase-backend-scale.png)
 ## [fit] Data Synchronisation
 - Graceful Connectivity Loss
 - Application Data Cache
@@ -264,42 +144,6 @@ When consuming your data, much like what was available in the legacy Firebase SD
 ^
 - Whilst Firebase doesn't yet support the ability to resolve complex conflicts
 - Most conflicts will be automatically merged without any intervention required
-
----
-
-**Keeping Data Fresh**
-
-`FirebaseDatabase.getInstance()
-  .getReference("...")
-  .keepSynced(true);`
-
-^
-- Additionally you can instruct Firebase to keep a particular reference updated whilst the client still has connectivity
-- Even whilst not maintaining an active reference to this Firebase reference in your code.
-
----
-
-## Connectivity State
-
-```java
-FirebaseDatabase.getInstance()
-  .getReference(".info/connected")
-  .addValueEventListener(new ValueEventListener() {
-
-    @Override
-    public void onDataChange(DataSnapshot snapshot) {
-      boolean connected = snapshot.getValue(Boolean.class);
-    }
-
-    @Override
-    public void onCancelled(DatabaseError error) {
-      System.err.println("Listener was cancelled");
-    }
-  });
-```
-
-^
-- Firebase even offers a way to detect your current connection state using the same API for fetching data with the .info/connected reference.
 
 ---
 
@@ -361,6 +205,39 @@ FirebaseDatabase.getInstance()
 
 ---
 
+## What's New?
+
+^
+- So what's new with Firebase? and how can you include it in your application?
+- One of the key difference to Firebase then and Firebase now is the set up process
+- It is now fully integrated into Google Services
+- Meaning it can effortlessly interleave with the other aspects of your set up
+
+---
+
+## Set Up
+
+```java
+// Legacy SDK
+compile "com.firebase:firebase-client-android:2.5.2"
+
+// Distributed SDK
+compile "com.google.firebase:firebase-core:9.8.0"
+compile "com.google.firebase:firebase-auth:9.8.0"
+compile "com.google.firebase:firebase-config:9.8.0"
+compile "com.google.firebase:firebase-crash:9.8.0"
+compile "com.google.firebase:firebase-database:9.8.0"
+```
+
+^
+- All the functionality was provided with a single SDK
+- Google have broken these down into individual modular components
+- The original Firebase SDK only provides auth and database
+- tightly coupled to each other, now you specify each of the components you want to include
+- Configuration provided by google-play-services.json
+
+---
+
 ## The Tasks API[^1]
 
 ```java
@@ -384,8 +261,111 @@ task.addOnFailureListener(new OnFailureListener() {
 
 ---
 
-## [fit] Remote Config
-![inline](remote-config.png)
+![](firebase-analytics.png)
+## [fit] Analytics
+- Free & Unlimited
+
+^
+- Free and unlimited
+- No limit on the volume of events
+- 500 distinct events
+- 25 event parameters
+
+---
+
+![](firebase-analytics.png)
+## [fit] Analytics
+- Free and Unlimited
+- Automatic Reporting
+
+^
+- Firebase Analytics comes baked after you have integrated it into your application
+- Over a dozen of key analytic events logged automatically
+- Device properties automatically logged
+- In addition to all of this Google overlays their demographic data to give you more context on your data,
+- showing countries, age ranges and user interests without you having to do any additional integration.
+
+---
+
+![](firebase-analytics.png)
+## [fit] Analytics
+- Free and Unlimited
+- Automatic Reporting
+- Seamlessly Integrated
+
+^
+- Runs at the core of Firebase integrating with all other services
+- Augments other features through seamless integration
+
+---
+
+![](firebase-analytics.png)
+## [fit] Analytics
+- Free and Unlimited
+- Automatic Reporting
+- Seamlessly Integrated
+- Cross Platform
+
+^
+- Runs on all platforms
+
+---
+
+## Where's my Data?
+
+^
+- Firebase Analytics updates every 4 - 5 hours
+- Developers complain that they need instant data
+- Analytic events can be marked as conversion events
+
+
+---
+
+![left 70%](firebase.png)
+![right 120%](google-bigquery.png)
+
+^
+- Conversion events are reported in real time
+- realtime export of conversion events to BigQuery
+- events available in seconds
+
+---
+
+## ![](google-data-studio.png) Google Data Studio
+### Firebase Templates
+
+^
+- Firebase real time events can be viewed in Google Data Studio
+- Firebase dev summit Google announced Firebase templates
+
+---
+
+![](firebase-data-studio-template.png)
+
+^
+- This allows you to drill down on your data to produce useful visuals
+
+---
+
+![](firebase-data-studio-template-next.png)
+
+^
+- You can easily change the dimension used for your reported
+- Create reports good enough for any product manager
+
+---
+
+## Firebase Analytics
+### Debug View
+
+---
+
+## Firebase Analytics
+### Stream View
+
+---
+
+![fit](firebase-remote-config.png)
 
 ^
 - Remote config is probably one of the most exciting features from this years Firebase announcements
@@ -432,33 +412,6 @@ task.addOnFailureListener(new OnFailureListener() {
 
 ^
 - Finally this could also be used for AB testing to deliver different variants.
-
----
-
-![](analytics-screenshot.png)
-## [fit] Analytics
-- Analytics funnels
-- Designed for apps
-- Event and user centric
-- Connects across Firebase
-- Free & Unlimited
-
-^
-- Firebase Analytics comes baked after you have integrated it into your application,
-- Like most analytics platform it shows you exactly what you want to see in an easy to understand with an overview of your key metrics,
-- Active users, in app revenue streams, users source and retention and a distribution over device versions.
-- In addition to all of this Google overlays their demographic data to give you more context on your data,
-- showing countries, age ranges and user interests without you having to do any additional integration.
-
----
-
-## Analytics
-### Automatic events
-![inline](analytics-automatic-events.png)
-
-^
-The events you can see here are provided without any Additionally configuration,
-and allow you to drill down your event funnels through conversion rates.
 
 ---
 
