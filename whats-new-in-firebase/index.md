@@ -33,7 +33,7 @@
 ![fit](firebase-cross-platform.png)
 
 ^
-- Collaboration and synchronisation across platforms
+- Cross platform collaboration
 - Web, iOS, Android form factors
 - Increasing number of platforms
 
@@ -51,7 +51,7 @@
 
 ^
 - Firebase allows you to move quickly
-- Without having to worry about the simple infrastructure
+- Without the worry of building infrastructure
 - Series of tools to develop your apps
 - Bring users to your app
 - Grow your user base
@@ -76,23 +76,20 @@
 - Custom OAuth2 redirect domains
 
 ^
-- Firebase has long been able to assist your application with additional login methods
-- Skip the difficulties of setting up 3rd party login options
-- Now runs on the same technology Google users for its own authentication server
-- Provided an open source authentication UI that you can use to power your projects with
+- Allows login with third party accounts
+- Now runs with Google own authentication servers
+- Firebase UI provides prepared environment set up
 
 ---
 
 ![fit](firebase-backend-scale.png)
-## [fit] Realtime Database
+## [fit] Realtime
+## [fit] Database
 
 ^
-- When Firebase first started out, it was mostly just a realtime database
-- Despite Firebase now describing a collective toolset of the suite of services provided now
-- the real power of using Firebase when first starting out is still that
-- The Firebase Realtime Database is a cloud hosted NoSQL utilising the strength of Google's infrastructure to power your application
-- Firebase Realtime Database allows developers to implement fully functioning application interfaces across multiple platforms
-- Without having to worry about things like realtime synchronisation and conflict resolution
+- Firebase started as real time database
+- Now a suite of development services
+- Power still in Firebase Realtime Database
 
 ---
 
@@ -101,7 +98,8 @@
 - Graceful Connectivity Loss
 
 ^
-- When your app loses connectivity, you would normally have to compose extensive amounts of logic to handle this failure gracefully
+- Would normally need lots of logic
+- Handles poor connectivity gracefully
 
 ---
 
@@ -111,12 +109,12 @@
 - Application Data Cache
 
 ^
-- Considerable thought must be put into how data is cached and evaluated
-- This is all handled for you and you can treat your application as though connectivity wasn't an issue
-- Firebase will remain responsive regardless of network latency or internet connectivity
-- Firebase will synchronise on its own after data connectivity returns
-- Users authentication tokens will be persisted across restarts allowing a seamless user experience
-- If the token expires, database writes will be resumed until the user has been re-authenticated
+- Application data cached automatically
+- Forget about connectivity issues
+- Firebase will remain responsive
+- Will synchronise when connectivity returns
+- User auth tokens persisted
+- Data writes resumed after token re-authentication
 
 ---
 
@@ -127,10 +125,9 @@
 - Client Synchronisation
 
 ^
-- Synchronisation remains central to core principles of the Firebase Realtime Database
-- Data is not just synchronised on the one device but across every connected client
-- This is massively beneficial when developing cross platform applications
-- All of your clients are sharing the same realtime database and will automatically received updates with the newest data
+- Data is synchronised across all connected clients across platforms
+- All clients share same realtime database with newest data
+- Data freshness synchronised in real time
 
 ---
 
@@ -158,9 +155,6 @@
 
 ## Can I still change the configured cache size?
 
-^
-- You might ask, can I still increase the configured cache size to greater than 10MB?
-
 ---
 
 ## [fit] No!
@@ -177,7 +171,7 @@
 ^
 - Your data is stored in a cloud hosted NoSql database powered by Google
 - NoSql data structures can provide huge increases to speed and performance
-- Require a different way of thinking when it comes to relational data structures.
+- Require a different way of thinking when it comes to relational data structures
 
 ---
 
@@ -197,21 +191,19 @@
 ```
 
 ^
-- One of the most important things to remember about Firebase is how to structure your data
-- The Firebase Realtime Database does not offer a feasible environment for relational data
-- Data must be de-normalized
 - Data is structured as a Json tree of key, value parameters
-- Use uuid as keys rather than using arrays since these are easier to use when calling `setValue` on your data
+- Data must be de-normalized and some data might need to be repeated
+- Structures do not really support relational data
+- UUID keys easier to index when calling setValue
 
 ---
 
 ## What's New?
 
 ^
-- So what's new with Firebase? and how can you include it in your application?
-- One of the key difference to Firebase then and Firebase now is the set up process
+- Major changes to how Firebase is included in your project
 - It is now fully integrated into Google Services
-- Meaning it can effortlessly interleave with the other aspects of your set up
+- Effortlessly interleave with the other aspects of your set up
 
 ---
 
@@ -224,16 +216,21 @@ compile "com.firebase:firebase-client-android:2.5.2"
 // Distributed SDK
 compile "com.google.firebase:firebase-core:9.8.0"
 compile "com.google.firebase:firebase-auth:9.8.0"
-compile "com.google.firebase:firebase-config:9.8.0"
-compile "com.google.firebase:firebase-crash:9.8.0"
 compile "com.google.firebase:firebase-database:9.8.0"
+compile "com.google.firebase:firebase-crash:9.8.0"
+compile "com.google.firebase:firebase-config:9.8.0"
 ```
 
 ^
-- All the functionality was provided with a single SDK
-- Google have broken these down into individual modular components
 - The original Firebase SDK only provides auth and database
-- tightly coupled to each other, now you specify each of the components you want to include
+- Broken these down into individual modular components
+- Choose which you want to include in your project
+- Analytics not included separately but in core (2k)
+
+---
+
+^
+- Firebase Admin SDK / API
 - Configuration provided by google-play-services.json
 
 ---
@@ -263,7 +260,7 @@ task.addOnFailureListener(new OnFailureListener() {
 
 ![](firebase-analytics.png)
 ## [fit] Analytics
-- Free & Unlimited
+- Free and Unlimited
 
 ^
 - Free and unlimited
@@ -279,11 +276,11 @@ task.addOnFailureListener(new OnFailureListener() {
 - Automatic Reporting
 
 ^
-- Firebase Analytics comes baked after you have integrated it into your application
-- Over a dozen of key analytic events logged automatically
+- Analytics baked in after integration
+- Over a dozen of key analytic events automatically
 - Device properties automatically logged
-- In addition to all of this Google overlays their demographic data to give you more context on your data,
-- showing countries, age ranges and user interests without you having to do any additional integration.
+- Google powered user demographic properties
+- Countries, age ranges, interests
 
 ---
 
@@ -311,13 +308,23 @@ task.addOnFailureListener(new OnFailureListener() {
 
 ---
 
+![](firebase-analytics.png)
+## [fit] Audiences
+
+^
+- Create audiences from our analytics events
+- Further drill down reporting and dashboard filtering
+- Seemlessly integrates with other Firebase features
+- Set additional user properties to examine user habits
+
+---
+
 ## Where's my Data?
 
 ^
 - Firebase Analytics updates every 4 - 5 hours
 - Developers complain that they need instant data
 - Analytic events can be marked as conversion events
-
 
 ---
 
@@ -334,29 +341,35 @@ task.addOnFailureListener(new OnFailureListener() {
 ## ![](google-data-studio.png) Google Data Studio
 ### Firebase Templates
 
+![left](firebase-data-studio-template.png)
+![right](firebase-data-studio-template-next.png)
+
 ^
-- Firebase real time events can be viewed in Google Data Studio
-- Firebase dev summit Google announced Firebase templates
+- Real time events can be viewed in Google Data Studio
+- Dev summit Google announced Firebase templates
+- Drill down on your data to produce useful visuals
 
 ---
 
-![](firebase-data-studio-template.png)
-
-^
-- This allows you to drill down on your data to produce useful visuals
-
----
-
-![](firebase-data-studio-template-next.png)
-
-^
-- You can easily change the dimension used for your reported
-- Create reports good enough for any product manager
-
----
-
+![](firebase-debug-view.png)
 ## Firebase Analytics
 ### Debug View
+
+^
+- Latency pain points for development
+^
+https://www.youtube.com/watch?v=zssCC6rXyGk&list=PLl-K7zZEsYLmYSsW6ED2QvHxuI3UzT0WZ
+
+---
+
+## Crash Reporting
+![](firebase-crash.png)
+
+^
+- Integrated automatically
+- Instance statistics, cluster summaries, and stack traces
+- Fully integrated with analytics
+- Includes events leading up to a crash
 
 ---
 
@@ -415,29 +428,6 @@ task.addOnFailureListener(new OnFailureListener() {
 
 ---
 
-## Crash Reporting
-![inline](firebase-crash-statistics.png)
-![inline](firebase-crash-event.png)
-
-^
-- Firebase Analytics is integrated into your application as soon as you add the Gradle plugin,
-- Much like other crash reporting frameworks you might be used to Firebase will track fatal crashes by default,
-- Showing you instance statistics, cluster summaries and stack traces allowing you to easily identify and resolve the problem.
-
----
-
-# Audiences
-![inline 100%](analytics-audience.png)
-
-^
-- One of the core concepts of the Firebase console is being able to define your audiences based upon your analytics events.
-- This not only allows you to provide reporting and dashboard filtering based upon these audiences,
-- But allows you to target this audience directly with seemless integration across other Firebase features,
-- such as delivering custom notifications and promotions to particular audiences.
-- In addition you can set additional user properties to examine the habits of your users.
-
----
-
 ## [fit] Hosting
 - Serve Static Assets
 - SSL by default
@@ -481,8 +471,8 @@ task.addOnFailureListener(new OnFailureListener() {
 - AdWords
 
 ^
-- Firebase also offers a ton of other features that I simply don't have enough time to go into,
-- all seamlessly integrated with the core components allowing you to empower your mobile app.
+- Lots of other stuff
+- No more time
 
 ---
 
@@ -496,7 +486,7 @@ task.addOnFailureListener(new OnFailureListener() {
 ## QR, SRSLY?!
 
 ^
-QR codes are so 2012 right?
+- QR codes are so 2012?
 
 ---
 
@@ -506,10 +496,8 @@ QR codes are so 2012 right?
 ### [fit] [github.com/ashdavies/peppermint](https://github.com/ashdavies/peppermint)
 
 ^
-- The sample application demonstrates usage of the Google Nearby API for Android.
-- So that messages you send will be broadcast to everybody in the area,
-- and the message history you are seeing is *your* personal history,
-- stored using Firebase Realtime Database.
+- Sample chat application with Firebase Realtime Database and Google Nearby
+- Firebase Analytics, Auth, Database, Crash, Config
 
 ---
 
