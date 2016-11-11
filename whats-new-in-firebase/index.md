@@ -160,8 +160,8 @@
 ## [fit] No!
 
 ^
-- Legacy version offered `setPersistenceCacheSizeBytes` to override the configuration cache
-- no longer available and it would generally be unwise to do so since this can cause application out of memory errors
+- Legacy version used `setPersistenceCacheSizeBytes()`
+- Too much memory usage causes out of memory errors
 
 ---
 
@@ -229,9 +229,24 @@ compile "com.google.firebase:firebase-config:9.8.0"
 
 ---
 
+![](firebase-google-play-services.png)
+
 ^
-- Firebase Admin SDK / API
-- Configuration provided by google-play-services.json
+- Google Play Services file in the Firebase console
+
+---
+
+```groovy
+dependencies {
+  // ...
+}
+
+apply plugin: 'com.google.gms.google-services'
+```
+
+^
+- Google play services after dependencies
+- Will result in conflicts otherwise
 
 ---
 
@@ -241,11 +256,15 @@ compile "com.google.firebase:firebase-config:9.8.0"
 Task<AuthResult> task = FirebaseAuth.getInstance().signInAnonymously();
 
 task.addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-  @Override public void onSuccess(AuthResult result) { /* ... */ }
+  @Override public void onSuccess(AuthResult result) {
+    /* ... */
+  }
 });
 
 task.addOnFailureListener(new OnFailureListener() {
-  @Override public void onFailure(@NonNull Exception exception) { /* ... */ }
+  @Override public void onFailure(@NonNull Exception exception) {
+    /* ... */
+  }
 });
 ```
 
@@ -357,8 +376,26 @@ task.addOnFailureListener(new OnFailureListener() {
 
 ^
 - Latency pain points for development
+- Is my app correctly set up
+- Am I reporting events properly
+
+---
+
+![](firebase-stream-view.png)
+## Firebase Analytics
+### Stream View
+
 ^
-https://www.youtube.com/watch?v=zssCC6rXyGk&list=PLl-K7zZEsYLmYSsW6ED2QvHxuI3UzT0WZ
+- Analytics dashboard
+- Inspiring user insights
+
+---
+
+![](firebase-stream-view-events.png)
+
+^
+- Immediate feedback on your user engagement efforts
+- Live stream of user events as they happen
 
 ---
 
@@ -369,20 +406,22 @@ https://www.youtube.com/watch?v=zssCC6rXyGk&list=PLl-K7zZEsYLmYSsW6ED2QvHxuI3UzT
 - Integrated automatically
 - Instance statistics, cluster summaries, and stack traces
 - Fully integrated with analytics
-- Includes events leading up to a crash
 
 ---
 
-## Firebase Analytics
-### Stream View
+## Crash Reporting
+### Detailed Insights with Analytics
+![](firebase-crash.png)
+
+^
+- Includes events leading up to a crash
 
 ---
 
 ![fit](firebase-remote-config.png)
 
 ^
-- Remote config is probably one of the most exciting features from this years Firebase announcements
-- Firebase remote config allows you to update your application remotely without deploying a new version
+- Update application values without deploying a new version
 
 ---
 
@@ -390,10 +429,8 @@ https://www.youtube.com/watch?v=zssCC6rXyGk&list=PLl-K7zZEsYLmYSsW6ED2QvHxuI3UzT
 - Audience Customisation
 
 ^
-- What brings power to Firebase remote config is being able to target your audience groups
-- Services integrate seamlessly with each other you can create an audience based upon analytic metrics
-- and then deliver features only to them.
-- This can be useful for promotions by demographic.
+- Target audience groups from analytic metrics
+- Delivery features to your different demographics
 
 ---
 
@@ -402,8 +439,8 @@ https://www.youtube.com/watch?v=zssCC6rXyGk&list=PLl-K7zZEsYLmYSsW6ED2QvHxuI3UzT
 - Staged Roll Out
 
 ^
-- Remote config can be used to deliver a staged roll out to your users after deploying to the Play store,
-- You can even tweak your configuration to roll out to different countries based on your market strategy.
+- Deliver staged feature roll out
+- Roll out to countries based on market strategy
 
 ---
 
@@ -413,7 +450,7 @@ https://www.youtube.com/watch?v=zssCC6rXyGk&list=PLl-K7zZEsYLmYSsW6ED2QvHxuI3UzT
 - Feature Flags
 
 ^
-- If you use feature flags for internal or public feature toggling then this can also be manipulated to the same strengths.
+- Use feature flags for internal or public deployment
 
 ---
 
@@ -424,19 +461,50 @@ https://www.youtube.com/watch?v=zssCC6rXyGk&list=PLl-K7zZEsYLmYSsW6ED2QvHxuI3UzT
 - A/B Testing
 
 ^
-- Finally this could also be used for AB testing to deliver different variants.
+- AB testing to deliver different variants
+- Test variants based on analytics data
 
 ---
 
 ## [fit] Hosting
-- Serve Static Assets
+- Serve static assets
+
+^
+- Similar to GitHub pages
+- Host static sites built with Jeykll
+
+---
+
+## [fit] Hosting
+- Serve static assets
+- SSL by default
+
+^
+- Zero configuration SSL setup
+
+---
+
+## [fit] Hosting
+- Serve static assets
 - SSL by default
 - Custom domains
 
 ^
-- Firebase Hosting allows you to host static assets such as Jekyll and Angular built front end sites for free,
-- Zero configuration SSL is built into Firebase hosting so you don't have to set anything up to be completely secure,
 - With the new Firebase you can transfer custom domains for free.
+
+---
+
+## [fit] Hosting
+- Serve static assets
+- SSL by default
+- Custom domains
+- Available free
+
+^
+- Available on the free spark tier
+- 5GB storage
+- 30GB download
+- 50k up and down
 
 ---
 
@@ -446,20 +514,39 @@ https://www.youtube.com/watch?v=zssCC6rXyGk&list=PLl-K7zZEsYLmYSsW6ED2QvHxuI3UzT
 - High Scalability
 
 ^
-- Firebase storage benefits from the same infrastructure that makes the realtime database so powerful,
-- With Firebase storage you can store your assets and resources backed by Google Cloud Storage,
-- caching and resuming your downloads, protected by Firebase authentication and with high scalability.
+- Same powerful infrastructure with high scalability
+- Store assets backed by Google Cloud Storage
+- Caching and resuming downloads
+- Protected by Firebase Auth
 
 ---
 
+![](firebase-notifications.png)
 ## [fit] Cloud Messaging
-![inline](compose-notification.png)
 
 ^
-- Google Cloud Messaging is the most popular method for delivering notifications but it often leaves a lot to be desired for its UI,
-- Now Google Cloud Messaging is now available through Firebase Cloud Messaging across all platforms so it works for iOS, Chrome, Android, and web push.
-- Additionally Firebase Notification allows you to use the UI to compose a notification to your users via Google Cloud Messaging,
-- As mentioned previously you can couple this with the Audience feature available in Firebase to directly target your users.
+- Cloud Messaging supported for mobile and web push
+- Send messages via Firebase HTTP API
+
+---
+
+![](firebase-notifications-compose.png)
+
+^
+- Debug notification compose UI
+- Target audiences from your Analytics data
+
+---
+
+## [fit] Admin SDK
+- Integrate with CI systems
+- Import users into Firebase Auth
+- Manage Users, Database
+
+^
+- Create custom tokens for legacy auth systems
+- Support third party login which Firebase doesn't support
+- ID token verification
 
 ---
 
