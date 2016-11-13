@@ -20,11 +20,6 @@
 
 ---
 
-![](currywurst-background.jpg)
-## Currywurst
-
----
-
 ![](platform-background.jpg)
 ## Specialising on a Single Platform?
 
