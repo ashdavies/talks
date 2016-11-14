@@ -1,3 +1,8 @@
+## Ash Davies
+#### Senior Android developer
+
+---
+
 ![](developer-background.jpg)
 ## Why Development?
 
