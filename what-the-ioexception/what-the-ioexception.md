@@ -150,16 +150,56 @@ Retrofit retrofit = new Retrofit.Builder()
 ## Retrofit2: Converters
 
 ```java
-com.squareup.retrofit:converter-gson // Gson
-com.squareup.retrofit:converter-jackson // Jackson
-com.squareup.retrofit:converter-moshi // Moshi
-com.squareup.retrofit:converter-protobuf // Protobuf
-com.squareup.retrofit:converter-wire // Wire
-com.squareup.retrofit:converter-simplexml // Simple XML
+// Moshi
+compile 'com.squareup.retrofit2:converter-moshi:2.1.0'
+
+// Scalars
+compile 'com.squareup.retrofit2:converter-scalars:2.1.0'
+
+// Simple XML
+compile 'com.squareup.retrofit2:converter-simplexml:2.1.0'
+
+// Wire
+compile 'com.squareup.retrofit2:converter-wire:2.1.0'
+
+// Jackson
+compile 'com.squareup.retrofit2:converter-jackson:2.1.0'
+
+// Protobuf
+compile 'com.squareup.retrofit2:converter-protobuf:2.1.0'
+
+// Gson
+compile 'com.squareup.retrofit2:converter-gson:2.1.0'
 ```
 
 ^
 - No duplication of converters when choosing an alternative
+- This covers all of your request and response body converters
+- But doesn't cover call adapters
+
+---
+
+## Retrofit2: Adapters
+
+```java
+// RxJava
+compile 'com.squareup.retrofit2:adapter-rxjava'
+
+// RxJava2
+compile 'com.jakewharton.retrofit:retrofit2-rxjava2-adapter:1.0.0'
+
+// Java8
+compile 'com.squareup.retrofit:converter-java8'
+
+// Guava
+compile 'com.squareup.retrofit:converter-guava'
+```
+
+^
+- RxJava to use with observables
+- RxJava2 provided by Jake Wharton until RxJava2 stable release
+- Java8 futures for Java projects (not available on Jack compiler)
+- Guava futures if you MultiDex and hate your users
 
 ---
 
