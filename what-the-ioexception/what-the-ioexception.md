@@ -58,7 +58,7 @@
 
 ---
 
-![](immobilien-scout-outside.png)
+![](immobilien-scout-outside.jpg)
 
 ![inline 50%](immobilien-scout-logo.png)
 
@@ -127,10 +127,18 @@ Retrofit retrofit = new Retrofit.Builder()
 
 ---
 
-So good so far...
+![](looking-good.gif)
+
+### So good so far...
+
+[^1]: http://www.simpsonsworld.com/
 
 ^
 - What else?
+
+---
+
+## Converters
 
 ---
 
@@ -150,32 +158,75 @@ Retrofit retrofit = new Retrofit.Builder()
 ## Retrofit2: Converters
 
 ```java
-// Moshi
-compile 'com.squareup.retrofit2:converter-moshi:2.1.0'
-
-// Scalars
-compile 'com.squareup.retrofit2:converter-scalars:2.1.0'
-
-// Simple XML
-compile 'com.squareup.retrofit2:converter-simplexml:2.1.0'
-
-// Wire
-compile 'com.squareup.retrofit2:converter-wire:2.1.0'
-
-// Jackson
-compile 'com.squareup.retrofit2:converter-jackson:2.1.0'
-
-// Protobuf
-compile 'com.squareup.retrofit2:converter-protobuf:2.1.0'
-
-// Gson
 compile 'com.squareup.retrofit2:converter-gson:2.1.0'
 ```
 
 ^
 - No duplication of converters when choosing an alternative
 - This covers all of your request and response body converters
+
+---
+
+## Retrofit2: Converters
+
+```java
+compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+```
+
+moshi, scalars, simplexml, wire, jackson, protobuf
+
+^
+- Also available for other adapters
 - But doesn't cover call adapters
+
+---
+
+## Adapters
+
+---
+
+## Retrofit2: Adapters
+
+```java
+// RxJava
+compile 'com.squareup.retrofit2:adapter-rxjava'
+```
+
+^
+- RxJava to use with observables
+
+---
+
+## Retrofit2: Adapters
+
+```java
+// RxJava
+compile 'com.squareup.retrofit2:adapter-rxjava'
+
+// RxJava2
+compile 'com.jakewharton.retrofit:retrofit2-rxjava2-adapter:1.0.0'
+```
+
+^
+- RxJava2 provided by Jake Wharton until RxJava2 stable release
+
+---
+
+## Retrofit2: Adapters
+
+```java
+// RxJava
+compile 'com.squareup.retrofit2:adapter-rxjava'
+
+// RxJava2
+compile 'com.jakewharton.retrofit:retrofit2-rxjava2-adapter:1.0.0'
+
+// Java8
+compile 'com.squareup.retrofit:converter-java8'
+```
+
+^
+- Java8 futures for Java projects (not available on Jack compiler)
 
 ---
 
@@ -196,19 +247,18 @@ compile 'com.squareup.retrofit:converter-guava'
 ```
 
 ^
-- RxJava to use with observables
-- RxJava2 provided by Jake Wharton until RxJava2 stable release
-- Java8 futures for Java projects (not available on Jack compiler)
 - Guava futures if you MultiDex and hate your users
 
 ---
 
-## Asynchronous
+## Services
 
 ^
 - There is no difference between asynchronous and synchronous call definitions
 
 ---
+
+## Retrofit2: Services
 
 ```java
 /* Retrofit 1.9 */
@@ -229,6 +279,8 @@ public interface Service {
 
 ---
 
+## Retrofit2: Services
+
 ```java
 /* Retrofit 2.1 */
 public interface Service {
@@ -242,6 +294,8 @@ public interface Service {
 - Retrofit 2 does not allow this in the interface definition
 
 ---
+
+## Retrofit2: Services
 
 ```java
 /* Retrofit 2.1 */
@@ -311,10 +365,6 @@ call.cancel();
 
 ---
 
-## RxJava not integrated by default
-
----
-
 ## Base url resolution provided by HttpUrl.resolve()
 
 ---
@@ -343,19 +393,11 @@ call.cancel();
 
 ---
 
-## No more synchronous requests (makes sense)
-
----
-
 ## onResponse called even if request not successful
 
 ---
 
 ## isSuccessful to check if call succeeded
-
----
-
-## Not documented on official docs
 
 ---
 
