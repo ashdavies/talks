@@ -190,6 +190,8 @@ moshi, scalars, simplexml, wire, jackson, protobuf
 
 ---
 
+![](logging-background.jpeg)
+
 ## Logging
 
 ^
@@ -437,11 +439,68 @@ call.cancel();
 
 ---
 
+## Life is Good
+
+![](life-is-good.gif)
+
+^
+- Life is good right now
+- This migration seems easy!
+
+---
+
+![](suspicious.gif)
 
 ## What happens when things go wrong?
 
 ^
 - How would retrofit1 handle server errors
+
+---
+
+```java
+public void login(String username, String password) {
+  service.login(username, password)
+    .observeOn(AndroidSchedulers.mainThread())
+    .subscribeOn(Schedulers.io())
+    .subscribe(user -> {
+        session.storeUser(user);
+        view.gotoProfile();
+    }, throwable -> {
+        if (throwable instanceof RetrofitError) {
+          processServerError(
+            ((RetrofitError) throwable).getBodyAs(ServerError.class)
+          );
+        }
+
+        view.onError(throwable.getMessage());
+    });
+}
+```
+
+^
+- Lets give a basic login flow for example
+- Pretty straight forward sample that you might recognise from Retrofit 1
+
+---
+
+```
+FAILURE: Build failed with an exception.
+`error: cannot find symbol class RetrofitError`
+```
+
+---
+
+![](sobbing-continues.gif)
+
+^
+- What happened to RetrofitError?
+- Has it moved? renamed?
+- What can I do about this?
+
+---
+
+`* goes to stackoverflow.com *`
 
 ---
 
@@ -526,6 +585,27 @@ public Object getBodyAs(Type type) {
 ## RxJava Adapter Observables
 
 ```java
+public class Service {
+
+  // Calls onNext with the deserialized body for 2XX responses and calls onError
+  // with HttpException for non-2XX responses and IOException for network errors.
+  Observable<T> call();
+
+  // Calls onNext with a Response object for all HTTP responses and calls
+  // onError with IOException for network errors.
+  Observable<Response<T>> call();
+
+  // Calls onNext with a Result object for all HTTP responses and errors.
+  Observable<Result<T>> call();
+
+}
+```
+
+---
+
+## RxJava2 Adapter Observables
+
+```java
 // Flowable<Response<T>>: Creates observable from call, throws IOException
 public class CallObserver<T> extends Observable<Response<T>> {
   CallObservable(Call<T> originalCall) {}
@@ -541,30 +621,6 @@ public class ResultObservable<T> extends Observable<Result<T>> {
   ResultObservable(Observable<Response<T>> upstream) {}
 }
 ```
-
----
-
-## Call, Result, Response
-
-^
-Call: Default container provided by Retrofit2
-Allows execution of request, doesn't contain error information
-
-^
-Response: Default result container provided by Retrofit2
-Contains error information and response body
-
-^
-Result: RxJava adapter container
-Contains response body and throwable used for observable propagation
-
-^
-Standard Hierarchy
-Call -> Response -> T
-
-^
-RxJava Hierarchy
-Observable -> Result -> Response -> T
 
 ---
 
