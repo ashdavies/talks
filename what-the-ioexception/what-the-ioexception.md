@@ -79,12 +79,8 @@ dependencies {
   // Retrofit 1.9
   compile 'com.squareup.retrofit:retrofit:1.9.0'
 
-  // Retrofit 2.1: Core
+  // Retrofit 2.1
   compile 'com.squareup.retrofit2:retrofit:2.1.0'  
-
-  // Retrofit 2.1: Transitive
-  compile 'com.squareup.okhttp3:okhttp:3.3.0'
-  compile 'com.squareup.okio:okio:1.8.0'
 
 }
 ```
@@ -92,12 +88,29 @@ dependencies {
 ^
 - Retrofit 2 is distributed with a package name
 - Meaning you include both libraries in your project
+
+---
+
+## Retrofit2: Dependencies
+
+```groovy
+dependencies {
+
+  // Retrofit 2.1
+  compile 'com.squareup.okhttp3:okhttp:3.3.0'
+  compile 'com.squareup.okio:okio:1.8.0'
+
+}
+```
+
+^
+- Retrofit now uses the OkHttp client as a dependency
 - OkHttp: RequestBody, Header, Interceptor replaced
 
 ---
 
 ## Awesome!
-### what next?
+### What's Next?
 
 ^
 - Lets build our rest adapter
@@ -121,19 +134,16 @@ Retrofit retrofit = new Retrofit.Builder()
 ```
 
 ^
-- No Retrofit client (Ok3Client)
-- Adapter -> Retrofit
-- baseUrl -> endpoint
+- No Retrofit client wrapper (Ok3Client)
+- `Adapter` renamed to `Retrofit`
+- `baseUrl` renamed to `endpoint`
 
 ---
 
 ![](looking-good.gif)
 
-### So good so far...
-
-[^1]: http://www.simpsonsworld.com/
-
 ^
+- So good so far...
 - What else?
 
 ---
@@ -177,7 +187,6 @@ moshi, scalars, simplexml, wire, jackson, protobuf
 
 ^
 - Also available for other adapters
-- But doesn't cover call adapters
 
 ---
 
@@ -212,6 +221,9 @@ OkHttpClient client = new OkHttpClient.Builder()
 ---
 
 ## Adapters
+
+^
+- Call adapters not included
 
 ---
 
@@ -322,6 +334,7 @@ public interface Service {
 
 ^
 - Retrofit 2 does not allow this in the interface definition
+- Responses are now encapsulated in a parameterized call
 - Take another look at the url in this service
 
 ---
@@ -354,7 +367,24 @@ public interface AwsService {
 
 ^
 - Retrofit now supports dynamic urls
-- Useful with AWS with same client
+
+---
+
+## Retrofit2: Services
+
+```java
+public interface AwsService {
+
+  @GET
+  public Call<File> getImage(@Url String url);
+}
+```
+
+Useful when working with external Services
+
+^
+- If you need to upload an image to AWS
+- Needed to create a new retrofit client
 
 ---
 
@@ -399,11 +429,19 @@ call.cancel();
 
 ---
 
-## Retrofit2: Response Encapsulation
+![inline](all-the-things-emoji.png)
+# Rx all the things!
 
 ^
-- Responses are now parameterized
-- Encapsulated as a single request
+- For the rest of this I'm going to assume the use of RxJava adapters
+
+---
+
+
+## What happens when things go wrong?
+
+^
+- How would retrofit1 handle server errors
 
 ---
 
@@ -427,18 +465,7 @@ call.cancel();
 
 ---
 
-## Call, Result, Response
-
----
-
 ## When response has error body is null
-
----
-
-## What happens when things go wrong?
-
-^
-- How would retrofit1 handle server errors
 
 ---
 
@@ -493,6 +520,51 @@ public Object getBodyAs(Type type) {
   }
 }
 ```
+
+---
+
+## RxJava Adapter Observables
+
+```java
+// Flowable<Response<T>>: Creates observable from call, throws IOException
+public class CallObserver<T> extends Observable<Response<T>> {
+  CallObservable(Call<T> originalCall) {}
+}
+
+// Flowable<T>: Wraps CallObserver, gives HttpException on server error
+public class BodyObserver<T> extends Observable<T> {
+  BodyObservable(Observable<Response<T>> upstream) {}
+}
+
+// Flowable<Result<T>>: Wraps CallObserver, includes IOException inside Result
+public class ResultObservable<T> extends Observable<Result<T>> {
+  ResultObservable(Observable<Response<T>> upstream) {}
+}
+```
+
+---
+
+## Call, Result, Response
+
+^
+Call: Default container provided by Retrofit2
+Allows execution of request, doesn't contain error information
+
+^
+Response: Default result container provided by Retrofit2
+Contains error information and response body
+
+^
+Result: RxJava adapter container
+Contains response body and throwable used for observable propagation
+
+^
+Standard Hierarchy
+Call -> Response -> T
+
+^
+RxJava Hierarchy
+Observable -> Result -> Response -> T
 
 ---
 
