@@ -459,23 +459,19 @@ call.cancel();
 ---
 
 ```java
-public void login(String username, String password) {
-  service.login(username, password)
-    .observeOn(AndroidSchedulers.mainThread())
-    .subscribeOn(Schedulers.io())
-    .subscribe(user -> {
-        session.storeUser(user);
-        view.gotoProfile();
-    }, throwable -> {
-        if (throwable instanceof RetrofitError) {
-          processServerError(
-            ((RetrofitError) throwable).getBodyAs(ServerError.class)
-          );
-        }
+service.login(username, password)
+  .subscribe(user -> {
+    session.storeUser(user);
+    view.gotoProfile();
+  }, throwable -> {
+    if (throwable instanceof RetrofitError) {
+      processServerError(
+        ((RetrofitError) throwable).getBodyAs(ServerError.class)
+      );
+    }
 
-        view.onError(throwable.getMessage());
-    });
-}
+    view.onError(throwable.getMessage());
+  });
 ```
 
 ^
@@ -501,6 +497,48 @@ FAILURE: Build failed with an exception.
 ---
 
 `* goes to stackoverflow.com *`
+
+---
+
+## RetrofitError is dead.
+### Long live IOException.
+
+^
+- Jake Wharton decided to remove RetrofitError
+- This is what Jake had to see on the matter
+
+---
+
+> "I find that API to awful (which I'm allowed to say as the author)"
+-- Jake Wharton (Nov 7, 2015)
+
+---
+
+```java
+service.login(username, password)
+  .subscribe(user -> {
+    session.storeUser(user);
+    view.gotoProfile();
+  }, throwable -> {
+    // Now What?!
+  });
+```
+
+^
+- Lets revisit our login code without a RetrofitError
+
+---
+
+## RetrofitError
+
+^
+- Lets first take a look at RetrofitError
+- What it was doing for us
+- and why it gets such a bad rep
+
+---
+
+## Retrofit: RetrofitError
 
 ---
 
@@ -645,8 +683,3 @@ public enum Kind {
 
 > "I love Factories!"
 -- @alosdev
-
----
-
-> "I find that API to awful (which I'm allowed to say as the author)"
--- Jake Wharton (Nov 7, 2015)
