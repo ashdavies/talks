@@ -1,6 +1,16 @@
 # [fit] Retrofit 2
 ## What the IOException?!
 
+^
+- HttpException is more accurate
+- When planning IOException sounded cooler
+
+---
+
+# [fit] Retrofit 2
+## ~~What the IOException?!~~
+## What the HttpException?!
+
 ---
 
 ## Ash Davies
@@ -16,7 +26,7 @@
 
 ^
 - Because my name was taken
-- and I like to shout at thing
+- and I like to shout at things
 
 ---
 
@@ -501,16 +511,10 @@ FAILURE: Build failed with an exception.
 ---
 
 ## RetrofitError is dead.
-### Long live IOException.
+### Long live HttpException.
 
 ^
-- Jake Wharton decided to remove RetrofitError
-- This is what Jake had to see on the matter
-
----
-
-> "I find that API to awful (which I'm allowed to say as the author)"
--- Jake Wharton (Nov 7, 2015)
+- Lets take another look at the login method
 
 ---
 
@@ -533,72 +537,11 @@ service.login(username, password)
 
 ^
 - Lets first take a look at RetrofitError
-- What it was doing for us
-- and why it gets such a bad rep
+- What was it doing for us and why it gets such a bad rep
 
 ---
 
 ## Retrofit: RetrofitError
-
----
-
-## IOException used for network exceptions
-
----
-
-## HttpException used for non 2xx http responses
-
----
-
-## Hard to distinguish serialisation exceptions
-
----
-
-## onResponse called even if request not successful
-
----
-
-## isSuccessful to check if call succeeded
-
----
-
-## When response has error body is null
-
----
-
-```json
-{
-    statusCode: 400,
-    message: "Malformed email"
-}
-```
-
-^
-- Here the server gives us some useful information
-- This may also localised using your accept headers
-
----
-
-## RetrofitError
-
----
-
-```java
-public void onError(Throwable throwable) {
- if (throwable instanceof RetrofitError) {
-   return onError((RetrofitError) throwable).getBody(ServerError.class));
- }
-}
-
-public void onError(ServerError error) {
-  Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
-}
-```
-
-^
-- Here RetrofitError allows you to cast the body response
-
----
 
 ```java
 /* Retrofit 1.9: RetrofitError */
@@ -617,6 +560,79 @@ public Object getBodyAs(Type type) {
   }
 }
 ```
+
+^
+- RetrofitError allows you to cast the error body response
+- Violation of single responsibility principle
+
+---
+
+> "How do you know if it was a conversion error, network error, random error inside Retrofit? Yuck."
+-- Jake Wharton (Jul 25, 2013)
+
+---
+
+## Retrofit: RetrofitError
+
+```java
+/** Identifies the event kind which triggered a {@link RetrofitError}. */
+public enum Kind {
+  /** An {@link IOException} occurred while communicating to the server. */
+  NETWORK,
+  /** An exception was thrown while (de)serializing a body. */
+  CONVERSION,
+  /** A non-200 HTTP status code was received from the server. */
+  HTTP,
+  /**
+   * An internal error occurred while attempting to execute a request. It is best practice to
+   * re-throw this exception so your application crashes.
+   */
+  UNEXPECTED
+}
+```
+
+Introduced in Retrofit v1.7 (Oct 8, 2014)
+
+^
+- But it didn't quite meet Jake's requirements
+
+---
+
+> "I find that API to awful (which I'm allowed to say as the author)"
+-- Jake Wharton (Nov 7, 2015)
+
+^
+- The typo isn't mine
+
+---
+
+## What Now?
+
+^
+- So what now?
+
+---
+
+## Retrofit2
+
+### Network exceptions: IOException
+### 2xx Http responses: HttpException
+
+^
+- Not clear the difference between an network and serialisation error
+
+---
+
+```json
+{
+    statusCode: 400,
+    message: "Malformed email"
+}
+```
+
+^
+- Here the server gives us some useful information
+- This may also localised using your accept headers
 
 ---
 
@@ -657,25 +673,6 @@ public class BodyObserver<T> extends Observable<T> {
 // Flowable<Result<T>>: Wraps CallObserver, includes IOException inside Result
 public class ResultObservable<T> extends Observable<Result<T>> {
   ResultObservable(Observable<Response<T>> upstream) {}
-}
-```
-
----
-
-```java
-/** Identifies the event kind which triggered a {@link RetrofitError}. */
-public enum Kind {
-  /** An {@link IOException} occurred while communicating to the server. */
-  NETWORK,
-  /** An exception was thrown while (de)serializing a body. */
-  CONVERSION,
-  /** A non-200 HTTP status code was received from the server. */
-  HTTP,
-  /**
-   * An internal error occurred while attempting to execute a request. It is best practice to
-   * re-throw this exception so your application crashes.
-   */
-  UNEXPECTED
 }
 ```
 
