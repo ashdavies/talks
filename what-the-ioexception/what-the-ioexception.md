@@ -181,6 +181,36 @@ moshi, scalars, simplexml, wire, jackson, protobuf
 
 ---
 
+## Logging
+
+^
+- Original request logging is no longer included with Retrofit
+
+---
+
+## Retrofit2: Logging
+
+```groovy
+// build.gradle
+compile 'com.squareup.okhttp3:logging-interceptor:3.4.1'
+```
+
+```java
+// NetworkModule.java
+HttpLoggingInterceptor logger = new HttpLoggingInterceptor();
+logger.setLevel(HttpLoggingInterceptor.Level.BODY);
+
+OkHttpClient client = new OkHttpClient.Builder()
+        .addInterceptor(logger)
+        .build();
+```
+
+^
+- Since Retrofit now uses OkHttp as its client
+- Logging must be performed via an interceptor
+
+---
+
 ## Adapters
 
 ---
@@ -292,6 +322,39 @@ public interface Service {
 
 ^
 - Retrofit 2 does not allow this in the interface definition
+- Take another look at the url in this service
+
+---
+
+## Retrofit2: Services
+
+```java
+/* Retrofit 1.9 */
+@GET("/articles")
+
+/* Retrofit 2.1 */
+@GET("articles")
+```
+
+^
+- Base url resolution provided by HttpUrl.resolve()
+- Use relative urls for your partial endpoints
+
+---
+
+## Retrofit2: Services
+
+```java
+public interface AwsService {
+
+  @GET
+  public Call<File> getImage(@Url String url);
+}
+```
+
+^
+- Retrofit now supports dynamic urls
+- Useful with AWS with same client
 
 ---
 
@@ -313,41 +376,7 @@ call.enqueue();
 
 ---
 
-## Response<T>
-
-^
-- Responses are now parameterized
-- Encapsulated as a single request
-
----
-
-## Cancel Requests
-
-^
-- What if I start making a network request in my application that I want to Cancel
-- Either because the user has navigated somewhere where the request isn't necessary
-- Or the user actively cancelled the network operation
-
----
-
-```java
-/* Retrofit 1.9 */
-
-ExecutorService executors = Executors.newCachedThreadPool();
-
-RestAdapter adapter = new RestAdapter.Builder()
-  .setExecutor(executors)
-  .build();
-
-adapter.create(MyService.class).myMethod();
-
-executors.shutdownNow();
-```
-
-^
-- Cancelling on Retrofit 1 requires you to kill a custom thread
-
----
+## Retrofit2: Cancel Requests
 
 ```java
 /* Retrofit 2.1 */
@@ -360,32 +389,29 @@ call.cancel();
 ```
 
 ^
+- Either because the user has navigated somewhere where the request isn't necessary
 - Cancelling on Retrofit 2 is as simple as calling a method on the call
 - and you can check if the call was cancelled with `isCancelled()`
 
 ---
 
-## Base url resolution provided by HttpUrl.resolve()
+![](baldwin-nice.gif)
 
 ---
 
-## OkHttp logging interceptor
+## Retrofit2: Response Encapsulation
 
----
-
-## Dependency on OkHttp where default http client used previously
-
----
-
-## OkHttp interceptors
-
----
-
-## HttpException used for non 2xx http responses
+^
+- Responses are now parameterized
+- Encapsulated as a single request
 
 ---
 
 ## IOException used for network exceptions
+
+---
+
+## HttpException used for non 2xx http responses
 
 ---
 
