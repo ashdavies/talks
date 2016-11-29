@@ -196,11 +196,44 @@ moshi, scalars, simplexml, wire, jackson, protobuf
 
 ---
 
-![](looking-good.gif)
+## Multiple Converters
+
+---
+
+## Retrofit2: Multiple Converters
+- Checks every Converter Sequentially
 
 ^
-- So good so far...
-- What else?
+- Retrofit2 checks every converter that is capable of dealing with the data type
+- If it can't understand the data Retrofit moves to the next one
+
+---
+
+## Retrofit2: Multiple Converters
+- Checks every converter sequentially
+- Register converter factories in order
+
+^
+- Register your special converter factories first
+- General converters like Gson last
+
+---
+
+## Retrofit2: Multiple Converters
+- Checks every converter sequentially
+- Register converter factories in order
+- Create custom `retrofit2.Converter.Factory`
+
+^
+- You can create custom converter factories using retrofit2 converter factory
+- For use with serialisation that may not have a retrofit2 converter
+
+---
+
+> "I love Factories!"
+-- @alosdev
+
+![right](true-story.gif)
 
 ---
 
@@ -318,6 +351,14 @@ com.squareup.retrofit:converter-guava
 
 ^
 - Guava futures if you MultiDex and hate your users
+
+---
+
+![](looking-good.gif)
+
+^
+- So good so far...
+- What else?
 
 ---
 
@@ -697,13 +738,38 @@ service.login(username, password)
 - Contains a response object
 - Response is not serialisable
 
+
+---
+
+## IOException
+
+---
+
+## Retrofit2: IOException
+### RetrofitError.Kind.NETWORK
+### RetrofitError.Kind.CONVERSION
+
+![right](reynolds-confused.gif)
+
 ^
+- Detecting serialisation issues is pretty hard
+- IOExceptions are thrown for both network errors and conversions
+
+---
+
+## Retrofit: IOExceptions
+### isConnectedOrConnecting();
+
+![right](reynolds-ouch.gif)
+
+^
+- You can typically detect connection issues with the ConnectivityManager
+- Be careful not to pollute your error handling code however
 - So what will our throwable look like?
 
 ---
 
 ```java
-/* Retrofit 2.1 */
 throwable -> {
   if (throwable instanceof HttpException) {
     // non-2xx error
@@ -721,11 +787,87 @@ throwable -> {
 
 ---
 
-## Cool story bro
+## Cool story bro...
 
 ^
-- Ok cool so we know what we're dealing with
+- Ok cool so we know our exceptions
 - How can we deal with it?
+
+---
+
+```java
+@AutoValue
+public abstract class ServerError extends RuntimeException {
+
+  public abstract int getStatusCode();
+  public abstract String message();
+}
+```
+
+^
+- Lets say we have a server error object
+- For brevity here I'm using AutoValue
+
+---
+
+```java
+public class ServerErrorProcessor {
+
+  private final Converter<ResponseBody, ServerError> converter;
+
+  public ServerErrorProcessor(Retrofit retrofit) {
+    this(retrofit.responseBodyConverter(ServerError.class, new Annotation[0]));
+  }
+
+  private ServerErrorProcessor(Converter<ResponseBody, ServerError> converter) {
+    this.converter = converter;
+  }
+
+  public <T> Function<Throwable, Publisher<? extends T>> convert() {
+    return throwable -> {
+      if (throwable instanceof HttpException) {
+        Response response = ((HttpException) throwable).response();
+        return Flowable.error(converter.convert(response.errorBody()));
+      }
+
+      return Flowable.error(throwable);
+    };
+  }
+}
+```
+
+^
+- Creates a response body converter from the retrofit instanceof
+- Provides a Flowable function to convert HttpException to a server error
+
+---
+
+```java
+public static class UserClient {
+
+  private final ErrorProcessor processor;
+  private final UserService service;
+
+  public UserClient(Retrofit retrofit) {
+    this(retrofit.create(UserService.class), new ErrorProcessor(retrofit));
+  }
+
+  private UserClient(UserService service, ErrorProcessor processor) {
+    this.service = service;
+    this.processor = processor;
+  }
+
+  public Flowable<User> login(String username, String password) {
+    return service.login(username, password)
+        .onErrorResumeNext(processor.convert());
+  }
+}
+```
+
+^
+- Use Rx onErrorResumeNext to check for an HttpException
+- HttpException has been converted to a parsed ServerError
+- If you want to wrap the entire exception into a custom one...
 
 ---
 
@@ -744,95 +886,101 @@ gist.github.com/koesie10/bc6c62520401cc7c858f
 ---
 
 ```java
-@AutoValue
-public abstract class ServerError implements Throwable {
-  public int getStatusCode()
-  public String message();
+public static RetrofitException from(Throwable throwable) {
+  if (throwable instanceof HttpException) {
+    Response response = (HttpException) throwable).response();
+    Request request = response.raw().request();
+
+    return RetrofitException.http(request.url().toString(), response, retrofit);
+  }
+
+  if (throwable instanceof IOException) {
+    return RetrofitException.network((IOException) throwable);
+  }
+
+  return RetrofitException.unexpected(throwable);
 }
 ```
 
 ^
-- Lets say we have a server error object
-- For brevity here I'm using AutoValue
+- Creates RetrofitException as clone of RetrofitError
+- Can be created from HttpException or IOException
 
 ---
 
 ```java
-// Server error response body converter
-Converter<ResponseBody, ServerError> converter =
-  retrofit.responseBodyConverter(ServerError.class, new Annotation[0]);
-```
+public class RxErrorHandlingCallAdapterFactory extends CallAdapter.Factory {
+  private final RxJavaCallAdapterFactory original = RxJavaCallAdapterFactory.create();
 
-^
-- Create a response body converter from the Retrofit adapter
+  @Override
+  public CallAdapter<?> get(Type returnType, Annotation[] annotations, Retrofit retrofit) {
+    return new RxCallAdapterWrapper(retrofit, original.get(returnType, annotations, retrofit));
+  }
 
----
+  private static class RxCallAdapterWrapper implements CallAdapter<Observable<?>> {
+    private final Retrofit retrofit;
+    private final CallAdapter<?> wrapped;
 
-```java
-public void login(String username, String password) {
-  service.login(username, password)
-    .onErrorResumeNext(throwable -> {
-      if (throwable instanceof HttpException) {
+    public RxCallAdapterWrapper(Retrofit retrofit, CallAdapter<?> wrapped) {
+      this.retrofit = retrofit;
+      this.wrapped = wrapped;
+    }
 
-        // Get error response body
-        Response<?> response = ((HttpException) throwable).response();
+    @Override
+    public Type responseType() {
+      return wrapped.responseType();
+    }
 
-        // Return serialised ServerError
-        return Observable.error(converter.convert(response.errorBody()));
-      }
-
-      // Return any other errors
-      return Observable.error(throwable);
-    });
+    @Override
+    public <R> Observable<?> adapt(Call<R> call) {
+      return ((Observable) wrapped.adapt(call)).onErrorResumeNext(throwable -> {
+        return Observable.error(RetrofitException.from(throwable));
+      });
+    }
+  }
 }
 ```
-
-^
-- Use Rx onErrorResumeNext to check for an HttpException
 
 ---
 
 ## RxJava Adapters
 
-```java
-public class Service {
-
-  // Calls onNext with the deserialized body for 2XX responses and calls onError
-  // with HttpException for non-2XX responses and IOException for network errors.
-  Observable<T> call();
-
-  // Calls onNext with a Response object for all HTTP responses and calls
-  // onError with IOException for network errors.
-  Observable<Response<T>> call();
-
-  // Calls onNext with a Result object for all HTTP responses and errors.
-  Observable<Result<T>> call();
-
-}
-```
+^
+- You can also take more control over the result
+- RxJava adapters for different service responses
+- Important to know which exceptions will be passed
 
 ---
 
-## RxJava2 Adapter Observables
+## RxJava Adapters
+### `Observable<T> call();`
 
-```java
-// Flowable<Response<T>>: Creates observable from call, throws IOException
-public class CallObserver<T> extends Observable<Response<T>> {
-  CallObservable(Call<T> originalCall) {}
-}
-
-// Flowable<T>: Wraps CallObserver, gives HttpException on server error
-public class BodyObserver<T> extends Observable<T> {
-  BodyObservable(Observable<Response<T>> upstream) {}
-}
-
-// Flowable<Result<T>>: Wraps CallObserver, includes IOException inside Result
-public class ResultObservable<T> extends Observable<Result<T>> {
-  ResultObservable(Observable<Response<T>> upstream) {}
-}
-```
+^
+- onNext with deserialised body for 2xx responses
+- onError with HttpException for non-2xx responses
+- onError with IOException for network calls
 
 ---
 
-> "I love Factories!"
--- @alosdev
+## RxJava Adapters
+### `Observable<Response<T>> call();`
+
+^
+- onNext with a response object for all Http responses
+- onError with IOException for network errors
+
+---
+
+## RxJava Adapters
+### `Observable<Result<T>> call();`
+
+^
+- onNext with a result object for all Http responses and errors
+
+---
+
+That's all folks
+
+---
+
+Thank You
