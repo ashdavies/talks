@@ -3,7 +3,6 @@
 
 ^
 - HttpException is more accurate
-- When planning IOException sounded cooler
 
 ---
 
@@ -11,22 +10,8 @@
 ## ~~What the IOException?!~~
 ## What the HttpException?!
 
----
-
-## Ash Davies
-### @DogmaticCoder
-
 ^
-- Why dogmatic coder?
-
----
-
-## Ash Davies
-### ~~@AshDavies~~
-
-^
-- Because my name was taken
-- and I like to shout at things
+- When planning IOException sounded cooler
 
 ---
 
@@ -101,21 +86,32 @@ dependencies {
 
 ---
 
+## Method Counts
+
+---
+
 ## Retrofit2: Dependencies
 
-```groovy
-dependencies {
+**Retrofit 1.9 (1997)**
+Retrofit (776)
+Gson (1231)
 
-  // Retrofit 2.1
-  compile 'com.squareup.okhttp3:okhttp:3.3.0'
-  compile 'com.squareup.okio:okio:1.8.0'
-
-}
-```
+**Retrofit 2.1 (3349)**
+Retrofit (508)
+OkHttp (2180)
+OkIo (661)
 
 ^
-- Retrofit now uses the OkHttp client as a dependency
-- OkHttp: RequestBody, Header, Interceptor replaced
+- Considerable difference because of dependency on OkHttp
+
+---
+
+## OkHttp
+
+^
+- Retrofit inherits OkHttp call pattern
+- Uses request elements from OkHttp too
+- Interceptor, Response, RequestBody
 
 ---
 
@@ -127,7 +123,7 @@ dependencies {
 
 ---
 
-## Retrofit2: Adapter
+## Retrofit2: RestAdapter
 
 ```java
 // Retrofit 1.9
@@ -150,15 +146,15 @@ Retrofit retrofit = new Retrofit.Builder()
 
 ---
 
-![](looking-good.gif)
-
-^
-- So good so far...
-- What else?
+## Converters
 
 ---
 
 ## Converters
+### Serialisation / Deserialisation
+
+^
+- Converters deal with the serialisation of your data objects
 
 ---
 
@@ -170,7 +166,7 @@ Retrofit retrofit = new Retrofit.Builder()
 ```
 
 ^
-- Retrofit 1.9 included GsonConverter to automatically parse your DAO's
+- Retrofit 1.9 included GsonConverter and had gson as a dependency
 - Retrofit 2.1 does not include any converters automatically
 
 ---
@@ -200,6 +196,14 @@ moshi, scalars, simplexml, wire, jackson, protobuf
 
 ---
 
+![](looking-good.gif)
+
+^
+- So good so far...
+- What else?
+
+---
+
 ![](logging-background.jpeg)
 
 ## Logging
@@ -212,12 +216,19 @@ moshi, scalars, simplexml, wire, jackson, protobuf
 ## Retrofit2: Logging
 
 ```groovy
-// build.gradle
-compile 'com.squareup.okhttp3:logging-interceptor:3.4.1'
+dependencies {
+  compile 'com.squareup.okhttp3:logging-interceptor:3.4.1'
+}
 ```
 
+^
+- Since Retrofit now uses OkHttp as its client
+
+---
+
+## Retrofit2: Logging
+
 ```java
-// NetworkModule.java
 HttpLoggingInterceptor logger = new HttpLoggingInterceptor();
 logger.setLevel(HttpLoggingInterceptor.Level.BODY);
 
@@ -227,23 +238,28 @@ OkHttpClient client = new OkHttpClient.Builder()
 ```
 
 ^
-- Since Retrofit now uses OkHttp as its client
 - Logging must be performed via an interceptor
 
 ---
 
 ## Adapters
 
+---
+
+## Adapters
+### Call -> Asynchronous Consumer
+
 ^
-- Call adapters not included
+- Adapters convert a standard call to another asynchronous consumer
+- Unlike Retrofit1 call adapters do not come included
 
 ---
 
 ## Retrofit2: Adapters
 
 ```java
-// RxJava
-compile 'com.squareup.retrofit2:adapter-rxjava'
+// RxJava: Observable<T>
+com.squareup.retrofit2:adapter-rxjava
 ```
 
 ^
@@ -254,11 +270,11 @@ compile 'com.squareup.retrofit2:adapter-rxjava'
 ## Retrofit2: Adapters
 
 ```java
-// RxJava
-compile 'com.squareup.retrofit2:adapter-rxjava'
+// RxJava: Observable<T>
+com.squareup.retrofit2:adapter-rxjava
 
-// RxJava2
-compile 'com.jakewharton.retrofit:retrofit2-rxjava2-adapter:1.0.0'
+// RxJava2: Flowable<T>
+com.jakewharton.retrofit:retrofit2-rxjava2-adapter
 ```
 
 ^
@@ -269,14 +285,14 @@ compile 'com.jakewharton.retrofit:retrofit2-rxjava2-adapter:1.0.0'
 ## Retrofit2: Adapters
 
 ```java
-// RxJava
-compile 'com.squareup.retrofit2:adapter-rxjava'
+// RxJava: Observable<T>
+com.squareup.retrofit2:adapter-rxjava
 
-// RxJava2
-compile 'com.jakewharton.retrofit:retrofit2-rxjava2-adapter:1.0.0'
+// RxJava2: Flowable<T>
+com.jakewharton.retrofit:retrofit2-rxjava2-adapter
 
-// Java8
-compile 'com.squareup.retrofit:converter-java8'
+// Java8: CompletableFuture<T>
+com.squareup.retrofit:converter-java8
 ```
 
 ^
@@ -287,17 +303,17 @@ compile 'com.squareup.retrofit:converter-java8'
 ## Retrofit2: Adapters
 
 ```java
-// RxJava
-compile 'com.squareup.retrofit2:adapter-rxjava'
+// RxJava: Observable<T>
+com.squareup.retrofit2:adapter-rxjava
 
-// RxJava2
-compile 'com.jakewharton.retrofit:retrofit2-rxjava2-adapter:1.0.0'
+// RxJava2: Flowable<T>
+com.jakewharton.retrofit:retrofit2-rxjava2-adapter
 
-// Java8
-compile 'com.squareup.retrofit:converter-java8'
+// Java8: CompletableFuture<T>
+com.squareup.retrofit:converter-java8
 
-// Guava
-compile 'com.squareup.retrofit:converter-guava'
+// Guava: ListenableFuture<T>
+com.squareup.retrofit:converter-guava
 ```
 
 ^
@@ -468,7 +484,31 @@ call.cancel();
 
 ---
 
+## Retrofit2: Errors
+
+^
+- Lets say we have a standard user journey
+- But the user puts in a wrong email address
+
+---
+
+## Retrofit2: Errors
+
+```json
+{
+    statusCode: 400,
+    message: "Malformed email"
+}
+```
+
+^
+- Here the server gives us some useful information
+- This may also localised using your accept headers
+
+---
+
 ```java
+/* Retrofit 1.9 */
 service.login(username, password)
   .subscribe(user -> {
     session.storeUser(user);
@@ -485,8 +525,8 @@ service.login(username, password)
 ```
 
 ^
-- Lets give a basic login flow for example
-- Pretty straight forward sample that you might recognise from Retrofit 1
+- How would you consume this error in Retrofit 1?
+- Goto user profile on success, process server error on failure
 
 ---
 
@@ -512,24 +552,6 @@ FAILURE: Build failed with an exception.
 
 ## RetrofitError is dead.
 ### Long live HttpException.
-
-^
-- Lets take another look at the login method
-
----
-
-```java
-service.login(username, password)
-  .subscribe(user -> {
-    session.storeUser(user);
-    view.gotoProfile();
-  }, throwable -> {
-    // Now What?!
-  });
-```
-
-^
-- Lets revisit our login code without a RetrofitError
 
 ---
 
@@ -593,50 +615,184 @@ public enum Kind {
 
 Introduced in Retrofit v1.7 (Oct 8, 2014)
 
-^
-- But it didn't quite meet Jake's requirements
-
 ---
 
 > "I find that API to awful (which I'm allowed to say as the author)"
 -- Jake Wharton (Nov 7, 2015)
 
 ^
-- The typo isn't mine
+- Forces creating messy bug prone code in the caller
 
 ---
 
 ## What Now?
 
 ^
-- So what now?
+- So what do we do now?
+- Lets revisit our login code
 
 ---
 
-## Retrofit2
-
-### Network exceptions: IOException
-### 2xx Http responses: HttpException
+```java
+/* Retrofit 2.1 */
+service.login(username, password)
+  .subscribe(user -> {
+    session.storeUser(user);
+    view.gotoProfile();
+  }, throwable -> {
+    // Now What?!
+  });
+```
 
 ^
-- Not clear the difference between an network and serialisation error
+- How can we react to this throwable?
 
 ---
 
-```json
-{
-    statusCode: 400,
-    message: "Malformed email"
+## Exceptions
+
+^
+- In Retrofit2 there are two main exception
+
+---
+
+## Retrofit2: Exceptions
+### IOException: Network errors
+
+^
+- Loss of connectivity
+- Serialisation errors
+- Hard to know which
+
+---
+
+## Retrofit2: Exceptions
+### HttpException: Non 2xx responses
+
+^
+- Server errors giving a non-2xx responses
+
+---
+
+## HttpException
+
+---
+
+## Retrofit2: HttpException
+
+- Included in Retrofit2 adapters
+
+---
+
+## Retrofit2: HttpException
+
+- Included in Retrofit2 adapters
+- Contains a response object
+
+---
+
+## Retrofit2: HttpException
+
+- Included in Retrofit2 adapters
+- Contains a response object
+- Response is not serialisable
+
+^
+- So what will our throwable look like?
+
+---
+
+```java
+/* Retrofit 2.1 */
+throwable -> {
+  if (throwable instanceof HttpException) {
+    // non-2xx error
+  }
+
+  else if (throwable instanceof IOException) {
+    // Network or conversion error
+  }
+
+  else {
+    // ¯\_(ツ)_/¯
+  }
+}
+```
+
+---
+
+## Cool story bro
+
+^
+- Ok cool so we know what we're dealing with
+- How can we deal with it?
+
+---
+
+## "RetrofitException"
+
+---
+
+![inline](retrofit-exception-gist.png)
+
+gist.github.com/koesie10/bc6c62520401cc7c858f
+
+^
+- Introduces Retrofit1 error handling in Retrofit2
+- Doesn't really solve the problem that RetrofitError had
+
+---
+
+```java
+@AutoValue
+public abstract class ServerError implements Throwable {
+  public int getStatusCode()
+  public String message();
 }
 ```
 
 ^
-- Here the server gives us some useful information
-- This may also localised using your accept headers
+- Lets say we have a server error object
+- For brevity here I'm using AutoValue
 
 ---
 
-## RxJava Adapter Observables
+```java
+// Server error response body converter
+Converter<ResponseBody, ServerError> converter =
+  retrofit.responseBodyConverter(ServerError.class, new Annotation[0]);
+```
+
+^
+- Create a response body converter from the Retrofit adapter
+
+---
+
+```java
+public void login(String username, String password) {
+  service.login(username, password)
+    .onErrorResumeNext(throwable -> {
+      if (throwable instanceof HttpException) {
+
+        // Get error response body
+        Response<?> response = ((HttpException) throwable).response();
+
+        // Return serialised ServerError
+        return Observable.error(converter.convert(response.errorBody()));
+      }
+
+      // Return any other errors
+      return Observable.error(throwable);
+    });
+}
+```
+
+^
+- Use Rx onErrorResumeNext to check for an HttpException
+
+---
+
+## RxJava Adapters
 
 ```java
 public class Service {
