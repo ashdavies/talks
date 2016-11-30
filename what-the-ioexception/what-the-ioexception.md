@@ -97,12 +97,39 @@ Retrofit (776)
 Gson (1231)
 
 **Retrofit 2.1 (3349)**
-Retrofit (508)
-OkHttp (2180)
+retrofit2 (508)
+OkHttp3 (2180)
 OkIo (661)
 
 ^
 - Considerable difference because of dependency on OkHttp
+- Make note these figures are base values
+- You are probably already using OkHttp with 1.9
+
+---
+
+## Retrofit2: Dependencies
+**Retrofit 1.9 (4848)**
+Retrofit (776)
+OkHttp3 (2180)
+Gson (1231)
+OkIo (661)
+
+---
+
+## Retrofit2: Dependencies
+**Retrofit 2.1 (3496)**
+Retrofit2 (508)
+Converter-Gson (32)
+Adapter-RxJava (115)
+OkHttp3 (2180)
+OkIo (661)
+
+---
+
+## Retrofit2: Dependencies
+### Retrofit 1.9 & 2.1 (+655)
+### Retrofit 1.9 > 2.1 (-1352)
 
 ---
 
@@ -151,6 +178,7 @@ Retrofit retrofit = new Retrofit.Builder()
 - Converters deal with the serialisation of your data objects
 - Factories no longer dependent on Gson package
 - Are parameterised and generated from a factory
+- Don't require two way
 
 ---
 
@@ -807,22 +835,28 @@ throwable -> {
 ---
 
 ```java
-@AutoValue
 public abstract class ServerError extends RuntimeException {
 
-  public abstract int getStatusCode();
-  public abstract String message();
+  private final int statusCode;
+
+  public ServerError(int statusCode, String message) {
+    super(message);
+    this.statusCode = statusCode;
+  }
+
+  public int getStatusCode() {
+    return statusCode;
+  }
 }
 ```
 
 ^
 - Lets say we have a server error object
-- For brevity here I'm using AutoValue
 
 ---
 
 ```java
-public class ServerErrorProcessor {
+public class ErrorProcessor {
 
   private final Converter<ResponseBody, ServerError> converter;
 
@@ -834,14 +868,14 @@ public class ServerErrorProcessor {
     this.converter = converter;
   }
 
-  public <T> Function<Throwable, Publisher<? extends T>> convert() {
+  public <T> Function<Throwable, Observable<? extends T>> convert() {
     return throwable -> {
       if (throwable instanceof HttpException) {
         Response response = ((HttpException) throwable).response();
-        return Flowable.error(converter.convert(response.errorBody()));
+        return Observable.error(converter.convert(response.errorBody()));
       }
 
-      return Flowable.error(throwable);
+      return Observable.error(throwable);
     };
   }
 }
@@ -882,13 +916,8 @@ public static class UserClient {
 
 ---
 
-## "RetrofitException"
-
----
-
-![inline](retrofit-exception-gist.png)
-
-gist.github.com/koesie10/bc6c62520401cc7c858f
+## RetrofitException
+### goo.gl/N5tRoH
 
 ^
 - Introduces Retrofit1 error handling in Retrofit2
