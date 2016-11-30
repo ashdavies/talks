@@ -148,18 +148,9 @@ Retrofit retrofit = new Retrofit.Builder()
 
 ## Converters
 ^
-- Converters havent changed much since Retrofit1
-- No longer dependent on GsonConverterFactory
-- Are parameterised and generated from a factory
-
----
-
-## Converters
-### Serialisation / Deserialisation
-
-^
-- Client and server need to agree on a common data representation format
 - Converters deal with the serialisation of your data objects
+- Factories no longer dependent on Gson package
+- Are parameterised and generated from a factory
 
 ---
 
