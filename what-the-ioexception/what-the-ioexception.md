@@ -140,13 +140,17 @@ Retrofit retrofit = new Retrofit.Builder()
 ```
 
 ^
+- `RestAdapter` renamed to `Retrofit`
 - No Retrofit client wrapper (Ok3Client)
-- `Adapter` renamed to `Retrofit`
-- `baseUrl` renamed to `endpoint`
+- `setEndpoint` renamed to `baseUrl`
 
 ---
 
 ## Converters
+^
+- Converters havent changed much since Retrofit1
+- No longer dependent on GsonConverterFactory
+- Are parameterised and generated from a factory
 
 ---
 
@@ -154,15 +158,14 @@ Retrofit retrofit = new Retrofit.Builder()
 ### Serialisation / Deserialisation
 
 ^
+- Client and server need to agree on a common data representation format
 - Converters deal with the serialisation of your data objects
 
 ---
 
 ## Retrofit2: Converters
-```java
-Retrofit retrofit = new Retrofit.Builder()
-  .addConverterFactory(GsonConverterFactory.create())
-  .build();
+```groovy
+compile 'com.squareup.retrofit2:converter-gson:2.1.0'
 ```
 
 ^
@@ -172,36 +175,50 @@ Retrofit retrofit = new Retrofit.Builder()
 ---
 
 ## Retrofit2: Converters
-
-```java
+```groovy
 compile 'com.squareup.retrofit2:converter-gson:2.1.0'
 ```
 
+```java
+Retrofit retrofit = new Retrofit.Builder()
+  .addConverterFactory(GsonConverterFactory.create())
+  .build();
+```
+
 ^
-- No duplication of converters when choosing an alternative
-- This covers all of your request and response body converters
+- This covers both your request and response body converters
 
 ---
 
 ## Retrofit2: Converters
+```groovy
+compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+```
 
 ```java
-compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+Retrofit retrofit = new Retrofit.Builder()
+  .addConverterFactory(GsonConverterFactory.create())
+  .build();
 ```
 
 moshi, scalars, simplexml, wire, jackson, protobuf
 
 ^
-- Also available for other adapters
+- Other serialisation converters can be used
+- No duplication of converters using an alternative
 
 ---
 
 ## Multiple Converters
 
+^
+- Using multiple converters is similar to Retrofit1
+- Converter Factory is not dependent on Gson either
+
 ---
 
 ## Retrofit2: Multiple Converters
-- Checks every Converter Sequentially
+- Checks every converter sequentially
 
 ^
 - Retrofit2 checks every converter that is capable of dealing with the data type
@@ -214,6 +231,7 @@ moshi, scalars, simplexml, wire, jackson, protobuf
 - Register converter factories in order
 
 ^
+- Retrofit will take first successful converter
 - Register your special converter factories first
 - General converters like Gson last
 
@@ -225,8 +243,10 @@ moshi, scalars, simplexml, wire, jackson, protobuf
 - Create custom `retrofit2.Converter.Factory`
 
 ^
-- You can create custom converter factories using retrofit2 converter factory
-- For use with serialisation that may not have a retrofit2 converter
+- You can create custom converter factories
+- For use with custom serialisation methods
+- If you have legacy code or manual json converters
+- Any questions on this directed as @alosdev
 
 ---
 
@@ -976,10 +996,6 @@ public class RxErrorHandlingCallAdapterFactory extends CallAdapter.Factory {
 
 ^
 - onNext with a result object for all Http responses and errors
-
----
-
-That's all folks
 
 ---
 
