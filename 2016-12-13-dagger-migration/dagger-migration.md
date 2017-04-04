@@ -422,5 +422,35 @@ class FakeAuthModule {
 - Serialise `RequesterModule` modules
 - Move conflicting provisions to new modules
 - Manually create generated components
-- Update Dagger version
-- Profit.
+- Finish complete Dagger 2 migration
+
+---
+
+# TODO
+
+- Serialise `RequesterModule` modules
+- Move conflicting provisions to new modules
+- Manually create generated components
+- Finish complete Dagger 2 migration
+- Activity subcomponent multi-bindings
+
+---
+
+# TODO
+
+- Serialise `RequesterModule` modules
+- Move conflicting provisions to new modules
+- Manually create generated components
+- Finish complete Dagger 2 migration
+- Activity subcomponent multi-bindings
+
+---
+
+# TODO
+
+- Serialise `RequesterModule` modules
+- Move conflicting provisions to new modules
+- Manually create generated components
+- Finish complete Dagger 2 migration
+- Activity subcomponent multi-bindings
+- Instance state bundle with qualifiers
