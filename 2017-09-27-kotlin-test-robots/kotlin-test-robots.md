@@ -1,4 +1,4 @@
-footer: ### ashdavies
+footer: ### ashdavies.io
 
 ![](bender-futurama.jpg)
 
@@ -15,9 +15,11 @@ footer: ### ashdavies
 # Testing
 
 ^ Why do we test?
+- Allows us to understand our code
 - Find bugs and verify behaviour
 - To give assurance about our app
 - Allow us to refactor safely
+- Working effectively with legacy code
 
 ---
 
@@ -26,9 +28,17 @@ footer: ### ashdavies
 # Tooling
 
 ^ How can we test?
+- QA teams
+- Smoke tests
 - Manual tests
 - Unit testing
 - UI testing
+
+---
+
+![](unit-tests-passing-no-integration-tests.jpg)
+
+^ Unit tests pass, no integration tests
 
 ---
 
@@ -38,6 +48,7 @@ footer: ### ashdavies
 
 ^ 
 - UI tests tests everything as a cohesive interface
+- Verifies integrated behaviour
 - Defines the extent of implementation
 - Create high level acceptance tests
 
@@ -64,6 +75,49 @@ footer: ### ashdavies
 
 ---
 
+![](espresso-test-recorder.png)
+
+^ Last year Google released the espresso test recorder
+^ But the generated code isn't so readable
+
+---
+
+```java
+ViewInteraction appCompatEditText = onView(
+        allOf(withId(R.id.email),
+                withParent(allOf(withId(R.id.activity_main),
+                        withParent(withId(android.R.id.content)))),
+                isDisplayed()));
+appCompatEditText.perform(click());
+
+ViewInteraction appCompatEditText2 = onView(
+        allOf(withId(R.id.email),
+                withParent(allOf(withId(R.id.activity_main),
+                        withParent(withId(android.R.id.content)))),
+                isDisplayed()));
+appCompatEditText2.perform(replaceText("test@invalid"), closeSoftKeyboard());
+
+ViewInteraction appCompatButton = onView(
+        allOf(withId(R.id.validate_button), withText("Validate"),
+                withParent(allOf(withId(R.id.activity_main),
+                        withParent(withId(android.R.id.content)))),
+                isDisplayed()));
+appCompatButton.perform(click());
+
+ViewInteraction textView = onView(
+        allOf(withId(R.id.validation_result), withText("Invalid Email Format"),
+                childAtPosition(
+                        allOf(withId(R.id.activity_main),
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0)),
+                        1),
+                isDisplayed()));
+textView.check(matches(isDisplayed()));
+```
+
+---
+
 ![](marvin-the-paranoid-android.jpg)
 
 "I've calculated your chance of survival, 
@@ -87,7 +141,7 @@ but I don't think you'll like it."
 
 ```kotlin
 @Test
-fun shouldRoundToInterval() {
+fun shouldValidateEmailAddress() {
     onView(withId(R.id.email)).check(matches(isDisplayed()))
     onView(withId(R.id.email)).perform(typeText("ash"))
 
@@ -103,23 +157,47 @@ fun shouldRoundToInterval() {
 
 ---
 
-# What ... how ... now?
+# Espresso
+
+```kotlin
+@Test
+fun `should validate email address`() {
+    onView(withId(R.id.email)).check(matches(isDisplayed()))
+    onView(withId(R.id.email)).perform(typeText("ash"))
+
+    onView(withId(R.id.login)).perform(click())
+    onView(withId(R.id.error)).check(matches(allOf(isDisplayed(), withText(R.string.invalid_email))))
+}
+```
+
+^ You can immediately improve the readability here with human readable test name
+- But we can still notice something quite wrong about this format
+
+---
 
 ![](what-how.jpg)
 
-^ If the view implementation changes, then we have to update the tests
+^ What, and how combined in the test
+- If the view implementation changes, then we have to update the tests
 
 ---
 
 # Robots
 
-![fit](terminator.jpg)
+![](cybermen-cover.jpg)
 
 ^ Robots
 - The Robot pattern allows us to encode "the how"
 - Allows you to create stable, readable and maintainable tests
 - Abstract it away from the test behaviour concerned with "the what"
+
+---
+
+![](test-robot-view-presenter-model.jpg)
+
+^ By abstracting the how into a separated robot we encapsulate it from the why
 - If your view implementation changes, then you only have to update the robot
+- Now our tests are only concerned with business logic
 
 ---
 
@@ -163,7 +241,7 @@ fun shouldRoundToInterval() {
 
 ![](jake-wharton.png)
 
-# Familiar?
+# Sound Familiar?
 ### Testing Robots (Kotlin Night) - JW
 
 ^
@@ -182,16 +260,180 @@ fun shouldRoundToInterval() {
 
 ---
 
+![25%](finance-calculator.png)
+
+---
+
+# Robot
+
+```kotlin
+class FinanceRobot {
+
+    fun price(amount: Int): FinanceRobot { ... }
+
+    fun costs(amount: Int): FinanceRobot { ... }
+
+    fun funds(amount: Int): FinanceRobot { ... }
+
+    fun next(): ResultRobot { ... }
+}
+```
+
+^ This is what a robot might look like for this screen
+
+---
+
+# Robots
+
+```kotlin, [.highlight: 4, 8, 12, 16]
+class FinanceRobot {
+    
+    fun price(amount: Int) = apply {
+        onChild(withId(R.id.price)).perform(typeText(value))
+    }
+
+    fun costs(amount: Int) = apply {
+        onChild(withId(R.id.costs)).perform(typeText(value))
+    }
+
+    fun funds(amount: Int) = apply {
+        onChild(withId(R.id.funds)).perform(typeText(value))
+    }
+
+    fun next() = apply {
+        onChild(withId(R.id.next)).perform(click())
+    }
+}
+```
+
+^ These methods may contain simple view actions
+- You can use a simple apply block to return the robot object
+
+---
+
+```kotlin
+class FinanceTest {
+
+    fun `should update seek bar amount`() {
+        FinanceRobot()
+            .price(200_000)
+            .next()
+    }
+}
+```
+
+^ And the resulting test would look like this
+- Given the scenario that the user can also enter a numeric input
+- The progress should be reflected in the seek bar
+- You may notice there's no verification here
+
+---
+
+# Cucumber
+## Gherkin
+
+```gherkin
+ Feature: Some terse yet descriptive text of what is desired
+    Textual description of the business value of this feature
+    Business rules that govern the scope of the feature
+    Any additional information that will make the feature easier to understand
+ 
+    Scenario: Some determinable business situation
+        Given some precondition
+            And some other precondition
+        When some action by the actor
+            And some other action
+            And yet another action
+        Then some testable outcome is achieved
+            And something else we can check happens too
+```
+
+---
+
 # Kotlin
 
 ```kotlin
-financing()
-    given { amount "200000" } 
-    then { amount "2.000.000 €" }
+@Test
+fun `should update progress bar amount`() {
+    FinanceRobot()
+        .given { amount("200000") } 
+        .then { amount("200.000 €") }
+}
 ```
 
 ^ I wrote the tests in a syntax that I thought readable
-^ Then made it work using Kotlin
+- You can achieve this syntax by encapsulating an extension function
+- This allows you to contextualise the operations you wish to perform
+
+---
+
+# Kotlin
+
+```kotlin
+class FinanceRobot {
+
+    fun given(func: Given.() -> Unit) = Given().apply(func)
+
+    class Given {
+
+        fun amount(value: Int) = apply { 
+            onChild(withId(R.id.input)).perform(typeText(value))
+        }
+    }
+}
+```
+
+^ This syntax allows you nest operations within functions
+
+---
+
+# Kotlin
+
+```kotlin, [.highlight: 3, 7-9]
+class FinanceRobot {
+
+    fun given(func: Given.() -> Unit) = Given().apply(func)
+
+    class Given {
+
+        fun amount(value: Int) = apply { 
+            onChild(withId(R.id.input)).perform(typeText(value))
+        }
+    }
+}
+```
+
+^ This creates a new given object and applies the function
+- Allowing us to then chain an assertion syntax "amount"
+
+---
+
+# Kotlin
+
+```kotlin, [.highlight: 12-19]
+class FinanceRobot {
+
+    fun given(func: Given.() -> Unit) = Given().apply(func)
+
+    class Given {
+
+        fun amount(value: Int) = apply { 
+            onChild(withId(R.id.input)).perform(typeText(value))
+        }
+    }
+
+    fun then(func: Then.() -> Unit) = Then().apply(func)
+
+    class Then {
+
+        fun progress(value: Int) = apply {
+            onChild(withId(R.id.progress)).perform(scrubProgress(value))
+        }
+    }
+}
+```
+
+^ Here we nest the assertion syntax away from the precondition
 
 ---
 
@@ -199,7 +441,7 @@ financing()
 
 ```kotlin
 @get:Rule
-val rule: IntentsTestRule<FinanceCalculatorActivity> = FinanceCalculatorRobot.rule()
+val rule: IntentsTestRule<FinanceActivity> = FinanceRobot.rule()
 ```
 
 ^ IntentsTestRule
@@ -211,11 +453,11 @@ val rule: IntentsTestRule<FinanceCalculatorActivity> = FinanceCalculatorRobot.ru
 # Activity Starter
 
 ```kotlin
-class Activity : AppCompatActivity {
+class FinanceActivity : AppCompatActivity {
 
     companion object {
         
-        fun start(context: Context, parameter: Int) { ... }
+        fun start(context: Context, amount: Int) { ... }
     }
 }
 ```
@@ -228,14 +470,14 @@ class Activity : AppCompatActivity {
 ## Exposed Intent
 
 ```kotlin
-class Activity : AppCompatActivity {
+class FinanceActivity : AppCompatActivity {
 
     companion object {
 
-        fun start(context: Context, parameter: Int) = context.startActivity(newIntent(parameter))
+        fun start(context: Context, amount: Int) = context.startActivity(newIntent(amount))
 
         @VisibleForTesting
-        fun newIntent(parameter: Int) { ... }
+        fun newIntent(amount: Int) { ... }
     }
 }
 ```
@@ -324,61 +566,86 @@ inline fun start(rule: IntentsTestRule<T>, starter: (Context) -> Unit) {
 
 ---
 
-# Cucumber
-## Gherkin
+![](c-3po.jpeg)
 
-```gherkin
- Feature: Some terse yet descriptive text of what is desired
-    Textual description of the business value of this feature
-    Business rules that govern the scope of the feature
-    Any additional information that will make the feature easier to understand
- 
-    Scenario: Some determinable business situation
-        Given some precondition
-            And some other precondition
-        When some action by the actor
-            And some other action
-            And yet another action
-        Then some testable outcome is achieved
-            And something else we can check happens too
-```
+# Robot Companion
 
 ---
 
-# BDD Testing
-### Given ... When ... Then
+# Robot Companion
 
----
+```kotlin, [.highlight: 1,15]
+abstract class RobotCompanion<T : Activity> {
 
-# BDDMockito
+    inline fun start(rule: IntentsTestRule<T>, starter: (Context) -> Unit) {
+        val context = mock<Context>()
+        starter(context)
 
-```java
-public class BDDMockito extends Mockito {
+        val captor = argumentCaptor<Intent>()
+        then(context).should().startActivity(captor.capture())
 
-    public static <T> BDDMyOngoingStubbing<T> given(T methodCall) { ... }
-
-    public static <T> Then<T> then(T mock) { ... }
-
-    public static BDDStubber willThrow(Throwable... toBeThrown) { ... }
-
-    public static BDDStubber willAnswer(Answer<?> answer) { ... }
-
-    public static BDDStubber willDoNothing() { ... }
-
-    public static BDDStubber willCallRealMethod() { ... }
+        captor.lastValue.apply {
+        component = ComponentName(InstrumentationRegistry.context, component.className)
+        rule.launchActivity(this)
+        }
+    }
 }
 ```
 
 ---
 
+# Robot Companion
+
+```kotlin
+class FinanceRobot {
+
+    companion object : RobotCompanion<FinanceActivity>() {
+
+        fun start(rule: IntentsTestRule<FinanceActivity>, amount: Int = 200_000): FinanceRobot {
+            start(rule, { context -> FinanceActivity.start(context, amount) })
+            return FinanceRobot()
+        }
+    }
+}
+```
+
+^ Starter
+- Default parameters for easy activity starting
+- Calls starter from activity companion
+
+---
+
+# Testing Robots
+
+```kotlin
+FinanceRobot.start(rule)
+    given { input "200000" }
+    then { equals "20.000 €" }
+```
+
+---
+
+# Testing Robots
+
+```kotlin
+FinanceRobot.start(rule)
+    given { 
+        price { input "200000" }
+        funds { scrub 40_000 }
+    }
+    then {
+        price { equals "200.000 €" }
+        funds { equals "40.000 € / 20 %" }
+    }
+```
+
+---
+
+# Thanks
+
 ^ Topics
-- Starting your activity using an `IntentsTestRule` and `RobotCompanion`
-- Alias start invocation with extension function and default parameters `rule.start(price = 50_000)`
 - Utilising Kotlin extension functions on "context" objects to provide assertions and verifications
 - Splitting sequence of your operation into class contexts
-
-^ Additional
-- Unit tests! (Show unit v integration test meme)
 
 ^ Resources 
 - https://academy.realm.io/posts/kau-jake-wharton-testing-robots/
