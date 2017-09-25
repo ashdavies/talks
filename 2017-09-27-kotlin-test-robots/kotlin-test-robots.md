@@ -356,8 +356,8 @@ class FinanceTest {
 @Test
 fun `should update progress bar amount`() {
     FinanceRobot()
-        .given { amount("200000") } 
-        .then { amount("200.000 €") }
+        .given { amount(200_000) } 
+        .then { progress(200_000) }
 }
 ```
 
