@@ -116,6 +116,8 @@ ViewInteraction textView = onView(
 textView.check(matches(isDisplayed()));
 ```
 
+^ Espresso Test Recorder introduced to help but the code created is awful to read 
+
 ---
 
 ![](marvin-the-paranoid-android.jpg)
@@ -125,7 +127,6 @@ but I don't think you'll like it."
 -- Marvin
 
 ^ Espresso tests are hard to write, hard to read, and hard to debug
-^ Espresso Test Recorder introduced to help but the code created is awful to read 
 
 ---
 
@@ -203,6 +204,10 @@ fun `should validate email address`() {
 
 # Robots
 
+---
+
+# Robots
+
 - Structure your own domain language
 
 ^ The beauty of using the Robot pattern, means that you can define your own domain language that makes sense for you.
@@ -261,6 +266,11 @@ fun `should validate email address`() {
 ---
 
 ![25%](finance-calculator.png)
+
+^ Newer version allows numeric input
+- Purchase price affects additional costs
+- Additional costs affect own funds
+- own funds remains constant after user change
 
 ---
 
@@ -389,7 +399,28 @@ class FinanceRobot {
 
 # Kotlin
 
-```kotlin, [.highlight: 3, 7-9]
+```kotlin, [.highlight: 3]
+class FinanceRobot {
+
+    fun given(func: Given.() -> Unit) = Given().apply(func)
+
+    class Given {
+
+        fun amount(value: Int) = apply { 
+            onChild(withId(R.id.input)).perform(typeText(value))
+        }
+    }
+}
+```
+
+^ Notice how we're taking an extension function as a parameter
+- Kotlin allows you to specify this as a high order function
+
+---
+
+# Kotlin
+
+```kotlin, [.highlight: 7-9]
 class FinanceRobot {
 
     fun given(func: Given.() -> Unit) = Given().apply(func)
@@ -410,7 +441,7 @@ class FinanceRobot {
 
 # Kotlin
 
-```kotlin, [.highlight: 12-19]
+```kotlin, [.highlight: 11]
 class FinanceRobot {
 
     fun given(func: Given.() -> Unit) = Given().apply(func)
@@ -420,13 +451,35 @@ class FinanceRobot {
         fun amount(value: Int) = apply { 
             onChild(withId(R.id.input)).perform(typeText(value))
         }
-    }
 
-    fun then(func: Then.() -> Unit) = Then().apply(func)
+        fun then(func: Then.() -> Unit) = Then().apply(func)
+    }
+}
+```
+
+^ We then create a "then" method to return the assertion class
+
+---
+
+# Kotlin
+
+```kotlin, [.highlight: 12-19]
+class FinanceRobot {
+
+    fun given(func: Given.() -> Unit) = Given().apply(func)
+
+    class Given {
+
+        fun inputText(value: Int) = apply { 
+            onChild(withId(R.id.input)).perform(typeText(value))
+        }
+
+        fun then(func: Then.() -> Unit) = Then().apply(func)
+    }
 
     class Then {
 
-        fun progress(value: Int) = apply {
+        fun hasProgress(value: Int) = apply {
             onChild(withId(R.id.progress)).perform(scrubProgress(value))
         }
     }
@@ -441,7 +494,7 @@ class FinanceRobot {
 
 ```kotlin
 @get:Rule
-val rule: IntentsTestRule<FinanceActivity> = FinanceRobot.rule()
+val rule: IntentsTestRule<FinanceActivity> = FinanceRobot.rule(FinanceActivity::class.java, false, false)
 ```
 
 ^ IntentsTestRule
@@ -450,159 +503,15 @@ val rule: IntentsTestRule<FinanceActivity> = FinanceRobot.rule()
 
 ---
 
-# Activity Starter
-
-```kotlin
-class FinanceActivity : AppCompatActivity {
-
-    companion object {
-        
-        fun start(context: Context, amount: Int) { ... }
-    }
-}
-```
-
-^ Here we use a statically accessible activity starter to encapsulate parameter serialisation
-
----
-
-# Activity Starter
-## Exposed Intent
-
-```kotlin
-class FinanceActivity : AppCompatActivity {
-
-    companion object {
-
-        fun start(context: Context, amount: Int) = context.startActivity(newIntent(amount))
-
-        @VisibleForTesting
-        fun newIntent(amount: Int) { ... }
-    }
-}
-```
-
----
-
-# Intent Captor
-
-```kotlin
-inline fun start(rule: IntentsTestRule<T>, starter: (Context) -> Unit) {
-    val context = mock<Context>()
-    starter(context)
-
-    val captor = argumentCaptor<Intent>()
-    then(context).should().startActivity(captor.capture())
-
-    captor.lastValue.apply {
-      component = ComponentName(InstrumentationRegistry.context, component.className)
-      rule.launchActivity(this)
-    }
-}
-```
-
----
-
-# Intent Captor
-
-```kotlin, [.highlight: 2-3]
-inline fun start(rule: IntentsTestRule<T>, starter: (Context) -> Unit) {
-    val context = mock<Context>()
-    starter(context)
-
-    val captor = argumentCaptor<Intent>()
-    then(context).should().startActivity(captor.capture())
-
-    captor.lastValue.apply {
-      component = ComponentName(InstrumentationRegistry.context, component.className)
-      rule.launchActivity(this)
-    }
-}
-```
-
-^ Creates mock context and invokes the starter extension function
-
----
-
-# Intent Captor
-
-```kotlin, [.highlight: 5-6]
-inline fun start(rule: IntentsTestRule<T>, starter: (Context) -> Unit) {
-    val context = mock<Context>()
-    starter(context)
-
-    val captor = argumentCaptor<Intent>()
-    then(context).should().startActivity(captor.capture())
-
-    captor.lastValue.apply {
-      component = ComponentName(InstrumentationRegistry.context, component.className)
-      rule.launchActivity(this)
-    }
-}
-```
-
-^ Captures the intent parameter via mocked context
-
----
-
-# Intent Captor
-
-```kotlin, [.highlight: 8-11]
-inline fun start(rule: IntentsTestRule<T>, starter: (Context) -> Unit) {
-    val context = mock<Context>()
-    starter(context)
-
-    val captor = argumentCaptor<Intent>()
-    then(context).should().startActivity(captor.capture())
-
-    captor.lastValue.apply {
-      component = ComponentName(InstrumentationRegistry.context, component.className)
-      rule.launchActivity(this)
-    }
-}
-```
-
-^ Corrects intent context and launches via provided rule
-
----
-
-![](c-3po.jpeg)
-
-# Robot Companion
-
----
-
-# Robot Companion
-
-```kotlin, [.highlight: 1,15]
-abstract class RobotCompanion<T : Activity> {
-
-    inline fun start(rule: IntentsTestRule<T>, starter: (Context) -> Unit) {
-        val context = mock<Context>()
-        starter(context)
-
-        val captor = argumentCaptor<Intent>()
-        then(context).should().startActivity(captor.capture())
-
-        captor.lastValue.apply {
-        component = ComponentName(InstrumentationRegistry.context, component.className)
-        rule.launchActivity(this)
-        }
-    }
-}
-```
-
----
-
 # Robot Companion
 
 ```kotlin
 class FinanceRobot {
 
-    companion object : RobotCompanion<FinanceActivity>() {
+    companion object {
 
         fun start(rule: IntentsTestRule<FinanceActivity>, amount: Int = 200_000): FinanceRobot {
-            start(rule, { context -> FinanceActivity.start(context, amount) })
+            rule.launchActivity(FinanceActivity.newIntent(context, amount))
             return FinanceRobot()
         }
     }
@@ -618,9 +527,12 @@ class FinanceRobot {
 # Testing Robots
 
 ```kotlin
-FinanceRobot.start(rule)
-    given { input "200000" }
-    then { equals "20.000 €" }
+@Test
+fun `should update progress bar amount`() {
+    FinanceRobot.start(rule)
+        given { inputText("200000") }
+        then { hasProgress(200_000) }
+}
 ```
 
 ---
@@ -628,24 +540,182 @@ FinanceRobot.start(rule)
 # Testing Robots
 
 ```kotlin
-FinanceRobot.start(rule)
-    given { 
-        price { input "200000" }
-        funds { scrub 40_000 }
+@Test
+fun `should update progress bar amount`() {
+    FinanceRobot.start(rule)
+        given { /* ??? */ }
+        then { /* ??? */ }
+}
+```
+
+^ Now consider the scenario where you have more than one compound view
+- The same compound view, that therefore shares its ids
+
+---
+
+# Kotlin
+
+```kotlin
+class FinanceRobot {
+
+    fun given(func: Given.() -> Unit) = Given().apply(func)
+
+    class Given {
+
+        fun inputText(value: Int) = apply { /* ... */ }
+
+        fun then(func: Then.() -> Unit) = Then().apply(func)
     }
-    then {
-        price { equals "200.000 €" }
-        funds { equals "40.000 € / 20 %" }
+
+    class Then {
+
+        fun hasProgress(value: Int) = apply { /* ... */ }
     }
+}
+```
+
+^ Lets go back to our test robot
+- Sorry for amount of code
+
+---
+
+```kotlin, [.highlight: 7-16]
+class FinanceRobot {
+
+    fun given(func: Given.() -> Unit) = Given().apply(func)
+
+    class Given {
+
+        fun price(func: Will.() -> Unit) = Will(R.id.price).apply(func)
+
+        class Will(@IdRes parent: Int) {
+        
+            fun inputText(value: Int) = apply { /* ... */ }
+
+            fun then(func: Then.() -> Unit) = Then().apply(func)
+        }
+    }
+
+    class Then {
+
+        fun hasProgress(value: Int) = apply { /* ... */ }
+    }
+}
+```
+
+^ Lets wrap our input actions inside another object
+- Where we can then perform them on a child with a parent id
+
+---
+
+```kotlin, [.highlight: 11-14]
+class FinanceRobot {
+
+    fun given(func: Given.() -> Unit) = Given().apply(func)
+
+    class Given {
+
+        fun price(func: Will.() -> Unit) = Will(R.id.price).apply(func)
+
+        class Will(@IdRes parent: Int) {
+        
+            fun inputText(value: Int) = apply {
+                onView(allOf(isDescendantOfA(withId(parent)), withId(R.id.input)))
+                    .perform(typeText(value)).perform(pressImeActionButton()) 
+            }
+
+            fun then(func: Then.() -> Unit) = Then().apply(func)
+        }
+    }
+
+    class Then {
+
+        fun hasProgress(value: Int) = apply { /* ... */ }
+    }
+}
 ```
 
 ---
 
+```kotlin, [.highlight: 6-9]
+class FinanceRobot {
+
+    fun given(func: Given.() -> Unit) = Given().apply(func)
+
+    class Given {
+
+        fun price(func: Will.() -> Unit) = {
+            Will(R.id.price).apply(func)
+            return FinanceRobot()
+        }
+
+        class Will(@IdRes parent: Int) {
+        
+            fun inputText(value: Int) = apply { /* ... */ }
+        }
+    }
+
+    fun then(func: Then.() -> Unit) = Then().apply(func)
+
+    class Then {
+
+        fun hasProgress(value: Int) = apply { /* ... */ }
+    }
+}
+```
+
+^ If it bugs you that the "then" function is in the Will object
+- You can simply change the return type
+- So what does this look like in our test?
+
+---
+
+# Testing Robots
+
+```kotlin
+fun `should update progress bar amount`() {
+    FinanceRobot.start(rule)
+        given { 
+            price { inputText("200000") }
+            funds { scrubTo(40_000) }
+        }
+        then {
+            price { hasText("200.000 €") }
+            funds { hasText("40.000 € / 20 %") }
+        }
+}
+```
+
+^ Here we've allowed ourselves to add a bit of complexity
+- without reducing the readability of the code
+- The beauty is that you can write whatever makes sense to your team
+- You don't have to follow this style or structure
+
+---
+
+# Testing Robots
+
+```kotlin, [.highlight: 2,13-15]
+fun `should update progress bar amount`() {
+    rule.start()
+        given { 
+            price { inputText("200000") }
+            funds { scrubTo(40_000) }
+        }
+        then {
+            price { hasText("200.000 €") }
+            funds { hasText("40.000 € / 20 %") }
+        }
+}
+
+fun IntentsTestRule<FinanceActivity>.start(amount: Int = 200_000): FinanceRobot {
+    return FinanceRobot.start(this, amount)
+}
+```
+
+^ Here I've added an extension function on the intent rule
+- to shorten the initial call
+
+---
+
 # Thanks
-
-^ Topics
-- Utilising Kotlin extension functions on "context" objects to provide assertions and verifications
-- Splitting sequence of your operation into class contexts
-
-^ Resources 
-- https://academy.realm.io/posts/kau-jake-wharton-testing-robots/
