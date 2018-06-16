@@ -275,19 +275,19 @@ Which involves fetching the required data, applying it to the view properties, a
 
 ---
 
-MainView.kt
+RepoView.kt
 
 ```kotlin
-interface MainView {
+interface RepoView {
   var inProgress: Boolean
-  var items: List<String>
+  var items: List<Repo>
 }
 ```
 
-MainPresenter.kt
+RepoPresenter.kt
 
 ```kotlin
-interface MainPresenter {
+interface RepoPresenter {
   fun onResume()
   fun onDestroy()
 }
@@ -298,17 +298,17 @@ Consider a simple view presenter interface contract like so.
 
 ---
 
-MainPresenterImpl.kt
+RepoPresenterImpl.kt
 
 ```kotlin
-class MainPresenterImpl(
-  private var view: MainView?,
-  private val interactor: MainInteractor
-) : MainPresenter {
+class RepoPresenterImpl(
+  private var view: RepoView?,
+  private val service: RepoService
+) : RepoPresenter {
 
   override fun onResume() {
     view?.inProgress = true
-    interactor.fetch {
+    service.fetch {
       view?.apply {
         items = it
         inProgress = false
@@ -338,24 +338,24 @@ Lets consider how we might implement this, utilising Android data binding with K
 
 ---
 
-MainActivity.kt
+RepoActivity.kt
 
 ```kotlin
-class MainActivity : AppCompatActivity() {
+class RepoActivity : AppCompatActivity() {
 
-  private lateinit var binding: ActivityMainBinding
-  private lateinit var interactor: MainInteractor
+  private lateinit var binding: ActivityRepoBinding
+  private lateinit var service: RepoService
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
-    binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-    interactor = MainInteractor()
+    binding = DataBindingUtil.setContentView(this, R.layout.activity_repo)
+    interactor = RepoServiceFactory().get()
   }
 
   override fun onResume() {
     super.onResume()
-    interactor.fetch {
+    service.fetch {
       binding.items = it
     }
   }
@@ -367,24 +367,24 @@ This is what the most basic implementation for data binding might look like, let
 
 ---
 
-MainActivity.kt
+RepoActivity.kt
 
 ```kotlin, [.highlight: 3, 9]
-class MainActivity : AppCompatActivity() {
+class RepoActivity : AppCompatActivity() {
 
-  private lateinit var binding: ActivityMainBinding
-  private lateinit var interactor: MainInteractor
+  private lateinit var binding: ActivityRepoBinding
+  private lateinit var service: RepoService
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
-    binding = DataBindingUtil.setContentView(this, R.layout.activity_home)
-    interactor = MainInteractor()
+    binding = DataBindingUtil.setContentView(this, R.layout.activity_repo)
+    interactor = RepoServiceFactory().get()
   }
 
   override fun onResume() {
     super.onResume()
-    interactor.fetch {
+    service.fetch {
       binding.items = it
     }
   }
@@ -396,24 +396,24 @@ Here we have our generated binding class which represents our interaction with t
 
 ---
 
-MainActivity.kt
+RepoActivity.kt
 
 ```kotlin, [.highlight: 4, 10, 15]
-class MainActivity : AppCompatActivity() {
+class Repoactivity : AppCompatActivity() {
 
-  private lateinit var binding: ActivityMainBinding
-  private lateinit var interactor: MainInteractor
+  private lateinit var binding: ActivityRepoBinding
+  private lateinit var service: RepoService
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
-    binding = DataBindingUtil.setContentView(this, R.layout.activity_home)
-    interactor = MainInteractor()
+    binding = DataBindingUtil.setContentView(this, R.layout.activity_repo)
+    service = RepoServiceFactory().get()
   }
 
   override fun onResume() {
     super.onResume()
-    interactor.fetch {
+    service.fetch {
       binding.items = it
     }
   }
@@ -431,24 +431,24 @@ But lets look at how we can use Kotlin to improve this.
 
 ---
 
-MainActivity.kt
+RepoActivity.kt
 
 ```kotlin
-class MainActivity : AppCompatActivity() {
+class RepoActivity : AppCompatActivity() {
 
-  private lateinit var binding: ActivityMainBinding
-  private lateinit var interactor: MainInteractor
+  private lateinit var binding: ActivityRepoBinding
+  private lateinit var service: RepoService
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
     binding = DataBindingUtil.setContentView(this, R.layout.activity_home)
-    interactor = MainInteractor()
+    service = RepoServiceFactory().get()
   }
 
   override fun onResume() {
     super.onResume()
-    interactor.fetch {
+    service.fetch {
       binding.items = it
     }
   }
@@ -460,6 +460,10 @@ Kotlin allows us to create property delegates, that is basically a template for 
 
 ^
 We can use a property delegate to lazily instantiate our data binding
+
+---
+
+## TODO("Data Binding Layout")
 
 ---
 
@@ -506,24 +510,26 @@ Naturally we should create an extension function to create our binding delegate
 
 ---
 
-MainActivity.kt
+RepoActivity.kt
 
 ```kotlin
-class MainActivity : AppCompatActivity() {
+class RepoActivity : AppCompatActivity() {
 
-  private lateinit var binding: ActivityMainBinding
-  private lateinit var interactor: MainInteractor
+  private lateinit var binding: ActivityRepoBinding
+  private lateinit var service: RepoService
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
     binding = DataBindingUtil.setContentView(this, R.layout.activity_home)
-    interactor = MainInteractor()
+    service = RepoServiceFactory().get()
   }
 
   override fun onResume() {
     super.onResume()
-    interactor.fetch { binding.items = it }
+    service.fetch {
+      binding.items = it
+    }
   }
 }
 ```
@@ -533,24 +539,24 @@ Coming back to our activity, we can see how we can make it a little cleaner.
 
 ---
 
-MainActivity.kt
+RepoActivity.kt
 
 ```kotlin, [.highlight: 3, 10]
-class MainActivity : AppCompatActivity() {
+class RepoActivity : AppCompatActivity() {
 
   private val binding: ActivityRepoBinding by activityBinding(R.layout.activity_repo)
 
-  private lateinit var interactor: MainInteractor
+  private lateinit var service: RepoService
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    interactor = MainInteractor()
+    service = RepoServiceFactory().get()
     binding.items = emptyList()
   }
 
   override fun onResume() {
     super.onResume()
-    interactor.fetch {
+    service.fetch {
       binding.items = it
     }
   }
@@ -604,21 +610,19 @@ Lets extract the behaviour from the activity with a view model.
 
 ---
 
-MainActivity.kt
+RepoActivity.kt
 
-```kotlin, [.highlight: 10-12]
-class MainActivity : AppCompatActivity() {
+```kotlin, [.highlight: 8-10]
+class RepoActivity : AppCompatActivity() {
 
-  private lateinit var binding: ActivityMainBinding
+  private val binding: ActivityRepoBinding by activityBinding(R.layout.activity_repo)
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
-    binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-
     binding.model = ViewModelProviders
-        .of(this, MainViewModelFactory())
-        .get(MainViewModel::class.java)
+        .of(this, RepoViewModelFactory())
+        .get(RepoViewModel::class.java)
   }
 }
 ```
@@ -675,101 +679,104 @@ class RepoViewModel(private val service: RepoService) {
 }
 ```
 
----
+^
 
-## ObservableField’s
-
----
-
-## Observable interfaces
 
 ---
 
-## LiveData LifeCycle DataBinding
+## TODO("ObservableField")
 
 ---
 
-## ViewModel bound property binding
+## TODO("Observable interfaces")
 
 ---
 
-## Stateful loading layout binding example
+## TODO("LiveData LifeCycle DataBinding")
 
 ---
 
-## Stupidly complex stateful loading layout binding example
+## TODO("ViewModel bound property binding")
 
 ---
 
-## Databinding generated code
+## TODO("Stateful loading layout binding example")
 
 ---
 
-## Databinding executePendingBindings (recyclerview usage)
+## TODO("Stupidly complex stateful loading layout binding example")
 
 ---
 
-## SingleLayoutAdapter
+## TODO("Databinding generated code")
 
 ---
 
-## Two-way databinding
+## TODO("Databinding executePendingBindings (recyclerview usage)")
 
 ---
 
-## Bindable annotation with notifyDataChanged
+## TODO("SingleLayoutAdapter")
 
 ---
 
-## Binding extension properties
+## TODO("Two-way databinding")
 
 ---
 
-## Generated code nullability
+## TODO("Bindable annotation with notifyDataChanged")
 
 ---
 
-## Generated code class transformers
+## TODO("Binding extension properties")
 
 ---
 
-## Static binding adapters / companion objects
+## TODO("Generated code nullability")
 
 ---
 
-## InverseBindingAdapters listeners
+## TODO("Generated code class transformers")
 
 ---
 
-## InverseBindingAdapters high order function
+## TODO("Static binding adapters / companion objects")
 
 ---
 
-## Generated databinding identifiers
+## TODO("InverseBindingAdapters listeners")
 
 ---
 
-## Generated databinding after changing order of view classes
+## TODO("InverseBindingAdapters high order function")
 
 ---
 
-## Creating generic view binding properties (view:visible)
+## TODO("Generated databinding identifiers")
+
+---
+
+## TODO("Generated databinding after changing order of view classes")
+
+---
+
+## TODO("Creating generic view binding properties (view:visible)")
 
 ^
 Also consider creating a visibility enum for LiveData
 
 ---
 
-## Scoping specific view binding properties on custom views
+## TODO("Scoping specific view binding properties on custom views")
 
 ---
 
-## BindingMethod / InverseBindingMethod
+## TODO("BindingMethod / InverseBindingMethod")
 
 ---
 
-## Recognition of class getter/setter
+## TODO("Recognition of class getter/setter")
 
 ---
 
-## LiveData side-effects
+## TODO("LiveData side-effects")
