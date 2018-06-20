@@ -46,15 +46,15 @@ Whilst we're being nostalgic, lets go back to 2015, Ireland had just voted to le
 
 ---
 
-## Data Binding
-### [bit.ly/2JSKnJK](bit.ly/2JSKnJK)
+## Data Binding Beta
+### [~~bit.ly/2JSKnJK~~](bit.ly/2JSKnJK)
 
 ^
 The data binding library promised to allow us to write declarative layouts, and minimise the glue code necessary to bind your application logic and layouts. In addition to being a support library allowing it's use with the Android platform back to Android 2.1 (API 7).
 
 ---
 
-build.gradle
+## build.gradle
 
 ```groovy, [.highlight: 2,7]
 apply plugin: 'com.android.application'
@@ -73,18 +73,24 @@ To make use of the data binding library, you would need to use the classpath dep
 
 ---
 
+## Data Binding Sample
 
-![inline 50%](data-binding-sample.png)
+![inline](data-binding-sample.png)
 
 ^
 Wanting to try out this new library, I created a sample project on GitHub to demonstrate how to use data binding, which would fetch a list of repositories from a given user, and published the resulting application on the Google Play store, it was well received with monumental success.
 
 ---
 
-![inline 50%](google-play-rating.png)
+## Data Binding Sample
+
+![inline](google-play-rating.png)
 
 ^
 Here's an example of a quality review, one of the two one star ratings the app received.
+
+^
+Thanks!
 
 ---
 
@@ -184,7 +190,7 @@ How do we setup the current version of data binding?
 
 ---
 
-build.gradle
+## build.gradle
 
 ```groovy, [.highlight: 2-4]
 android {
@@ -229,7 +235,7 @@ Additionally the new version generates classes prior to the managed compiler bui
 
 ---
 
-gradle.properties
+## gradle.properties
 
 ```groovy
 android.databinding.enableV2=true
@@ -275,7 +281,7 @@ Which involves fetching the required data, applying it to the view properties, a
 
 ---
 
-RepoView.kt
+## RepoView.kt
 
 ```kotlin
 interface RepoView {
@@ -284,7 +290,7 @@ interface RepoView {
 }
 ```
 
-RepoPresenter.kt
+## RepoPresenter.kt
 
 ```kotlin
 interface RepoPresenter {
@@ -296,9 +302,12 @@ interface RepoPresenter {
 ^
 Consider a simple view presenter interface contract like so.
 
+^
+The view interface contains the necessary information to display the current state to the user, and the presenter is able to react to events and manage the presentation appropriately.
+
 ---
 
-RepoPresenterImpl.kt
+## RepoPresenterImpl.kt
 
 ```kotlin
 class RepoPresenterImpl(
@@ -338,7 +347,7 @@ Lets consider how we might implement this, utilising Android data binding with K
 
 ---
 
-RepoActivity.kt
+## RepoActivity.kt
 
 ```kotlin
 class RepoActivity : AppCompatActivity() {
@@ -350,7 +359,9 @@ class RepoActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
 
     binding = DataBindingUtil.setContentView(this, R.layout.activity_repo)
-    interactor = RepoServiceFactory().get()
+    binding.setLifecycleOwner(this)
+
+    service = RepoServiceFactory().get()
   }
 
   override fun onResume() {
@@ -363,11 +374,11 @@ class RepoActivity : AppCompatActivity() {
 ```
 
 ^
-This is what the most basic implementation for data binding might look like, lets take a closer look at whats going on.
+This is what the most basic implementation for data binding might look like.
 
 ---
 
-RepoActivity.kt
+## RepoActivity.kt
 
 ```kotlin, [.highlight: 3, 9]
 class RepoActivity : AppCompatActivity() {
@@ -379,7 +390,9 @@ class RepoActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
 
     binding = DataBindingUtil.setContentView(this, R.layout.activity_repo)
-    interactor = RepoServiceFactory().get()
+    binding.setLifecycleOwner(this)
+
+    service = RepoServiceFactory().get()
   }
 
   override fun onResume() {
@@ -396,10 +409,10 @@ Here we have our generated binding class which represents our interaction with t
 
 ---
 
-RepoActivity.kt
+## RepoActivity.kt
 
-```kotlin, [.highlight: 4, 10, 15]
-class Repoactivity : AppCompatActivity() {
+```kotlin, [.highlight: 10]
+class RepoActivity : AppCompatActivity() {
 
   private lateinit var binding: ActivityRepoBinding
   private lateinit var service: RepoService
@@ -408,6 +421,8 @@ class Repoactivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
 
     binding = DataBindingUtil.setContentView(this, R.layout.activity_repo)
+    binding.setLifecycleOwner(this)
+
     service = RepoServiceFactory().get()
   }
 
@@ -421,17 +436,88 @@ class Repoactivity : AppCompatActivity() {
 ```
 
 ^
-Here is our behaviour, where we invoke a method on the interactor and pass the resulting value to the view binding.
-
-^
-This is not yet an improvement, we've lost all of our testability, since the presentation behaviour is entirely contained in the activity.
-
-^
-But lets look at how we can use Kotlin to improve this.
+As of Android Studio, and the Android gradle plugin 3.1, databinding is lifecycle aware, this means that you can use lifecycle components such as LiveData with your databinding set up, to take advantage of this you should inform it of the lifecycle owner by calling setLifecycleOwner on your binding class.
 
 ---
 
-RepoActivity.kt
+## RepoActivity.kt
+
+```kotlin, [.highlight: 4, 12, 17-19]
+class Repoactivity : AppCompatActivity() {
+
+  private lateinit var binding: ActivityRepoBinding
+  private lateinit var service: RepoService
+
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+
+    binding = DataBindingUtil.setContentView(this, R.layout.activity_repo)
+    binding.setLifecycleOwner(this)
+
+    service = RepoServiceFactory().get()
+  }
+
+  override fun onResume() {
+    super.onResume()
+    service.fetch {
+      binding.items = it
+    }
+  }
+}
+```
+
+^
+Here is our behaviour, where we invoke a method on the service and pass the resulting value to the view binding.
+
+---
+
+## activity_repo.xml
+
+```xml
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <data>
+
+    <variable
+        name="items"
+        type="java.util.List&lt;io.ashdavies.databinding.Repo&gt;"/>
+
+  </data>
+
+  <androidx.coordinatorlayout.widget.CoordinatorLayout... />
+</layout>
+```
+
+^
+In our xml layout file, we must also specify that the variable that we wish to set from the activity or fragment within a data tag, in order to let databinding know, it can use this for its bindings.
+
+---
+
+## activity_repo.xml
+
+```xml, [.highlight: 6-8]
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <data>
+
+    <variable
+        name="items"
+        type="java.util.List&lt;io.ashdavies.databinding.Repo>"/>
+
+  </data>
+
+  <androidx.coordinatorlayout.widget.CoordinatorLayout... />
+</layout>
+```
+
+^
+You might notice here that I'm using the generic type List for the variable, whilst this is fine, XML doesn't recognise the angle bracket necessary, so in the same way you might need to do so for a link within a String resource, you must escape it to its html entity.
+
+---
+
+## RepoActivity.kt
 
 ```kotlin
 class RepoActivity : AppCompatActivity() {
@@ -443,6 +529,8 @@ class RepoActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
 
     binding = DataBindingUtil.setContentView(this, R.layout.activity_home)
+    binding.setLifecycleOwner(this)
+
     service = RepoServiceFactory().get()
   }
 
@@ -456,18 +544,11 @@ class RepoActivity : AppCompatActivity() {
 ```
 
 ^
-Kotlin allows us to create property delegates, that is basically a template for the getter and setter methods, dependent on whether the property is mutable, and we can then reuse this template for all properties like this.
-
-^
-We can use a property delegate to lazily instantiate our data binding
+Coming back to our activity, we can see that this is not yet an improvement, we've lost all of our testability, since the presentation behaviour is entirely contained in the activity, so how can we use Kotlin to improve this.
 
 ---
 
-## TODO("Data Binding Layout")
-
----
-
-ActivityBindingProperty.kt
+## ActivityBindingProperty.kt
 
 ```kotlin
 class ActivityBindingProperty<out T : ViewDataBinding>(
@@ -487,30 +568,75 @@ class ActivityBindingProperty<out T : ViewDataBinding>(
 ```
 
 ^
-This behaviour is very similar to the standard lazy delegate provided to us in Kotlin, note that we're extending the read only property interface, denoting that this is an immutable value property.
+Kotlin allows us to create delegated properies, that is basically a template for the getter and setter methods, dependent on whether the property is mutable, and we can then reuse this template for all properties with the same requirements.
 
 ^
-Notice that we take the layout resource identifier as a parameter in order to correctly inflate the view, and the class is inferred by the generic type.
-
-^
-The activity reference is specified as this binding property may only exist on an activity instance, it's very important that the binding is instantiated lazily as view will not yet be inflated when the delegate is first instantiated, we have to be careful to only access this property after onCreate.
+We can use a delegated property to lazily instantiate our data binding
 
 ---
 
-FragmentActivity.kt
+## ActivityBindingProperty.kt
 
-```kotlin
-fun <T : ViewDataBinding> FragmentActivity.activityBinding(@LayoutRes resId: Int): ActivityBindingProperty<T> {
-  return ActivityBindingProperty(resId)
+```kotlin, [.highlight: 1-3]
+class ActivityBindingProperty<out T : ViewDataBinding>(
+  @LayoutRes private val resId: Int
+) : ReadOnlyProperty<Activity, T> {
+
+  private var binding: T? = null
+
+  override operator fun getValue(thisRef: Activity, property: KProperty<*>): T {
+    return binding ?: createBinding(thisRef).also { binding = it }
+  }
+
+  private fun createBinding(activity: Activity): T {
+    return DataBindingUtil.setContentView(activity, resId)
+  }
 }
 ```
 
 ^
-Naturally we should create an extension function to create our binding delegate
+we take the layout resource identifier as a constructor parameter in order to correctly inflate the view, and the class is inferred by the generic type, note that we're extending the read only property interface, denoting that this is an immutable value property.
 
 ---
 
-RepoActivity.kt
+## ActivityBindingProperty.kt
+
+```kotlin, [.highlight: 5-13]
+class ActivityBindingProperty<out T : ViewDataBinding>(
+  @LayoutRes private val resId: Int
+) : ReadOnlyProperty<Activity, T> {
+
+  private var binding: T? = null
+
+  override operator fun getValue(thisRef: Activity, property: KProperty<*>): T {
+    return binding ?: createBinding(thisRef).also { binding = it }
+  }
+
+  private fun createBinding(activity: Activity): T {
+    return DataBindingUtil.setContentView(activity, resId)
+  }
+}
+```
+
+^
+This behaviour is very similar to the standard lazy delegate provided to us in Kotlin, the activity reference specified as the property receiver allows us to lazily instantiate the data binding and inflate the layout view when the delegated property is first accessed, as we must not do so before on create.
+
+---
+
+## FragmentActivity.kt
+
+```kotlin
+fun <T : ViewDataBinding> FragmentActivity.activityBinding(
+  @LayoutRes resId: Int
+) = ActivityBindingProperty(resId)
+```
+
+^
+We can then declare a nice extension function to create the delegate property in a fashion that is consistent with the provided Kotlin delegates.
+
+---
+
+## RepoActivity.kt
 
 ```kotlin
 class RepoActivity : AppCompatActivity() {
@@ -522,6 +648,8 @@ class RepoActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
 
     binding = DataBindingUtil.setContentView(this, R.layout.activity_home)
+    binding.setLifecycleOwner(this)
+
     service = RepoServiceFactory().get()
   }
 
@@ -544,7 +672,7 @@ RepoActivity.kt
 ```kotlin, [.highlight: 3, 10]
 class RepoActivity : AppCompatActivity() {
 
-  private val binding: ActivityRepoBinding by activityBinding(R.layout.activity_repo)
+  private val binding by activityBinding<ActivityRepoBinding>(R.layout.activity_repo)
 
   private lateinit var service: RepoService
 
@@ -564,7 +692,10 @@ class RepoActivity : AppCompatActivity() {
 ```
 
 ^
-This is much simpler, but remember if you don't reference the binding property during onCreate, the delegate will not create the binding and therefore will not inflate the layout.
+This is much simpler, and we benefit now from immutability of the binding, but remember if you don't reference the binding property during onCreate, the delegate will not create the binding and therefore will not inflate the layout.
+
+^
+But we've still not improved the testability of the domain behaviour.
 
 ---
 
@@ -584,10 +715,10 @@ Furthermore, with the announcement of Jetpack this year, Google have continued t
 ## MVVM
 
 ^
-Data binding works beautifully with the suggested MVVM structure, since the pattern is designed to expose the view state to the view as an observable property, without having to instruct the view, it's nullability is irrelevant.
+Data binding works beautifully with the MVVM pattern, since the pattern is designed to expose the view state to the view as an observable property, without having to instruct the view explicitly, therefore it's nullability is irrelevant as it is a passive receiver.
 
 ^
-Thus allowing us to take advantage of lifecycle aware components, that can react accordingly to the presence or absence of a lifecycle owner such as an activity or fragment, and what state that activity or fragment might be in.
+Furthermore, this allows us to take advantage of lifecycle aware components, that can react accordingly to the presence or absence of a lifecycle owner such as an activity or fragment, and what state that activity or fragment might be in.
 
 ---
 
@@ -610,12 +741,12 @@ Lets extract the behaviour from the activity with a view model.
 
 ---
 
-RepoActivity.kt
+## RepoActivity.kt
 
 ```kotlin, [.highlight: 8-10]
 class RepoActivity : AppCompatActivity() {
 
-  private val binding: ActivityRepoBinding by activityBinding(R.layout.activity_repo)
+  private val binding by activityBinding<ActivityRepoBinding>(R.layout.activity_repo)
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -628,87 +759,537 @@ class RepoActivity : AppCompatActivity() {
 ```
 
 ^
-Here we have the same activity, but fetching the view model from the view model providers implementation of the application compatibility activity.
+Here we have the same activity, but fetching the view model from the view model providers implementation of the application compatibility activity. We're assigning the resulting view model directly on the binding, but you might choose to keep it as a value on the activity so that you can directly observe a property should you need to.
 
 ^
-We're assigning the resulting view model directly on the binding, but you might choose to keep it as a value on the activity so that you can directly observe a property should you need to.
+It's important to do this in or after onCreate otherwise the activity will have not yet retrieved the view model store from the non configuration instance.
 
 ---
 
-RepoViewModel.kt
+## activity_repo.xml
+
+```xml, [.highlight: 6-8]
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <data>
+
+    <variable
+        name="model"
+        type="io.ashdavies.databinding.RepoViewModel"/>
+
+  </data>
+
+  <androidx.coordinatorlayout.widget.CoordinatorLayout... />
+</layout>
+```
+
+^
+We'll need to update our layout file to represent the change in our activity.
+
+---
+
+## RepoActivity.kt
+
+```kotlin, [.highlight: 8-10]
+class RepoActivity : AppCompatActivity() {
+
+  private val binding by activityBinding<ActivityRepoBinding>(R.layout.activity_repo)
+
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+
+    binding.model = ViewModelProviders
+        .of(this, RepoViewModelFactory())
+        .get(RepoViewModel::class.java)
+  }
+}
+```
+
+^
+We can again make use of an extension function with lazy instantiation to keep our activity simple.
+
+---
+
+## FragmentActivity.kt
+
+```kotlin, [.highlight: 5-8]
+fun <T : ViewDataBinding> FragmentActivity.activityBinding(@LayoutRes resId: Int) {
+  return ActivityBindingProperty(resId)
+}
+
+inline fun <reified T : ViewModel> FragmentActivity.getViewModel(
+  factory: ViewModelProvider.Factory = ViewModelProvider.NewInstanceFactory()
+) = ViewModelProviders.of(this, factory).get(T::class.java)
+```
+
+^
+Here we are providing the same behaviour as we had seen on our activity, allowing the caller to pass in a factory to create the view model if it does not already exist.
+
+^
+Android architecture components providers a default instance factory that we can use here if your view model does not take any constructor parameters, but be careful with this.
+
+---
+
+## RepoActivity.kt
+
+```kotlin
+class RepoActivity : AppCompatActivity() {
+
+  private val binding by activityBinding<ActivityRepoBinding>(R.layout.activity_repo)
+  private val model by lazy { getViewModel<RepoViewModel>(RepoViewModelFactory()) }
+
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    binding.model = model
+  }
+}
+```
+
+^
+This is what our resulting activity looks like, there are a lot of things to take into consideration when using a view model, and I recommend you check out the resources available for them, but I'd like to focus on how we use them with data binding.
+
+---
+
+## RepoViewModel.kt
 
 ```kotlin
 class RepoViewModel(private val service: RepoService) {
 
-  private val jobs: Job = Job()
-
-  val items: MutableLiveData<List<String>> = MutableLiveData()
+  val items: ObservableField<List<String>> = ObservableField()
 
   init {
-    launch(UI, parent = jobs) {
-      items.value = service.fetch("ashdavies")
-    }
-  }
-
-  override fun onCleared() {
-    jobs.cancel()
-  }
-}
-```
-
----
-
-RepoViewModel.kt
-
-```kotlin, [.highlight: 5, 9]
-class RepoViewModel(private val service: RepoService) {
-
-  private val jobs: Job = Job()
-
-  val items: MutableLiveData<List<String>> = MutableLiveData()
-
-  init {
-    launch(UI, parent = jobs) {
-      items.value = service.fetch("ashdavies")
-    }
-  }
-
-  override fun onCleared() {
-    jobs.cancel()
+    service.fetch(items::set)
   }
 }
 ```
 
 ^
+The data binding library provides classes and methods to easily observe data for changes. You don't have to worry about refreshing the UI when the underlying data source changes. You can make your variables or their properties observable. The library allows you to make objects, fields, or collections observable.
 
-
----
-
-## TODO("ObservableField")
-
----
-
-## TODO("Observable interfaces")
+^
+Here we're using the observable field class, but the data binding library also provides base classes for many other primitive types if your view model isn't so complex, such as boolean, byte, char, short, int long, float, double and parcelable.
 
 ---
 
-## TODO("LiveData LifeCycle DataBinding")
+## Observable
+
+^
+All of these class implement the observable interface, which has a mechanism to add and remove listeners. You can extend from the BaseObservable class, which implements the listener registration mechanisms. But If you have a complex object, you can extend from this interface and decide when notifications are sent, this will become useful a little later.
 
 ---
 
-## TODO("ViewModel bound property binding")
+## LiveData Data Binding
+
+^
+As mentioned previously as of version 3.1 of the Android gradle plugin, you can use LiveData with your data bindings.
 
 ---
 
-## TODO("Stateful loading layout binding example")
+## RepoViewModel.kt
+
+```kotlin
+class RepoViewModel(private val service: RepoService) {
+
+  val items = MutableLiveData<List<String>>()
+
+  init {
+    service.fetch(items::setValue)
+  }
+}
+```
+
+^
+The behaviour of this is very similar to an observable field, except that it provides your application with all the benefits that come with the architecture components like observing from your lifecycle owner.
+
+^
+Here we use the mutable live data so that we can also post and set the value.
 
 ---
 
-## TODO("Stupidly complex stateful loading layout binding example")
+## RepoViewModel.kt
+
+```kotlin
+class RepoViewModel(private val service: RepoService) {
+
+  val items = MutableLiveData<List<String>>()
+  val loading = MutableLiveData<Boolean>()
+
+  init {
+    loading.value = true
+    service.fetch {
+      loading.value = false
+      items.value = it
+    }
+  }
+}
+
+```
+
+^
+Lets assume a basic asynchronous operation that gets called with the appropriate background and UI threading, and we want to show to the user that the UI is loading.
+
+---
+
+## Layout Expressions
+
+```xml, [.highlight: 6, 14-15]
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <data>
+
+    <import type="android.view.View"/>
+
+    <variable
+        name="model"
+        type="io.ashdavies.databinding.RepoViewModel"/>
+
+  </data>
+
+  <ProgressBar...
+      android:visibility="@{model.loading ? View.VISIBLE : View.GONE}"/>
+
+</layout>
+```
+
+^
+We can use data binding to subscribe to the value of loading on the view model, to update the visibility of our progress bar like so, since visibility has one of three possible states, we must tell data binding which two to use in the event of the value being either true or false.
+
+---
+
+## Layout Expressions
+
+```xml, [.highlight: 6]
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <data>
+
+    <import type="android.view.View"/>
+
+    <variable
+        name="model"
+        type="io.ashdavies.databinding.RepoViewModel"/>
+
+  </data>
+
+  <ProgressBar...
+      android:visibility="@{model.loading ? View.VISIBLE : View.GONE}"/>
+
+</layout>
+```
+
+^
+Note that we must also import the view type in our data tag so that data binding can recognise the class we're using in the attribute binding.
+
+---
+
+## Layout Expressions
+
+```xml, [.highlight: 14-15]
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <data>
+
+    <import type="android.view.View"/>
+
+    <variable
+        name="model"
+        type="io.ashdavies.databinding.RepoViewModel"/>
+
+  </data>
+
+  <TextView...
+      android:text="@string/activity_repo_empty"/>
+
+  <ProgressBar...
+      android:visibility="@{model.loading ? View.VISIBLE : View.GONE}"/>
+
+</layout>
+```
+
+^
+Lets say we want to show a message to our user when there are no items to display, how could we achieve this?
+
+---
+
+## Layout Expressions
+
+```xml, [.highlight: 14-16]
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <data>
+
+    <import type="android.view.View"/>
+
+    <variable
+        name="model"
+        type="io.ashdavies.databinding.RepoViewModel"/>
+
+  </data>
+
+  <TextView...
+      android:text="@string/activity_repo_empty"
+      android:visibility="@{model.items.count == 0 ? View.VISIBLE : View.GONE}"/>
+
+  <ProgressBar...
+      android:visibility="@{model.loading ? View.VISIBLE : View.GONE}"/>
+
+</layout>
+```
+
+^
+We can include rudimentary evaluation statements in our data binding statements to check for the properties of classes, such as the number of items in a list.
+
+^
+But that wouldn't be enough here, since we'd want to make sure that the empty text isn't shown to the user whilst the view is loading new data.
+
+---
+
+## Layout Expressions
+
+```xml, [.highlight: 14-16]
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <data>
+
+    <import type="android.view.View"/>
+
+    <variable
+        name="model"
+        type="io.ashdavies.databinding.RepoViewModel"/>
+
+  </data>
+
+  <TextView...
+      android:text="@string/activity_repo_empty"
+      android:visibility="@{model.items.count == 0 &amp;&amp; !model.loading ? View.VISIBLE : View.GONE}"/>
+
+  <ProgressBar...
+      android:visibility="@{model.loading ? View.VISIBLE : View.GONE}"/>
+
+</layout>
+```
+
+^
+We'd have to include the statement like so, again we have the issue with including html entities within binding expressions that we need to escape properly, but you can see the obvious problem here.
+
+---
+
+## Complex Layout Expressions
+
+^
+As you can see, it's very easy to find ourselves in the midst of overly complex binding statements, polluting our otherwise simple layouts with business logic, making it very difficult to maintain, and test.
+
+^
+This can make many developers apprehensive about using data binding, because they believe it can be too easily misused, and whilst this is true, like many toolsets, we can show constraint in using it carefully and effectively.
+
+---
+
+## Single Property Bindings
+
+^
+In our example, we saw that we were using multiple properties to build our binding statement, but we should avoid this an prefer to use a single property which can be managed by our view model, making the business behaviour easily testable.
+
+---
+
+```kotlin
+class RepoViewModel(private val service: RepoService) {
+
+  val items = MutableLiveData<List<String>>()
+  val loading = MutableLiveData<Boolean>()
+  val empty = MutableLiveData<Boolean>()
+
+  init {
+    loading.value = true
+    empty.value = false
+
+    service.fetch {
+      loading.value = false
+      empty.value = it.isEmpty()
+
+      items.value = it
+    }
+  }
+}
+
+```
+
+^
+Whilst you could argue that some of the logic is duplicitous, here we're ensuring that we have a single observable property that tells our view what we want it to do, which we could easily test.
+
+---
+
+```xml, [.highlight: 14-16]
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <data>
+
+    <import type="android.view.View"/>
+
+    <variable
+        name="model"
+        type="io.ashdavies.databinding.RepoViewModel"/>
+
+  </data>
+
+  <TextView...
+      android:text="@string/activity_repo_empty"
+      android:visibility="@{model.empty ? View.VISIBLE : View.GONE}"/>
+
+  <ProgressBar...
+      android:visibility="@{model.loading ? View.VISIBLE : View.GONE}"/>
+
+</layout>
+```
+
+^
+Here we have an immediate improvement, but we've still got a bit of logic going on here that we can clean up.
+
+---
+
+## Simple Properties
+
+^
+In most cases, the data binding library will be able to recognise simple properties that match their Java bean access methods, and will automatically look for the correct matching types.
+
+---
+
+## Simple Properties
+
+- `android:text="@{model.name}"`
+  - `fun TextView.setText(value: String)`
+  - `fun ViewModel.getName(): String`
+
+^
+For example, given the android text expression, the library looks for the set text method that accepts the type returned by the view model getName function.
+
+---
+
+## Simple Properties
+
+- `android:text="@{model.name}"`
+  - `fun TextView.setText(@StringRes resId: Int)`
+  - `@StringRes fun ViewModel.getName(): Int`
+
+^
+If the expression returns an int instead, the library searches for a setText method that accepts an int argument. The same applies to set methods where the property doesn't exist, for example, setScrimColor or scrollColor attributes.
+
+---
+
+## Binding Adapters
+
+^
+but you can specify your own additional data binding adapters, to give some additional logic to your binding. The data binding library actually already uses a lot of binding adapters under the hood to help you use both common framework views, and views found in the support library.
+
+---
+
+```kotlin
+@BindingAdapter("app:goneUnless")
+fun goneUnless(view: View, visible: Boolean) {
+  view.visibility = if (visible) View.VISIBLE else View.GONE
+}
+```
+
+^
+We can start of with an example of a simple binding adapter, that tells the data binding library which view states we want to use for the boolean properties managed by our view model.
+
+^
+This binding, will allow us to remove the conditional statement from our layouts, with this example, there's much debate as to what to name the parameter, since "visible" ignores the invisible parameter, this one from the data binding documentation respects that.
+
+---
+
+```xml, [.highlight: 14-16, 18-19]
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <data>
+
+    <import type="android.view.View"/>
+
+    <variable
+        name="model"
+        type="io.ashdavies.databinding.RepoViewModel"/>
+
+  </data>
+
+  <TextView...
+      android:text="@string/activity_repo_empty"
+      app:goneUnless="@{model.empty}"/>
+
+  <ProgressBar...
+      app:goneUnless="@{model.loading}"/>
+
+</layout>
+```
+
+^
+Much better, now we have really simple data binding expressions.
+
+---
+
+## ProTip!
+
+^
+You could even expose your intended view visibility int from your view model, thereby removing the need for an additional binding adapter.
+
+---
+
+```kotlin
+class RepoViewModel(private val service: RepoService) {
+
+  val empty = MutableLiveData<Int>()
+
+  init {
+    empty.value = View.VISIBLE
+  }
+}
+
+```
+
+^
+Though some might complain this results in the view model being aware of an android framework import, you could alleviate this by creating your own enum.
+
+---
+
+```kotlin
+class RepoViewModel(private val service: RepoService) {
+
+  val empty = MutableLiveData<Visibility>()
+
+  init {
+    empty.value = Visibility.VISIBLE
+  }
+}
+
+@BindingAdapter("visibility")
+fun setVisibility(view: View, visibility: Visibility) {
+  view.visibility = visibility.value
+}
+
+enum class Visibility(val value: Int) {
+  VISIBLE(View.VISIBLE),
+  INVISIBLE(View.INVISIBLE),
+  GONE(View.GONE)
+}
+```
+
+---
+
+## TODO("InverseBindingAdapters listeners")
+## TODO("InverseBindingAdapters high order function")
+## TODO("BindingMethod / InverseBindingMethod")
 
 ---
 
 ## TODO("Databinding generated code")
+## TODO("Generated code nullability")
+## TODO("Generated databinding after changing order of view classes")
 
 ---
 
@@ -716,7 +1297,59 @@ class RepoViewModel(private val service: RepoService) {
 
 ---
 
-## TODO("SingleLayoutAdapter")
+## Single Live Data
+
+```kotlin
+class SingleLiveData<T> : MutableLiveData<T>() {
+
+  private val pending = AtomicBoolean(false)
+
+  override fun observe(owner: LifecycleOwner, observer: Observer<in T>) {
+    super.observe(owner, Observer<T> {
+      if (pending.compareAndSet(true, false)) {
+        observer.onChanged(it)
+      }
+    })
+  }
+
+  override fun setValue(it: T?) {
+    pending.set(true)
+    super.setValue(it)
+  }
+}
+```
+
+---
+
+## Single Layout Adapter
+
+```kotlin
+class SingleLayoutAdapter<T>(@LayoutRes private val resId: Int) : RecyclerView.Adapter<SingleLayoutAdapter.ViewHolder<T>>() {
+
+  var items by observable<List<T>>(listOf()) { _, _, _ -> notifyDataSetChanged() }
+
+  override fun getItemCount(): Int = items.size
+
+  override fun onBindViewHolder(holder: ViewHolder<T>, position: Int) {
+    return holder.bind(items[position])
+  }
+
+  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder<T> {
+    val inflater = LayoutInflater.from(parent.context)
+    val binding = DataBindingUtil.inflate<ViewDataBinding>(inflater, resId, parent, false)
+
+    return ViewHolder(binding)
+  }
+
+  class ViewHolder<in T>(private val binding: ViewDataBinding) : RecyclerView.ViewHolder(binding.root) {
+
+    fun bind(item: T) = with(binding) {
+      setVariable(BR.item, item)
+      executePendingBindings()
+    }
+  }
+}
+```
 
 ---
 
@@ -724,7 +1357,12 @@ class RepoViewModel(private val service: RepoService) {
 
 ---
 
+## TODO("Generated databinding identifiers")
 ## TODO("Bindable annotation with notifyDataChanged")
+
+---
+
+## TODO("ObservableViewModel notifyPropertyChanged")
 
 ---
 
@@ -732,50 +1370,11 @@ class RepoViewModel(private val service: RepoService) {
 
 ---
 
-## TODO("Generated code nullability")
-
----
-
-## TODO("Generated code class transformers")
-
----
-
 ## TODO("Static binding adapters / companion objects")
 
 ---
 
-## TODO("InverseBindingAdapters listeners")
-
----
-
-## TODO("InverseBindingAdapters high order function")
-
----
-
-## TODO("Generated databinding identifiers")
-
----
-
-## TODO("Generated databinding after changing order of view classes")
-
----
-
-## TODO("Creating generic view binding properties (view:visible)")
-
-^
-Also consider creating a visibility enum for LiveData
-
----
-
 ## TODO("Scoping specific view binding properties on custom views")
-
----
-
-## TODO("BindingMethod / InverseBindingMethod")
-
----
-
-## TODO("Recognition of class getter/setter")
 
 ---
 
