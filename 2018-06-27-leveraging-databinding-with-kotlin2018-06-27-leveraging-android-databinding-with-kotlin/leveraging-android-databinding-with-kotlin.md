@@ -54,25 +54,6 @@ The data binding library promised to allow us to write declarative layouts, and 
 
 ---
 
-## build.gradle
-
-```groovy, [.highlight: 2,7]
-apply plugin: 'com.android.application'
-apply plugin: 'com.android.databinding'
-
-buildscript {
-  dependencies {
-    classpath 'com.android.tools.build:gradle:1.2.3'
-    classpath 'com.android.databinding.dataBinder:1.0-rc0'
-  }
-}
-```
-
-^
-To make use of the data binding library, you would need to use the classpath dependency, and the plugin to generate the necessary code.
-
----
-
 ## Data Binding Sample
 
 ![inline](data-binding-sample.png)
@@ -94,7 +75,7 @@ Thanks!
 
 ---
 
-## Data Binding Sample v2
+## Data Binding Sample
 ### [bit.ly/2JLyMc8](bit.ly/2JLyMc8)
 
 ^
@@ -102,7 +83,7 @@ I figured that it would be a good idea to update this project, to demonstrate so
 
 ---
 
-## Data Binding Sample v2
+## Data Binding Sample
 
 - Kotlin Coroutines
 
@@ -111,7 +92,7 @@ Updated with Kotlin, and Kotlin coroutines, which I've found to be really enjoya
 
 ---
 
-## Data Binding Sample v2
+## Data Binding Sample
 
 - Kotlin Coroutines
 - Constraint Layout
@@ -121,7 +102,7 @@ ConstraintLayout to simplify layouts
 
 ---
 
-## Data Binding Sample v2
+## Data Binding Sample
 
 - Kotlin Coroutines
 - Constraint Layout
@@ -132,7 +113,7 @@ Architecture components to demonstrate how you can use these with data binding.
 
 ---
 
-## Data Binding Sample v2
+## Data Binding Sample
 
 - Kotlin Coroutines
 - Constraint Layout
@@ -144,7 +125,7 @@ Moshi codegen, which can now recognise Kotlin class meta data.
 
 ---
 
-## Data Binding Sample v2
+## Data Binding Sample
 
 - Kotlin Coroutines
 - Constraint Layout
@@ -154,7 +135,7 @@ Moshi codegen, which can now recognise Kotlin class meta data.
 
 ---
 
-## Data Binding Sample v2
+## Data Binding Sample
 
 - Kotlin Coroutines
 - Constraint Layout
@@ -169,7 +150,7 @@ Moshi codegen, which can now recognise Kotlin class meta data.
 
 ---
 
-## Data Binding Sample v2
+## Data Binding Sample
 
 - Kotlin Coroutines
 - Constraint Layout
@@ -1182,25 +1163,58 @@ If the expression returns an int instead, the library searches for a setText met
 
 ---
 
-## Binding Adapters
+## `@BindingMethods`
+
+^
+When your property attributes do not match by name, you can use the binding methods annotation, or the inverse binding methods annotation for two way binding to indicate to the data binding library what method should be used.
+
+---
+
+## `@BindingAdapter`
 
 ^
 but you can specify your own additional data binding adapters, to give some additional logic to your binding. The data binding library actually already uses a lot of binding adapters under the hood to help you use both common framework views, and views found in the support library.
 
 ---
 
+## `@BindingAdapter`
+
 ```kotlin
-@BindingAdapter("app:goneUnless")
+@BindingAdapter("goneUnless")
 fun goneUnless(view: View, visible: Boolean) {
   view.visibility = if (visible) View.VISIBLE else View.GONE
 }
 ```
 
 ^
-We can start of with an example of a simple binding adapter, that tells the data binding library which view states we want to use for the boolean properties managed by our view model.
+This binding, will allow us to remove the conditional statement from our layouts, with this example, there's much debate as to what to name the parameter, since "visible" ignores the invisible parameter, this one from the data binding documentation respects that.
 
 ^
-This binding, will allow us to remove the conditional statement from our layouts, with this example, there's much debate as to what to name the parameter, since "visible" ignores the invisible parameter, this one from the data binding documentation respects that.
+Remember you don't need to declare a namespace for the attribute name if you are not using an android parameter.
+
+---
+
+## ProTip!
+### `@BindingAdapter`
+
+^
+Binding adapters also work as extension properties, here's an example of a view extension property from the Android KTX library, with the binding adapter annotation applied.
+
+---
+
+## `@BindingAdapter`
+
+```kotlin
+@set:BindingAdapter("isVisible")
+inline var View.isVisible: Boolean
+  get() = visibility == View.VISIBLE
+  set(value) {
+    visibility = if (value) View.VISIBLE else View.GONE
+  }
+```
+
+^
+This allows us to set the visibility through both data binding and programatically.
 
 ---
 
@@ -1220,80 +1234,16 @@ This binding, will allow us to remove the conditional statement from our layouts
 
   <TextView...
       android:text="@string/activity_repo_empty"
-      app:goneUnless="@{model.empty}"/>
+      app:isVisible="@{model.empty}"/>
 
   <ProgressBar...
-      app:goneUnless="@{model.loading}"/>
+      app:isVisible="@{model.loading}"/>
 
 </layout>
 ```
 
 ^
 Much better, now we have really simple data binding expressions.
-
----
-
-## ProTip!
-
-^
-You could even expose your intended view visibility int from your view model, thereby removing the need for an additional binding adapter.
-
----
-
-```kotlin
-class RepoViewModel(private val service: RepoService) {
-
-  val empty = MutableLiveData<Int>()
-
-  init {
-    empty.value = View.VISIBLE
-  }
-}
-
-```
-
-^
-Though some might complain this results in the view model being aware of an android framework import, you could alleviate this by creating your own enum.
-
----
-
-```kotlin
-class RepoViewModel(private val service: RepoService) {
-
-  val empty = MutableLiveData<Visibility>()
-
-  init {
-    empty.value = Visibility.VISIBLE
-  }
-}
-
-@BindingAdapter("visibility")
-fun setVisibility(view: View, visibility: Visibility) {
-  view.visibility = visibility.value
-}
-
-enum class Visibility(val value: Int) {
-  VISIBLE(View.VISIBLE),
-  INVISIBLE(View.INVISIBLE),
-  GONE(View.GONE)
-}
-```
-
----
-
-## TODO("InverseBindingAdapters listeners")
-## TODO("InverseBindingAdapters high order function")
-## TODO("BindingMethod / InverseBindingMethod")
-
----
-
-## TODO("Databinding generated code")
-## TODO("Generated code nullability")
-## TODO("Generated databinding after changing order of view classes")
-
----
-
-## TODO("Databinding executePendingBindings (recyclerview usage)")
 
 ---
 
@@ -1318,6 +1268,9 @@ class SingleLiveData<T> : MutableLiveData<T>() {
   }
 }
 ```
+
+^
+Often you'll need to act upon an event triggered by your view in response to a user interaction, such an interaction might be navigating to a new activity, but without
 
 ---
 
@@ -1353,29 +1306,64 @@ class SingleLayoutAdapter<T>(@LayoutRes private val resId: Int) : RecyclerView.A
 
 ---
 
-## TODO("Two-way databinding")
+## TODO
+
+- Two-way databinding
+
+- Bindable annotation with notifyDataChanged
+- ObservableViewModel notifyPropertyChanged
+
+- Databinding in a multimodule project
+
+- Static binding adapters / companion objects
+
+- Scoping specific view binding properties on custom views
+
+- InverseBindingAdapters listeners
+- InverseBindingAdapters high order function
+
+- Databinding generated code
+- Generated databinding identifiers
+- Generated code nullability
+- Generated databinding after changing order of view classes
+
+- Databinding executePendingBindings (recyclerview usage)
 
 ---
 
-## TODO("Generated databinding identifiers")
-## TODO("Bindable annotation with notifyDataChanged")
+## Additional Resources
 
 ---
 
-## TODO("ObservableViewModel notifyPropertyChanged")
+- **Android Data Binding Library samples**
+Google Samples - [bit.ly/2MK5GMb]
+<br />
+
+- **Make your view-model properties great again**
+Aiden McWilliams - [bit.ly/2llVVHz]
+<br />
+
+- **MVVM, Viewmodel and architecture components**
+Danny Preussler - [bit.ly/2yxvGay]
+
+^
+Google provides some examples on how to use layout expressions, binding adapters, animations, and inverse converters.
+
+^
+Aiden mcwilliams wrote a great article covering the bindable property delegates which I covered in this talk, and I highly suggest you go check it out.
+
+^
+Finally, Danny had a cool talk last year covering the architecture components, which work really well with data binding.
+
 
 ---
 
-## TODO("Binding extension properties")
+## Android Databinding with Kotlin
+[coming soon](Coming Soon)
+
+^
+Finally, all of these slides are available on GitHub
 
 ---
 
-## TODO("Static binding adapters / companion objects")
-
----
-
-## TODO("Scoping specific view binding properties on custom views")
-
----
-
-## TODO("LiveData side-effects")
+## Thanks
