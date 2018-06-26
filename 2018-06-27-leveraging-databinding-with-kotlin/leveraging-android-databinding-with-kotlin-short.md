@@ -728,6 +728,8 @@ inline var View.isVisible: Boolean
 
 ## `@Bindable`
 
+![](bindable.gif)
+
 ^ - Remember ObservableField extends BaseObservable?
 
 ^ - Applied to generated binding properties from layout.
@@ -744,7 +746,7 @@ inline var View.isVisible: Boolean
 
 ### ObservableViewModel
 
-^ - Create Bindable VM properties by extending from Observable interface.
+^ - Create bindable VM properties by extending from Observable interface.
 
 ---
 
@@ -851,6 +853,8 @@ class RepoViewModel(private val service: RepoService) : ObservableViewModel {
 ## `@Bindable`
 ### Delegated Properties
 
+![right](business-cat.png)
+
 ^ - Remember our delegated properties.
 
 ^ - Reduce boilerplate property accessors with delegated properties.
@@ -891,9 +895,9 @@ class BindableProperty<T>(
     property: KProperty<*>, oldValue: T, newValue: T
   ): Boolean = oldValue != newValue
 
-  override fun afterChange(property: KProperty<*>, oldValue: T, newValue: T) {
-    observable.notifyPropertyChanged(id)
-  }
+  override fun afterChange(
+    property: KProperty<*>, oldValue: T, newValue: T
+  ) { /* ... */ }
 }
 ```
 
@@ -926,7 +930,7 @@ class BindableProperty<T>(
 
 ## `@Bindable`
 
-```kotlin, [.highlight: 3-4]
+```kotlin, [.highlight: 3-4, 14-16]
 class RepoViewModel(private val service: RepoService) : ObservableViewModel() {
 
   @get:Bindable 
@@ -940,7 +944,9 @@ class RepoViewModel(private val service: RepoService) : ObservableViewModel() {
   }
 }
 
-fun <T> ObservableViewModel.bindable(initial: T, id: Int): BindableProperty<T> = BindableProperty(initial, this, id)
+fun <T> ObservableViewModel.bindable(initial: T, id: Int): BindableProperty<T> {
+  return BindableProperty(initial, this, id)
+}
 ```
 
 ^ - Extension function to create bindable property.
