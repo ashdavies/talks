@@ -1498,17 +1498,13 @@ Danny Preussler - [bit.ly/2yxvGay]
 George Mount - [https://bit.ly/2IgwY9w]
 <br />
 
-^
-Google provides some examples on how to use layout expressions, binding adapters, animations, and inverse converters.
+^ - Google Two Way Binding samples
 
-^
-Aiden mcwilliams wrote a great article covering the bindable property delegates which I covered in this talk, and I highly suggest you go check it out.
+^ - Aiden mcwilliams bindable property delegates in view models
 
-^
-Danny had a cool talk last year covering the architecture components, which work really well with data binding.
+^ - Danny covered using architecture components
 
-^
-Finally, George Mount covered how you can use data binding with the recycler view to create a single layout adapter that I've demonstrated in the sample project.
+^ - George Mount on a unified adapter for RecyclerView with databinding
 
 ---
 

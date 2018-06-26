@@ -7,8 +7,6 @@ autoscale: true
 
 ^ - Speaker introduction.
 
-^ - Avatar bemusement.
-
 ---
 
 ## What is Data Binding?
@@ -154,6 +152,8 @@ class RepoActivity : AppCompatActivity() {
 
 ## Delegated Properties
 
+![right](business-cat.png)
+
 ^ - Reduce boilerplate property accessors with delegated properties.
 
 ^ - Create template for getter and setter to reuse elsewhere.
@@ -195,7 +195,8 @@ interface ReadWriteProperty<in R, T> {
 ## Delegated Properties
 
 ```kotlin
-class ActivityBindingProperty<out T : ViewDataBinding> : ReadOnlyProperty<Activity, T> {
+class ActivityBindingProperty<out T : ViewDataBinding>(
+) : ReadOnlyProperty<Activity, T> {
 
   override operator fun getValue(thisRef: Activity, property: KProperty<*>): T {
     TODO("not implemented")
@@ -230,7 +231,7 @@ class ActivityBindingProperty<out T : ViewDataBinding>(
 
 ---
 
-## ProTip: Extension Function!
+## ProTip: Extension Function! 👍
 
 ```kotlin, [.highlight: 3, 20-22]
 class RepoActivity : AppCompatActivity() {
@@ -272,15 +273,7 @@ fun <T : ViewDataBinding> FragmentActivity.activityBinding(
 
 ![inline right](jetpack-hero.png)
 
-^ - Google announced architecture components last year at Google IO.
-
-^ - Announced JetPack this year to quickly build framework applications.
-
----
-
-## Model-View-ViewModel
-
-^ - Suggestion design pattern for fresh projects.
+^ - Google announced architecture components and Android Jetpack framework.
 
 ^ - Data binding works well with MVVM, view state designed to be observed.
 
@@ -289,8 +282,6 @@ fun <T : ViewDataBinding> FragmentActivity.activityBinding(
 ^ - View observes VM state, notifies VM of user interaction or intent.
 
 ^ - VM responsible for business logic behaviour.
-
-^ - No Android dependencies.
 
 ---
 
@@ -337,7 +328,7 @@ class RepoActivity : AppCompatActivity() {
 
 ---
 
-## ProTip: Extension Function!
+## ProTip: Extension Function! 👍
 
 ```kotlin, [.highlight: 9, 13-15]
 class RepoActivity : AppCompatActivity() {
@@ -372,8 +363,8 @@ class RepoViewModel(service: RepoService) : ViewModel {
 
   val items: ObservableField<List<String>> = ObservableField()
 
-  init {
-    service.fetch(items::set)
+  fun query(value: String) {
+    service.fetch(value, items::set)
   }
 }
 ```
@@ -386,6 +377,17 @@ class RepoViewModel(service: RepoService) : ViewModel {
 
 ## Observable
 
+```kotlin, [.highlight: 3]
+class RepoViewModel(service: RepoService) : ViewModel {
+
+  val items: ObservableField<List<String>> = ObservableField()
+
+  fun query(value: String) {
+    service.fetch(value, items::set)
+  }
+}
+```
+
 ^ - Implement observable interface to add and remove property change listeners.
 
 ^ - Extending from BaseObservable to implement property change listeners.
@@ -395,6 +397,8 @@ class RepoViewModel(service: RepoService) : ViewModel {
 ---
 
 ## LiveData Data Binding
+
+![left](rainbow-tears.gif)
 
 ^ - From AGP 3.1 Live Data can be used with Data Binding with lifecycle owner
 
@@ -407,8 +411,8 @@ class RepoViewModel(service: RepoService) : ViewModel {
 
   val items = MutableLiveData<List<String>>()
 
-  init {
-    service.fetch(items::setValue)
+  fun query(value: String) {
+    service.fetch(value, items::set)
   }
 }
 ```
@@ -419,15 +423,15 @@ class RepoViewModel(service: RepoService) : ViewModel {
 
 ---
 
-## ProTip: Extension Functions!
+## ProTip: Extension Functions! 👍
 
 ```kotlin, [.highlight: 3, 10]
 class RepoViewModel(service: RepoService) : ViewModel {
 
   val items = mutableLiveData<List<String>>()
 
-  init {
-    service.fetch(items::setValue)
+  fun query(value: String) {
+    service.fetch(value, items::setValue)
   }
 }
 
@@ -490,30 +494,6 @@ class RepoViewModel(private val service: RepoService) : ViewModel {
 ^ - Progress bar visibility updated from loading boolean.
 
 ^ - Boolean two state transformed to three state visibility.
-
----
-
-## Layout Expressions
-
-```xml, [.highlight: 6]
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-
-  <data>
-
-    <import type="android.view.View"/>
-
-    <variable
-        name="model"
-        type="io.ashdavies.databinding.RepoViewModel"/>
-
-  </data>
-
-  <ProgressBar...
-      android:visibility="@{model.loading ? View.VISIBLE : View.GONE}"/>
-
-</layout>
-```
 
 ^ - Must import View for variable usage in binding expressions.
 
@@ -626,14 +606,6 @@ class RepoViewModel(private val service: RepoService) : ViewModel {
 
 ---
 
-## Simple Property Bindings
-
-^ - Prefer single property bindings.
-
-^ - Business behaviour more easily testable.
-
----
-
 ```kotlin
 class RepoViewModel(private val service: RepoService) : ViewModel {
 
@@ -686,16 +658,6 @@ class RepoViewModel(private val service: RepoService) : ViewModel {
 
 ---
 
-## `@BindingMethod`
-
-^ - Data Binding can detect simple properties like visibility.
-
-^ - Binding methods can be specified for other properties.
-
-^ - How can we apply logic?
-
----
-
 ## `@BindingAdapter`
 
 ^ - Data Binding allows specification of binding adapters
@@ -719,7 +681,7 @@ fun goneUnless(view: View, visible: Boolean) {
 
 ---
 
-## ProTip: Extension Property!
+## ProTip: Extension Property! 👍
 
 ```kotlin
 @set:BindingAdapter("isVisible")
@@ -998,38 +960,8 @@ fun <T> ObservableViewModel.bindable(initial: T, id: Int): BindableProperty<T> =
 
 ---
 
-## Additional Resources
-
----
-
-- **Android Data Binding Library samples**
-Google Samples - [bit.ly/2MK5GMb]
-<br />
-
-- **Make your view-model properties great again**
-Aiden McWilliams - [bit.ly/2llVVHz]
-<br />
-
-- **MVVM, Viewmodel and architecture components**
-Danny Preussler - [bit.ly/2yxvGay]
-<br />
-
-- **Android Data Binding: RecyclerView**
-George Mount - [https://bit.ly/2IgwY9w]
-<br />
-
-^ - Google provides some examples on how to use layout expressions, binding adapters, animations, and inverse converters.
-
-^ - Aiden mcwilliams wrote a great article covering the bindable property delegates which I covered in this talk, and I highly suggest you go check it out.
-
-^ - Danny had a cool talk last year covering the architecture components, which work really well with data binding.
-
-^ - Finally, George Mount covered how you can use data binding with the recycler view to create a single layout adapter that I've demonstrated in the sample project.
-
----
-
-## Android Databinding with Kotlin
-### bit.ly/coming-soon
+## Android Data Binding with Kotlin
+### bit.ly/2yU8qUz
 
 ^
 Finally, all of these slides are available on GitHub
@@ -1037,3 +969,5 @@ Finally, all of these slides are available on GitHub
 ---
 
 ## Cheers! 🍻
+
+### ![](twitter.png) _ashdavies
