@@ -2,8 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2c2bb1b9-2330-4d94-a925-b20f46dd045f" name="Default Changelist" comment="Rest">
-      <change afterPath="$PROJECT_DIR$/.idea/dictionaries/adavies.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/leveraging-android-databinding-with-kotlin-short.md" beforeDir="false" afterPath="$PROJECT_DIR$/leveraging-android-databinding-with-kotlin-short.md" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -45,8 +43,8 @@
         <entry file="file://$PROJECT_DIR$/leveraging-android-databinding-with-kotlin-short.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="FIRST">
-              <first_editor relative-caret-position="331">
-                <caret line="1028" lean-forward="true" selection-start-line="1028" selection-end-line="1028" />
+              <first_editor relative-caret-position="709">
+                <caret line="1074" lean-forward="true" selection-start-line="1074" selection-end-line="1074" />
               </first_editor>
               <second_editor />
             </state>
@@ -57,8 +55,8 @@
         <entry file="file://$PROJECT_DIR$/leveraging-android-databinding-with-kotlin.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="FIRST">
-              <first_editor relative-caret-position="341">
-                <caret line="738" column="18" selection-start-line="738" selection-start-column="18" selection-end-line="738" selection-end-column="18" />
+              <first_editor relative-caret-position="652">
+                <caret line="1508" column="3" lean-forward="true" selection-start-line="1478" selection-start-column="3" selection-end-line="1508" selection-end-column="3" />
               </first_editor>
               <second_editor />
             </state>
@@ -573,23 +571,7 @@
       <autoscrollFromSource ProjectPane="true" />
       <foldersAlwaysOnTop value="true" />
     </navigator>
-    <panes>
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="2018-06-27-leveraging-databinding-with-kotlin" type="b2602c69:ProjectViewProjectNode" />
-              <item name="2018-06-27-leveraging-databinding-with-kotlin" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
-      <pane id="AndroidView" />
-      <pane id="PackagesPane" />
-      <pane id="Scope" />
-      <pane id="Course" />
-    </panes>
+    <panes />
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
@@ -644,14 +626,16 @@
       <workItem from="1530030448898" duration="27000" />
       <workItem from="1530030512706" duration="2014000" />
       <workItem from="1530050113465" duration="6814000" />
+      <workItem from="1530099321528" duration="105000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="12949000" />
+    <option name="totallyTimeSpent" value="13054000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1020" height="1050" extended-state="0" />
+    <frame x="0" y="0" width="1680" height="1050" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" weight="0.29166666" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -668,7 +652,7 @@
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="8" visible="true" weight="0.33751306" />
+      <window_info anchor="bottom" id="Terminal" order="8" weight="0.33751306" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" weight="0.3291536" />
       <window_info anchor="bottom" id="Version Control" order="10" weight="0.32810867" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
@@ -720,8 +704,8 @@
     <entry file="file://$PROJECT_DIR$/leveraging-android-databinding-with-kotlin.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="FIRST">
-          <first_editor relative-caret-position="341">
-            <caret line="738" column="18" selection-start-line="738" selection-start-column="18" selection-end-line="738" selection-end-column="18" />
+          <first_editor relative-caret-position="652">
+            <caret line="1508" column="3" lean-forward="true" selection-start-line="1478" selection-start-column="3" selection-end-line="1508" selection-end-column="3" />
           </first_editor>
           <second_editor />
         </state>
@@ -730,8 +714,8 @@
     <entry file="file://$PROJECT_DIR$/leveraging-android-databinding-with-kotlin-short.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="FIRST">
-          <first_editor relative-caret-position="331">
-            <caret line="1028" lean-forward="true" selection-start-line="1028" selection-end-line="1028" />
+          <first_editor relative-caret-position="709">
+            <caret line="1074" lean-forward="true" selection-start-line="1074" selection-end-line="1074" />
           </first_editor>
           <second_editor />
         </state>

@@ -1049,6 +1049,36 @@ fun <T> ObservableViewModel.bindable(initial: T, id: Int): BindableProperty<T> {
 
 ---
 
+## Additional Resources
+
+---
+
+- **Android Data Binding Library samples**
+Google Samples - [bit.ly/2MK5GMb]
+<br />
+
+- **Make your view-model properties great again**
+Aiden McWilliams - [bit.ly/2llVVHz]
+<br />
+
+- **MVVM, Viewmodel and architecture components**
+Danny Preussler - [bit.ly/2yxvGay]
+<br />
+
+- **Android Data Binding: RecyclerView**
+George Mount - [https://bit.ly/2IgwY9w]
+<br />
+
+^ - Google Two Way Binding samples
+
+^ - Aiden mcwilliams bindable property delegates in view models
+
+^ - Danny covered using architecture components
+
+^ - George Mount on a unified adapter for RecyclerView with databinding
+
+---
+
 ## Cheers! 🍻
 
 ### ![](twitter.png) _ashdavies
