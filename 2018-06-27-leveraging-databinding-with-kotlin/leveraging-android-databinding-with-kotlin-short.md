@@ -67,7 +67,7 @@ class RepoActivity : AppCompatActivity() {
 }
 ```
 
-^ - Starting with basic usage of data binding
+^ Starting with basic usage of data binding
 
 ---
 
@@ -86,7 +86,7 @@ class RepoActivity : AppCompatActivity() {
 }
 ```
 
-^ - Store replaced framework setContentView with data binding util
+^ Store replaced framework setContentView with data binding util
 
 ---
 
@@ -106,9 +106,9 @@ internal class RepoActivity : AppCompatActivity() {
 }
 ```
 
-^ - From AGP 3.1 data binding is lifecycle aware, allowing lifecycle components.
+^ From AGP 3.1 data binding is lifecycle aware, allowing lifecycle components.
 
-^ - Inform binding of lifecycle owner to manage lifecycle subscription.
+^ Inform binding of lifecycle owner to manage lifecycle subscription.
 
 ---
 
@@ -850,7 +850,6 @@ abstract class ObservableViewModel : ViewModel(), Observable {
 ---
 
 ## `@Bindable`
-
 
 ```kotlin, [.highlight: 1]
 class RepoViewModel(private val service: RepoService) : ObservableViewModel {
