@@ -2,10 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2c2bb1b9-2330-4d94-a925-b20f46dd045f" name="Default Changelist" comment="Rest">
-      <change afterPath="$PROJECT_DIR$/droidcon-tweet.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/summer.jpeg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/leveraging-android-databinding-with-kotlin-short.md" beforeDir="false" afterPath="$PROJECT_DIR$/leveraging-android-databinding-with-kotlin-short.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/leveraging-android-databinding-with-kotlin.md" beforeDir="false" afterPath="$PROJECT_DIR$/leveraging-android-databinding-with-kotlin.md" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -19,18 +15,18 @@
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="jpg" value="1" />
-          <entry key="md" value="7" />
+          <entry key="md" value="8" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="Image" value="1" />
-          <entry key="Markdown" value="7" />
+          <entry key="Markdown" value="8" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="md" value="14025" />
+          <entry key="md" value="14027" />
           <entry key="txt" value="19" />
         </counts>
       </usages-collector>
@@ -38,13 +34,14 @@
         <counts>
           <entry key="JAVA" value="36" />
           <entry key="Kotlin" value="30" />
-          <entry key="Markdown" value="13954" />
+          <entry key="Markdown" value="13956" />
           <entry key="PLAIN_TEXT" value="19" />
           <entry key="XML" value="5" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.lifecycle.project">
         <counts>
+          <entry key="project.closed" value="1" />
           <entry key="project.open.time.11" value="1" />
           <entry key="project.opened" value="1" />
         </counts>
@@ -57,8 +54,8 @@
         <entry file="file://$PROJECT_DIR$/leveraging-android-databinding-with-kotlin.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="FIRST">
-              <first_editor relative-caret-position="877">
-                <caret line="1838" selection-start-line="1838" selection-end-line="1838" />
+              <first_editor relative-caret-position="953">
+                <caret line="857" column="32" lean-forward="true" selection-start-line="857" selection-start-column="32" selection-end-line="857" selection-end-column="32" />
               </first_editor>
               <second_editor />
             </state>
@@ -92,6 +89,7 @@
       <find>simple</find>
       <find>bindingadapter</find>
       <find>droidcon</find>
+      <find>livedata data binding</find>
     </findStrings>
     <replaceStrings>
       <replace>^ -</replace>
@@ -605,7 +603,7 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="android.sdk.path" value="$USER_HOME$/Library/Android/sdk" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1532535540957" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1532595991806" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="/usr/local/bin/node" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
@@ -661,12 +659,12 @@
       <workItem from="1530030512706" duration="2014000" />
       <workItem from="1530050113465" duration="6814000" />
       <workItem from="1530099321528" duration="262000" />
-      <workItem from="1532520683384" duration="13212000" />
+      <workItem from="1532520683384" duration="13979000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="26423000" />
+    <option name="totallyTimeSpent" value="27190000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-1200" y="-1484" width="1200" height="1920" extended-state="0" />
@@ -687,9 +685,9 @@
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Terminal" order="8" weight="0.17679256" />
+      <window_info anchor="bottom" id="Terminal" order="8" visible="true" weight="0.17679256" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" weight="0.3291536" />
-      <window_info anchor="bottom" id="Version Control" order="10" weight="0.32810867" />
+      <window_info anchor="bottom" id="Version Control" order="10" weight="0.32785988" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -805,8 +803,8 @@
     <entry file="file://$PROJECT_DIR$/leveraging-android-databinding-with-kotlin.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="FIRST">
-          <first_editor relative-caret-position="877">
-            <caret line="1838" selection-start-line="1838" selection-end-line="1838" />
+          <first_editor relative-caret-position="953">
+            <caret line="857" column="32" lean-forward="true" selection-start-line="857" selection-start-column="32" selection-end-line="857" selection-end-column="32" />
           </first_editor>
           <second_editor />
         </state>

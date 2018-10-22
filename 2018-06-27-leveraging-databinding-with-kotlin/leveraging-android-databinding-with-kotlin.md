@@ -871,8 +871,6 @@ fun <T> ViewModel.mutableLiveDataOf() = MutableLiveData<T>()
 
 ---
 
----
-
 ## LiveData Data Binding
 ### Transformations
 
