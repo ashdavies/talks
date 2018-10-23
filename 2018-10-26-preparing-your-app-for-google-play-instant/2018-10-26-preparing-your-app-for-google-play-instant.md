@@ -1,35 +1,35 @@
 footer: ![10%](immobilienscout24.png)
 autoscale: true
-slidenumbers: true
+build-lists: true
 header: Roboto
 text: Roboto
 
 [.footer: ashdavies.io - @askashdavies]
 ![right inline 15%](immobilienscout24.png)
 
-# Preparing your app
-# for Google Play Instant
+## Preparing your app for Google Play Instant
+
+### Droidcon London 2018 
+
+^ (Make Droidcon title white)
 
 ![inline left](ash-davies.png)
 
 ---
 
-### Super Duper Exclusive 
-### London Preview
-
-![](london-aerial.jpg)
-
----
-
 ![fit](mobile-apps.png)
 
-^ Mobile economy runs on apps
+^ Mobile economy driven by apps
+
+^ Mobile development business priority
 
 ---
 
 ![](mobile-first.png)
 
-^ Mobile first business strategy
+^ Mobile first business strategy often employed
+
+^ Resulting in, growth (acquisition), user retention statistics used as measurement of success
 
 ---
 
@@ -39,7 +39,9 @@ text: Roboto
 
 ^ Wherever the user journey starts
 
-^ It inevitably ends up on Google Play
+^ Referral, word-of-mouth, advertisement, social
+
+^ It inevitably ends up on Google Play to install
 
 ---
 
@@ -47,13 +49,15 @@ text: Roboto
 
 ^ Incredibly useful tool, reliable distribution
 
-^ Guaranteed safety, brand identity, trust
+^ Guaranteed safety, Google Play Protect
+
+^ Brand identity, source of truth, trust
 
 ---
 
 # 🧗 Friction 
 
-^ One more step to your app
+^ One more step to your awesome user experience
 
 ---
 
@@ -67,7 +71,11 @@ text: Roboto
 
 ![autoplay loop](material-progress-indicator.mp4)
 
-^ Long installation times leading cause of cancellation
+^ How often have you seen this when trying to install?
+
+^ Long installation times one of the leading cause of cancellation
+
+^ User acquisition funnel already difficult
 
 ---
 
@@ -77,7 +85,11 @@ text: Roboto
 
 # `< />`
 
-^ Mobile optimised sites as solution
+^ Progressive web apps (mobile optimised sites)
+
+^ Often clunky, unintuitive, require extensive dev time
+
+^ Not as pleasant as a native mobile experience
 
 ---
 
@@ -85,24 +97,44 @@ text: Roboto
 
 ![100%](google-play-instant.png)
 
-^ Renamed from instant apps
+^ Instant apps are native apps that don't require an installation
+
+^ Ideal for businesses with an existing Android app
 
 ---
 
-# Performance
+## Park and Pay
 
-- Monolith
-- Feature artifacts
-- Parallel builds [Citation Needed]
+^ Introduces as instant apps 2016, NFC concept with "Park and Pay"
+
+^ SDK opened up next year for users running Lollipop or later
+
+---
+
+# <br />
+
+## Performance
+
+![50%](android-performance-patterns.png)
+
+^ Doesn't make your app automatically performant
+
+^ Encourages you to modularise from a single artifact
+
+^ Instant apps, are by nature "instant"
+
+^ AGP includes clever optimisations, incremental builds, parrallelisation
 
 ---
 
 [.background-color: #ffffff]
 [.header: #333333]
 
+# <br />
+
 ## Security
 
-![100%](android-security.jpg)
+![80%](android-security.jpg)
 
 ^ Concern for instant security implications
 
@@ -144,7 +176,7 @@ text: Roboto
 
 ---
 
-- `ACCESS_COURSE_LOCATION`
+- `ACCESS_COARSE_LOCATION`
 - `ACCESS_FINE_LOCATION`
 - `ACCESS_NETWORK_STATE`
 - `BILLING` (Deprecated as of Play Billing Library 1.0)
@@ -228,16 +260,20 @@ text: Roboto
 
 ^ Arbitrary size limit for fast download
 
+^ Elaborate on base module
+
 ---
 
 [.background-color: #FFFFFF]
 [.header: #666666]
 
-## Size Limit (10 Mb) 💪
+## Size Limit ~~(4 Mb)~~ (10 Mb) 💪
 
 ![inline 50%](distribution-base-10mb.png) ![inline 50%](distribution-feature-a-10mb.png) ![inline 50%](distribution-feature-b-10mb.png)
 
 ^ Size increased to 10 Mb to enable Try Now
+
+^ Should still keep small
 
 ---
 
@@ -293,6 +329,8 @@ text: Roboto
 
 ![120% right](directed-acyclic-graph.png)
 
+^ Direct Acyclic Graph
+
 ^ Migration from Dagger 1 long and arduous
 
 ^ Heavy use of Dagger Android allowed modularisation
@@ -325,43 +363,33 @@ Flat Hierarchy
 
 ---
 
-![](kotlin-android.png)
-
-^ Kotlin internal modifier
-
----
-
-![](how-did-i-get-here.gif)
-
-^ How did I get here?
+![](awesome-farrel.gif)
 
 ^ Already a prime candidate for an instant app
 
 ---
 
-# Analysis
+![](california-road.jpeg)
 
-^ Which tools did you use for measuring APK size per package?
+^ Not there yet, still need to ensure within limitation
 
-^ Android Studio APK analyser
-
-^ Emulator support
-
-^ Refactoring tool
+^ Mistakenly spent a lot of time on optimisation first
 
 ---
 
-# Modularisation
+## App Bundle
 
-^ App Bundle
+---
 
-^ Dynamic feature modules
+## Dynamic Feature
 
-^ Independent feature modules
+---
 
-^ How did you decide for your base module? 
+![fit](apk-analyser.png)
 
-^ Feature module data binding
+^ Android Studio allows analysis of instant app apk
+
+^ Emulator support, and refactoring tool
 
 ---
 
@@ -375,17 +403,23 @@ Flat Hierarchy
 
 # Optimisations
 
-- Proguard (`minifyEnabled`)
+- Code minification (`minifyEnabled`)
 
-- SVG assets (optimised)
+- Resource shrinking (`shrinkResources`)
 
-^ Remove bloated images
+- Optimised SVG assets (`bit.ly/2SeZePQ`)
 
-^ Avocado optimiser
+- Configuration splits (`splits { }`)
+
+^ Remove rasterised images
+
+^ Optimised vector graphics (Avocado)
+
+^ Density, processor, language
 
 ---
 
-# Libraries
+## Third Party SDKs 🤦‍♂️
 
 ^ Largest library dependency to remove
 
@@ -399,7 +433,11 @@ Flat Hierarchy
 
 ---
 
-![](kotlin-android.png)
+[.header: #000000]
+
+# Coroutines
+
+![original](kotlin-android.png)
 
 ^ Kotlin Coroutines smaller than Rx
 
@@ -415,13 +453,24 @@ Flat Hierarchy
 
 ---
 
-Navigation
+## Navigation
 
-^ Intent cannot reference activity
+### `Intent(this, FinanceCalculatorActivity::class.java)`
+
+^ You may be used to creating intents like this
+
+---
+
+## Navigation
+
+### ~~`Intent(this, FinanceCalculatorActivity::class.java)`~~
+
+^ No dice, intents cannot reference activity directly
+
+---
 
 ```xml
 <activity android:name=".calculator.FinanceCalculatorActivity">
-
   <intent-filter>
 
     <action android:name="android.intent.action.VIEW"/>
@@ -434,14 +483,18 @@ Navigation
         android:scheme="https"/>
 
   </intent-filter>
-
-  <meta-data android:name="default-url"
-      android:value="https://www.immobilienscout24.de/baufinanzierung/finanzierungsrechner/"/>
-
 </activity>
 ```
 
 ^ App linking URL parameters
+
+^ Nullable parameters via query param
+
+^ Don't use intent parameters
+
+---
+
+# URL Verification
 
 ^ Certificate file uploaded to server
 
@@ -465,11 +518,11 @@ Navigation
 
 ---
 
-# Current State
+## Next Steps
 
----
+^ Finance calculator shipping before end of year
 
-# Next Steps
+^ Search funnel 'Try Now' shipping before BER
 
 ---
 
