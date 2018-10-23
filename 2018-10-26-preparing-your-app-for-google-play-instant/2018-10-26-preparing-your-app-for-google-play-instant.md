@@ -14,6 +14,13 @@ text: Roboto
 
 ---
 
+### Super Duper Exclusive 
+### London Preview
+
+![](london-aerial.jpg)
+
+---
+
 ![fit](mobile-apps.png)
 
 ^ Mobile economy runs on apps
@@ -52,11 +59,13 @@ text: Roboto
 
 ![](https://media.giphy.com/media/ZelfdOk5XE7p6/giphy.gif)
 
-^ This cat had no friction
+^ This graceful feline had no friction,
+
+^ but perhaps needed some.
 
 ---
 
-![](material-progress-indicator.mp4)
+![autoplay loop](material-progress-indicator.mp4)
 
 ^ Long installation times leading cause of cancellation
 
@@ -76,6 +85,8 @@ text: Roboto
 
 ![100%](google-play-instant.png)
 
+^ Renamed from instant apps
+
 ---
 
 # Performance
@@ -94,6 +105,7 @@ text: Roboto
 ![100%](android-security.jpg)
 
 ^ Concern for instant security implications
+
 ^ Careful precautions have been taken
 
 ---
@@ -104,10 +116,16 @@ text: Roboto
 
 ---
 
+[.background-color: #478ff9]
+
 ## Smart Lock
 
+![60% right](netflix-retrieve.png)
+
 ^ Smart lock for passwords on Android
+
 ^ Retrieve stored credentials from Credentials API 
+
 ^ Requires explicit user permission
 
 ---
@@ -115,6 +133,7 @@ text: Roboto
 ## 💳 Play Billing Library
 
 ^ Payments via Play Billing Library
+
 ^ Fast and easy payments in over 135 countries
 
 ---
@@ -159,18 +178,40 @@ text: Roboto
 ## ~~External Storage~~
 
 ^ No access to external storage,
+
 ^ no sniffing for installed apps
+
+---
+
+## 🎉 Local Storage 
+
+^ Still have access to local storage, cache and preferences
+
+^ SqlLiteDatabase and content providers without export
+
+---
+
+## Cookie API
+
+![](cookie-monster.gif)
+
+^ Available to installed and instant apps
+
+^ Help migrate users over to installed app
+
+^ Used with PackageManager (or support) API
 
 ---
 
 ## ~~Push Notifications~~
 
 ^ Like background services, no background notifications
+
 ^ Beta program available by application
 
 ---
 
-## Bluetooth
+## ~~Bluetooth~~
 
 ^ Many hardware facilities limited
 
@@ -181,9 +222,10 @@ text: Roboto
 
 ## Size Limit (4 Mb)
 
-![inline 60%](distribution-base.png) ![inline 60%](distribution-feature-a.png) ![inline 60%](distribution-feature-b.png)
+![inline 50%](distribution-base-2mb.png) ![inline 50%](distribution-feature-a-2mb.png) ![inline 50%](distribution-feature-b-2mb.png)
 
 ^ Instant Apps should be instant
+
 ^ Arbitrary size limit for fast download
 
 ---
@@ -193,9 +235,9 @@ text: Roboto
 
 ## Size Limit (10 Mb) 💪
 
-^ Size increased to 10 Mb to enable Try Now
+![inline 50%](distribution-base-10mb.png) ![inline 50%](distribution-feature-a-10mb.png) ![inline 50%](distribution-feature-b-10mb.png)
 
-![inline 60%](distribution-base.png) ![inline 60%](distribution-feature-a.png) ![inline 60%](distribution-feature-b.png)
+^ Size increased to 10 Mb to enable Try Now
 
 ---
 
@@ -211,71 +253,215 @@ text: Roboto
 
 --- 
 
-# Segmentation
-
---- 
-
 # The Monolith
 
 ![](monolith.jpg)
 
+^ Not only back ends work with a monolith
+
+^ Two modules app and search
+
+^ Tightly coupled
+
 ---
 
-# Rearchitecting
+# Location Input
+
+![100% right](calculator-location.gif)
+
+^ Location searching existed on web
+
+^ Reused search funnel location
+
+^ Multiple behaviours
+
+---
+
+![](common-architectures.jpg)
+
+[^]: https://www.lynda.com
+
+^ Updating architecture
+
+^ Android Guild discussions
+
+^ Modularisation, autonomy
 
 --- 
 
-# Dependencies
+# Dependency Graph
 
-- Dagger Android Support
-- Dagger Multi-Binding for alternative dependencies
+![120% right](directed-acyclic-graph.png)
+
+^ Migration from Dagger 1 long and arduous
+
+^ Heavy use of Dagger Android allowed modularisation
+
+---
+
+![50%](architecture-monolith.png)
+
+^ Monolith application with tight coupling
+
+^ Heavy modularisation and responsible workflow
+
+---
+
+![fit](application-hierarchy.png)
+
+^ Highly modularised, mostly unidirectional dependency flow
+
+^ Vertically structured architectural hierarchy
+
+^ Top-level god module
 
 ---
  
-# Gradle Modules
+Flat Hierarchy
 
-- Horizontal vs vertical / flat hierarchy vs structured hierarchy
+![60% original](flat-hierarchy.png)
+
+^ Horizontal hierarchy encapsulating implementation
 
 ---
+
+![](kotlin-android.png)
+
+^ Kotlin internal modifier
+
+---
+
+![](how-did-i-get-here.gif)
+
+^ How did I get here?
+
+^ Already a prime candidate for an instant app
 
 ---
 
 # Analysis
 
-- Which tools did you use for measuring APK size per package?
-- Android Studio APK analyser
-- Emulator support
-- Refactoring tool
+^ Which tools did you use for measuring APK size per package?
+
+^ Android Studio APK analyser
+
+^ Emulator support
+
+^ Refactoring tool
 
 ---
 
 # Modularisation
 
-- App Bundle
-- Dynamic feature modules
-- Independent feature modules
-- How did you decide for your base module? 
-- Separated finance dagger application component
+^ App Bundle
+
+^ Dynamic feature modules
+
+^ Independent feature modules
+
+^ How did you decide for your base module? 
+
+^ Feature module data binding
+
+---
+
+# Dagger
+
+^ Dagger Multi-Binding for alternative dependencies
+
+^ Separated finance dagger application component
 
 ---
 
 # Optimisations
 
-- Removing bloated images (SVG assets, avocado optimiser)
-- RxMustDie in favour of Coroutines
-- What was the biggest library/dependency to remove?
+- Proguard (`minifyEnabled`)
+
+- SVG assets (optimised)
+
+^ Remove bloated images
+
+^ Avocado optimiser
 
 ---
 
-# Navigation
+# Libraries
 
-- App linking URL parameters
-- Try Now Google Play button
+^ Largest library dependency to remove
+
+---
+
+`#RxMustDie`
+
+![original](rx-must-die.jpg_large)
+
+^ Droidcon Berlin 2018 RxMustDie Panel
+
+---
+
+![](kotlin-android.png)
+
+^ Kotlin Coroutines smaller than Rx
+
+^ Not advocated, but advocating
+
+---
+
+# Try Now
+
+![25% right](buzzfeed-try-now.png)
+
+^ Try now button for installed apps
+
+---
+
+Navigation
+
+^ Intent cannot reference activity
+
+```xml
+<activity android:name=".calculator.FinanceCalculatorActivity">
+
+  <intent-filter>
+
+    <action android:name="android.intent.action.VIEW"/>
+
+    <category android:name="android.intent.category.DEFAULT"/>
+    <category android:name="android.intent.category.BROWSABLE"/>
+
+    <data android:host="www.immobilienscout24.de"
+        android:pathPrefix="/baufinanzierung/finanzierungsrechner/"
+        android:scheme="https"/>
+
+  </intent-filter>
+
+  <meta-data android:name="default-url"
+      android:value="https://www.immobilienscout24.de/baufinanzierung/finanzierungsrechner/"/>
+
+</activity>
+```
+
+^ App linking URL parameters
+
+^ Certificate file uploaded to server
+
+^ Play store verifies fingerprint
 
 ---
 
 # Topeka
+
+### github.com/googlesamples/android-topeka
+
+^ Topeka from Ben Weiss
+
+---
+
 # Plaid
+
+### github.com/nickbutcher/plaid
+
+^ Plaid from Nick Butcher and Google
 
 ---
 
@@ -287,13 +473,9 @@ text: Roboto
 
 ---
 
-# Misc
-- Resources prefixing
-- Feature module data binding
+[.footer: ashdavies.io - @askashdavies]
+![right inline 15%](immobilienscout24.png)
 
--  61,269 lines Java code
-- 105,303 lines Kotlin code
+# Cheers! 🍻
 
----
-
-![](dancing-zebra.gif)
+![inline left](ash-davies.png)
