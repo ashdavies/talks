@@ -3,17 +3,23 @@ autoscale: true
 build-lists: true
 header: Roboto
 text: Roboto
+theme: Next
 
 [.footer: ashdavies.io - @askashdavies]
 ![right inline 15%](immobilienscout24.png)
 
-## Preparing your app for Google Play Instant
+[.header-strong: #e7dc6f]
+[.header: #ffffff]
+
+## **Preparing your app for Google Play Instant**
 
 ### Droidcon London 2018 
 
-^ (Make Droidcon title white)
+![inline left](ash-davies.png) 
 
-![inline left](ash-davies.png)
+^ Speaker introduction
+
+^ Freebies for questions
 
 ---
 
@@ -27,7 +33,7 @@ text: Roboto
 
 ![](mobile-first.png)
 
-^ Mobile first business strategy often employed
+^ Mobile first business strategy often employed, spend time on promotion
 
 ^ Resulting in, growth (acquisition), user retention statistics used as measurement of success
 
@@ -37,9 +43,9 @@ text: Roboto
 
 ![100%](google-play.png)
 
-^ Wherever the user journey starts
+^ Wherever the user journey starts, often using a URL
 
-^ Referral, word-of-mouth, advertisement, social
+^ Referral, word-of-mouth, advertisement, social, Google
 
 ^ It inevitably ends up on Google Play to install
 
@@ -101,13 +107,31 @@ text: Roboto
 
 ^ Ideal for businesses with an existing Android app
 
+^ From a URL, Google Play installs minimised version and runs
+
 ---
 
-## Park and Pay
+![](park-and-pay.png)
 
 ^ Introduces as instant apps 2016, NFC concept with "Park and Pay"
 
 ^ SDK opened up next year for users running Lollipop or later
+
+---
+
+# `<a href />`
+
+^ Two flavours of instant app 
+
+^ One registered to a url
+
+---
+
+# Try Now
+
+![25% right](buzzfeed-try-now.png)
+
+^ Try now button for installed apps
 
 ---
 
@@ -117,7 +141,7 @@ text: Roboto
 
 ![50%](android-performance-patterns.png)
 
-^ Doesn't make your app automatically performant
+^ Doesn't automatically improve performance
 
 ^ Encourages you to modularise from a single artifact
 
@@ -136,6 +160,8 @@ text: Roboto
 
 ![80%](android-security.jpg)
 
+^ When executing native code automatically from a URL
+
 ^ Concern for instant security implications
 
 ^ Careful precautions have been taken
@@ -145,6 +171,8 @@ text: Roboto
 ## 🔐 HTTPS
 
 ^ All network traffic must be secure
+
+^ Do this anyway!
 
 ---
 
@@ -156,7 +184,9 @@ text: Roboto
 
 ^ Smart lock for passwords on Android
 
-^ Retrieve stored credentials from Credentials API 
+^ Retrieve previously stored credentials from Credentials API 
+
+^ Apps linked by verified URL in Play Developer Console
 
 ^ Requires explicit user permission
 
@@ -164,15 +194,19 @@ text: Roboto
  
 ## 💳 Play Billing Library
 
-^ Payments via Play Billing Library
+^ Payments offered though Google Play Billing Library
 
 ^ Fast and easy payments in over 135 countries
+
+^ Google Pay for physical goods
 
 ---
  
 ## Runtime Permissions
 
-^ Must use runtime permissions
+^ Must use runtime permissions introduced in Marshmallow
+
+^ Intercepted for Lollipop
 
 ---
 
@@ -193,45 +227,19 @@ text: Roboto
 
 # Limitations
 
+^ To abide by security and performance, limitations observed
+
 ---
 
 # ₿ ⛏️ 💰
 
-^ Mine Bitcoin without users consent?
+^ Mine Bitcoin in the background without users consent?
 
 ---
 
 ## ~~Background Services~~
 
 ^ No dice, background services are disabled!
-
----
-
-## ~~External Storage~~
-
-^ No access to external storage,
-
-^ no sniffing for installed apps
-
----
-
-## 🎉 Local Storage 
-
-^ Still have access to local storage, cache and preferences
-
-^ SqlLiteDatabase and content providers without export
-
----
-
-## Cookie API
-
-![](cookie-monster.gif)
-
-^ Available to installed and instant apps
-
-^ Help migrate users over to installed app
-
-^ Used with PackageManager (or support) API
 
 ---
 
@@ -243,9 +251,45 @@ text: Roboto
 
 ---
 
-## ~~Bluetooth~~
+## ~~External Storage~~
 
-^ Many hardware facilities limited
+^ No access to external storage, shared photos and media
+
+^ Cannot detect installed apps
+
+---
+
+## 🎉 Local Storage 
+
+^ Don't worry! Still have access to local storage
+
+^ Internal cache, internal storage, shared preferences
+
+^ SqlLiteDatabase and content providers, but not exported
+
+---
+
+## Instant <-> Installed
+
+^ Instant apps great for user acquisition and growth
+
+^ Promote installed app, tease user with features
+
+^ But you want to offer a seamless experience
+
+---
+
+## Cookie API
+
+![](cookie-monster.gif)
+
+^ Great news! Use cookies just like on the web
+
+^ Available to installed and instant apps
+
+^ Help migrate users over to installed app
+
+^ Used with PackageManager (or SupportPackageManager) API
 
 ---
 
@@ -256,11 +300,9 @@ text: Roboto
 
 ![inline 50%](distribution-base-2mb.png) ![inline 50%](distribution-feature-a-2mb.png) ![inline 50%](distribution-feature-b-2mb.png)
 
-^ Instant Apps should be instant
+^ Instant Apps should be instant, small as possible
 
-^ Arbitrary size limit for fast download
-
-^ Elaborate on base module
+^ Arbitrary size limit imposed for fast download
 
 ---
 
@@ -271,13 +313,20 @@ text: Roboto
 
 ![inline 50%](distribution-base-10mb.png) ![inline 50%](distribution-feature-a-10mb.png) ![inline 50%](distribution-feature-b-10mb.png)
 
-^ Size increased to 10 Mb to enable Try Now
+^ After Google Playtime event,
+ 
+^ Size increased to 10 Mb
 
 ^ Should still keep small
 
 ---
 
-# History
+[.background-color: #000000]
+![fit](history-lesson.gif)
+
+^ Talk on *preparing* your app, useful to give example case study
+
+^ Need to give a bit of our app history
 
 ---
 
@@ -287,6 +336,14 @@ text: Roboto
 
 ![inline 20%](immobilienscout24.png)
 
+^ Started at Scout just over two years ago
+
+^ Joined financing teams, connecting users with mortgage providers
+
+^ Low interest, high costs, need to offer best deal
+
+^ Dream of digitising entire moving process
+
 --- 
 
 # The Monolith
@@ -295,9 +352,13 @@ text: Roboto
 
 ^ Not only back ends work with a monolith
 
-^ Two modules app and search
+^ Two modules app and search (java only)
 
-^ Tightly coupled
+^ Lighter module contained interface contracts
+
+^ Larger module, implementations, *everything* else
+
+^ Tight feature coupling
 
 ---
 
@@ -305,11 +366,11 @@ text: Roboto
 
 ![100% right](calculator-location.gif)
 
-^ Location searching existed on web
+^ Early initiative, offer financing location input
 
-^ Reused search funnel location
+^ Reused search funnel location searching, makes sense?
 
-^ Multiple behaviours
+^ Quickly grew out of control, multiple behaviours, technical debt
 
 ---
 
@@ -317,31 +378,43 @@ text: Roboto
 
 [^]: https://www.lynda.com
 
-^ Updating architecture
+^ Realised we needed to update architecture
 
-^ Android Guild discussions
+^ Started cross segment Android Guild, opened discussions
 
-^ Modularisation, autonomy
+^ Modularisation, autonomy, confidence
 
---- 
+---
 
 # Dependency Graph
 
 ![120% right](directed-acyclic-graph.png)
 
-^ Direct Acyclic Graph
+^ Started with dependencies, Direct Acyclic Graph
 
 ^ Migration from Dagger 1 long and arduous
 
-^ Heavy use of Dagger Android allowed modularisation
+^ Heavy use of Dagger Components allowed modularisation
+
+---
+
+# <br />
+
+## `@Component`
+
+^ Alternative app component allowed dependencies substitution
+
+^ Proguard removes for installed app on production
+
+^ Multi-binding to provide subset of dependencies
 
 ---
 
 ![50%](architecture-monolith.png)
 
-^ Monolith application with tight coupling
+^ Monolith application 
 
-^ Heavy modularisation and responsible workflow
+^ Tight coupling
 
 ---
 
@@ -349,9 +422,11 @@ text: Roboto
 
 ^ Highly modularised, mostly unidirectional dependency flow
 
+^ Mostly unidirectional hierarchical dependence (work in progress)
+
 ^ Vertically structured architectural hierarchy
 
-^ Top-level god module
+^ Top-level module, feature, and base modules
 
 ---
  
@@ -359,13 +434,49 @@ Flat Hierarchy
 
 ![60% original](flat-hierarchy.png)
 
-^ Horizontal hierarchy encapsulating implementation
+^ Aim to achieve independent modules
+
+^ Horizontal (flat) hierarchy
+
+^ `internal` encapsulated implementation
 
 ---
 
 ![](awesome-farrel.gif)
 
-^ Already a prime candidate for an instant app
+^ Already put work into heavy modularisation
+
+^ Why not one step further?
+
+^ Prime candidate for an instant app
+
+---
+
+[.background-color: #ffffff]
+
+![100%](android-app-bundle.png)
+
+^ Distribute bundle with resources
+
+^ Defers apk build and signing to Google Play
+
+^ Keys stored with Google secure infrastructure
+
+^ Check out Ben's talk
+
+---
+
+[.background-color: #ffffff]
+
+![50% original](dynamic-feature-module.png)
+
+Dynamic Feature
+
+^ Similar to instant apps, shipped with installed app
+
+^ Allows user to download features on-demand
+
+^ Ship smaller apk, great for secondary features
 
 ---
 
@@ -373,31 +484,9 @@ Flat Hierarchy
 
 ^ Not there yet, still need to ensure within limitation
 
-^ Mistakenly spent a lot of time on optimisation first
+^ Started analysing build artifact to reduce size
 
----
-
-## App Bundle
-
----
-
-## Dynamic Feature
-
----
-
-![fit](apk-analyser.png)
-
-^ Android Studio allows analysis of instant app apk
-
-^ Emulator support, and refactoring tool
-
----
-
-# Dagger
-
-^ Dagger Multi-Binding for alternative dependencies
-
-^ Separated finance dagger application component
+^ Looking for optimisation opportunities
 
 ---
 
@@ -411,51 +500,59 @@ Flat Hierarchy
 
 - Configuration splits (`splits { }`)
 
+- Third party SDKs 😲
+
 ^ Remove rasterised images
 
-^ Optimised vector graphics (Avocado)
+^ Optimised vector graphics
+ 
+^ Avocado SVG optimiser
 
 ^ Density, processor, language
 
 ---
 
-## Third Party SDKs 🤦‍♂️
+![fit](apk-analyser.png)
 
-^ Largest library dependency to remove
+^ How can you identify size of your dependencies
 
----
-
-`#RxMustDie`
-
-![original](rx-must-die.jpg_large)
-
-^ Droidcon Berlin 2018 RxMustDie Panel
+^ Android Studio allows analysis of instant app apk
 
 ---
 
-[.header: #000000]
+## Proguard / R8 🤦‍♂️
 
-# Coroutines
-
-![original](kotlin-android.png)
-
-^ Kotlin Coroutines smaller than Rx
-
-^ Not advocated, but advocating
+^ Verify proguard configuration (I didn't)
 
 ---
 
-# Try Now
+## Third Party SDKs 🙄
 
-![25% right](buzzfeed-try-now.png)
+^ Twitter question: largest library dependency to remove?
 
-^ Try now button for installed apps
+^ Not sure about you, reporting frameworks, all of them
+
+---
+
+## Data Binding 😥
+
+```
+Error: Currently, data binding does not work for non-base feature modules.
+Please, move data binding code to the base feature module.
+See https://issuetracker.google.com/63814741 for details
+```
+
+---
+
+## Data Binding 😌
+
+`android.enableExperimentalFeatureDatabinding=true`
 
 ---
 
 ## Navigation
 
-### `Intent(this, FinanceCalculatorActivity::class.java)`
+`Intent(context, CalculatorActivity::class.java)`
 
 ^ You may be used to creating intents like this
 
@@ -463,14 +560,18 @@ Flat Hierarchy
 
 ## Navigation
 
-### ~~`Intent(this, FinanceCalculatorActivity::class.java)`~~
+~~`Intent(context, CalculatorActivity::class.java)`~~
 
 ^ No dice, intents cannot reference activity directly
 
 ---
 
+## App Links
+
+---
+
 ```xml
-<activity android:name=".calculator.FinanceCalculatorActivity">
+<activity android:name=".calculator.CalculatorActivity">
   <intent-filter>
 
     <action android:name="android.intent.action.VIEW"/>
@@ -479,7 +580,7 @@ Flat Hierarchy
     <category android:name="android.intent.category.BROWSABLE"/>
 
     <data android:host="www.immobilienscout24.de"
-        android:pathPrefix="/baufinanzierung/finanzierungsrechner/"
+        android:path="/baufinanzierung/finanzierungsrechner/"
         android:scheme="https"/>
 
   </intent-filter>
@@ -488,17 +589,161 @@ Flat Hierarchy
 
 ^ App linking URL parameters
 
+---
+
+```xml, [.highlight: 9-11]
+<activity android:name=".calculator.CalculatorActivity">
+  <intent-filter>
+
+    <action android:name="android.intent.action.VIEW"/>
+
+    <category android:name="android.intent.category.DEFAULT"/>
+    <category android:name="android.intent.category.BROWSABLE"/>
+
+    <data android:host="www.immobilienscout24.de"
+        android:path="/baufinanzierung/finanzierungsrechner/"
+        android:scheme="https"/>
+
+  </intent-filter>
+</activity>
+```
+
+^ Matches explicit URL
+
+^ Use pathPrefix for parameters
+
+---
+
+## Intent Extras
+
+```kotlin
+val intent = Intent(context, CalculatorActivity::class.java)
+intent.putExtra("location", "Berlin")
+```
+
+---
+
+[.background-color: #ffffff]
+
+## ❗
+
+^ Nope!
+
+---
+
+## Query Params
+
+### `intent.data?.getQueryParameter("location")`
+
 ^ Nullable parameters via query param
 
 ^ Don't use intent parameters
 
 ---
 
-# URL Verification
+## ?
 
-^ Certificate file uploaded to server
+^ Nullable
 
-^ Play store verifies fingerprint
+---
+
+## Query Params
+
+```kotlin
+val geocode = intent.data?.getQueryParameter("location")
+val label = intent.data?.getQueryParameter("label")
+
+val region = if (geocode != null && label != null) Region(geocode, label)
+else null
+```
+
+^ Problem compounded when you create objects
+
+---
+
+## Query Params
+
+```kotlin
+data class Region(val geocode: String, val label: String) {
+
+  companion object {
+  
+    operator fun invoke(
+      geocode: String?,
+      label: String?
+    ) : Region(
+      geocode ?: "1276001010", 
+      label ?: "Berlin - Mitte (Mitte)"
+    )
+  }
+}
+```
+
+^ Operator invocation companion function mirrors constructor API
+
+---
+
+## Query Params
+
+```kotlin
+val region = Region(
+    intent.data?.getQueryParameter("location"),
+    intent.data?.getQueryParameter("label")
+)
+```
+
+---
+
+## Verify Site Associations
+
+^ Digital asset link json file
+
+^ Published to your website
+
+^ Verify ownership
+
+---
+
+### `keytool -list -v -keystore release.keystore`
+
+^ Use keytool to retrieve keystore fingerprint
+
+----
+
+```
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "de.is24.android",
+    "sha256_cert_fingerprints": ["..."]
+  }
+}]
+```
+---
+
+![10% left](android-studio.png)
+
+![fit right](app-link-assistant.png)
+
+^ Android Studio includes app link assistant
+
+^ URL mapping editor to build app links
+
+^ Generate URL verification file to upload to your server
+
+---
+
+# <br />
+
+# Emulator
+# Support
+
+![100% right](android-emulator.png)
+
+^ Android Emulator supports instant apps
+
+^ Can be used to test your app links
 
 ---
 
@@ -508,17 +753,23 @@ Flat Hierarchy
 
 ^ Topeka from Ben Weiss
 
+^ Instant app without URL
+
 ---
 
 # Plaid
 
 ### github.com/nickbutcher/plaid
 
-^ Plaid from Nick Butcher and Google
+^ Plaid with Nick, Florina, Ben
+
+^ Dynamic feature and distribution
 
 ---
 
 ## Next Steps
+
+^ Hoped to demonstrate at conference
 
 ^ Finance calculator shipping before end of year
 
@@ -532,3 +783,7 @@ Flat Hierarchy
 # Cheers! 🍻
 
 ![inline left](ash-davies.png)
+
+
+
+^ https://issuetracker.google.com/issues/63814741
