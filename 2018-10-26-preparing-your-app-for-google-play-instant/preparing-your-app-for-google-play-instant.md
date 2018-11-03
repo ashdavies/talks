@@ -13,9 +13,9 @@ theme: Next
 
 ## **Preparing your app for Google Play Instant**
 
-### DevFestCZ Prague 2018
+### Droidcon London 2018
 
-![inline left](ash-davies.png) ![right](dev-fest-cz.png)
+![inline left](ash-davies.png)
 
 ^ Speaker introduction
 
