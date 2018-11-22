@@ -200,7 +200,7 @@ fun main() {
 
 ## Annotations
 
-### bit.ly/2BrxgKv
+### [bit.ly/2BrxgKv](bit.ly/2BrxgKv)
 
 ^ Though coroutines are stable some API elements are still under development
 
@@ -447,11 +447,13 @@ fun main() {
 
 ## 👎 Synchronous API's
 
+^ Doesn't make sense to use a reactive framework for synchronous API's
+
 ---
 
-## `Observable.fromIterable()`
+## [fit] `Observable.fromIterable()`
 
-![](my-brain-is-full-of-fuck.png)
+![right 80%](my-brain-is-full-of-fuck.png)
 
 ^ This may have made sense before Kotlin streams
 
@@ -510,19 +512,21 @@ Observable
 
 ## ⚙️ Hidden complexity
 
-^ Go back to previous slide
+^ Business behaviour can often be hidden behind difficult to understand operators
+
+^ Go back to previous slide, many statements feel unnecessary
 
 ---
 
 ## 😭 Hidden gotchas
 
-^ Behaviour can often be unpredictable when converting
+^ Behaviour often unpredictable when converting from Rx2 types
 
-^ Maybe can be turned to completable without completing
+^ `Maybe` can be turned to `Completable` without completing
 
 ^ Combining operators behave differently if not all complete
 
-^ Position of observeOn crucial to expected behaviour
+^ Position of `observeOn` crucial to expected behaviour
 
 ---
 
@@ -530,7 +534,7 @@ Observable
 
 ^ RxJava objects take a lot of memory
 
-^ Each operation increases object allocation
+^ Each operation large object allocation
 
 ---
 
@@ -546,11 +550,13 @@ Observable
 
 [.footer: http://explosm.net/comics/3185/]
 
-^ Not quite the hero we thought it would be
+^ Not the hero we wanted, or needed, or deserved.
 
 ---
 
 ![](table-flip.gif)
+
+^ Enough is enough
 
 ---
 
@@ -560,6 +566,10 @@ Observable
 ![right](rx-must-die.jpg)
 
 ^ Discussion panel on RxJava at Droidcon Berlin
+
+^ Started from a Twitter discussion on RxJava API
+
+^ API obstructive, difficult, obtuse, and unnecessary
 
 ^ Podcast available via Pocket Casts
 
@@ -585,6 +595,8 @@ Observable
 
 ^ Also discussed reactive and imperative programming
 
+^ Imperative code executed statement by statement
+
 ^ Imperative programming can be much clearer
 
 ^ Coroutines allow sequential operation of statements
@@ -593,9 +605,236 @@ Observable
 
 ---
 
+## Coroutine Use Cases
+
+^ Simple use cases can be achieved in Corouties
+
+---
+
+## Network Call Handling
+
+```kotlin
+// RxJava2
+fun getUser(): Single<User> = Single.fromCallable { /* ... */ }
+
+// Coroutine
+suspend fun getUser(): User = /* ... */
+```
+
+^ Ignoring presence of Retrofit we return result of network request
+
+^ Assume network retrieval with client inside comment block
+
+^ Simply suspend network call in coroutine function
+
+---
+
+## Cache Retrieval
+
+```kotlin
+// RxJava2
+fun getUser(): Maybe<User> = Maybe.fromCallable { /* ... */ }
+
+// Coroutine
+suspend fun getUser(): User? = /* ... */
+```
+
+^ Nullable value can be returned to represent empty
+
+---
+
+## Background Task Handling
+
+```kotlin
+// RxJava2
+fun storeUser(user: User): Completable.fromCallable { /* ... */ }
+
+// Coroutine
+suspend fun storeUser(user: User) { /* ... */ }
+```
+
+---
+
+## RxJava2 / Coroutines
+
+### Single<T> / T
+### Maybe<T> / T?
+### Completable / Unit
+
+^ These statements are pretty similar
+
+^ Differ only by return type and suspend
+
+^ Real beauty comes with consumption
+
+---
+
+## Thread Handling
+
+```kotlin
+// RxJava2
+getUser()
+  .subscribeOn(Schedulers.computation())
+  .observeOn(AndroidSchedulers.mainThread())
+  .subscribe { /* Do something */ }
+
+// Coroutine
+launch(Dispatchers.Main) {
+  val user = getUser()
+  /* Do something */
+}
+```
+
+^ Key difference is sequential operation of values
+
+^ Imperative code much more readable
+
+^ Value accessible instead of callback
+
+^ This also means flat mapping isnt necessary (👋 Ivan)
+
+---
+
+## 💪 ~~FlatMap~~
+
+```kotlin
+// RxJava2
+getUser()
+  .flatMap { doSomethingWithUser(it) }
+  .subscribeOn(Schedulers.computation())
+  .observeOn(AndroidSchedulers.mainThread())
+  .subscribe { /* Do something else */ }
+
+// Coroutine
+launch(Dispatchers.Main) {
+  val user = getUser()
+  val smth = doSomethingWithUser(user)
+  
+  /* Do something else */
+}
+```
+
+
+---
+
+## Callback Consumption
+
+```kotlin
+// RxJava2
+fun getSingle(): Single = Single.create<T> { emitter -> 
+  doSomethingAsync(object: Callback<T> {
+    override fun onComplete(result: T) = emitter.onSuccess(result)
+    override fun onException(exception: Exception) = emitter.onError(exception)
+  })
+}
+
+// Coroutine
+suspend fun getCoroutine() : T = suspendCoroutine { continuation ->
+  doSomethingAsync(object : Callback<Baz> {
+    override fun onComplete(result: T) = continuation.resume(result)
+    override fun onException(exception: Exception) = continuation.resumeWithException(exception)
+  })
+}
+```
+
+^ RxJava gives us `fromCallable` and `create` with an emitter to use callbacks
+
+^ Coroutines has an almost identical approach using continuation instead of emitter
+
+---
+
+## Task Cancellation
+
+```kotlin
+// RxJava2
+val disposable: Disposable = Single.create { /* Do something */ }
+    .subscribe { /* Do something else */ }
+disposable.dispose()
+
+// Coroutine
+val parent: Job = Job()
+launch(Dispatchers.Main + parent) { /* Do something */ }
+parent.cancelChildren()
+```
+
+^ Many times you may need to cancel a request in flight, eg. orientation change, change of input etc
+
+^ Handled almost identically with Job, addition operator applies values right to left
+
+^ Cancelling a job will cancel all other jobs, use cancel children or `SupervisorJob`
+
+^ Coroutines also offers job hierarchy, jobs nested and structured, useful, but different from RxJava
+
+---
+
+## Lifecycle Task Cancellation
+
+### [bit.ly/2POmNBJ](bit.ly/2POmNBJ)
+
+^ Register lifecycle callback, invoke dispose of cancel manually
+
+^ JetBrains and OSS community working on automatic lifecycle integration
+
+---
+
+## Lifecycle Task Cancellation
+
+```kotlin
+class MainActivity : AppCompatActivity {
+
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    
+    lifecycle.coroutineScope.launch {
+      someSuspendFunction()
+      someOtherSuspendFunction()
+      someCancellableSuspendFunction()
+    }
+  }
+}
+```
+
+^ Automatically cancelled `Activity.onDestroy`
+
+---
+
+## Value Streams
+
+```kotlin
+// RxJava2
+val publisher = PublishSubject()
+publisher.subscribe { /* Do something */ }
+publisher.onNext("Hello")
+
+// Coroutine
+val channel = Channel<String>()
+launch { channel.send("Hello") }
+launch { channel.consumeEach { /* Do something */ } }
+```
+
+^ Value streams (Observable -> Channel)
+
+^ Transformations (FlatMap -> 🤷‍♀️) Ivan happy
+
+---
+
+## 💪 Backpressure
+
+^ RxJava Observables not originally backpressure aware
+
+^ Support introduced after initial release
+
+^ RxJava introduced `Flowable` for native support
+
+^ Channels only accept from coroutine context
+
+^ end will wait until value popped (like queue)
+
+---
+
 ## ~~Channels~~
 
-#### bit.ly/2DQU7lb
+#### [bit.ly/2DQU7lb](bit.ly/2DQU7lb)
 
 ^ Channels obsolete as only produce a hot stream
 
@@ -603,6 +842,54 @@ Observable
 
 ^ Use with care, abstract usage, not for fundamental usage
 
+---
+
+## RxJava Use Cases
+
+---
+
+## ↔️ Channels
+
+^ Channel operations push/pull instead of transforming
+
+^ Create new coroutine for each transformation
+
+^ Behaviour not quite identical to observables
+
+---
+
+## ❄️ Cold Streams
+
+^ Cold streams not yet available in Coroutines
+
+---
+
+## ⚙️ Complex Business Logic
+
+^ Debouncing, distinct filtering, side-effects
+
+^ Operators from RxJava intentionally not created
+
+^ Complex business logic, merging streams, etc
+
+^ Possible to achieve in Coroutines but arduous
+
+^ Not going to show how to do it
+
+---
+
+## [fit] Coroutines & RxJava: An Asynchronicity Comparison
+
+### Manuel Vivo (@manuelvicnt)
+
+### [bit.ly/2R27stP](bit.ly/2R27stP)
+
+^ Would like to go into more detail on these comparisons
+
+^ Focus more on feasibility, practicality, and justification
+
+^ Multi-part blog article, great comparison of the two frameworks
+ 
 ---
 
 ## Is Coroutines a replacement for RxJava?
@@ -679,7 +966,7 @@ Observable
 
 ---
 
-## [fit] Retrofit2 Coroutines Adapter (bit.ly/2TyGXOh)
+## [fit] Retrofit2 Coroutines Adapter [bit.ly/2TyGXOh](bit.ly/2TyGXOh)
 
 ### [fit] `com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:+`
 
@@ -787,7 +1074,7 @@ GlobalScope.launch {
 
 ---
 
-## Coroutines RxJava2 (bit.ly/2DQ2ZYn)
+## Coroutines RxJava2 [bit.ly/2DQ2ZYn](bit.ly/2DQ2ZYn)
 
 ### [fit] `org.jetbrains.kotlinx:kotlinx-coroutines-rx2:+`
 
