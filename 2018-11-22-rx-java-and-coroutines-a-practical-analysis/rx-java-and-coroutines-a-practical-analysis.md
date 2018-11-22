@@ -200,7 +200,7 @@ fun main() {
 
 ## Annotations
 
-### bit.ly/2BpDQkB
+### bit.ly/2BrxgKv
 
 ^ Though coroutines are stable some API elements are still under development
 
@@ -522,6 +522,8 @@ Observable
 
 ^ Combining operators behave differently if not all complete
 
+^ Position of observeOn crucial to expected behaviour
+
 ---
 
 ## 💾 Memory footprint
@@ -553,13 +555,297 @@ Observable
 ---
 
 ## #RxMustDie
-#### #DCBERLIN18
+### pca.st/7IJG
 
 ![right](rx-must-die.jpg)
 
+^ Discussion panel on RxJava at Droidcon Berlin
+
+^ Podcast available via Pocket Casts
+
 ---
 
-^ https://github.com/Kotlin/kotlinx.coroutines/issues/254
+<br />
+<br />
+<br />
+
+> "When all you have is a hammer, everything looks like a nail"
+
+#### Ivan Morgillo (@hamen)
+
+^ Previous iterations of Android limited developers
+
+^ RxJava was the only feasible tool of choice
+
+^ No longer the case, many tools at our disposal
+
+---
+
+## Reactive & Imperative programming
+
+^ Also discussed reactive and imperative programming
+
+^ Imperative programming can be much clearer
+
+^ Coroutines allow sequential operation of statements
+
+^ Reactive paradigms still respected
+
+---
+
+## ~~Channels~~
+
+#### bit.ly/2DQU7lb
+
+^ Channels obsolete as only produce a hot stream
+
+^ Emitted value computed regardless of receiver
+
+^ Use with care, abstract usage, not for fundamental usage
+
+---
+
+## Is Coroutines a replacement for RxJava?
+
+---
+
+### Maybe...
+
+^ The answer isn't so clear... maybe, but not really
+
+^ Some behaviour can be replaced, perform different functions
+
+^ Different levels of abstraction, can complement each other
+
+^ Even possible for RxJava to be built with Coroutines
+
+---
+
+## Should I migrate to Coroutines?
+
+---
+
+### Probably not...
+
+^ If something is already working, it does not need to be migrated
+
+---
+
+<br />
+<br />
+<br />
+
+> "Don't fix what ain't broke"
+
+#### Some Guy
+
+^ RxJava already provides a lot of worth for existing code
+
+^ Coroutines perfect for new code or fresh projects
+
+---
+
+![](anticlimactic.gif)
+
+---
+
+## Did "I" migrate to Coroutines?
+
+---
+
+# 😜 Yes!
+
+^ Kotlin and Coroutines are fun and a joy to use
+
+^ Better understanding of code behaviour
+
+^ Code often becomes much clearer
+
+---
+
+## How could I migrate to Coroutines?
+
+---
+
+## 🤝 Migration Policy
+
+^ Agree upon a migration policy with your team
+
+^ Start with low-level implementations
+
+---
+
+## Retrofit Services
+
+---
+
+## [fit] Retrofit2 Coroutines Adapter (bit.ly/2TyGXOh)
+
+### [fit] `com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:+`
+
+^ Retrofit Coroutine adapter library from Jake Wharton
+
+^ Not advocating dynamic versions with (+)
+
+---
+
+```kotlin
+interface UserService {
+
+  @GET("/user")
+  fun getUser(): Deferred<User>
+}
+
+val retrofit = Retrofit.Builder()
+    .baseUrl("https://example.com/")
+    .addCallAdapterFactory(CoroutineCallAdapterFactory())
+    .build()
+
+GlobalScope.launch {
+    val user = retrofit
+        .create<UserService>() // >= 2.5.0
+        .getUser()
+        .await()
+}
+```
+
+^ Reified type create call available from 2.5.0
+
+---
+
+```kotlin, [.highlight: 4]
+interface UserService {
+
+  @GET("/user")
+  fun getUser(): Deferred<User>
+}
+
+val retrofit = Retrofit.Builder()
+    .baseUrl("https://example.com/")
+    .addCallAdapterFactory(CoroutineCallAdapterFactory())
+    .build()
+
+GlobalScope.launch {
+    val user = retrofit
+        .create<UserService>() // >= 2.5.0
+        .getUser()
+        .await()
+}
+```
+
+^ Service should return Deferred instead of Single or Observable
+
+^ Can also wrap Response or Result as normal
+
+---
+
+```kotlin, [.highlight: 9]
+interface UserService {
+
+  @GET("/user")
+  fun getUser(): Deferred<User>
+}
+
+val retrofit = Retrofit.Builder()
+    .baseUrl("https://example.com/")
+    .addCallAdapterFactory(CoroutineCallAdapterFactory())
+    .build()
+
+GlobalScope.launch {
+    val user = retrofit
+        .create<UserService>() // >= 2.5.0
+        .getUser()
+        .await()
+}
+```
+
+^ Use provided Coroutine call adapter factory when building retrofit client
+
+---
+
+```kotlin, [.highlight: 16]
+interface UserService {
+
+  @GET("/user")
+  fun getUser(): Deferred<User>
+}
+
+val retrofit = Retrofit.Builder()
+    .baseUrl("https://example.com/")
+    .addCallAdapterFactory(CoroutineCallAdapterFactory())
+    .build()
+
+GlobalScope.launch {
+    val user = retrofit
+        .create<UserService>() // >= 2.5.0
+        .getUser()
+        .await()
+}
+```
+
+^ Await the response of deferred type inside Coroutine context
+
+---
+
+## Coroutines RxJava2 (bit.ly/2DQ2ZYn)
+
+### [fit] `org.jetbrains.kotlinx:kotlinx-coroutines-rx2:+`
+
+^ Convert suspended functions seamlessly
+
+^ RxJava builders provide scope to consume suspend functions
+
+^ Allows awaiting observable streams as channels (obsolete)
+
+---
+
+| **Name**        | **Result**     | **Scope**        | **Description**
+| --------------- | -------------- | ---------------- | ---------------
+| [rxCompletable] | `Completable`  | [CoroutineScope] | Cold completable that starts coroutine on subscribe
+| [rxMaybe]       | `Maybe`        | [CoroutineScope] | Cold maybe that starts coroutine on subscribe
+| [rxSingle]      | `Single`       | [CoroutineScope] | Cold single that starts coroutine on subscribe
+| [rxObservable]  | `Observable`   | [ProducerScope]  | Cold observable that starts coroutine on subscribe
+| [rxFlowable]    | `Flowable`     | [ProducerScope]  | Cold observable that starts coroutine on subscribe with **backpressure** support 
+
+^ Currently the only way to produce a cold stream with Coroutines
+
+---
+
+```kotlin
+val service: UserService = /* ... */
+
+GlobalScope.rxSingle { service.getUser() }
+    .observeOn(AndroidSchedulers.mainThread())
+    .subscribeOn(Schedulers.io())
+    .subscribe(
+        { /* Do something with user */ },
+        { /* Handle error ... maybe */ }
+    )
+```
+
+^ Take our user service from earlier
+
+^ Handle threading with RxJava
+
+^ Context is unconfined
+
+---
+
+## 😅 Conclusion
+
+^ Good idea of when its appropriate to use RxJava or Coroutines
+
+^ Most of the time fine to use both, frameworks are complementary
+
+^ Many other times you don't need complicated architecture
+
+^ Now you have more than a hammer you can pick the right tool for the job
+
+---
+
+[.background-color: #020202]
+
+![130%](the-end.gif)
 
 ---
 
@@ -567,6 +853,12 @@ Observable
 
 ![right inline 15%](immobilienscout24.png)
 
+<br /> 
+
 # Cheers! 🍻
 
 ![right](k-night-pattern.png)
+
+---
+
+![](its-over.gif)
