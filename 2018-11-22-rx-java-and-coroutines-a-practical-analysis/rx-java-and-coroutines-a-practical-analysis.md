@@ -3,8 +3,10 @@ autoscale: true
 build-lists: true
 header: Open Sans
 text: Open Sans
-slidenumbers: true
 theme: Simple
+
+[.background-color: #ffffff]
+[.text: #333333]
 
 [.footer: ashdavies.io - @askashdavies]
 
@@ -16,13 +18,21 @@ theme: Simple
 
 ![right](k-night-pattern.png)
 
-^ Talk a culmination of discussions with developers in conferences these few months
+^ Speaker introduction, senior engineer at ImmobilienScout24
+
+^ Talk a culmination of discussions with developers in conferences over last few months
+
+^ Specifically Twitter interactions and panel discussions at Droidcon Berlin
 
 ^ Most people excited about coroutines, but have questions about its usage
+
+^ Often considered to take the place of reactive frameworks
 
 ^ What position does it sit in the Android ecosystem
 
 ---
+
+[.background-color: #ffffff]
 
 ![inline 25%](kotlin-logo.png)
 
@@ -34,6 +44,8 @@ theme: Simple
 
 ---
 
+[.background-color: #ffffff]
+
 ![inline 40%](android-kotlin-hero.png)
 
 ^ Already garnered support from development community
@@ -44,7 +56,9 @@ theme: Simple
 
 # 🎉
 
-^ Developers worldwide rejoiced, dreams had been realised
+^ Heavens opened, angels sang, prayers were answers
+
+^ Developers worldwide rejoiced, for their dreams had been realised
 
 ---
 
@@ -65,7 +79,7 @@ theme: Simple
 ## 19.5% (2016)
 ### 7.7% (2015)
 
-^ Spiking to 19.5 after the release of a document from JW advocating its use at Square
+^ Spiking to 19.5 after the release of a document from Jake Wharton advocating its use at Square
 
 ---
 
@@ -77,11 +91,18 @@ theme: Simple
 
 ---
 
+[.background-color: #ffffff]
+[.footer-style: #333333]
+
 [.footer: blog.jetbrains.com/kotlin/2016/02/kotlin-1-0-released-pragmatic-language-for-jvm-and-android/]
 
 ![inline](kotlin-adoption.png)
 
+^ GitHub reported over 25 million LoC by the end of 2017
+
 ^ Stack Overflow speculated one of the fasted growing and least disliked
+
+^ Popularity and success contributed to by continued evolution of Kotlin
 
 ---
 
@@ -89,7 +110,7 @@ theme: Simple
 
 ![right](kotlin-multiplatform.png)
 
-^ Popularity and success contributed to by continued evolution of Kotlin
+^ As we've already heard today on Kotlin multi-platform
 
 ^ Kotlin 1.2 announced in November 2017 with multi-platform support
 
@@ -104,6 +125,9 @@ theme: Simple
 ^ Allow us to write asynchronous code as if it were synchronous
 
 ---
+
+<br />
+<br />
 
 ```kotlin
 fun main() {
@@ -122,6 +146,9 @@ fun main() {
 
 ---
 
+<br />
+<br />
+
 ```kotlin, [.highlight: 3]
 fun main() {
     GlobalScope.launch {
@@ -137,6 +164,9 @@ fun main() {
 
 ---
 
+<br />
+<br />
+
 ```kotlin, [.highlight: 2, 5]
 fun main() {
     GlobalScope.launch {
@@ -150,7 +180,9 @@ fun main() {
 
 ^ Calling launch on a Coroutine scope will build a coroutine context
 
-^ Existing Coroutine scopes can be accessed or created 
+^ Global scope applied unconfined context
+
+^ Scope can be created with dispatchers based on use case
 
 ---
 
@@ -214,27 +246,23 @@ fun main() {
 
 ---
 
-## `@ExperimentalCoroutinesApi`
+## ⚠️ `@ExperimentalCoroutinesApi`
 
 ^ Experimental API's design declarations may still change
 
-^ Applies to some Rx conversion methods
-
-^ Production of channels
+^ Applies to some Rx conversion methods and production of channels
 
 ---
 
-## `@ObsoleteCoroutinesApi`
+## ⚠️ `@ObsoleteCoroutinesApi`
 
-^ Obsolete API's will be deprecated in the future
+^ Obsolete API's will be deprecated in the future but not yet known what will replace them
 
-^ Not yet known what will replace them
-
-^ Consumption of channels
+^ Applies to consumption of channels
 
 ---
 
-## `@InternalCoroutinesApi`
+## ☠️ `@InternalCoroutinesApi`
 
 ^ Should only be used internally by Kotlin coroutines
 
@@ -242,14 +270,19 @@ fun main() {
 
 ---
 
+[.background-color: #ffffff]
+
+<br />
+
 ![inline](elizarov-obsolete-difference.png)
 
-^ Roman explains difference between obsolete and experimental
+^ Roman Elizarov explains difference between obsolete and experimental
 
 ^ Difference only in intent, `@Experimental` may graduate
 
 ^ Not yet known what will replace `@Obsolete`
 
+^ Kind of buggered...
 
 ---
 
@@ -357,6 +390,12 @@ fun main() {
 
 ---
 
+[.background-color: #ffffff]
+[.footer-style: #333333]
+
+<br />
+<br />
+
 ![inline](competing-standards.png)
 
 [.footer: https://xkcd.com/927/]
@@ -379,7 +418,7 @@ fun main() {
 
 ---
 
-## ↔️ Abstracted threading
+## ⬆️ ⬇️ Abstracted threading
 
 ^ Abstract away threading, synchronisation, concerns
 
@@ -393,6 +432,8 @@ fun main() {
 
 ---
 
+## 😮
+
 ![right](over-the-top.gif)
 
 ^ But this quickly got out of hand
@@ -401,11 +442,15 @@ fun main() {
 
 ---
 
+[.background-color: #ffffff]
+
 ![65%](rx-libraries-one.jpg)
 
 ^ Started seeing libraries wrapping native API's
 
 ---
+
+[.background-color: #ffffff]
 
 ![65%](rx-libraries-two.jpg)
 
@@ -413,17 +458,23 @@ fun main() {
 
 ---
 
+[.background-color: #ffffff]
+
 ![65%](rx-libraries-three.jpg)
 
 ^ and more
 
 ---
 
+[.background-color: #ffffff]
+
 ![65%](rx-libraries-four.jpg)
 
 ^ and more
 
 ---
+
+[.background-color: #f9fafb]
 
 ![inline 100%](rx-tasks.png)
 
@@ -453,7 +504,7 @@ fun main() {
 
 ## [fit] `Observable.fromIterable()`
 
-![right 80%](my-brain-is-full-of-fuck.png)
+![right](my-brain-is-full-of-fuck.jpg)
 
 ^ This may have made sense before Kotlin streams
 
@@ -472,6 +523,8 @@ fun main() {
 ---
 
 [.background-color: #222222]
+
+<br />
 
 ![inline](rx-java-mapping.png)
 
@@ -500,13 +553,21 @@ Observable
   );
 ```
 
-^ Operator chains can quickly escalate out of control
+^ Actual code sample from unnamed code base, from unnamed developer absolutely not in this room
+
+^ -- After escalated quickly
+
+^ How many of these operations seem unnecessary?
 
 ---
 
 ![](escalated-quickly.jpg)
 
-^ Well that escalated quickly
+^ Well that escalated quickly...
+
+^ Whilst chains and operators can be useful
+
+^ They can quickly become unmanageable
 
 ---
 
@@ -544,7 +605,14 @@ Observable
 
 ^ Even after years of use still miss some behaviours
 
+^ Have to be an implementation expert to fully understand
+
 ---
+
+[.background-color: #ffffff]
+[.footer-style: #333333]
+
+<br />
 
 ![inline](cyanide-hero.png)
 
@@ -607,9 +675,12 @@ Observable
 
 ## Coroutine Use Cases
 
-^ Simple use cases can be achieved in Corouties
+^ Simple use cases can be achieved in Coroutines without the overhead of reactive frameworks
 
 ---
+
+<br />
+<br />
 
 ## Network Call Handling
 
@@ -629,6 +700,9 @@ suspend fun getUser(): User = /* ... */
 
 ---
 
+<br />
+<br />
+
 ## Cache Retrieval
 
 ```kotlin
@@ -643,6 +717,9 @@ suspend fun getUser(): User? = /* ... */
 
 ---
 
+<br />
+<br />
+
 ## Background Task Handling
 
 ```kotlin
@@ -654,6 +731,9 @@ suspend fun storeUser(user: User) { /* ... */ }
 ```
 
 ---
+
+<br />
+<br />
 
 ## RxJava2 / Coroutines
 
@@ -668,6 +748,8 @@ suspend fun storeUser(user: User) { /* ... */ }
 ^ Real beauty comes with consumption
 
 ---
+
+<br />
 
 ## Thread Handling
 
@@ -691,9 +773,9 @@ launch(Dispatchers.Main) {
 
 ^ Value accessible instead of callback
 
-^ This also means flat mapping isnt necessary (👋 Ivan)
-
 ---
+
+<br />
 
 ## 💪 ~~FlatMap~~
 
@@ -714,8 +796,13 @@ launch(Dispatchers.Main) {
 }
 ```
 
+^ Since value already accessible in scope flatMap no longer necessary
+
+^ To much joy of a particular Italian developer here (👋 Ivan)
 
 ---
+
+<br />
 
 ## Callback Consumption
 
@@ -742,6 +829,9 @@ suspend fun getCoroutine() : T = suspendCoroutine { continuation ->
 ^ Coroutines has an almost identical approach using continuation instead of emitter
 
 ---
+
+<br />
+<br />
 
 ## Task Cancellation
 
@@ -771,11 +861,15 @@ parent.cancelChildren()
 
 ### [bit.ly/2POmNBJ](bit.ly/2POmNBJ)
 
+^ OSS proposal on Coroutines GitHub project for lifecycle coroutine scope
+
 ^ Register lifecycle callback, invoke dispose of cancel manually
 
 ^ JetBrains and OSS community working on automatic lifecycle integration
 
 ---
+
+<br />
 
 ## Lifecycle Task Cancellation
 
@@ -798,6 +892,9 @@ class MainActivity : AppCompatActivity {
 
 ---
 
+<br />
+<br />
+
 ## Value Streams
 
 ```kotlin
@@ -813,8 +910,6 @@ launch { channel.consumeEach { /* Do something */ } }
 ```
 
 ^ Value streams (Observable -> Channel)
-
-^ Transformations (FlatMap -> 🤷‍♀️) Ivan happy
 
 ---
 
@@ -976,6 +1071,8 @@ launch { channel.consumeEach { /* Do something */ } }
 
 ---
 
+<br />
+
 ```kotlin
 interface UserService {
 
@@ -999,6 +1096,8 @@ GlobalScope.launch {
 ^ Reified type create call available from 2.5.0
 
 ---
+
+<br />
 
 ```kotlin, [.highlight: 4]
 interface UserService {
@@ -1026,6 +1125,8 @@ GlobalScope.launch {
 
 ---
 
+<br />
+
 ```kotlin, [.highlight: 9]
 interface UserService {
 
@@ -1049,6 +1150,8 @@ GlobalScope.launch {
 ^ Use provided Coroutine call adapter factory when building retrofit client
 
 ---
+
+<br />
 
 ```kotlin, [.highlight: 16]
 interface UserService {
@@ -1086,6 +1189,9 @@ GlobalScope.launch {
 
 ---
 
+<br />
+<br />
+
 | **Name**        | **Result**     | **Scope**        | **Description**
 | --------------- | -------------- | ---------------- | ---------------
 | [rxCompletable] | `Completable`  | [CoroutineScope] | Cold completable that starts coroutine on subscribe
@@ -1097,6 +1203,9 @@ GlobalScope.launch {
 ^ Currently the only way to produce a cold stream with Coroutines
 
 ---
+
+<br />
+<br />
 
 ```kotlin
 val service: UserService = /* ... */
@@ -1135,6 +1244,9 @@ GlobalScope.rxSingle { service.getUser() }
 ![130%](the-end.gif)
 
 ---
+
+[.background-color: #ffffff]
+[.text: #333333]
 
 [.footer: ashdavies.io - @askashdavies]
 
