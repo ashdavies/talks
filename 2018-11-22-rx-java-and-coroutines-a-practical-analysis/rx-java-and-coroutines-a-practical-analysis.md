@@ -10,6 +10,9 @@ theme: Simple
 
 [.footer: ashdavies.io - @askashdavies]
 
+<br />
+<br />
+
 ![right inline 15%](immobilienscout24.png)
 
 ## RxJava & Coroutines: A Practical Analysis
