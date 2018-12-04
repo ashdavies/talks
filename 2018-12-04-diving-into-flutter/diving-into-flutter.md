@@ -5,6 +5,14 @@ header: Google Sans
 text: #4a4a4a, Google Sans
 theme: Simple
 
+---
+
+[.footer: ]
+
+![inline 50%](flutter-logo.png)
+
+---
+
 [.footer: ashdavies.io - @askashdavies]
 
 ![right inline 15%](immobilienscout24.png)
@@ -42,9 +50,11 @@ theme: Simple
 
 ---
 
-## 📱🏦💰
+## 📱💰🏦
 
 ^ Finance segment with business partnerships
+
+^ Money from banks, money for consumers
 
 ^ Many internal initiative experiments
 
@@ -53,6 +63,8 @@ theme: Simple
 [.background-color: #022555]
 
 ![inline](hack-week.png)
+
+^ Opportunity to build showcase application
 
 ---
 
@@ -76,6 +88,8 @@ theme: Simple
 
 ^ I'd heard about how quick Flutter was but didn't believe it until I used it
 
+^ Hot reload.
+
 ^ It's fast.
 
 ---
@@ -95,6 +109,8 @@ theme: Simple
 ^ Similarities with many other languages makes its really familiar
 
 ^ Doesn't come with many of the bells and whistles
+
+^ Dart formatter (dartfmt) prevents dispute over code style
 
 ---
 
@@ -117,9 +133,13 @@ theme: Simple
 
 ^ Great article on why Flutter doesn't use OEM widgets
 
+^ Incredibly fast performance like a game engine
+
 ---
 
 ## 🖕 ![inline](samsung.png) 🖕
+
+^ My favourite reason for not using OEM widgets
 
 ---
 
@@ -144,7 +164,17 @@ theme: Simple
 
 ## Private Investors Preview
 
-### [bit.ly/2QsXyVd](bit.ly)
+### [bit.ly/2EgEBiw](bit.ly/2EgEBiw)
+
+---
+
+## 🤔 Caveats
+
+^ Framework widget themes, one theme for both platforms
+
+^ Persuading developers to learn yet another language
+
+^ Architecture not as evolved as other platforms
 
 ---
 
@@ -154,7 +184,5 @@ theme: Simple
 [.footer: ashdavies.io - @askashdavies]
 
 ![right inline 15%](immobilienscout24.png)
-
-<br /> 
 
 # Cheers! 🍻
