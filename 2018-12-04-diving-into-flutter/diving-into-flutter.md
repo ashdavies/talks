@@ -5,14 +5,6 @@ header: Google Sans
 text: #4a4a4a, Google Sans
 theme: Simple
 
----
-
-[.footer: ]
-
-![inline 50%](flutter-logo.png)
-
----
-
 [.footer: ashdavies.io - @askashdavies]
 
 ![right inline 15%](immobilienscout24.png)
