@@ -14,7 +14,7 @@ footer-style: Open Sans
 
 ![right](concurrency.jpg)
 
-^ Speaker introduction, senior engineer at ImmobilienScout24
+^ I was asked if this talk will be exiting, it will be long and boring, so I give you permission to leave now 
 
 ^ Talk a culmination of discussions with developers in conferences over last few months
 
@@ -24,17 +24,15 @@ footer-style: Open Sans
 
 ^ Often considered to take the place of reactive frameworks
 
-^ What position does it sit in the Android ecosystem
-
 ---
 
 [.background-color: #ffffff]
 
 ![inline 25%](kotlin-logo.png)
 
-^ Unveiled as project Kotlin in 2011 stable release in 2014
+^ Unveiled as project Kotlin in 2011 
 
-^ Already garnered support from development community
+^ Stable release in 2014, garnered support from community
 
 ---
 
@@ -44,7 +42,7 @@ footer-style: Open Sans
 
 ^ 2017 heavens opened, angels sang, prayers were answers
 
-^ Android team announced first class support in 2017
+^ Google announced first class support for Android in 2017
 
 ---
 
@@ -52,6 +50,9 @@ footer-style: Open Sans
 
 ^ Developers worldwide rejoiced, for their dreams had been realised
 
+^ Since then adaption has sky-rocketed, community involvement and participation
+
+^ Talks on every aspect of Kotlin, from DataBinding to Coroutines, Redux and IoT
 ---
 
 ## Adoption
@@ -95,6 +96,8 @@ footer-style: Open Sans
 ^ Stack Overflow speculated one of the fasted growing and least disliked
 
 ^ Popularity and success contributed to by continued evolution of Kotlin
+
+^ Understandable why people want to jump on the bandwagon
 
 ---
 
