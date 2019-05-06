@@ -53,7 +53,7 @@ Navigation is hard.
 
 ---
 
-Navigating around an application is a fundamental operation in Android, and forms the basis for the structure of your application.
+^ Navigating around an application is a fundamental operation in Android, and forms the basis for the structure of your application.
 
 ---
 
