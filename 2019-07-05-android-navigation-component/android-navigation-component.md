@@ -86,6 +86,8 @@ class MainActivity : AppCompatActivity {
 
 ---
 
+[.background-color: #ffffff]
+
 ![100%](application-scope.png)
 
 ^ Since you need to pass data from one activity to the next,
@@ -201,59 +203,165 @@ public class MainActivity extends FragmentActivity {
 
 ---
 
-Using an Activity as a larger scope with nested destination scopes, being able to share data across screens using ViewModel's or otherwise.
+## JetPack: Navigation
+
+![right 100%](jetpack-hero.png)
+
+^ JetPack is...
 
 ---
 
-Fragments are an implementation of this destination concept, whilst mired with lifecycle issues, allowing the navigation component to handle the back stack makes this simple.
+## 📚 Libraries
 
 ---
 
-## Introducing the Navigation Component
+## 🔌 Plugin
 
 ---
 
-A collection of libraries, a plugin, and tooling for unifying and simplifying Android Navigation.
+## 🔧 Tooling
+
+^ for unifying and simplifying Android Navigation
 
 ---
 
-Handles all the common facets of navigation patterns, including backstack, transactions, animations, deep links, and type safe arguments.
+- Fragment transactions
+- Up and back actions
+- Standardised transition resources
+- Deep link implementation
+- Easy navigation patterns
+- Type safe arguments
+
+^ Handles all the common facets of navigation patterns
+
+^ Easy navigation patterns such as navigation drawers or bottom navigation
 
 ---
 
-Works natively with Activity and Fragment, and with custom views should you wish to define your own destinations.
+## Principles of Navigation
+
+^ The navigation component is designed to implement the principles of navigation by default
+
+^ So you don't have to worry about breaking guideline patterns
+
+---
+
+[.background-color: #ffffff]
+
+## Fixed Start Destination
+
+![inline](navigation-principles-start-destination.png)
+
+^ Every app has a fixed start destination
+
+^ First and last screen pressing the back button
+
+---
+
+## 🥞
+
+^ Navigation state is represented as a stack of destinations
+
+^ Representation history of the user flow
+
+---
+
+## ⬆️ ⬅️
+
+^ Up and back are identical within your apps task
+
+---
+
+## ⬆️ 🙅‍♀️
+
+^ Up never exist your application
+
+---
+
+[.background-color: #ffffff]
+
+## Deep linking simulates manual navigation
+
+![inline](navigation-principles-deep-linking-2.png) 
+
+^ Back stack will be created as though you had navigated there yourself
+
+---
+
+## JetPack: Navigation
+
+![right 100%](jetpack-hero.png)
+
+^ To getting started with JetPack you'll need to familiarise yourself with three components
 
 ---
 
 ## Navigation Graph
 
----
+![](navigation-graph_2x-callouts.png)
 
-Android Studio 3.3 introduces the new navigation editor, allowing you to utilise a graphical editor to build your application navigation graph.
+^ Android Studio 3.3 introduces the new navigation editor, 
 
----
-
-Each screen is represented as a destination that shows how the navigation actions behave, and allow you to specify the arguments required for each screen which will allow to you pass type safe values.
+^ allowing you to utilise a graphical editor to build your application navigation graph.
 
 ---
 
-You can also configure a deep link easily and simpliy.
+[.background-color: #2d3032]
+[.footer: ]
+
+![inline](navigation-editor_2x.png)
+
+^ Destinations are listed on the left showing the host and graph hierarchy,
+
+^ graph editor contains a visual representation showing how the destinations interact with each other,
+
+^ the arrows indicate actions which can be invoked programmatically,
+
+^ each destination has attributes displayed on the right,
+
+^ attributes allow you to configure arguments, and deep links.
 
 ---
 
-## NavHostLayout
+## NavHostFragment
 
----
+```xml
+<fragment
+    android:id="@+id/nav_host_fragment"
+    android:name="androidx.navigation.fragment.NavHostFragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:defaultNavHost="true"
+    app:navGraph="@navigation/nav_graph" />
+```
 
-Simply a fragment widget that will act as a host for each of your fragment destinations, not compatible with Activity's. It makes sense to use Fragment's with the Navigation Library as you can easily navigate between screens and have the lifecycle, transactions, and configuration handled for you automatically.
+^ Simply a fragment widget that will act as a host for each of your fragment destinations,
+
+^ compatible only with Fragments as the navigation library can easily navigate between screens,
+
+^ lifecycle, configuration, animations handled for you automatically.
 
 ---
 
 ## NavController
 
+- `Fragment.findNavController()`
+
+- `View.findNavController()`
+
+- `Activity.findNavController(viewId: Int)`
+
+^ Each NavHostFragment has a controller that allows you to invoke navigation actions 
+
+^ NavController can be retrieved from fragment, activity, or view.
+
 ---
 
-Each NavHostFragment has a controller that allows you to invoke navigation actions providing the necessary arguments and will perform the transactions as necessary.
+## Actions
+
+### `NavController.navigate(R.id.viewTransactionsAction)`
+
+^ From there you instruct the controller to navigate to an action defined in your navigation graph
 
 ---
 
@@ -277,12 +385,21 @@ The navigation library also allows you to easily configure deep linking by speci
 
 ---
 
-[Principles of Navigation]
-
----
-
 [Migration to Navigation Component]
 
 ---
 
 [FragmentFactory]
+
+---
+
+Works natively with Activity and Fragment, and with custom views should you wish to define your own destinations.
+
+---
+
+Using an Activity as a larger scope with nested destination scopes, being able to share data across screens using ViewModel's or otherwise.
+
+
+---
+
+Fragments are an implementation of this destination concept, whilst mired with lifecycle issues, allowing the navigation component to handle the back stack makes this simple.
