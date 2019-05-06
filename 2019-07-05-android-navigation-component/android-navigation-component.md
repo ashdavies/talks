@@ -18,15 +18,15 @@ footer-style: Open Sans
 
 Navigation is hard.
 
-^ Starting off with a misnomer like this might not seem like a great start to a talk
+^ Starting off with a misnomer like this might not seem like a great start to a talk.
 
 ---
 
 ![](developing-hard.png)
 
-^ Often a topic of confusion and difficult for new developers to grasp
+^ Often a topic of confusion and difficult for new developers to grasp,
 
-^ With navigating from screen to screen being such a fundamental part of your android app
+^ With navigating from screen to screen being such a fundamental part of your android app,
 
 ^ Why is this, what makes navigation so confusing?
 
@@ -34,66 +34,170 @@ Navigation is hard.
 
 [.background-color: #ffffff]
 
-![bottom 75%](starting-activity.png)
+![75%](starting-activity.png)
 
-^ In the beginning we had activities, like content providers, services, activities are an Android level component
+^ In the beginning we had activities, 
 
-^ Navigation between activities done with Intents, and that was that
+^ like content providers, services and broadcast receivers, 
+
+^ activities are an Android level component.
+
+---
+
+```kotlin
+class MainActivity : AppCompatActivity {
+
+  private val message: EditText
+    get() = findViewById(R.id.message)
+    
+  override fun onCreate(savedInstanceState: Bundle) {
+    /* ... */
+  }
+  
+  fun sendMessage() {
+    val intent = Intent(this, DisplayMessageActivity::class.java)
+    intent.putExtra(DisplayMessageActivity.EXTRA_MESSAGE, message.text.toString())
+    startActivity(intent)
+  }
+}
+```
+
+^ In it's simplest form you would have an Android Activity, and would use an Intent to navigate from one to the other.
+
+^ but this gets quickly out of hand in larger projects.
+
+---
+
+## 😰
+
+^ Activities knowing about other activity implementations,
+
+^ Putting and retrieving complex intent extra compositions,
+
+^ Conditional navigation becoming difficult to maintain.
+
+---
+
+## 🔍 Scoping
+
+^ When building large applications you might have dependencies that need to survive a few screens,
+
+^ expensive repositories, databases, network clients, or in-memory persisted data,
+
+---
+
+![100%](application-scope.png)
+
+^ Since you need to pass data from one activity to the next,
+
+^ dependency graphs with repositories, databases only needed for a few screens,
+
+^ survive for the entire duration in the application scope.
 
 ---
 
 > ## "Once we have gotten in to this entry-point to your UI, we really don't care how you organise the flow inside."
 -- Dianne Hackborn, Android Framework team
 
-^ Because fundamentally the framework does not care about the structure of your application
+^ Quite controversial, but framework isn't opinionated, and does not care about the structure of your application,
 
-^ Once your activity is started, you can handle the flow however you see fit
-
-^ Quite controversial, but framework isn't opinionated, and does not care about the structure of your application.
+^ Once your activity is started, you can handle the flow however you see fit.
 
 ---
 
-^ Navigating around an application is a fundamental operation in Android, and forms the basis for the structure of your application.
+## 🍯 🐝
+
+^ With Android 3.0 (Honeycomb) developers could break up screens into Fragments,
+
+^ in order to build richer, more interactive user interfaces.
 
 ---
 
-In it's simplest form you would have an Android Activity, and would use an Intent to navigate from one to the other.
+[.background-color: #ebebeb]
+[.footer: ]
+
+![fit](contacts_full.png)
+
+^ Demonstrated with a master / detail interface, 
+
+^ responsive layout for use with larger screens such as tablets,
+
+^ "also run properly on smaller screen devices".
 
 ---
 
-With Android 3.0 (Honeycomb) developers could break activities into subcomponents called Fragments in order to build richer, more interactive user interfaces.
+```java
+public class MainActivity extends FragmentActivity {
+
+  @Override
+  public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.news_articles);
+
+    // Check that the activity is using the layout version with
+    // the fragment_container FrameLayout
+    if (findViewById(R.id.fragment_container) != null) {
+
+      // However, if we're being restored from a previous state,
+      // then we don't need to do anything and should return or else
+      // we could end up with overlapping fragments.
+      if (savedInstanceState != null) {
+        return;
+      }
+
+      // Create a new Fragment to be placed in the activity layout
+      HeadlinesFragment firstFragment = new HeadlinesFragment();
+    
+      // In case this activity was started with special instructions from an
+      // Intent, pass the Intent's extras to the fragment as arguments
+      firstFragment.setArguments(getIntent().getExtras());
+
+      // Add the fragment to the 'fragment_container' FrameLayout
+      getSupportFragmentManager()
+        .beginTransaction()
+        .add(R.id.fragment_container, firstFragment)
+        .commit();
+    }
+  }
+}
+```
+
+^ Sample provided from the Android documentation, not available yet in Kotlin,
+
+^ Fragments would be added, and removed using fragment transactions, 
+
+^ quite a bit more complex than starting an Activity.
 
 ---
 
-This was often demonstrated with a master / detail interface, as a responsive layout for use with larger screens such as tablets, or large aspect phones.
+[.footer: ]
+[.background-color: #ffffff]
 
----
- 
-Fragments would be added, or removed using fragment transactions, but would introduce a much more complex lifecycle behaviour than what we have been used to with Activities.
+![fit](fragment-lifecycle.png)
 
----
+^ but would introduce a much more complex lifecycle behaviour than what we have been used to with Activities.
 
-Furthermore, Fragment's complicate the back stack navigation, leading to edge cases where your stack is stale or invalid, and results in unexpected user behaviour on configuration change.
+^ link provided with slide sources
 
----
-
-Since Fragment's are created by the framework, you don't have control over the initialisation, so setting properties might work at first, but will be null if the Fragment is recreated when the user returns to your application. 
+^ https://github.com/JoseAlcerreca/android-lifecycles/blob/a5dfd030a70989ad2496965f182e5fa296e6221a/cheatsheetfragments.pdf
 
 ---
 
-Making communication between Fragment's or their host quite difficult, having to check for an interface implementation onAttach prior to the introduction of shared ViewModel's.
+## ➡️ ⬆️ ➡️ ⬅️ ➡️
+
+^ Furthermore if not implemented correctly, it's really easy to mess up your back stack,
+
+^ leading to invalid stack and unexpected behaviour on configuration change.
 
 ---
 
-Sharing data between activities can be fairly difficult, as data needs to be Parcelable, and must hand over data from one to the other. Making it difficult to build larger scopes.
+![100%](fragment-communication.png)
 
----
+^ Additionally communication between fragments is quite difficult,
 
-The only larger scope available to an activity is the application, which survives the entire duration of the user experience.
+^ different mechanisms such as checking for interface implementation onAttach,
 
----
-
-This is often also present when trying to build dependency graphs, where components such as repositories, databases, or network clients need to only be scoped to a flow of screens, and don't need to take up valuable memory space until the user is in your funnel.
+^ dispatching data through an event bus.
 
 ---
 
