@@ -313,6 +313,8 @@ public class MainActivity extends FragmentActivity {
 
 ^ Destinations are listed on the left showing the host and graph hierarchy,
 
+^ destinations can be an activity, fragment, or your own custom view implementation,
+
 ^ graph editor contains a visual representation showing how the destinations interact with each other,
 
 ^ the arrows indicate actions which can be invoked programmatically,
@@ -320,6 +322,40 @@ public class MainActivity extends FragmentActivity {
 ^ each destination has attributes displayed on the right,
 
 ^ attributes allow you to configure arguments, and deep links.
+
+---
+
+**nav_graph.xml**
+
+```xml
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    app:startDestination="@+id/fragmentMain">
+
+  <fragment
+      android:id="@+id/fragmentMain"
+      android:name="com.google.sample.MainFragment"
+      android:label="@string/main_title"
+      tools:layout="@layout/main_fragment">
+
+    <action
+        android:id="@+id/mainToViewBalance"
+        app:destination="@+id/fragmentViewBalance"/>
+
+  </fragment>
+
+  <fragment
+      android:id="@+id/fragmentViewBalance"
+      android:name="com.google.sample.ViewBalanceFragment"
+      android:label="@string/view_balance_title"
+      tools:layout="@layout/view_balance_fragment" />
+
+</navigation>
+```
+
+^ But if you're like me and prefer to hand code you can create your graph in xml too
 
 ---
 
@@ -359,47 +395,242 @@ public class MainActivity extends FragmentActivity {
 
 ## Actions
 
-### `NavController.navigate(R.id.viewTransactionsAction)`
+```kotlin
+viewTransactionsButton.setOnClickListener { view ->
+   view.findNavController().navigate(R.id.viewTransactionsAction)
+}
+```
 
-^ From there you instruct the controller to navigate to an action defined in your navigation graph
+```kotlin
+button.setOnClickListener(
+    Navigation.createNavigateOnClickListener(R.id.next_fragment, null)
+)
+```
 
----
+^ The recommended mechanism to navigate is with the navigate method with a resource ID,
 
-## SafeArgs
+^ After retrieving the controller you can navigate to an action defined in your navigation graph,
 
----
-
-When using the safeargs plugin in your project, you can add arguments to your destinations in your navigation graph to generate a type safe args class in Kotlin, that has default arguments and null safety to boot.
-
----
-
-The navigation library also provides extensions for configuring BottomNavigationView simply and easily.
-
----
-
-## Deep Link
+^ Alternatively you can create a navigation listener which will retrieve the view controller.
 
 ---
 
-The navigation library also allows you to easily configure deep linking by specifying a deep link in your navigation graph, which will be automatically includes in your manifest.
+## 💪 SafeArgs
+
+^ As mentioned earlier the navigation component includes a plugin,
+
+^ this plugin enabled generation of type safe argument classes from your navigation graph,
+
+^ generates Kotlin class, null safe, and provides defaults
+
+^ Only use primitive or parcelable values
+
+^ Mark with @Keep to keep after Proguard
 
 ---
 
-[Migration to Navigation Component]
+## SafeArgs: Directions
+
+### [fit] `MainFragmentDirections.mainToViewBalance()`
+
+```xml
+<fragment
+  android:id="@+id/fragmentMain"
+  android:name="com.google.sample.MainFragment"
+  android:label="@string/main_title"
+  tools:layout="@layout/main_fragment">
+
+  <action
+    android:id="@+id/mainToViewBalance"
+    app:destination="@+id/fragmentViewBalance"/>
+
+</fragment> 
+```
+
+^ Safeargs will generate a directions class for each destination where an action originates,
+
+^ In our navigation graph the fragment is defined as MainFragment and action mainToViewBalance,
+
+^ Useful since it will include necessary arguments and will break if you adjust your graph.
 
 ---
 
-[FragmentFactory]
+## SafeArgs: Directions
+
+```xml
+<fragment
+  android:id="@+id/fragmentViewBalance"
+  android:name="com.google.sample.ViewBalanceFragment"
+  android:label="@string/view_balance_title"
+  tools:layout="@layout/view_balance_fragment">
+  
+  <argument
+    android:name="balanceAmount"
+    app:argType="integer"/>
+
+</fragment>
+```
+
+^ Lets add an argument to the view balance fragment
+
+^ This will update the generated direction class to take the argument
+
+^ Will also generate an args class on the destination to deserialise
 
 ---
 
-Works natively with Activity and Fragment, and with custom views should you wish to define your own destinations.
+## SafeArgs: Args
+
+[.code-highlight: 7, 17-18]
+
+```kotlin
+class MainFragment: Fragment() {
+  
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
+
+    viewTransactionsButton.setOnClickListener { view ->
+      MainFragmentDirections.mainToViewBalance(100)
+    }
+  }
+}
+
+class ViewBalanceFragment : Fragment() {
+  
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
+
+    val args = ViewBalanceFragmentArgs.fromBundle(arguments!!)
+    balance.setText(String.format("%.2d", args.balanceAmount))
+  }
+}
+```
+
+^ Here we must now pass a parameter to the main fragment direction,
+
+^ which we can deserialise in the receiving balance fragment used the extras.
 
 ---
 
-Using an Activity as a larger scope with nested destination scopes, being able to share data across screens using ViewModel's or otherwise.
+## SafeArgs: Activities 🎉🍾
 
+^ SafeArgs also work with activity destinations so you can immediately make use of the plugin
 
 ---
 
-Fragments are an implementation of this destination concept, whilst mired with lifecycle issues, allowing the navigation component to handle the back stack makes this simple.
+## SafeArgs: Activities
+
+```kotlin
+class MainActivity : Activity {
+
+  override fun onCreate(savedInstanceState: Bundle) {
+    super.onCreate(savedInstanceState)
+    
+    val args = ViewBalanceActivityArgs(100)
+    val intent = Intent(this, ViewBalanceActivity::class.java)
+    
+    startActivity(intent, bundle.toBundle())
+  }
+}
+```
+
+^ Instead of using a destinations class since it will not be generated you can directly instantiate the args
+
+---
+
+## SafeArgs: Getting Started
+
+```gradle
+buildscript {
+  repositories {
+    google()
+  }
+  
+  dependencies {
+    classpath "androidx.navigation:navigation-safe-args-gradle-plugin:2.0.0"
+  }
+}
+
+apply plugin: 'androidx.navigation.safeargs.kotlin'
+```
+
+---
+
+## 🛠 Migrating
+
+^ Making use of the navigation library might be difficult if you're already heavily using activities,
+
+^ can already make use of safeargs to generate your activity arguments,
+
+^ should probably decide whether you need to.
+
+---
+
+## 🛠 Migrating
+
+- Move screen behaviour away from activities
+
+- Create new activity for NavHostFragment
+
+- Move existing activity logic to fragment
+
+- Initialise fragment in host activity
+
+- Pass arguments as necessary
+
+- Create navigation graph
+
+- Profit
+
+^ Convert activity to fragment and include within navigation graph
+
+^ Invoke navigation manually without using NavHost or NavController
+
+^ Slowly move single activity/fragment pairs into larger navigation graph
+
+---
+
+## 🔍 Scoping
+
+^ Remember earlier with the application scope being too large for a flow of activities?
+
+---
+
+[.background-color: #ffffff]
+
+![100%](application-scope.png)
+
+---
+
+[.background-color: #ffffff]
+
+![50%](application-destination-scope.png)
+
+^ Introducing destinations with our navigation graph means we can share data with activity view models
+
+---
+
+[.footer: ]
+
+## Ian Lake: Single Activity: Why, When, and How 
+### bit.ly/2Jo94x9
+
+![inline](ian-lake-single-activity.jpg)
+
+^ Ian goes covers the topic of the Single Activity and how you take advantage of that structure and migrate to it.
+
+---
+
+## New Features: 2.1.0-alpha2
+
+> You can now create ViewModels that are scoped at a navigation graph level via the by `navGraphViewModels()` property delegate for Kotlin users or by using the `getViewModelStore()` API added to `NavController`. b/111614463
+
+^ When using large navigation graphs, you can choose to structure your architecture by graph instead of by activity,
+
+^ instead of retrieving your ViewModel from your activity or fragment you can store it in a scope between the two.
+
+---
+
+## Thanks!
+
+![right](aerial-shot-ship.jpg)
