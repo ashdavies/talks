@@ -966,7 +966,7 @@ join(job)
 
 # Cheers! 🍻
 
-## [fit] bit.ly/praha-rxjava-coroutines
+## [fit] bit.ly/rxjava-coroutines-prague
 
 ![left inline](gde-badge-round.png)
 
