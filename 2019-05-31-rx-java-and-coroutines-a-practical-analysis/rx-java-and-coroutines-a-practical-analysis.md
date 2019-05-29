@@ -80,129 +80,13 @@ footer-style: Open Sans
 
 ## ![](kotlin-logo.png) Coroutines 
 
-^ Coroutines available as experimental in Kotlin 1.1
+^ Coroutines available as experimental in Kotlin 1.1 stable in 1.3 (Oct '18)
 
 ^ Available in other languages, subroutines for non-preemptive (cooperative) multitasking
 
 ^ Allow us to write asynchronous code as if it were synchronous
 
----
-
-```kotlin
-fun main() {
-    GlobalScope.launch {
-        delay(1000L)
-        println("World!")
-    }
-    println("Hello,")
-    Thread.sleep(2000L)
-}
-
-// Hello,
-// World!
-```
-
-^ Consider the following asynchronous code
-
-^ Sequential by default, seemingly imperative
-
----
-
-```kotlin, [.highlight: 3]
-fun main() {
-    GlobalScope.launch {
-        delay(1000L)
-        println("World!")
-    }
-    println("Hello,")
-    Thread.sleep(2000L)
-}
-
-// Hello,
-// World!
-```
-
-^ Delay is a suspended function, must be called from a Coroutine
-
----
-
-```kotlin, [.highlight: 2, 5]
-fun main() {
-    GlobalScope.launch {
-        delay(1000L)
-        println("World!")
-    }
-    println("Hello,")
-    Thread.sleep(2000L)
-}
-
-// Hello,
-// World!
-```
-
-^ Calling launch on a Coroutine scope will build a coroutine context
-
-^ Global scope applied unconfined context
-
-^ Scope can be created with dispatchers based on use case
-
----
-
-## Coroutine Builders
-
-^ Coroutines library provides two coroutine builder functions on a scope
-
----
-
-## Coroutine Builders
-
-```kotlin
-val deferred: Deferred<String> = async { "Hello World!" }
-```
-
-^ Async returns a deferred result and must be awaited to return a result
-
----
-
-## Coroutine Builders
-
-```kotlin, [.highlight: 2]
-val deferred: Deferred<String> = async { "Hello World!" }
-val result: String = deferred.await()
-```
-
-^ Much like Future, Deferred represents a promise that must be awaited in a coroutine
-
-^ Job represents work taking place and can be cancelled like Disposable or Subscription
-
----
-
-## Coroutine Builders
-
-```kotlin, [.highlight: 4]
-val deferred: Deferred<String> = async { "Hello World!" }
-val result: String = deferred.await()
-  
-val job: Job = launch { "Hello World!" }
-```
-
-^ Launch will return a job which will run in parallel until awaits
-
----
-
-## Coroutine Builders
-
-```kotlin, [.highlight: 5]
-val deferred: Deferred<String> = async { "Hello World!" }
-val result: String = deferred.await()
-
-val job: Job = launch { "Hello World!" }
-job.join()
-```
-
-^ Join will suspend the coroutine until the job is finished
-
-^ Much like disposable or subscription, a job can be cancelled
+^ Not a coroutine introduction talk, assumes familiarity with coroutine
 
 ---
 
@@ -210,7 +94,7 @@ job.join()
 
 ^ In the abstract I had mentioned "with coroutines approaching stability"
 
-^ As of Kotlin 1.3 (28 Oct) coroutines API graduated to "fully" stable
+^ As of Kotlin 1.3 (Oct '18) coroutines API graduated to "fully" stable
 
 ---
 
@@ -400,25 +284,17 @@ job.join()
 
 ![right](rabbid-superhero.gif)
 
----
-
-## ⛓️ Chained operations
-
 ^ Allows us to compose chained operator sequences
 
----
-
-## ⬆️ ⬇️ Abstracted threading
-
 ^ Abstract away threading, synchronisation, concerns
+
+^ Introduced the concept of reactive programming
 
 ---
 
 ![right](over-the-top.gif)
 
 ## 😮 Reactive
-
-^ Introduced the concept of reactive programming
 
 ^ This was a major turning point for architecture
 
@@ -460,7 +336,7 @@ job.join()
 
 ![inline 100%](build-passing.png)
 
-^ One the plus side we learned that people really like readme badges
+^ We learned that developers like readme badges
 
 ---
 
@@ -510,7 +386,7 @@ Observable
 
 ^ Actual code sample from unnamed code base, from unnamed developer absolutely not in this room
 
-^ How many of these operations seem unnecessary?
+^ How many of these operations seem unnecessary? Four flat map operations...
 
 ---
 
@@ -677,57 +553,6 @@ launch(Dispatchers.Main) {
 
 ---
 
-## 💪 ~~FlatMap~~
-
-```kotlin
-// RxJava2
-getUser()
-  .flatMap { doSomethingWithUser(it) }
-  .subscribeOn(Schedulers.computation())
-  .observeOn(AndroidSchedulers.mainThread())
-  .subscribe { /* Do something else */ }
-
-// Coroutines
-launch(Dispatchers.Main) {
-  val user = getUser()
-  val smth = doSomethingWithUser(user)
-  
-  /* Do something else */
-}
-```
-
-^ Since value already accessible in scope flatMap no longer necessary
-
----
-
-## Callback Consumption
-
-```kotlin
-// RxJava2
-fun getSingle(): Single = Single.create<T> { emitter -> 
-  doSomethingAsync(object: Callback<T> {
-    override fun onComplete(result: T) = emitter.onSuccess(result)
-    override fun onException(exception: Exception) = emitter.onError(exception)
-  })
-}
-
-// Coroutines
-suspend fun getCoroutine() : T = suspendCoroutine { continuation ->
-  doSomethingAsync(object : Callback<T> {
-    override fun onComplete(result: T) = continuation.resume(result)
-    override fun onException(exception: Exception) = continuation.resumeWithException(exception)
-  })
-}
-```
-
-^ Things get a little more complicated consuming traditional interfaces
-
-^ RxJava gives us `fromCallable` and `create` with an emitter to use callbacks
-
-^ Coroutines has an almost identical approach using continuation instead of emitter
-
----
-
 ## Task Cancellation
 
 ```kotlin, [.highlight: 5, 10]
@@ -753,28 +578,6 @@ parent.cancelChildren()
 
 ---
 
-## 💪 Backpressure
-
-^ RxJava Observables not originally backpressure aware
-
-^ RxJava introduced `Flowable` for native support
-
----
-
-## 💪 Backpressure
-
-```kotlin
-launch { 
-  channel.send("Hello")
-}
-```
-
-^ Channels only accept from coroutine context
-
-^ end will wait until value popped (like queue)
-
----
-
 ## `ViewModel.viewModelScope`
 
 ### `androidx.lifecycle:2.1.0-alpha01`
@@ -787,11 +590,13 @@ launch {
 
 ## Channels 🚇
 
+^ Can be used to connect two coroutines, handle backpressure
+
 ^ Still marked as Obsolete, promoted to Experimental, use with care
 
 ^ Channel operations push/pull are bad for transformations
 
-^ Not suitable as a drop in for Observables, but can be converted
+^ Not suitable as a drop in for Observables, can use instead of subjects
 
 ---
 
@@ -849,6 +654,10 @@ Flow.collect {
 ### Maybe...
 
 ^ The answer isn't so clear... maybe, but not really
+
+---
+
+### Not really...
 
 ^ Some behaviour can be replaced, perform different functions
 
@@ -1014,7 +823,7 @@ GlobalScope.launch {
 | `rxObservable`  | `ProducerScope`  | Cold observable that starts coroutine on subscribe
 | `rxFlowable`    | `ProducerScope`  | Cold observable that starts coroutine on subscribe with **backpressure** support 
 
-^ Currently the only way to produce a cold stream with Coroutines
+^ Allows easy and reliable conversion of observables and coroutines
 
 ---
 
@@ -1094,7 +903,50 @@ observable
 
 ---
 
+## Exceptions?
+
+---
+
 ## Exceptions
+
+```kotlin
+observable.subscribe(
+  onSuccess = { it: T -> },
+  onError = { it: Throwable -> } // Gotta catch em all!
+)
+
+launch {
+  try {
+    doSomethingDangerous()
+  } catch(exception: DangerousException) {
+    // Specific exception caught!
+  }
+}
+```
+
+^ Coroutines doesn't include error handling by default
+
+^ RxJava will catch all exceptions by default (Pokemon exceptions)
+
+^ Recommended to manually catch expected exceptions
+
+---
+
+## Exceptions
+
+```kotlin
+val handler = CoroutineExceptionHandler { _, exception -> 
+  println("Caught $exception") 
+}
+
+val job = GlobalScope.launch(handler) {
+  throw AssertionError()
+}
+
+join(job)
+
+// Caught java.lang.AssertionError
+```
 
 ---
 
@@ -1114,6 +966,10 @@ observable
 
 # Cheers! 🍻
 
+## [fit] bit.ly/praha-rxjava-coroutines
+
 ![left inline](gde-badge-round.png)
 
 ![right](concurrency.jpg)
+
+^ Slides and links available online
