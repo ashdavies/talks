@@ -42,7 +42,7 @@ footer-style: Open Sans
 
 ^ Developers celebrated as Google announced first class support for Android in 2017
 
-^ Since then adaption has sky-rocketed, community involvement and participation
+^ Since then adoption has sky-rocketed, community involvement and participation
 
 ^ Talks on every aspect of Kotlin, from DataBinding to Coroutines, Redux and IoT
 
@@ -51,8 +51,6 @@ footer-style: Open Sans
 ![fit autoplay](kotlin-adoption-2018.mp4)
 
 ^ Study from Pusher surveyed 2744 people from January to March found Kotlin adoption doubled year on year
-
-^ Spiking to 19.5 after the release of a document from Jake Wharton advocating its use at Square
 
 ^ Starting at 7.7%, spiking at 19.5 after JW Square document, then to 46.8 after Google IO '17
 
@@ -90,6 +88,124 @@ footer-style: Open Sans
 
 ---
 
+```kotlin
+fun main() {
+    GlobalScope.launch {
+        delay(1000L)
+        println("World!")
+    }
+    println("Hello,")
+    Thread.sleep(2000L)
+}
+
+// Hello,
+// World!
+```
+
+^ Consider the following asynchronous code
+
+^ Sequential by default, seemingly imperative
+
+---
+
+```kotlin, [.highlight: 3]
+fun main() {
+    GlobalScope.launch {
+        delay(1000L)
+        println("World!")
+    }
+    println("Hello,")
+    Thread.sleep(2000L)
+}
+
+// Hello,
+// World!
+```
+
+^ Delay is a suspended function, must be called from a Coroutine
+
+---
+
+```kotlin, [.highlight: 2, 5]
+fun main() {
+    GlobalScope.launch {
+        delay(1000L)
+        println("World!")
+    }
+    println("Hello,")
+    Thread.sleep(2000L)
+}
+
+// Hello,
+// World!
+```
+
+^ Calling launch on a Coroutine scope will build a coroutine context
+
+^ Global scope applied unconfined context
+
+^ Scope can be created with dispatchers based on use case
+
+---
+
+## Coroutine Builders
+
+^ Coroutines library provides two coroutine builder functions on a scope
+
+---
+
+## Coroutine Builders
+
+```kotlin
+val deferred: Deferred<String> = async { "Hello World!" }
+```
+
+^ Async returns a deferred result and must be awaited to return a result
+
+---
+
+## Coroutine Builders
+
+```kotlin, [.highlight: 2]
+val deferred: Deferred<String> = async { "Hello World!" }
+val result: String = deferred.await()
+```
+
+^ Much like Future, Deferred represents a promise that must be awaited in a coroutine
+
+^ Job represents work taking place and can be cancelled like Disposable or Subscription
+
+---
+
+## Coroutine Builders
+
+```kotlin, [.highlight: 4]
+val deferred: Deferred<String> = async { "Hello World!" }
+val result: String = deferred.await()
+  
+val job: Job = launch { "Hello World!" }
+```
+
+^ Launch will return a job which will run in parallel until awaits
+
+---
+
+## Coroutine Builders
+
+```kotlin, [.highlight: 5]
+val deferred: Deferred<String> = async { "Hello World!" }
+val result: String = deferred.await()
+
+val job: Job = launch { "Hello World!" }
+job.join()
+```
+
+^ Join will suspend the coroutine until the job is finished
+
+^ Much like disposable or subscription, a job can be cancelled
+
+---
+
 ## ⚖️ Stability
 
 ^ In the abstract I had mentioned "with coroutines approaching stability"
@@ -102,7 +218,7 @@ footer-style: Open Sans
 
 ![](lie-detected.gif)
 
-^ That wasn't completely true, but lets cover the basics
+^ That wasn't completely true
 
 ---
 
@@ -140,6 +256,8 @@ footer-style: Open Sans
 
 ^ Difference between obsolete and experimental is intent, @Experimental may graduate, @Obsolete unknown
 
+^ Recommendation is not to use them in public APIs
+
 ^ Applies to channel consumptions, actors, Rx conversion functions
 
 ---
@@ -160,11 +278,9 @@ footer-style: Open Sans
 
 ---
 
-## 💪 Coroutines 💪
+## 💪 Coroutines
 
 ^ What makes everybody want to jump on the Coroutine bandwagon?
-
-^ Two left arms because RTL emojis aren't a thing yet
 
 ---
 
@@ -274,7 +390,7 @@ footer-style: Open Sans
 
 [.footer: xkcd.com/927/]
 
-^ No single option seems to match most requirements
+^ Excluding WorkManager, no single option seems to match most requirements
 
 ^ Leading to new standards for individual use cases
 
@@ -336,7 +452,7 @@ footer-style: Open Sans
 
 ![inline 100%](build-passing.png)
 
-^ We learned that developers like readme badges
+^ At least we learned that developers like readme badges
 
 ---
 
@@ -401,13 +517,13 @@ Observable
 
 ^ They can quickly become unmanageable
 
+^ The same benefits we received are now hurting us
+
 ---
 
 ## ⚙️ Hidden complexity
 
 ^ Business behaviour can often be hidden behind difficult to understand operators
-
-^ Go back to previous slide, many statements feel unnecessary
 
 ---
 
@@ -525,6 +641,8 @@ fun storeUser(user: User): Completable.fromCallable { /* ... */ }
 suspend fun storeUser(user: User) { /* ... */ }
 ```
 
+^ Backround tasks with no return value can be suspended
+
 ---
 
 ## Thread Handling
@@ -580,7 +698,7 @@ parent.cancelChildren()
 
 ## `ViewModel.viewModelScope`
 
-### `androidx.lifecycle:2.1.0-alpha01`
+### `androidx.lifecycle:2.1.0-alpha**`
 
 ^ Coroutine scope hierarchy allows view model scope with androidx lifecycle
 
@@ -594,9 +712,9 @@ parent.cancelChildren()
 
 ^ Still marked as Obsolete, promoted to Experimental, use with care
 
-^ Channel operations push/pull are bad for transformations
-
 ^ Not suitable as a drop in for Observables, can use instead of subjects
+
+^ Channel operations push/pull are bad for transformations similar to observable chains
 
 ---
 
@@ -614,6 +732,8 @@ Flow.collect {
 ```
 
 ^ But there is hope, flow allows cold streams, some channel behaviours promoted
+
+^ Flow still in early access preview, replays behaviour on terminal operator
 
 ---
 
@@ -718,6 +838,8 @@ Flow.collect {
 ^ Agree upon a migration policy with your team
 
 ^ Start with low-level implementations
+
+^ Cascade through hierarchy with conversions
 
 ---
 
