@@ -547,7 +547,11 @@ public class MainActivity extends FragmentActivity {
 
 ![right 100%](jetpack-hero.png)
 
-^ JetPack built from three components
+^ Primary ideal of Navigation is to use existing an accessible APIs
+
+^ Not private or limited by library scope
+
+^ Built from three components
 
 ---
 
@@ -568,7 +572,7 @@ public class MainActivity extends FragmentActivity {
 
 ^ Destinations to the left showing the host and graph hierarchy
 
-^ destinations can be an activity, fragment, or custom view
+^ destinations can be an activity, fragment, dialog, or custom view
 
 ^ graph editor contains a visual representation showing how the destinations interact
 
@@ -577,6 +581,31 @@ public class MainActivity extends FragmentActivity {
 ^ each destination has attributes displayed on the right
 
 ^ attributes allow you to configure arguments and deeplinks
+
+---
+
+## Destination Types
+
+- Activity `<activity>`
+
+- Fragment `<fragment>`
+
+- Dialog `<dialog>` (2.1.0+)
+
+^ Navigation destinations can be an activity
+
+---
+
+## Destination Types (Custom)
+#### developer.android.com/guide/navigation/navigation-add-new
+
+- Extend `Navigator<T>` with your type
+
+- Provide `Destination` implementation
+
+- Configure arguments after inflation
+
+- Augment `NavController`
 
 ---
 
@@ -611,6 +640,16 @@ public class MainActivity extends FragmentActivity {
 ```
 
 ^ But if you're like me and prefer to hand code you can create your graph in xml too
+
+---
+
+## Resource Inflation 🎈
+
+^ Due to the navigation resource being an XML document, this means that the navigation controller
+
+^ Inflates the resource at runtime, thus resulting in graph errors at runtime not at compile time
+
+^ Negligible inflation cost, part of your layouting
 
 ---
 
@@ -671,6 +710,48 @@ button.setOnClickListener(
 ^ With controller, navigate to action defined in navigation graph
 
 ^ Alternatively create navigation listener to retrieve view controller
+
+---
+
+## Deep Links 🔥
+
+^ The navigation compoennt can generate deep link intent filters for you
+
+^ Declare the relevant graph in your manifest
+
+---
+
+## Deep Links 🔥
+
+```xml, [.highlight: 10]
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+  package="com.example.myapplication">
+
+  <application ... >
+
+    <activity name=".ProfileActivity" ...>
+
+        ...
+        <nav-graph android:value="@navigation/main.xml" />
+        ...
+    </activity>
+  </application>
+</manifest>
+```
+
+---
+
+## Deep Links 🔥
+
+```kotlin
+<fragment 
+  android:id="@+id/profile"
+  android:name=".ProfileActivity">
+
+  <deepLink app:uri="www.example.com/profile/{userId}" />
+</fragment>
+```
 
 ---
 
@@ -770,9 +851,46 @@ NavigationUI.setupWithNavController(
 
 ---
 
-## 💪 SafeArgs
+## Bundles 📦
 
-^ Plugin enables generation of type safe args from your nav graph
+^ Despite having a better scope hierarchy some parameters need to be serialised
+
+^ No different from activities or traditional fragments
+
+---
+
+## Honourable Mention
+### Eugenio Marletti: Android Extras Delegates
+#### github.com/Takhion/android-extras-delegates
+
+^ When starting off with Kotlin, this was our goto choice for serialising intent and bundle extras
+
+---
+
+## Android Extras Delegates 👍
+
+```kotlin
+class SomeActivity : Activity() {
+
+  companion object : ActivityCompanion<IntentOptions>(
+    intentOptions = IntentOptions, 
+    kclass = SomeActivity::class
+  )
+
+  object IntentOptions {
+  
+    var Intent.someExtra by IntentExtra.String()
+  }
+}
+```
+
+^ This was nice because naming of the parameter could be taken care of in a single location
+
+---
+
+## SafeArgs 💪
+
+^ Simple concept, plugin enables generation of type safe args from your nav graph
 
 ^ Kotlin class, null safe, and provides defaults
 
@@ -784,7 +902,7 @@ NavigationUI.setupWithNavController(
 
 ## SafeArgs: Directions
 
-### [fit] `MainFragmentDirections.mainToViewBalance()`
+#### [fit] `MainFragmentDirections.mainToViewBalance()`
 
 ```xml
 <fragment
@@ -860,6 +978,76 @@ class ViewBalanceFragment : Fragment() {
 ^ Must now pass a parameter to the main fragment direction
 
 ^ Deserialise in the receiving balance fragment used the extras
+
+---
+
+## SafeArgs: Generated Args 💻
+
+```kotlin
+data class ViewBalanceFragmentArgs(val balanceAmount: Int) : NavArgs {
+    @Suppress("CAST_NEVER_SUCCEEDS")
+    fun toBundle(): Bundle {
+        val result = Bundle()
+        result.putInt("balanceAmount", this.balanceAmount)
+        return result
+    }
+
+    companion object {
+        @JvmStatic
+        fun fromBundle(bundle: Bundle): FinanceBorrowerFragmentArgs {
+            bundle.setClassLoader(FinanceBorrowerFragmentArgs::class.java.classLoader)
+            val __balanceAmount : Int
+            if (bundle.containsKey("balanceAmount")) {
+                __balanceAmount = bundle.getInt("balanceAmount")
+            } else {
+                throw IllegalArgumentException("Required argument \"balanceAmount\" is missing and does not have an android:defaultValue")
+            }
+            return FinanceBorrowerFragmentArgs(__balanceAmount)
+        }
+    }
+}
+```
+
+^ As with most generated code, it's not always so pretty to look at, but it's consistent and reliable
+
+^ Simple operations serialise the data correctly, and has support for enums, parcelables and other primitive types
+
+^ Nothing magical here, except reliable and scalable
+
+---
+
+## SafeArgs: Generated Directions
+
+```kotlin
+class MainFragmentDirections private constructor() {
+  private data class MainToViewBalance(val balanceAmount: Int) : NavDirections {
+    override fun getActionId(): Int = R.id.mainToViewBalance
+
+    @Suppress("CAST_NEVER_SUCCEEDS")
+    override fun getArguments(): Bundle {
+      val result = Bundle()
+      result.putInt("balanceAmount", this.index)
+      return result
+    }
+  }
+
+  companion object {
+    fun mainToViewBalance(balanceAmount: Int): NavDirections = BorrowerToBorrower(index, financeBorrower)
+  }
+}
+```
+
+^ Again not very exciting, but we can be certain that our serialisation will happen correctly
+
+---
+
+## Single Source of Truth
+
+^ By defining your navigation graph as a resource
+
+^ Resource acts as a single source of truth
+
+^ Not open to interpretation by calling activities
 
 ---
 
