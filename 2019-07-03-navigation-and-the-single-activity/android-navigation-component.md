@@ -3,7 +3,6 @@ build-lists: true
 footer: @askashdavies
 footer-style: Open Sans
 header: Open Sans
-slidenumbers: true
 slide-transition: true
 theme: Simple, 6
 text: Open Sans
@@ -551,7 +550,7 @@ public class MainActivity extends FragmentActivity {
 
 ^ Not private or limited by library scope
 
-^ Built from three components
+^ built from three components
 
 ---
 
