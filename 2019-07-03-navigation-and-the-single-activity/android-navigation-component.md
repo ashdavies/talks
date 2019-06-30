@@ -1,9 +1,11 @@
-footer: @askashdavies
 autoscale: true
 build-lists: true
-header: Open Sans
-text: Open Sans
+footer: @askashdavies
 footer-style: Open Sans
+header: Open Sans
+slide-transition: true
+theme: Simple, 6
+text: Open Sans
 
 ![right inline 15%](immobilienscout24.png)
 
@@ -59,11 +61,12 @@ class MainActivity : AppCompatActivity {
 ^ Simplest form, use Intent to navigate
 
 ^ Quickly out of hand in larger projects
+
 ---
 
 ## 😰
 
-^ Activities knowing about other activity implementations
+^ Activities dependent on other activity implementations
 
 ^ Store complex intent argument compositions
 
@@ -71,24 +74,15 @@ class MainActivity : AppCompatActivity {
 
 ---
 
-[.background-color: #ffffff]
+> ### "Once we have gotten in to this entry-point to your UI, we really don't care how you organise the flow inside."
+-- Dianne Hackborn, Android Framework team, 2016
 
-![100%](application-scope.png)
-
-^ Since you need to pass data from one activity to the next
-
-^ Dependency graphs include resources only for a few screens
-
-^ Survive for the entire duration in the application scope
-
----
-
-> ## "Once we have gotten in to this entry-point to your UI, we really don't care how you organise the flow inside."
--- Dianne Hackborn, Android Framework team
+^ 2016 back when Google Plus was still a thing
 
 ^ Controversial, framework not opinionated, does not care about app structure
 
 ^ Once activity started, you can handle the flow
+
 ---
 
 ## 🍯 🐝
@@ -97,12 +91,14 @@ class MainActivity : AppCompatActivity {
 
 ^ Build richer, more interactive user interfaces
 
+^ Beginning of design orientated thinking
+
 ---
 
 [.background-color: #ebebeb]
 [.footer: ]
 
-![fit](contacts_full.png)
+![inline](contacts_full.png)
 
 ^ Demonstrated with a master / detail interface
 
@@ -120,13 +116,11 @@ public class MainActivity extends FragmentActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.news_articles);
 
-    // Check that the activity is using the layout version with
-    // the fragment_container FrameLayout
+    // Check that the activity is using the layout version with the fragment_container FrameLayout
     if (findViewById(R.id.fragment_container) != null) {
 
-      // However, if we're being restored from a previous state,
-      // then we don't need to do anything and should return or else
-      // we could end up with overlapping fragments.
+      // However, if we're being restored from a previous state, then we don't need to do anything,
+      // and should return or else we could end up with overlapping fragments.
       if (savedInstanceState != null) {
         return;
       }
@@ -150,18 +144,103 @@ public class MainActivity extends FragmentActivity {
 
 ^ Sample from Android documentation, not yet in Kotlin
 
+---
+
+```java, [.highlight: 18, 22, 25-28]
+public class MainActivity extends FragmentActivity {
+
+  @Override
+  public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.news_articles);
+
+    // Check that the activity is using the layout version with the fragment_container FrameLayout
+    if (findViewById(R.id.fragment_container) != null) {
+
+      // However, if we're being restored from a previous state, then we don't need to do anything,
+      // and should return or else we could end up with overlapping fragments.
+      if (savedInstanceState != null) {
+        return;
+      }
+
+      // Create a new Fragment to be placed in the activity layout
+      HeadlinesFragment firstFragment = new HeadlinesFragment();
+    
+      // In case this activity was started with special instructions from an
+      // Intent, pass the Intent's extras to the fragment as arguments
+      firstFragment.setArguments(getIntent().getExtras());
+
+      // Add the fragment to the 'fragment_container' FrameLayout
+      getSupportFragmentManager()
+        .beginTransaction()
+        .add(R.id.fragment_container, firstFragment)
+        .commit();
+    }
+  }
+}
+```
+
 ^ Fragments added / removed using fragment transactions
 
 ^ More complex than starting an Activity
 
 ---
 
-[.footer: ]
+```java, [.highlight: 11-15]
+public class MainActivity extends FragmentActivity {
+
+  @Override
+  public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.news_articles);
+
+    // Check that the activity is using the layout version with the fragment_container FrameLayout
+    if (findViewById(R.id.fragment_container) != null) {
+
+      // However, if we're being restored from a previous state, then we don't need to do anything,
+      // and should return or else we could end up with overlapping fragments.
+      if (savedInstanceState != null) {
+        return;
+      }
+
+      // Create a new Fragment to be placed in the activity layout
+      HeadlinesFragment firstFragment = new HeadlinesFragment();
+    
+      // In case this activity was started with special instructions from an
+      // Intent, pass the Intent's extras to the fragment as arguments
+      firstFragment.setArguments(getIntent().getExtras());
+
+      // Add the fragment to the 'fragment_container' FrameLayout
+      getSupportFragmentManager()
+        .beginTransaction()
+        .add(R.id.fragment_container, firstFragment)
+        .commit();
+    }
+  }
+}
+```
+
+^ Additional state issues with checking for activity recreation
+
+^ We can get overlapping fragments after configuration change.
+
+---
+
+## Activity Lifecycle != Fragment Lifecycle
+
+^ Not just creation and use of fragments that included more complexity
+
+^  Introduced more complex lifecycle behaviour than with Activities
+
+---
+
+[.footer: Jose Alcerreca | Lifecycles cheet sheet beta1 (AndroidP/Jetpack 1.0) ]
+[.footer-style: #666666]
 [.background-color: #ffffff]
 
-![fit](fragment-lifecycle.png)
+![inline](fragment-lifecycle.png)
 
-^ Introduced more complex lifecycle behaviour than with Activities
+^ Graph created by Jose Alcerreca
 
 ^ https://github.com/JoseAlcerreca/android-lifecycles/blob/a5dfd030a70989ad2496965f182e5fa296e6221a/cheatsheetfragments.pdf
 
@@ -169,9 +248,21 @@ public class MainActivity extends FragmentActivity {
 
 ## ➡️ ⬆️ ➡️ ⬅️ ➡️
 
+^ Explicitly invoke addToBackStack or add on transactions
+
 ^ Can mess up back stack if not implemented correctly
 
 ^ Invalid stack, unexpected behaviour on configuration change.
+
+---
+
+### (supportFragmentManager || childFragmentManager)?
+
+^ Fragments allow adding fragments inside fragments
+
+^ Used for nested view pagers inside fragments
+
+^ Former can leak context if used inside fragments
 
 ---
 
@@ -183,9 +274,192 @@ public class MainActivity extends FragmentActivity {
 
 ---
 
-## JetPack: Navigation
+## Bundles 📦
 
-![right 100%](jetpack-hero.png)
+^ Like activities we must let the system manage instance
+
+^ Serialisation of data provided through bundles
+
+^ Don't use fragment constructors
+
+---
+
+## FragmentFactory
+### androidx.fragment:fragment:1.1.0-beta01
+
+^ As ov 1.1.0 you can set a FragmentFactory on any FragmentManager
+
+^ Control how new Fragment instances are instantiated
+
+---
+
+## Fragments? 🙀
+
+^ These are pretty compelling arguments to avoid Fragments in general
+
+^ Tempted to use pure Activity sequences or other alternatives
+
+^ Many alternative architecture options created, Mortar / Flow
+
+---
+
+## Fragments? 🤔
+
+^ There may be some good reasons to use Fragments
+
+---
+
+## Activity Capabilities ⏳
+
+^ Activity capabilities tied to API version, need to wait for new features
+
+^ Activity features in new versions of Android cannot be backported
+
+---
+
+## Shared Element Transition (API 21+)
+
+![right 80% autoplay loop](shared-element-animation.mp4)
+
+^ eg SharedElementTransitions only available on API 21 and above
+
+^ Compat shims only provide graceful failure saving API checks
+
+---
+
+## CompatShims < Enough
+
+^ Hidden gotchas, don't guarantee consistent user experience
+
+---
+
+## ~~android.app.Fragment~~
+## `androidx.fragment.app.Fragment`
+
+^ Native Android fragment deprecated in API 28
+
+^ Fragments entirely in androidx can be updated per app
+
+---
+
+## Scopes 🔍
+
+^ One of the real benefits comes in the form of scoping
+
+---
+
+[.background-color: #ffffff]
+[.text: #666666]
+
+## Scopes
+
+![inline](activity-isolated.png)
+
+^ Sharing instances or resources across different activities is difficult
+
+^ Each activity exists in isolation without much of a larger scope
+
+---
+
+[.background-color: #ffffff]
+[.text: #666666]
+
+## Scopes
+
+![inline](application-activity-scope.png)
+
+^ Dependency graphs include resources only for a few screens
+
+^ Survive for the entire duration in the application scope
+
+---
+
+[.background-color: #ffffff]
+[.text: #666666]
+
+## Scopes
+
+![inline](application-fragment-scope.png)
+
+^ With usage of a third framework type scopes can be nested
+
+^ Shared data can be provided by activity scope by ViewModel
+
+---
+
+#  🤔🧁
+
+^ So how can we have our cake and eat it?
+
+^ To benefit from the features available in fragments
+
+^ Without suffering from the difficulties of using them
+
+---
+
+![inline 100%](jetpack-hero.png)
+
+^ Last year Google introduced us to Android JetPack which included a variety of tools
+
+^ Dedicated to helping us bootstrap Android development
+
+^ Opinionted and clean implementations for common problems
+
+^ With the additional of comparmentalising the support library fragment 
+
+^ Renaming support dependencies to androidx and starting with independent versioning 
+
+---
+
+[.background-color: #ffffff]
+[.text: #666666]
+
+## Android JetPack 
+
+![inline](jetpack-foundation.png)
+
+^ Foundation picking up where the support library left off
+
+^ Including ktx helpers, multidex and security
+
+---
+
+[.background-color: #ffffff]
+[.text: #666666]
+
+## Android JetPack 
+
+![inline](jetpack-architecture.png)
+
+^ Architecture encompassing the arch components like LiveData and ViewModel
+
+^ Navigation, paging, and room persistence
+
+---
+
+[.background-color: #ffffff]
+[.text: #666666]
+
+## Android JetPack 
+
+![inline](jetpack-behaviour.png)
+
+^ Media playback, notifications, permissions, and slices
+
+---
+
+[.background-color: #ffffff]
+[.text: #666666]
+
+## Android JetPack 
+
+![inline](jetpack-ui.png)
+
+^ Finally UI, including Fragments, Transitions, Animations, and Emoji
+
+---
+
+## Android JetPack: Navigation ![](jetpack-hero.png)
 
 ^ Introducing JetPack
 
@@ -193,7 +467,7 @@ public class MainActivity extends FragmentActivity {
 
 ---
 
-## JetPack: Navigation ![](jetpack-hero.png)
+## Android JetPack: Navigation ![](jetpack-hero.png)
 
 - Libraries 📚
 - Plugin 🔌
@@ -572,21 +846,12 @@ apply plugin: 'androidx.navigation.safeargs.kotlin'
 
 ---
 
+[.background-color: #ffffff]
+[.text: #666666]
+
 ## 🔍 Scoping
 
-^ Remember application scope too large for activity flow?
-
----
-
-[.background-color: #ffffff]
-
-![100%](application-scope.png)
-
----
-
-[.background-color: #ffffff]
-
-![50%](application-destination-scope.png)
+![inline](application-destination-scope.png)
 
 ^ Navigation graph destinations can easily share data with activity view models
 
