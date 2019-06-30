@@ -3,6 +3,7 @@ build-lists: true
 footer: @askashdavies
 footer-style: Open Sans
 header: Open Sans
+slidenumbers: true
 slide-transition: true
 theme: Simple, 6
 text: Open Sans
@@ -499,6 +500,7 @@ public class MainActivity extends FragmentActivity {
 ---
 
 [.background-color: #ffffff]
+[.text: #666666]
 
 ## Fixed Start Destination
 
@@ -510,11 +512,11 @@ public class MainActivity extends FragmentActivity {
 
 ---
 
-## 🥞
+## State as Stack 🥞
 
 ^ Navigation state is represented as a stack of destinations
 
-^ Representation history of the user flow
+^ Representation history of the user flow that can be reversable and replayable
 
 ---
 
@@ -531,10 +533,11 @@ public class MainActivity extends FragmentActivity {
 ---
 
 [.background-color: #ffffff]
+[.text: #666666]
 
-## Deep linking simulates manual navigation
+## Deep Link Simulates Manual Navigation
 
-![inline](navigation-principles-deep-linking-2.png) 
+![inline](navigation-principles-deep-linking.png) 
 
 ^ Back stack will be created as though you had navigated there yourself
 
@@ -629,6 +632,8 @@ public class MainActivity extends FragmentActivity {
 
 ^ Lifecycle, configuration, animations handled automatically
 
+^ Navigation hosts all movement and screens
+
 ---
 
 ## NavController
@@ -666,6 +671,102 @@ button.setOnClickListener(
 ^ With controller, navigate to action defined in navigation graph
 
 ^ Alternatively create navigation listener to retrieve view controller
+
+---
+
+## Navigation Styles 📐
+
+---
+
+[.background-color: #dfdfdf]
+[.text: #666666]
+
+## Navigation Styles 📐
+### Toolbar
+
+![inline](title-navigation.png)![inline](contextual-toolbar.png)
+
+^ The familiar toolbar navigation style and it's contextual variant
+
+---
+
+[.background-color: #dfdfdf]
+[.text: #666666]
+
+## Navigation Styles 📐
+### Bottom
+
+![inline](bottom-navigation.png)
+
+^ The ever popular bottom navigation bar that has no become enshrined in Material design
+^ The familiar toolbar navigation style and it's contextual variant
+
+---
+
+[.background-color: #dfdfdf]
+[.text: #666666]
+
+## Navigation Styles 📐
+### Drawer
+
+![inline](navigation-drawer.png)
+
+^ The historically relevant navigation drawer allowing for extensible navigation items
+
+---
+
+## NavigationUI
+### `setupWithNavController()`
+
+^ Configuration of your navigation structure is provided with an AppBarConfiguration
+
+^ Responsible for configuring top-level destinations with navigation drawer
+
+---
+
+```kotlin
+class AwesomeActivity : AppCompatActivity() {
+
+  private val controller: NavController by lazy(NONE) { findNavController(this, R.id.host) }
+  private val drawer: DrawerLayout by lazy(NONE) { findViewById<DrawerLayout>(R.id.drawer) }
+  private val toolbar: Toolbar by lazy(NONE) { findViewById<Toolbar>(R.id.toolbar) }
+  
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    setContentView(R.layout.awesome_activity)
+
+    toolbar.setupWithNavController(controller, drawer)
+  }
+}
+```
+
+^ In most cases this will be enough to configure a navigation drawer
+
+^ Many other variations provided via NavigationUI and Kotlin extensions for other flavours
+
+---
+
+## NavigationUI
+
+```kotlin
+NavigationUI.setupActionBarWithNavController(
+  activity: AppCompatActivity,
+  controller: NavController,
+  configuration: AppBarConfiguration
+)
+
+NavigationUI.setupWithNavController(
+  toolbar: Toolbar,
+  controller: NavController,
+  configuration: AppBarConfiguration
+)
+```
+
+^ Setup with actionBar retrieves ActionBar from Activity by getSupportActionBar
+
+^ Both methods have variants for each different use case of DrawerLayout, CollapsingToolbar, Toolbar, and BottomSheet
+
+^ Each variants constructs an appropriate `AppBarConfiguration` for use 
 
 ---
 
