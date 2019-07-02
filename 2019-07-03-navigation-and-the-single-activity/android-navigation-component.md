@@ -9,12 +9,41 @@ text: Open Sans
 
 ![right inline 15%](immobilienscout24.png)
 
-## Android JetPack
-### Navigation Component
+## [fit] Navigation and the Single Activity
+### Learnings from a Skeptic
 
-![left inline](gde-badge-round.png)
+![left inline 30%](gde-badge-round.png)
 
 ![right](aerial-shot-ship.jpg)
+
+^ Speaker introduction
+
+---
+
+[.background-color: #EEA243]
+![right inline 15%](immobilienscout24.png)
+
+## Random Slides
+### Cheese
+
+![left inline 30%](gde-badge-round.png)
+
+![right](cheese.jpeg)
+
+^ Or was it cheese?
+
+---
+
+![right inline 15%](immobilienscout24.png)
+
+## [fit] Navigation and the Single Activity
+### Learnings from a Skeptic
+
+![left inline 30%](gde-badge-round.png)
+
+![right](aerial-shot-ship.jpg)
+
+^ Stick to the stuff I'm good with
 
 ---
 
@@ -397,6 +426,14 @@ public class MainActivity extends FragmentActivity {
 
 ---
 
+[.background-color: #ffffff]
+
+![fit 100%](more-cheese.jpg)
+
+^ Cheese is how we do it
+
+---
+
 ![inline 100%](jetpack-hero.png)
 
 ^ Last year Google introduced us to Android JetPack which included a variety of tools
@@ -714,7 +751,7 @@ button.setOnClickListener(
 
 ## Deep Links 🔥
 
-^ The navigation compoennt can generate deep link intent filters for you
+^ The navigation component can generate deep link intent filters for you
 
 ^ Declare the relevant graph in your manifest
 
@@ -779,6 +816,7 @@ button.setOnClickListener(
 ![inline](bottom-navigation.png)
 
 ^ The ever popular bottom navigation bar that has no become enshrined in Material design
+
 ^ The familiar toolbar navigation style and it's contextual variant
 
 ---
@@ -847,6 +885,42 @@ NavigationUI.setupWithNavController(
 ^ Both methods have variants for each different use case of DrawerLayout, CollapsingToolbar, Toolbar, and BottomSheet
 
 ^ Each variants constructs an appropriate `AppBarConfiguration` for use 
+
+---
+
+## NavigationUI: AppBarConfiguration
+
+- Top level destinations
+
+- Drawer layout
+
+- Fallback "up" listener
+
+^ AppBarConfiguration configures behaviour to top toolbar
+
+^ Top level destinations (should not display back button)
+
+^ Fallback on "up" listener for unhandled cases
+
+^ Building class from extension of default parameters take graph root elements
+
+---
+
+## OnDestinationChangedListener
+### NavController.addOnDestinationChangedListener
+
+```kotlin
+interface OnDestinationChangedListener {
+
+  fun onDestinationChanged(
+    controller: NavController,
+    destination: NavDestination,
+    arguments: Bundle?
+  );
+}
+```
+
+^ Not a closed API, functionality can be modified or handled specifically
 
 ---
 
@@ -1015,7 +1089,7 @@ data class ViewBalanceFragmentArgs(val balanceAmount: Int) : NavArgs {
 
 ---
 
-## SafeArgs: Generated Directions
+## SafeArgs: Generated Directions 💻
 
 ```kotlin
 class MainFragmentDirections private constructor() {
@@ -1110,23 +1184,248 @@ apply plugin: 'androidx.navigation.safeargs.kotlin'
 
 ## 🛠 Migrating
 
-- Move screen behaviour away from activities
+![](cheese-list.png)
+![](cheese-details.png)
 
-- Create new activity for NavHostFragment
+^ Consider on the left an activity to display a list of cheeses
 
-- Move existing activity logic to fragment
+^ and on the right an activity to view the cheese details
 
-- Initialise fragment in host activity
+---
 
-- Pass arguments as necessary
+## 🛠 Migrating
 
-- Create navigation graph
+### Move screen behaviour away from activities
 
-^ Convert activity to fragment and include within navigation graph
+^ Should already be using an architecture to keep modular components separate
 
-^ Invoke navigation manually without using NavHost or NavController
+^ Following single responsibility principle keep activity logic abstract
 
-^ Slowly move single activity/fragment pairs into larger navigation graph
+^ Recommended approach to use view models
+
+---
+
+## 🛠 Migrating
+
+### Create new activity for `Fragment`'s
+
+^ Blank activity to host fragments 
+
+^ Can be achieved with a FrameLayout
+
+^ Will later become host to navigation graph
+
+---
+
+## 🛠 Migrating
+
+### Move existing activity logic to fragment
+
+- FragmentBindings -> ActivityBindings
+
+- `onCreate()` -> `onCreateView()`
+
+- `onViewCreated()`
+
+- `getViewLifecycleOwner()`
+
+^ Update layouts for fragments with databinding layouts changing
+
+^ Don't include toolbar of other navigation layouts in Fragment
+
+^ onCreate becomes onCreateView to inflate your layout with parent and state
+
+^ Move post view creation behaviour to onViewCreated()
+
+^ ViewLifecycyleOwner should be used instead of Fragment
+
+^ Inconsistencies of view lifecycle for retained fragments
+
+---
+
+## 🛠 Migrating
+
+### Initialise fragment in host activity
+
+---
+
+## Initialise fragment in host activity
+
+```kotlin
+override fun onCreate(savedInstanceState: Bundle?) {
+  super.onCreate(savedInstanceState)
+  setContentView(R.layout.cheese_activity)
+
+  if (savedInstanceState == null) {
+    supportFragmentManager
+            .beginTransaction()
+            .add(R.id.main_content, CheeseListFragment())
+            .commit()
+  }
+
+  fun navigateToCheeseDetail(productId: String) {
+    ...
+  }
+}
+```
+
+^ No more complicated than adding a fragment to your host
+
+---
+
+## Pass arguments as necessary
+
+```kotlin
+override fun onCreate(savedInstanceState: Bundle?) {
+  super.onCreate(savedInstanceState)
+  setContentView(R.layout.cheese_activity)
+
+  if (savedInstanceState == null) {
+    val fragment = CheeseListFragment() // 🧀
+    fragment.arguments = intent.extras
+
+    supportFragmentManager
+            .beginTransaction()
+            .add(R.id.main_content, fragment)
+            .commit()
+  }
+
+  fun navigateToCheeseDetail(productId: String) {
+    ...
+  }
+}
+```
+
+---
+
+## 🛠 Migrating
+
+### Create navigation graph
+
+---
+
+## Create navigation graph
+
+```
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:startDestination="@+id/cheeseGraph">
+
+  <fragment
+      android:id="@+id/cheeseListFragment"
+      android:name="com.sample.CheeseListFragment"
+      android:label="@string/cheese_list_title"
+      tools:layout="@layout/cheese_list_fragment" />
+
+  <fragment
+      android:id="@+id/cheeseDetailsFragment"
+      android:name="com.sample.CheeseDetailsFragment"
+      android:label="@string/cheese_details_title"
+      tools:layout="@layout/cheese_details_fragment" />
+
+</navigation>
+```
+
+---
+
+## Create navigation host
+
+```
+<fragment
+   android:id="@+id/main_content"
+   android:layout_width="match_parent"
+   android:layout_height="match_parent"
+   android:name="androidx.navigation.fragment.NavHostFragment"
+   app:navGraph="@navigation/cheese_list_graph"
+   app:defaultNavHost="true" />
+```
+
+^ Default implementation for a fragment host
+
+^ Indicate nav graph with attribute
+
+^ Default nav host requires no further initialisation
+
+---
+
+## 🛠 Migrating
+
+```
+class CheeseHostActivity : AppCompatActivity() {
+
+  override fun onCreate(savedInstanceState: Bundle?) {
+      super.onCreate(savedInstanceState)
+      setContentView(R.layout.cheese_activity)
+  }
+}
+```
+
+^ Activity no longer needs the navigate to list method
+
+^ Can be included with directions and arguments
+
+---
+
+### Navigation Directions
+
+```xml, [.highlight: 11-13, 23-25]
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:startDestination="@+id/cheeseGraph">
+
+  <fragment
+      android:id="@+id/cheeseListFragment"
+      android:name="com.sample.CheeseListFragment"
+      android:label="@string/cheese_list_title"
+      tools:layout="@layout/cheese_list_fragment">
+  
+    <action
+        android:id="@+id/navigateToCheeseDetails"
+        app:destination="@+id/cheeseDetailsFragment"/>
+
+  </fragment>
+
+  <fragment
+      android:id="@+id/cheeseDetailsFragment"
+      android:name="com.sample.CheeseDetailsFragment"
+      android:label="@string/cheese_details_title"
+      tools:layout="@layout/cheese_details_fragment">
+  
+    <argument
+      android:name="cheeseId"
+      app:argType="string" />
+    
+  </fragment>
+
+</navigation>
+```
+
+^ Include argument and action to navigation graph
+
+^ Action indicates direction from fragment
+
+^ Argument implies dependency for next fragment
+
+---
+
+## CheeseListFragment 🧀
+
+```
+class CheeseListFragment : Fragment() {
+  ...
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+      cheeseAdapter = CheeseAdapter(cheeseClickCallback)
+      binding.productsList.setAdapter(productAdapter)
+  }
+  ...
+
+  // The callback makes the call to the activity to make the transition.
+  private val productClickCallback = ProductClickCallback { cheese ->
+    val directions = CheeseListDirections.navigateToCheeseDetails(cheese.id)
+    findNavController().navigate(directions)
+  }
+}
+```
 
 ---
 
@@ -1134,14 +1433,33 @@ apply plugin: 'androidx.navigation.safeargs.kotlin'
 
 ---
 
-[.background-color: #ffffff]
-[.text: #666666]
+## onActivityResult?
 
-## 🔍 Scoping
+^ Activity and fragment onActivityResult still available for calling other activities
 
-![inline](application-destination-scope.png)
+^ Communication within graph better achieved with shared ViewModel LiveData Event
 
-^ Navigation graph destinations can easily share data with activity view models
+---
+
+## onActivityResult
+### https://issuetracker.google.com/issues/79672220
+
+---
+
+## Jose Alcérreca: LiveData<Event<T>>
+### http://bit.ly/2YuSYXi
+
+---
+
+## Dynamic Features
+
+### Coming Soon? ™
+
+^ A lot of discussion about how these two might integrate
+
+^ Ideal world would simply have dynamic toggle on graph
+
+^ Safe args across modules a problem
 
 ---
 
