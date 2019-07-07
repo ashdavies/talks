@@ -263,6 +263,12 @@ public class MainActivity extends FragmentActivity {
 
 ---
 
+## [fit] Activity Lifecycle != Fragment Lifecycle != View Lifecycle
+
+^ Fragment lifecycle being detached from an activity makes view lifecycle even more complicated
+
+---
+
 [.footer: Jose Alcerreca | Lifecycles cheet sheet beta1 (AndroidP/Jetpack 1.0) ]
 [.footer-style: #666666]
 [.background-color: #ffffff]
@@ -316,7 +322,7 @@ public class MainActivity extends FragmentActivity {
 ## FragmentFactory
 ### androidx.fragment:fragment:1.1.0-beta01
 
-^ As ov 1.1.0 you can set a FragmentFactory on any FragmentManager
+^ As of 1.1.0 you can set a FragmentFactory on any FragmentManager
 
 ^ Control how new Fragment instances are instantiated
 
@@ -357,6 +363,8 @@ public class MainActivity extends FragmentActivity {
 ---
 
 ## CompatShims < Enough
+
+^ Sometimes demonstrated erratic visual behaviour
 
 ^ Hidden gotchas, don't guarantee consistent user experience
 
@@ -431,6 +439,8 @@ public class MainActivity extends FragmentActivity {
 ![fit 100%](more-cheese.jpg)
 
 ^ Cheese is how we do it
+
+^ Done with the cheese jokes
 
 ---
 
