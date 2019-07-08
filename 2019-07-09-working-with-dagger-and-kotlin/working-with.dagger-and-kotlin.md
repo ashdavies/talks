@@ -57,7 +57,7 @@ text: Google Sans
 
 # Constructor injection
 
-```java
+```kotlin
 class Game @Inject constructor(
     @Named("P1") private val player1: Player,
     @Named("P2") private val player2: Player
@@ -68,7 +68,7 @@ class Game @Inject constructor(
 
 # Constructor injection
 
-```java
+```kotlin
 class Game @Inject constructor(
     @Named("P1") private val player1: Player,
     @Named("P2") private val player2: Player
@@ -80,8 +80,7 @@ public final class Game {
    private final Player player1;
    private final Player player2;
 
-   @Inject
-   public Game(
+   @Inject public Game(
      @Named("P1") Player player1,
      @Named("P2") Player player2) {
       super();
@@ -95,7 +94,7 @@ public final class Game {
 
 # Constructor injection
 
-```java
+```kotlin
 class Game @Inject constructor(
     @Named("P1") private val player1: Player,
     @Named("P2") private val player2: Player
@@ -121,8 +120,8 @@ public final class Game {
 
 # lateinit var 🛑
 
-```java
-class Game1 @Inject constructor() {
+```kotlin
+class Game @Inject constructor() {
 
   @Named("P1") lateinit var player1: Player
   @Named("P2") lateinit var player2: Player
@@ -150,6 +149,8 @@ public final class Game {
 
    public final void setPlayer2(@NotNull Player var1) {...}
 ```
+
+---
 
 # Decompiled lateinit var 🛑
 
