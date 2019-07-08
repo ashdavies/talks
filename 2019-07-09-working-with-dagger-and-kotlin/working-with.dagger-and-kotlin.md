@@ -541,32 +541,288 @@ public final class ApplicationModule {
 
 ---
 
-## Kotlin Generics: in, out, where 
+# Kotlin: Generics<? : T>
 
 ^ Ash
 
-- Java generic types are invariant, List<String> not a subtype of List<Object>
-- Java prohibits this to ensure run-time safety but has implications
-    - Example of happy path, and compilation failure
-    - Prevents adding list of strings to list of objects
-- Java uses wildcard type arguments to solve this (Collection, ? extends T)
-- Kotlin applies declaration-site variance to generic parameters
-    - Show difference in usage/generated code between in/out variance
-    - Compiled JVM code erases generic types for Kotlin
-- Kotlin uses declaration-site variance without covariance for Java
-- Dagger multibindings generated Java code does not use wildcards
-- Injecting classes with generics in Kotlin definition expects wildcards
-    - Check use cases without multibindings for comparison
-- @JvmSuppressWildcards will suppress wildcards on member vars
-    - Possible to use @JvmWildcards in module declarations
-- Behaviour of annotation on constructor injection params
-- Also applies to injection of Kotlin lambda functions
+---
+
+# Kotlin: Generics<? : T>
+
+## Java Interoperability
+
+^ Complicated part of Java interoperability is wildcards
+
+^ Since Kotlin does not actually have wildcards
+
+^ Uses declaration-site variance and type projections
+
+---
+
+# Kotlin: Generics<? : T>
+
+## Java Interoperability
+
+```java
+interface Collection<E> extends Iterable<E> {
+    
+    boolean addAll(Collection<? extends E> collection);
+}
+```
+
+^ Consider the collection interface in Java
+
+^ Why does Java need to use a wildcard here?
+
+---
+
+# Kotlin: Generics<? : T>
+
+## Java Interoperability
+
+```java
+interface Collection<E> extends Iterable<E> {
+    
+    boolean addAll(Collection<E> collection);
+}
+```
+
+^ Could we just use addAll without a wildcard?
+
+^ No because generic types in Java are invariant
+
+^ What does this mean?
+
+---
+
+# Kotlin: Generics<? : T>
+
+## Java Interoperability
+
+`List<String> : List<Object>`
+
+---
+
+# Kotlin: Generics<? : T>
+
+## Java Interoperability
+
+~~`List<String> : List<Object>`~~
+
+^ List of Strings is not a subtype of a List of Objects
+
+^ If it were you could do the following
+
+---
+
+# Kotlin: Generics<? : T>
+
+## Java Interoperability
+
+```java
+List<String> strings = new ArrayList<String>();
+List<Object> objs = strings; 
+objs.add(1);
+String string = strings.get(0); 
+```
+
+^ Java prohibits casting a List<String> to a List<Object>
+
+^ Would throw a ClassCastException casting an Integer to String
+
+---
+
+# Kotlin: Generics<? : T>
+
+## Java Interoperability
+
+```java
+interface Collection<E> extends Iterable<E> {
+    
+    boolean addAll(Collection<? extends E> collection);
+}
+```
+
+^ We have wildcards so that this method can accept a list of something that extends the base type
+
+^ Wildcard with an upper bound makes the type covariant
+
+---
+
+# Kotlin: Generics<? : T>
+
+## Java Interoperability
+
+```kotlin
+List<String> box(String value) { /* ... */ }
+
+String unbox(List<? extends String> boxed) { /* ... */ }
+```
+
+^ In order to maintain compatibility with Java
+
+^ Kotlin emulates declaration-site variance through use-site variance
+
+^ Meaning types are generated with a wildcard only for parameters
+
+^ Return values are kept without wildcards
+
+---
+
+# Kotlin: Generics<? : T>
+
+## Java Interoperability
+
+```kotlin
+class ListAdapter @Inject constructor(strings: List<String>)
+```
+
+^ Thus when injecting generic types from Dagger
+
+^ A list of strings becomes...
+
+---
+
+# Kotlin: Generics<? : T>
+
+## Java Interoperability
+
+```kotlin
+class ListAdapter @Inject constructor(strings: List<String>)
+```
+
+---
+
+# Kotlin: Generics<? : T>
+
+## Java Interoperability
+
+```java
+public final class ListAdapter {
+   @Inject
+   public ListAdapter(@NotNull List<? extends String> strings) {
+      Intrinsics.checkParameterIsNotNull(strings, "strings");
+      super();
+   }
+}
+```
+
+^ Remember that the generated Dagger injection factory is written in Java
+
+---
+
+# Kotlin: Generics<? : T>
+
+## Java Interoperability
+
+```kotlin
+@Module
+object ListModule {
+
+    @Provides
+    @JvmStatic
+    fun strings(): List<String> = listOf("Hello", "World")
+}
+```
+
+^ Even though your module was defined in Kotlin without wildcards
+
+^ Expects ListAdapter parameter to appear without wildcard
+
+---
+
+# Build Failed...
+
+## 🔴 😢
+
+^ Fails to build, and now we're sad!
+
+^ How can we remedy this?
+
+^ Quite simply
+
+---
+
+# Kotlin: Generics<? : T>
+
+## Java Interoperability
+
+```kotlin
+class ListAdapter @Inject constructor(strings: @JvmSuppressWildcards List<String>)
+```
+
+^ Most convenient to use this as many times this will be an issue with Dagger multi-bindings
+
+---
+
+# Kotlin: Generics<? : T>
+
+## Dagger Multi-Bindings
+
+```kotlin
+@Module
+object ListModule {
+
+    @IntoSet
+    @Provides
+    @JvmStatic
+    fun hello(): String = "Hello"
+
+    @IntoSet
+    @Provides
+    @JvmStatic
+    fun world(): String = "World"
+}
+```
+
+^ Here were specifying in each method the set type
+
+^ No generics being used
+
+---
+
+# Kotlin: Generics<? : T>
+
+## Dagger Multi-Bindings
+
+```kotlin
+@Module
+object ListModule {
+
+    @Provides
+    @JvmStatic
+    fun listOfStrings(): List<String> = listOf("Hello", "World")
+}
+```
+
+^ But if we were to define a list of values explicitly
+
+---
+
+# Kotlin: Generics<? : T>
+
+## Dagger Multi-Bindings
+
+```kotlin
+@Module
+object ListModule {
+
+    @Provides
+    @JvmStatic
+    @JvmWildcards
+    fun listOfStrings(): List<String> = listOf("Hello", "World")
+}
+```
+
+^ We could specify to explicitly add a wildcard 
+
+^ So that it is no longer needed at injection site
 
 ---
 
 # Jetpack: ViewModel
 
-^ Ash
+^ Ash´
 
 -  Jetpack introduced us to ViewModel that persists through config change
     -  Most Dagger components scoped to life of instance
