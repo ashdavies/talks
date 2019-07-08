@@ -22,35 +22,28 @@ text: Google Sans
 
 # Introduction 👋
 
-- Dagger2 is a dependency injection framework (Not a service locator)
+- Dagger 2 is a fast dependency injector for Android and Java. (Not a service locator)
 - One of goals is having compile time safety
 - It is written for only Java in mind
 - It is used extensively outside of Android ecosystem
 
 ---
 
-# Dagger2 and Kotlin 👋
+# Dagger 2 and Kotlin ☕ 🗡
 
-- Generated code is Java
-- Kotlin supports almost every feature of Dagger2
+- Dagger 2 can work with Kotlin
+- Generated code is plain Java source code
 - Kotlin generated code won't like to happen
 
 ---
 
-# Introduction 👋
+# Dagger Qualifiers 🗡
 
-- Dagger processor written in Java for Java code
-- Used extensively in many ecosystems outside of Android
-- Kotlin compatibility unlikely to happen in the near future
-- Considerations about JVM compatibility and usage
-- Concerns about compile safety, runtime avoided
-- Dagger Android assumes injector available at runtime
-
----
-
-# Dagger Qualifiers 📛
-
-^ Sinan
+- Qualifiers used to identify dependencies with identical signatures
+  - Factories use qualifiers to decide the instance use
+  - Can create your own qualifier annotations, or just use @Named.
+  - Apply qualifiers by annotating the field or parameter of interest. 
+  - The type and qualifier annotation will both be used to identify the dependency.
 
 ---
 
