@@ -4,6 +4,7 @@ footer: @snnkzk | @askashdavies
 footer-style: Google Sans
 header: Google Sans
 slide-transition: true
+theme: Libre, 1
 text: Google Sans
 
 ![right inline 15%](immobilienscout24.png)
@@ -19,9 +20,13 @@ text: Google Sans
 
 ---
 
-## Introduction
+# Introduction 👋
 
 ^ Sinan
+
+---
+
+# Introduction 👋
 
 - Dagger processor written in Java for Java code
 - Used extensively in many ecosystems outside of Android
@@ -32,11 +37,17 @@ text: Google Sans
 
 ---
 
-## Qualifiers in Dagger
+# Dagger Qualifiers 📛
 
 ^ Sinan
 
+---
+
+# Dagger Qualifiers 📛
+
 - Qualifiers used to identify dependencies with identical signatures
+    - JSR330 provides @Named qualifier for default use
+    - Can define your own
 - Define annotation with @Qualifier annotation
     - Show official definition from Dagger documentation
 - Use Kotlin BINARY retention for usage in multi module projects
@@ -55,6 +66,145 @@ text: Google Sans
 - Java declarations explicit whereas Kotlin requires specification
     - Kotlin uses syntactic sugar to reduce boilerplate
     - Not clear to Kotlin compiler what we want to annotate
+
+---
+
+# Scope Annotations 🎯
+
+^ Ash
+
+---
+
+# @Scope 🎯
+
+```java
+@Documented
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.ANNOTATION_TYPE)
+public @interface Scope {
+}
+```
+
+^ Scope is a meta annotation applied to other annotations
+
+^ Scope indicates a lifecycle for the dependency
+
+^ Dagger will ensure the same instance provided
+
+---
+
+# @Singleton
+
+^ Most commonly used annotation is Singleton
+
+^ Also serves as documentation to developers
+
+---
+
+# @Singleton != Singleton Pattern
+
+^ Important to remember the singleton is not the same as the singleton pattern
+
+---
+
+# @Singleton != Singleton Pattern
+
+```java
+public final class Singleton {
+    
+    private static final Singleton INSTANCE = new Singleton();
+    
+    private Singleton() {
+    }
+    
+    public static Singleton getInstance() {
+        return INSTANCE;
+    }
+}
+```
+
+^ Singleton classes created statically when the class is loaded
+
+^ Same instance for the entire application
+
+^ Lifecycle impossible to manage
+
+---
+
+# @Singleton != Singleton Pattern
+
+```kotlin
+object Singleton
+```
+
+^ Same behaviour demonstrated by Kotlin objects
+
+^ Much less code
+
+---
+
+# @Scope
+
+```kotlin
+@Scope
+@MustBeDocumented
+@Retention(AnnotationRetention.RUNTIME)
+annotation class ActivityScope
+```
+
+^ Create a Kotlin scope annotation using the @Scope annotation
+
+^ Use @MustBeDocumented insted of @Documented
+
+^ Like @Qualifier should use Binary or Runtime retention
+
+^ Runtime retention visible during reflection
+
+---
+
+# @Scope
+
+```kotlin
+@Module
+class ApplicationModule {
+
+    @Provides
+    @ActivityScope
+    fun context(application: Application): Context = application
+}
+```
+
+^ Apply scope annotations to your module provisions
+
+^ Instance of dependency will live as long as your component
+
+---
+
+# @ActivityScope 🤷‍♂️😏
+
+^ Dagger does not care about the semantic meaning of your scope
+
+---
+
+# @Scope 🙅‍♂️
+
+```kotlin
+@ActivityScope
+class ActivityRepository @Inject constructor() {
+}
+```
+
+^ Dont apply scope annotations to your implementation
+
+^ Results in implementation dictating it's own lifecycle
+
+^ Confuses the why and the how of implementation details
+
+---
+
+# @Reusable
+
+^ Contrary to @Singleton
 
 ---
 
