@@ -101,7 +101,7 @@ public @interface Scope {
 
 ---
 
-# [fit] @Singleton != Singleton Pattern
+# @Singleton != Singleton Pattern
 
 ^ Important to remember the singleton is not the same as the singleton pattern
 
@@ -154,7 +154,7 @@ annotation class ActivityScope
 
 ^ Create a Kotlin scope annotation using the @Scope annotation
 
-^ Use @MustBeDocumented insted of @Documented
+^ Use @MustBeDocumented instead of @Documented
 
 ^ Like @Qualifier should use Binary or Runtime retention
 
@@ -663,26 +663,31 @@ public final class ApplicationModule {
 - Types may only contain one @Inject constructor
 - Best practice to define an alternative annotated constructor
 
-^ Dagger Reflect
-^ Dagger Assisted Inject
-
 ---
 
-## Further Reading
+# Further Reading 📖
 
-https://typealias.com/guides/inline-classes-and-autoboxing/
-https://kotlinlang.org/docs/reference/generics.html#declaration-site-variance
-https://kotlinlang.org/docs/reference/java-to-kotlin-interop.html#variant-generics
-https://jakewharton.com/helping-dagger-help-you/
-https://github.com/google/dagger/issues/900
-https://proandroiddev.com/dagger-2-on-android-the-official-guidelines-you-should-be-following-2607fd6c002e
-https://medium.com/@WindRider/correct-usage-of-dagger-2-named-annotation-in-kotlin-8ab17ced6928
-https://medium.com/@naturalwarren/dagger-kotlin-3b03c8dd6e9b
-https://github.com/JakeWharton/dagger-reflect
-https://github.com/square/AssistedInject
-https://medium.com/@elye.project/dagger-2-for-dummies-in-kotlin-scope-d51a6b6e077f
-https://developerlife.com/2018/10/21/dagger2-and-kotlin/
+- **Dave Leeds: Inline Classes and Autoboxing**
+    - https://typealias.com/guides/inline-classes-and-autoboxing/
+- **Kotlin: Declaration Site Variance**
+    - https://kotlinlang.org/docs/reference/generics.html#declaration-site-variance
+- **Kotlin: Variant Generics**
+    - https://kotlinlang.org/docs/reference/java-to-kotlin-interop.html#variant-generics
+- **Jake Wharton: Helping Dagger Help You**
+    - https://jakewharton.com/helping-dagger-help-you/
+- **Dagger: Kotlin Dagger Best Practices**
+    - https://github.com/google/dagger/issues/900
+- **Fred Porciúncula: Dagger 2 Official Guidelines**
+    - https://proandroiddev.com/dagger-2-on-android-the-official-guidelines-you-should-be-following-2607fd6c002e
+- **Warren Smith: Dagger & Kotlin**
+    - https://medium.com/@naturalwarren/dagger-kotlin-3b03c8dd6e9b
+- **Nazmul Idris: Advanced Dagger 2 w/ Android and Kotlin**
+    - https://developerlife.com/2018/10/21/dagger2-and-kotlin/
 
+^ https://github.com/JakeWharton/dagger-reflect
+
+^ https://github.com/square/AssistedInject
+      
 ---
 
 ![right inline 15%](immobilienscout24.png)
