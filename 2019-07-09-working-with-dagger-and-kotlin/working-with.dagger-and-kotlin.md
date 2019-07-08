@@ -931,18 +931,109 @@ object ListModule {
 -  ViewModel annotated with Inject can be built with graph dependencies
     -  Jetpack expects us to build ViewModel with Provider Factory
     -  Using both in conjunction requires compatibility glue code
--  One simply does not Inject a ViewModel
-    -  Injected ViewModel will be lost on activity death
-    -  Persistence achieved through ViewModelStore
-    -  ViewModel should not exist in Dagger graph
-    -  How can you still utilise Dagger?
+    
+---
+
+![inline](one-does-not.jpg)
+
+^ Injected ViewModel will be lost on activity death
+
+^ Persistence achieved through ViewModelStore
+
+^ ViewModel should not exist in Dagger graph
+
+^ How can you still utilise Dagger?
+
+---
+
+# ViewModelProvider.Factory
+
+## Delegated constructor
+
+```kotlin
+class DelegatedViewModelFactory @Inject constructor(
+    private val dataManager: DataManager,
+    private val loginRepository: LoginRepository,
+    private val sourcesRepository: SourcesRepository,
+    private val dispatcherProvider: CoroutinesDispatcherProvider
+) : ViewModelProvider.Factory {
+
+    @Suppress("UNCHECKED_CAST")
+    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        if (modelClass != DelegatedViewModel::class.java) {
+            throw IllegalArgumentException("Unknown ViewModel class")
+        }
+        return DelegatedViewModel(
+            dataManager,
+            loginRepository,
+            sourcesRepository,
+            dispatcherProvider
+        ) as T
+    }
+}
+```
+
+^ ViewModel dependencies are delegated through the Factory constructor
+
+^ ViewModel need not be annotated with @Inject as manually constructed
+
+---
+
+# ViewModelProvider.Factory
+
+## One simply injected a ViewModel...
+
+```kotlin
+class InjectedViewModelFactory @Inject constructor() : ViewModelProvider.Factory {
+
+    @Inject lateinit var sampleViewModel: InjectedViewModel
+
+    @Suppress("UNCHECKED_CAST")
+    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        return if (modelClass.isAssignableFrom(InjectedViewModel::class.java)) {
+            sampleViewModel as T
+        } else {
+            throw IllegalArgumentException(
+                "Class ${modelClass.name} is not supported in this factory."
+            )
+        }
+    }
+}
+```
+
+^ Bad example of how to use Dagger with ViewModels
+
+---
+
+# ViewModelProvider.Factory
+
+## One simply injected a ViewModel...
+
+```kotlin, [.highlight: 3, 8]
+class InjectedViewModelFactory @Inject constructor() : ViewModelProvider.Factory {
+
+    @Inject lateinit var sampleViewModel: InjectedViewModel
+
+    @Suppress("UNCHECKED_CAST")
+    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        return if (modelClass.isAssignableFrom(InjectedViewModel::class.java)) {
+            sampleViewModel as T
+        } else {
+            throw IllegalArgumentException(
+                "Class ${modelClass.name} is not supported in this factory."
+            )
+        }
+    }
+}
+```
+
+^ ViewModel is created and injected every time the factory is registered
+
+^ Every time the activity is created, wasted ViewModel created
+
+---
+
 -  Implementing a Dagger ViewModelProvider.Factory
-    -  Plaid: HomeViewModelFactory (Delegation)
-        -  ViewModel constructor kept without annotation
-        -  Duplicate class to delegate parameters
-    -  Plaid: AboutViewModelFactory (Bad Example)
-        -  ViewModel instantiated every time
-        -  Duplicate ViewModel not used
     -  Scout: ApplicationViewModelFactory (Multibinding)
         -  Application scoped view model knows everything
         -  Requires binding expression to include ViewModel in set
