@@ -204,28 +204,155 @@ class ActivityRepository @Inject constructor() {
 
 # @Reusable
 
-^ Contrary to @Singleton
+^ Unlike singleton instructs Dagger that the instance can be reused
+
+^ Should be used for expensive instantiations
+
+^ Uses a single check algorithm
 
 ---
 
-## Favouring @Reusable over @Scope
+# Double Check
 
-^ Ash
+```java
+public final class DoubleCheck<T> implements Provider<T>, Lazy<T> {
+  private static final Object UNINITIALIZED = new Object();
 
-- Any defined scope is treated like Singleton
-    - Lifecycle lives as long as the defined component
-    - @Singleton not the same as the singleton pattern
-- Use BINARY/RUNTIME retention just like @Qualifier
-- Double check synchronised algorithm
-- Single check synchronised algorithm
-- Kotlin lazy synchronisation options
-- Edge cases with Reusable and Singleton
-    - Same instance not guaranteed, but most likely
-    - Do not store state in reusable dependencies
-- Ideally Dagger graph should be entirely stateless
-    - Store state in injection site target
-- Single thread environments (Android)
-    - Single check algorithm sufficient as no thread check needed
+  private volatile Provider<T> provider;
+  private volatile Object instance = UNINITIALIZED;
+
+  private DoubleCheck(Provider<T> provider) { /* ... */ }
+
+  @Override
+  public T get() {
+    Object result = instance;
+    if (result == UNINITIALIZED) {
+      synchronized (this) {
+        result = instance;
+        if (result == UNINITIALIZED) {
+          result = provider.get();
+          instance = reentrantCheck(instance, result);
+          provider = null;
+        }
+      }
+    }
+    return (T) result;
+  }
+
+  public static Object reentrantCheck(Object currentInstance, Object newInstance) { /* ... */ }
+}
+```
+
+---
+
+# Double Check
+
+```java, [.highlight: 13-19, 24]
+public final class DoubleCheck<T> implements Provider<T>, Lazy<T> {
+  private static final Object UNINITIALIZED = new Object();
+
+  private volatile Provider<T> provider;
+  private volatile Object instance = UNINITIALIZED;
+
+  private DoubleCheck(Provider<T> provider) { /* ... */ }
+
+  @Override
+  public T get() {
+    Object result = instance;
+    if (result == UNINITIALIZED) {
+      synchronized (this) {
+        result = instance;
+        if (result == UNINITIALIZED) {
+          result = provider.get();
+          instance = reentrantCheck(instance, result);
+          provider = null;
+        }
+      }
+    }
+    return (T) result;
+  }
+
+  public static Object reentrantCheck(Object currentInstance, Object newInstance) { /* ... */ }
+}
+```
+
+^ Performs a double check outside and inside a synchronised block
+
+^ Expensive operation should really be avoided
+
+---
+
+# Single Check
+
+```java, [.highlight: 11-12, 17, 22]
+public final class SingleCheck<T> implements Provider<T> {
+  private static final Object UNINITIALIZED = new Object();
+
+  private volatile Provider<T> provider;
+  private volatile Object instance = UNINITIALIZED;
+
+  private SingleCheck(Provider<T> provider) { /* ... */ }
+
+  @Override
+  public T get() {
+    Object local = instance;
+    if (local == UNINITIALIZED) {
+      Provider<T> providerReference = provider;
+      if (providerReference == null) {
+        local = instance;
+      } else {
+        local = providerReference.get();
+        instance = local;
+        provider = null;
+      }
+    }
+    return (T) local;
+  }
+}
+```
+
+^ Single check algorithm has much better performance
+
+---
+
+# Kotlin: Lazy
+
+```kotlin
+private val viewModel by lazy(NONE) { SampleViewModel() }
+
+fun <T> lazy(mode: LazyThreadSafetyMode, initializer: () -> T): Lazy<T> =
+    when (mode) {
+        LazyThreadSafetyMode.SYNCHRONIZED -> SynchronizedLazyImpl(initializer)
+        LazyThreadSafetyMode.PUBLICATION -> SafePublicationLazyImpl(initializer)
+        LazyThreadSafetyMode.NONE -> UnsafeLazyImpl(initializer)
+    }
+```
+
+^ Much the same as how Kotlin handles lazy property delegates
+
+^ Recommended to use lazy(NONE) wherever possible
+
+^ Especially in single thread environments like Android
+
+---
+
+# [fit] Favour @Reusable over @Scope 👍
+
+- Great for expensive dependencies
+
+- Work great in single thread environments
+
+- Not guaranteed same instance in multiple threads
+
+- Prefer to keep your Dagger graph stateless
+
+- Use @Scope if you absolutely need to store state
+
+^ Ideally your Dagger graph shouldn't contain state
+
+^ Allow your injection sites to store the instance
+
+^ Lifecycle managed by injection site
 
 ---
 
