@@ -49,9 +49,10 @@ text: Google Sans
 
 # Retention Annotation
 
-- Use Kotlin retention annotations instead of Java
+- Use Kotlin retention annotations instead of Java retention
   - At least BINARY retention but RUNTIME is ideal
   - Dagger 2 doesn’t operate on source files
+  - Annotations are necessary for kapt
 
 ---
 
@@ -123,10 +124,13 @@ public final class Game {
 ```kotlin
 class Game @Inject constructor() {
 
-  @Named("P1") lateinit var player1: Player
-  @Named("P2") lateinit var player2: Player
+  @Inject @Named("P1") lateinit var player1: Player
+  @Inject @Named("P2") lateinit var player2: Player
 }
 ```
+
+^ Normal looking properties
+^ But kotlin properties arent same as Java properties
 
 ---
 
@@ -134,21 +138,25 @@ class Game @Inject constructor() {
 
 ```java
 public final class Game {
-   @Inject @NotNull public Player player1;
-   @Inject @NotNull public Player player2;
+   @Inject public Player player1;
+   @Inject public Player player2;
 
    @Named("P1") public static void player1$annotations() {}
 
-   @NotNull public final Player getPlayer1() { ... }
+   public final Player getPlayer1() { ... }
 
-   public final void setPlayer1(@NotNull Player var1) {...}
+   public final void setPlayer1(Player var1) {...}
 
    @Named("P2") public static void player2$annotations() {}
 
-   @NotNull public final Player getPlayer2() { ... }
+   public final Player getPlayer2() { ... }
 
-   public final void setPlayer2(@NotNull Player var1) {...}
+   public final void setPlayer2(Player var1) {...}
 ```
+
+^ @Named annotations are applied on additional static methods
+^ property access syntax via accessors
+^ Dagger processor will fail; it cannot know which player to inject
 
 ---
 
@@ -156,33 +164,96 @@ public final class Game {
 
 ```java, [.highlight: 2-3, 5, 11]
 public final class Game {
-   @Inject @NotNull public Player player1;
-   @Inject @NotNull public Player player2;
+   @Inject public Player player1;
+   @Inject public Player player2;
 
    @Named("P1") public static void player1$annotations() {}
 
-   @NotNull public final Player getPlayer1() { ... }
+   public final Player getPlayer1() { ... }
 
-   public final void setPlayer1(@NotNull Player var1) {...}
+   public final void setPlayer1(Player var1) {...}
 
    @Named("P2") public static void player2$annotations() {}
 
-   @NotNull public final Player getPlayer2() { ... }
+   public final Player getPlayer2() { ... }
 
-   public final void setPlayer2(@NotNull Player var1) {...}
+   public final void setPlayer2(Player var1) {...}
+```
+
+---
+
+# Specify annotation
+
+We need to specify where annotation needs to apply in Java world
+
+```kotlin
+class Game @Inject constructor() {
+
+  @Inject @field:Named("P1") lateinit var player1: Player
+  @Inject @field:Named("P2") lateinit var player2: Player
+}
+```
+
+@field:...
+@set:...
+@get:...
+@param:...
+@property:...
+@setparam:...
+@receiver:...
+@field:...
+@delegete:...
+
+---
+
+# Specify annotation
+
+```java
+public final class Game1 {
+   @Inject @Named("P1") public Player player1;
+   @Inject @Named("P2") public Player player2;
+
+   public final Player getPlayer1() {...}
+
+   public final void setPlayer1(Player var1) {...}
+
+   public final Player getPlayer2() {...}
+
+   public final void setPlayer2(Player var1) {...}
+}
+```
+
+---
+
+# Specify annotation
+
+```java, [.highlight: 2-3]
+public final class Game1 {
+   @Inject @Named("P1") public Player player1;
+   @Inject @Named("P2") public Player player2;
+
+   public final Player getPlayer1() {...}
+
+   public final void setPlayer1(Player var1) {...}
+
+   public final Player getPlayer2() {...}
+
+   public final void setPlayer2(Player var1) {...}
+}
 ```
 
 ---
 
 # Constructor vs Property injection
 
-- constructor val
+- Constructor val
   - Easy to use
   - Safe at runtime if project compile successfully
 
-- property lateinit var injection
+- Property lateinit var injection
   - Kotlin properties uses property access syntax via accessors
   - Unclear where the annotation is applied, accessor or property
+  - Dont forget to use with `@field:`
 
 ---
 
