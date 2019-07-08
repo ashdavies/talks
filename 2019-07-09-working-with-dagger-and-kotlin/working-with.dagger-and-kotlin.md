@@ -101,7 +101,7 @@ public @interface Scope {
 
 ---
 
-# @Singleton != Singleton Pattern
+# [fit] @Singleton != Singleton Pattern
 
 ^ Important to remember the singleton is not the same as the singleton pattern
 
@@ -590,15 +590,51 @@ public final class ApplicationModule {
 
 ---
 
-## Experimental Kotlin Inline Classes and Typealiases
+# Kotlin: Experimental 🧪
 
-^ Ash
+---
 
-- Inline classes use backing field to reduce runtime overhead
-- Inline classes sometimes retained and inlined as necessary
-- Working interoperably with Java, represented as backing type
-- Dagger processors recognises only compiled types after compiler
-- Same applies with Typealiases will be displayed as backed type
+# Kotlin: Experimental 🧪
+
+## Inline Classes
+
+- Wrapping types can introduce runtime overhead
+
+- Performance worse for primitive types
+
+- Initialised with single backing property
+
+- Inline classes represented by backing field at runtime
+
+- Sometimes represented as boxed type...
+
+^ Wrapping types for business logic requires additional heap allocations
+
+^ Primitive types heavily optimised by the runtime
+
+^ Compiler will inline where possible, but sometimes it's necessary to use wrapper
+
+^ How does this behave with Dagger?
+
+---
+
+# Kotlin: Experimental 🧪
+
+## Inline Classes
+
+- Dagger recognises inline class as it's backing type
+
+- Module @Provide not complex enough to require wrapper
+
+- @Inject sites not complex enough to require wrapper
+
+- Can cause problems if backing type not qualified
+
+- Operates the same for typealias
+
+^ Works out of the box, interoperable with Dagger as backing type
+
+^ Since backing fields are often primitive can lead to issues
 
 ---
 
