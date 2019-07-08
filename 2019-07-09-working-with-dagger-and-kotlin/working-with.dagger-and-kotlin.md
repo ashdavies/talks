@@ -166,9 +166,10 @@ annotation class ActivityScope
 
 ```kotlin
 @Module
-class ApplicationModule {
+internal object ApplicationModule {
 
     @Provides
+    @JvmStatic
     @ActivityScope
     fun context(application: Application): Context = application
 }
@@ -356,19 +357,151 @@ fun <T> lazy(mode: LazyThreadSafetyMode, initializer: () -> T): Lazy<T> =
 
 ---
 
-## Use Kotlin objects for @Provide modules
+# Dagger: Modules
 
-^ Ash
+---
 
-- Existing status quo for Java modules
-    - Possible to use both @Binds and @Provides in same module
-- Kotlin abstract module class with companion object
-    - Show JVM code for abstract module with companion
-    - Show JVM code for object module with JvmStatic
-    - Dagger cannot find mangled Companion objects method names
-- Ensure Dagger doesn’t need to create module instance
-- Stateless modules will be horizontal merged
-- Object methods will be inlined by R8/Proguard
+# Status Quo 🎸
+
+```java
+@Module
+public abstract class ApplicationModule {
+    
+    @Binds
+    abstract Context context(Application application);
+    
+    @Provides
+    static SampleRepository repository(String name) {
+        return new SampleRepository(name);
+    }
+}
+
+```
+
+^ The current status quo for Java modules
+
+^ allows us to define both @Binds and @Provides
+
+^ Dagger need not instantiate this module to create dependencies
+
+^ @Binds informs the Dagger compiler to create a synthetic binding
+
+^ @Provides results in a static function
+
+---
+
+# Dagger: Modules
+
+```kotlin
+@Module
+abstract class ApplicationModule {
+
+    @Binds
+    abstract fun context(application: Application): Context
+    
+    @Module
+    companion object {
+    
+        @Provides
+        @JvmStatic
+        fun repository(name: String): SampleRepository = SampleRepository(name)
+    }
+}
+```
+
+^ Converting this code to Kotlin results in a companion object for the static functions
+
+---
+
+# Dagger: Modules
+
+```java
+public abstract class ApplicationModule {
+   public static final ApplicationModule.Companion Companion = new ApplicationModule.Companion();
+
+   @Binds
+   @NotNull
+   public abstract Context context(@NotNull Application var1);
+
+   @Provides
+   @JvmStatic
+   @NotNull
+   public static final SampleRepository repository(@NotNull String name) {
+      return Companion.repository(name);
+   }
+
+   @Module
+   public static final class Companion {
+      @Provides
+      @JvmStatic
+      @NotNull
+      public final SampleRepository repository(@NotNull String name) {
+         return new SampleRepository(name);
+      }
+
+      private Companion() {
+      }
+   }
+}
+```
+
+^ Generates twice the methods as are necessary
+
+^ Companion object instantiated statically anyway
+
+^ Can mangle names when using multi-bindings
+
+---
+
+# Dagger: Modules
+
+```kotlin
+object ApplicationModule {
+
+    @Provides
+    @JvmStatic
+    fun context(application: Application): Context = application
+    
+    @Provides
+    @JvmStatic
+    fun repository(name: String): SampleRepository = SampleRepository(name)
+}
+```
+
+^ Use top-level Kotlin objects to reduce the generated code
+
+---
+
+# Dagger: Modules
+
+```java
+public final class ApplicationModule {
+   public static final ApplicationModule INSTANCE = new ApplicationModule();
+
+   @Provides
+   @JvmStatic
+   @NotNull
+   public static final Context context(@NotNull Application application) {
+      return (Context)application;
+   }
+
+   @Provides
+   @JvmStatic
+   @NotNull
+   public static final SampleRepository repository(@NotNull String name) {
+      return new SampleRepository(name);
+   }
+
+   private ApplicationModule() {
+   }
+}
+```
+
+^ Still creates instance of object module
+
+^ But no duplicate method signatures
+
+^ Module is stateless
 
 ---
 
