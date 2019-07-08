@@ -47,20 +47,144 @@ text: Google Sans
 
 ---
 
-# Dagger Qualifiers 📛
+# Retention Annotation
 
-- Qualifiers used to identify dependencies with identical signatures
-    - JSR330 provides @Named qualifier for default use
-    - Can define your own
-- Define annotation with @Qualifier annotation
-    - Show official definition from Dagger documentation
-- Use Kotlin BINARY retention for usage in multi module projects
-    - Dagger 2 doesn’t operate on source files (Dagger 1 used reflection)
-    - Use RUNTIME retention for Dagger Reflect
-- Difference between constructor val and property lateinit var
-    - Constructor injection should be preferred for runtime safety
-    - Kotlin properties uses property access syntax via accessors
-    - Unclear where the annotation is applied, accessor or property
+- Use Kotlin retention annotations instead of Java
+  - At least BINARY retention but RUNTIME is ideal
+  - Dagger 2 doesn’t operate on source files
+
+---
+
+# Constructor injection
+
+```java
+class Game @Inject constructor(
+    @Named("P1") private val player1: Player,
+    @Named("P2") private val player2: Player
+)
+```
+
+---
+
+# Constructor injection
+
+```java
+class Game @Inject constructor(
+    @Named("P1") private val player1: Player,
+    @Named("P2") private val player2: Player
+)
+```
+
+```java
+public final class Game {
+   private final Player player1;
+   private final Player player2;
+
+   @Inject
+   public Game(
+     @Named("P1") Player player1,
+     @Named("P2") Player player2) {
+      super();
+      this.player1 = player1;
+      this.player2 = player2;
+   }
+}
+```
+
+---
+
+# Constructor injection
+
+```java
+class Game @Inject constructor(
+    @Named("P1") private val player1: Player,
+    @Named("P2") private val player2: Player
+)
+```
+
+```java, [.highlight: 6-7]
+public final class Game {
+   private final Player player1;
+   private final Player player2;
+
+   @Inject public Game(
+     @Named("P1") Player player1,
+     @Named("P2") Player player2) {
+      super();
+      this.player1 = player1;
+      this.player2 = player2;
+   }
+}
+```
+
+---
+
+# lateinit var 🛑
+
+```java
+class Game1 @Inject constructor() {
+
+  @Named("P1") lateinit var player1: Player
+  @Named("P2") lateinit var player2: Player
+}
+```
+
+---
+
+# Decompiled lateinit var 🛑
+
+```java
+public final class Game {
+   @Inject @NotNull public Player player1;
+   @Inject @NotNull public Player player2;
+
+   @Named("P1") public static void player1$annotations() {}
+
+   @NotNull public final Player getPlayer1() { ... }
+
+   public final void setPlayer1(@NotNull Player var1) {...}
+
+   @Named("P2") public static void player2$annotations() {}
+
+   @NotNull public final Player getPlayer2() { ... }
+
+   public final void setPlayer2(@NotNull Player var1) {...}
+```
+
+# Decompiled lateinit var 🛑
+
+```java, [.highlight: 2-3, 5, 11]
+public final class Game {
+   @Inject @NotNull public Player player1;
+   @Inject @NotNull public Player player2;
+
+   @Named("P1") public static void player1$annotations() {}
+
+   @NotNull public final Player getPlayer1() { ... }
+
+   public final void setPlayer1(@NotNull Player var1) {...}
+
+   @Named("P2") public static void player2$annotations() {}
+
+   @NotNull public final Player getPlayer2() { ... }
+
+   public final void setPlayer2(@NotNull Player var1) {...}
+```
+
+---
+
+# Constructor vs Property injection
+
+- constructor val
+  - Easy to use
+  - Safe at runtime if project compile successfully
+
+- property lateinit var injection
+  - Kotlin properties uses property access syntax via accessors
+  - Unclear where the annotation is applied, accessor or property
+
+---
+
 - Qualified field injection requires @field annotation on property
     - Generated JVM code for both @field:Qualifier and @Qualifer
     - Generated JVM code for property getter and setter
