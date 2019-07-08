@@ -22,7 +22,18 @@ text: Google Sans
 
 # Introduction 👋
 
-^ Sinan
+- Dagger2 is a dependency injection framework (Not a service locator)
+- One of goals is having compile time safety
+- It is written for only Java in mind
+- It is used extensively outside of Android ecosystem
+
+---
+
+# Dagger2 and Kotlin 👋
+
+- Generated code is Java
+- Kotlin supports almost every feature of Dagger2
+- Kotlin generated code won't like to happen
 
 ---
 
