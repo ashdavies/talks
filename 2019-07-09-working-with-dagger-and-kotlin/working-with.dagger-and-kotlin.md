@@ -628,7 +628,20 @@ String string = strings.get(0);
 
 ^ Java prohibits casting a List<String> to a List<Object>
 
-^ Would throw a ClassCastException casting an Integer to String
+---
+
+# Kotlin: Generics<? : T>
+
+## Java Interoperability
+
+```java
+List<String> strings = new ArrayList<String>();
+List<Object> objs = strings; 
+objs.add(1);
+String string = strings.get(0); // 🔥🔥🔥
+```
+
+^ Would throw a ClassCastException casting an Integer to String at runtime
 
 ---
 
