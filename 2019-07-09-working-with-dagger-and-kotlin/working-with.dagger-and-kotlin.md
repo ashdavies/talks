@@ -35,23 +35,23 @@ text: Google Sans
 
 - Qualifiers used to identify dependencies with identical signatures
 - Define annotation with @Qualifier annotation
-- Show official definition from Dagger documentation
+    - Show official definition from Dagger documentation
 - Use Kotlin BINARY retention for usage in multi module projects
-- Dagger 2 doesn’t operate on source files (Dagger 1 used reflection)
-- Use RUNTIME retention for Dagger Reflect
+    - Dagger 2 doesn’t operate on source files (Dagger 1 used reflection)
+    - Use RUNTIME retention for Dagger Reflect
 - Difference between constructor val and property lateinit var
-- Constructor injection should be preferred for runtime safety
-- Kotlin properties uses property access syntax via accessors
-- Unclear where the annotation is applied, accessor or property
+    - Constructor injection should be preferred for runtime safety
+    - Kotlin properties uses property access syntax via accessors
+    - Unclear where the annotation is applied, accessor or property
 - Qualified field injection requires @field annotation on property
-- Generated JVM code for both @field:Qualifier and @Qualifer
-- Generated JVM code for property getter and setter
-- Show where @Inject annotation is applied by default
-- Show JVM code for @set:Inject with @Qualifer
+    - Generated JVM code for both @field:Qualifier and @Qualifer
+    - Generated JVM code for property getter and setter
+    - Show where @Inject annotation is applied by default
+    - Show JVM code for @set:Inject with @Qualifer
 - Qualifier also required for constructor injection but clearer
 - Java declarations explicit whereas Kotlin requires specification
-- Kotlin uses syntactic sugar to reduce boilerplate
-- Not clear to Kotlin compiler what we want to annotate
+    - Kotlin uses syntactic sugar to reduce boilerplate
+    - Not clear to Kotlin compiler what we want to annotate
 
 ^ Sinan
 
@@ -60,19 +60,19 @@ text: Google Sans
 ## Favouring @Reusable over @Scope
 
 - Any defined scope is treated like Singleton
-- Lifecycle lives as long as the defined component
-- @Singleton not the same as the singleton pattern
+    - Lifecycle lives as long as the defined component
+    - @Singleton not the same as the singleton pattern
 - Use BINARY/RUNTIME retention just like @Qualifier
 - Double check synchronised algorithm
 - Single check synchronised algorithm
 - Kotlin lazy synchronisation options
 - Edge cases with Reusable and Singleton
-- Same instance not guaranteed, but most likely
-- Do not store state in reusable dependencies
+    - Same instance not guaranteed, but most likely
+    - Do not store state in reusable dependencies
 - Ideally Dagger graph should be entirely stateless
-- Store state in injection site target
+    - Store state in injection site target
 - Single thread environments (Android)
-- Single check algorithm sufficient as no thread check needed
+    - Single check algorithm sufficient as no thread check needed
 
 ^ Ash
 
@@ -81,11 +81,11 @@ text: Google Sans
 ## Use Kotlin objects for @Provide modules
 
 - Existing status quo for Java modules
-- Possible to use both @Binds and @Provides in same module
+    - Possible to use both @Binds and @Provides in same module
 - Kotlin abstract module class with companion object
-- Show JVM code for abstract module with companion
-- Show JVM code for object module with JvmStatic
-- Dagger cannot find mangled Companion objects method names
+    - Show JVM code for abstract module with companion
+    - Show JVM code for object module with JvmStatic
+    - Dagger cannot find mangled Companion objects method names
 - Ensure Dagger doesn’t need to create module instance
 - Stateless modules will be horizontal merged
 - Object methods will be inlined by R8/Proguard
@@ -99,7 +99,7 @@ text: Google Sans
 - Separate objects from interfaces, reduce complexity
 - Should I use an abstract class or interface? Doesn’t matter
 - Interface more consistent with the documentation for Factory
-- Citation needed
+    - Citation needed
 - Interface with default implementation? No.
 
 ^ Sinan
@@ -123,18 +123,18 @@ text: Google Sans
 
 - Java generic types are invariant, List<String> not a subtype of List<Object>
 - Java prohibits this to ensure run-time safety but has implications
-- Example of happy path, and compilation failure
-- Prevents adding list of strings to list of objects
+    - Example of happy path, and compilation failure
+    - Prevents adding list of strings to list of objects
 - Java uses wildcard type arguments to solve this (Collection, ? extends T)
 - Kotlin applies declaration-site variance to generic parameters
-- Show difference in usage/generated code between in/out variance
-- Compiled JVM code erases generic types for Kotlin
+    - Show difference in usage/generated code between in/out variance
+    - Compiled JVM code erases generic types for Kotlin
 - Kotlin uses declaration-site variance without covariance for Java
 - Dagger multibindings generated Java code does not use wildcards
 - Injecting classes with generics in Kotlin definition expects wildcards
-- Check use cases without multibindings for comparison
+    - Check use cases without multibindings for comparison
 - @JvmSuppressWildcards will suppress wildcards on member vars
-- Possible to use @JvmWildcards in module declarations
+    - Possible to use @JvmWildcards in module declarations
 - Behaviour of annotation on constructor injection params
 - Also applies to injection of Kotlin lambda functions
 
@@ -142,37 +142,37 @@ text: Google Sans
 
 ---
 
-# Jetpack Architecture: ViewModel
+# Jetpack: ViewModel
 
 -  Jetpack introduced us to ViewModel that persists through config change
--  Most Dagger components scoped to life of instance
--  ViewModel persistence is a form of scoping
--  Scope greater than activity or component instance scope
--  ViewModel can leak dependencies injected from Dagger
--  Dagger and ViewModel should be used with caution
+    -  Most Dagger components scoped to life of instance
+    -  ViewModel persistence is a form of scoping
+    -  Scope greater than activity or component instance scope
+    -  ViewModel can leak dependencies injected from Dagger
+    -  Dagger and ViewModel should be used with caution
 -  ViewModel annotated with Inject can be built with graph dependencies
--  Jetpack expects us to build ViewModel with Provider Factory
--  Using both in conjunction requires compatibility glue code
+    -  Jetpack expects us to build ViewModel with Provider Factory
+    -  Using both in conjunction requires compatibility glue code
 -  One simply does not Inject a ViewModel
--  Injected ViewModel will be lost on activity death
--  Persistence achieved through ViewModelStore
--  ViewModel should not exist in Dagger graph
--  How can you still utilise Dagger?
+    -  Injected ViewModel will be lost on activity death
+    -  Persistence achieved through ViewModelStore
+    -  ViewModel should not exist in Dagger graph
+    -  How can you still utilise Dagger?
 -  Implementing a Dagger ViewModelProvider.Factory
--  Plaid: HomeViewModelFactory (Delegation)
--  ViewModel constructor kept without annotation
--  Duplicate class to delegate parameters
--  Plaid: AboutViewModelFactory (Bad Example)
--  ViewModel instantiated every time
--  Duplicate ViewModel not used
--  Scout: ApplicationViewModelFactory (Multibinding)
--  Application scoped view model knows everything
--  Requires binding expression to include ViewModel in set
--  Scout: ViewModelFactory (ViewModel Scope)
--  Ideal, ProviderFactory once per ViewModel
--  Useful for dynamic features, independent of application
--  Constructor Provider generated by Dagger
--  Single responsibility preserved
+    -  Plaid: HomeViewModelFactory (Delegation)
+        -  ViewModel constructor kept without annotation
+        -  Duplicate class to delegate parameters
+    -  Plaid: AboutViewModelFactory (Bad Example)
+        -  ViewModel instantiated every time
+        -  Duplicate ViewModel not used
+    -  Scout: ApplicationViewModelFactory (Multibinding)
+        -  Application scoped view model knows everything
+        -  Requires binding expression to include ViewModel in set
+    -  Scout: ViewModelFactory (ViewModel Scope)
+        -  Ideal, ProviderFactory once per ViewModel
+        -  Useful for dynamic features, independent of application
+        -  Constructor Provider generated by Dagger
+        -  Single responsibility preserved
 -  Fragment and Activity Factories can be defined in a similar fashion
 
 ^ Ash
@@ -198,8 +198,8 @@ text: Google Sans
 - Modules can be used to generate internal classes by abstract type
 - Internal constructor for public classes with internal dependencies
 - Dependency required in root module for submodule dependencies
-- Ie submodule using Coroutines requires app to include dependency
-- Even if it’s internal, if in Dagger graph, is required in app module
+    - Ie submodule using Coroutines requires app to include dependency
+    - Even if it’s internal, if in Dagger graph, is required in app module
 - Internal implementations can be hidden behind interfaces
 - Submodule requires Dagger compiler to function correctly
 
