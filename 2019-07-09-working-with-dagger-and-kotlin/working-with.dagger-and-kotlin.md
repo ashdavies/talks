@@ -9,8 +9,9 @@ text: Google Sans
 ![right inline 15%](immobilienscout24.png)
 
 ## [fit] Working with Dagger and Kotlin
+#### Sinan Kozak & Ash Davies
 
-![left inline](sinan-kozak.jpg)![left inline](gde-badge-round.png)
+![left inline 50%](sinan-kozak.png)![left inline 33%](gde-badge-round.png)
 
 ![right](graph-background.jpg)
 
@@ -20,6 +21,8 @@ text: Google Sans
 
 ## Introduction
 
+^ Sinan
+
 - Dagger processor written in Java for Java code
 - Used extensively in many ecosystems outside of Android
 - Kotlin compatibility unlikely to happen in the near future
@@ -27,11 +30,11 @@ text: Google Sans
 - Concerns about compile safety, runtime avoided
 - Dagger Android assumes injector available at runtime
 
-^ Sinan
-
 ---
 
 ## Qualifiers in Dagger
+
+^ Sinan
 
 - Qualifiers used to identify dependencies with identical signatures
 - Define annotation with @Qualifier annotation
@@ -53,11 +56,11 @@ text: Google Sans
     - Kotlin uses syntactic sugar to reduce boilerplate
     - Not clear to Kotlin compiler what we want to annotate
 
-^ Sinan
-
 ---
 
 ## Favouring @Reusable over @Scope
+
+^ Ash
 
 - Any defined scope is treated like Singleton
     - Lifecycle lives as long as the defined component
@@ -74,11 +77,11 @@ text: Google Sans
 - Single thread environments (Android)
     - Single check algorithm sufficient as no thread check needed
 
-^ Ash
-
 ---
 
 ## Use Kotlin objects for @Provide modules
+
+^ Ash
 
 - Existing status quo for Java modules
     - Possible to use both @Binds and @Provides in same module
@@ -90,11 +93,11 @@ text: Google Sans
 - Stateless modules will be horizontal merged
 - Object methods will be inlined by R8/Proguard
 
-^ Ash
-
 ---
 
 ## Use Kotlin interfaces for @Binds modules
+
+^ Sinan
 
 - Separate objects from interfaces, reduce complexity
 - Should I use an abstract class or interface? Doesn’t matter
@@ -102,11 +105,11 @@ text: Google Sans
     - Citation needed
 - Interface with default implementation? No.
 
-^ Sinan
-
 ---
 
 ## Inlined method bodies in Kotlin
+
+^ Sinan
 
 - Kotlin return types can be inferred from method body
 - Android Studio even suggests inlining return types
@@ -115,11 +118,11 @@ text: Google Sans
 - Easier to review, easier to understand, avoids compiler errors
 - Framework types (Fragment.context) can be assumed nullable
 
-^ Sinan
-
 ---
 
 ## Kotlin Generics: in, out, where 
+
+^ Ash
 
 - Java generic types are invariant, List<String> not a subtype of List<Object>
 - Java prohibits this to ensure run-time safety but has implications
@@ -138,11 +141,11 @@ text: Google Sans
 - Behaviour of annotation on constructor injection params
 - Also applies to injection of Kotlin lambda functions
 
-^ Ash
-
 ---
 
 # Jetpack: ViewModel
+
+^ Ash
 
 -  Jetpack introduced us to ViewModel that persists through config change
     -  Most Dagger components scoped to life of instance
@@ -175,11 +178,11 @@ text: Google Sans
         -  Single responsibility preserved
 -  Fragment and Activity Factories can be defined in a similar fashion
 
-^ Ash
-
 ---
 
 ## Experimental Kotlin Inline Classes and Typealiases
+
+^ Ash
 
 - Inline classes use backing field to reduce runtime overhead
 - Inline classes sometimes retained and inlined as necessary
@@ -187,11 +190,11 @@ text: Google Sans
 - Dagger processors recognises only compiled types after compiler
 - Same applies with Typealiases will be displayed as backed type
 
-^ Ash
-
 ---
 
 ## Dagger Factory generation
+
+^ Sinan
 
 - Inject annotated classes generate factory at usage sites
 - Prefer inject annotation as the module compiler isn’t necessary
@@ -203,21 +206,23 @@ text: Google Sans
 - Internal implementations can be hidden behind interfaces
 - Submodule requires Dagger compiler to function correctly
 
-^ Sinan
-
 ---
 
 ## Default Parameters in Dagger
+
+^ Sinan
 
 - Dagger doesn’t recognise default parameters even with @JvmOverloads
 - @JvmOverloads will generate all constructors with @Inject
 - Types may only contain one @Inject constructor
 - Best practice to define an alternative annotated constructor
 
-^ Sinan
-
 ^ Dagger Reflect
 ^ Dagger Assisted Inject
+
+---
+
+## Further Reading
 
 https://typealias.com/guides/inline-classes-and-autoboxing/
 https://kotlinlang.org/docs/reference/generics.html#declaration-site-variance
@@ -232,22 +237,15 @@ https://github.com/square/AssistedInject
 https://medium.com/@elye.project/dagger-2-for-dummies-in-kotlin-scope-d51a6b6e077f
 https://developerlife.com/2018/10/21/dagger2-and-kotlin/
 
-
 ---
 
-[.footer: ]
-
-## Ian Lake: Single Activity: Why, When, and How 
-### bit.ly/2Jo94x9
-
-![inline](ian-lake-single-activity.jpg)
-
-^ Ian covers how to take advantage of single activity
-
-^ How you take advantage of that structure and migrate to it
-
----
+![right inline 15%](immobilienscout24.png)
 
 ## Thanks!
 
-![right](aerial-shot-ship.jpg)
+#### Sinan Kozak & Ash Davies
+
+
+![left inline 50%](sinan-kozak.png)![left inline 33%](gde-badge-round.png)
+
+![right](graph-background.jpg)
