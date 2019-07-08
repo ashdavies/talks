@@ -732,9 +732,15 @@ public final class ListAdapter {
 @Module
 object ListModule {
 
+    @IntoSet
     @Provides
     @JvmStatic
-    fun strings(): List<String> = listOf("Hello", "World")
+    fun hello(): String = "Hello"
+
+    @IntoSet
+    @Provides
+    @JvmStatic
+    fun world(): String = "World"
 }
 ```
 
@@ -794,45 +800,6 @@ object ListModule {
 
 ---
 
-# Kotlin: Generics<? : T>
-
-## Dagger Multi-Bindings
-
-```kotlin
-@Module
-object ListModule {
-
-    @Provides
-    @JvmStatic
-    fun listOfStrings(): List<String> = listOf("Hello", "World")
-}
-```
-
-^ But if we were to define a list of values explicitly
-
----
-
-# Kotlin: Generics<? : T>
-
-## Dagger Multi-Bindings
-
-```kotlin
-@Module
-object ListModule {
-
-    @Provides
-    @JvmStatic
-    @JvmWildcards
-    fun listOfStrings(): List<String> = listOf("Hello", "World")
-}
-```
-
-^ We could specify to explicitly add a wildcard 
-
-^ So that it is no longer needed at injection site
-
----
-
 # Jetpack: ViewModel
 
 ^ Ash´
@@ -871,6 +838,8 @@ object ListModule {
 ---
 
 # Kotlin: Experimental 🧪
+
+^ Ash
 
 ---
 
@@ -918,9 +887,13 @@ object ListModule {
 
 ---
 
-## Dagger Factory generation
+## Dagger Factory's
 
 ^ Sinan
+
+---
+
+## Dagger Factory's
 
 - Inject annotated classes generate factory at usage sites
 - Prefer inject annotation as the module compiler isn’t necessary
