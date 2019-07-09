@@ -1628,6 +1628,12 @@ class ApplicationLayoutInflaterFactory @Inject constructor(
 
 ---
 
+[.footer: ]
+
+![fit](drax_listening.gif)
+
+---
+
 ## Use Kotlin interfaces for @Binds modules
 
 ^ Sinan
