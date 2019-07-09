@@ -699,11 +699,17 @@ public final class ApplicationModule {
 
 ^ Sinan
 
-- Separate objects from interfaces, reduce complexity
-- Should I use an abstract class or interface? Doesn’t matter
-- Interface more consistent with the documentation for Factory
-    - Citation needed
-- Interface with default implementation? No.
+- Use @Binds instead of a @Provides method when simply delegating one type to another.
+    - No code generation involved
+- Should I use an abstract class or interface?
+    - Doesn’t matter
+    - Interface is more cleaner
+    - Abstract can have @JvmStatic
+- Interface with default implementation?
+    - No
+
+^ Dagger use @Bind annotation to simply satify graph
+^ abstract method or interface doesnt matter but interface is more lean
 
 ---
 
