@@ -728,15 +728,73 @@ public final class ApplicationModule {
 
 ---
 
+# Dagger: Modules
+
+```kotlin
+@file:JvmName("ApplicationModule")
+@file:Module
+
+@Provides
+fun context(application: Application): Context = application
+
+@Provides
+fun repository(name: String): SampleRepository = SampleRepository(name)
+```
+
+^ Interestingly you can use top-level Kotlin methods with Jvm annotations
+
+---
+
+# Dagger: Modules
+
+```java
+public final class ApplicationModule {
+
+   @Provides
+   @NotNull
+   public static final Context context(@NotNull Application application) {
+      return (Context)application;
+   }
+
+   @Provides
+   @NotNull
+   public static final SampleRepository repository(@NotNull String name) {
+      return new SampleRepository(name);
+   }
+}
+```
+
+^ This will generate a simple Java classes with static methods
+
+^ But as it's not a defined class, cannot be referenced from Kotlin
+
+---
+
+[.footer: ]
+
+![](sad.gif)
+
+---
+
 # Kotlin: Generics<? : T>
 
 ^ Ash
 
+^ Lets cheer ourselves up with some generics
+
+---
+
+[.footer: ]
+
+![](uhm.gif)
+
 ---
 
 # Kotlin: Generics<? : T>
 
 ---
+
+# Kotlin: Generics<? : T>
 
 ## Java Interoperability
 
@@ -1356,9 +1414,9 @@ internal class AboutViewModelFactory @Inject constructor() : ViewModelProvider.F
 
 ---
 
-[.footer: © 2019 Viacom International Inc.]
+[.footer: © 2019 Warner Bros.]
 
-![](spongebob-thinking.gif)
+![](hangover-thinking.gif)
 
 ^ Surely there must be a way to combine these approaches
 
