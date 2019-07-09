@@ -22,37 +22,51 @@ text: Google Sans
 
 # Introduction 👋
 
-- Dagger 2 is a fast dependency injector for Android and Java. (Not a service locator)
+- Dagger 2 is a fast dependency injector for Android and Java
 - One of goals is having compile time safety
 - It is written for only Java in mind
 - It is used extensively outside of Android ecosystem
+
+^ It is a powerful tool for big project
+^ Compile time safety and no runtime involvement are main goal
+^ No magic or hack behind it
+^ It is used in Google as well
 
 ---
 
 # Dagger 2 and Kotlin ☕ 🗡
 
 - Dagger 2 can work with Kotlin
-- Generated code is plain Java source code
+- But generated code is plain Java source code
 - Kotlin generated code won't like to happen
 
 ---
 
 # Dagger Qualifiers 🗡
 
-- Qualifiers used to identify dependencies with identical signatures
+Qualifiers used to identify dependencies with identical signatures
+
   - Factories use qualifiers to decide the instance use
   - Can create your own qualifier annotations, or just use @Named.
-  - Apply qualifiers by annotating the field or parameter of interest. 
+  - Apply qualifiers by annotating the field or parameter of interest.
   - The type and qualifier annotation will both be used to identify the dependency.
+
+^ If there are multiple different instance of same class/interface in graph
+^ Passing String, Int or similar type into Graph will work for first one 
+^ But it will start failing when there are multiple provider for them
 
 ---
 
 # Retention Annotation
 
-- Use Kotlin retention annotations instead of Java retention
+Use Kotlin retention annotations instead of Java retention
+  
+  - Java retention support is depreceted in Kotlin
   - At least BINARY retention but RUNTIME is ideal
   - Dagger 2 doesn’t operate on source files
   - Annotations are necessary for kapt
+
+^ Determines whether an annotation is stored in binary output and visible for reflection
 
 ---
 
@@ -64,6 +78,9 @@ class Game @Inject constructor(
     @Named("P2") private val player2: Player
 )
 ```
+
+^ Simple Game class with Injected construtor
+^ We have named player instance in dagger graph
 
 ---
 
@@ -91,6 +108,8 @@ public final class Game {
 }
 ```
 
+^ Decomipled version of Kotlin class (Simplified)
+
 ---
 
 # Constructor injection
@@ -116,6 +135,8 @@ public final class Game {
    }
 }
 ```
+
+^ named annotations are at the place dagger needs
 
 ---
 
@@ -256,6 +277,8 @@ public final class Game1 {
   - Kotlin properties uses property access syntax via accessors
   - Unclear where the annotation is applied, accessor or property
   - Dont forget to use with `@field:`
+
+  ^ lateinit var is error prone and hacky to test
 
 ---
 
@@ -699,13 +722,13 @@ public final class ApplicationModule {
 
 ^ Sinan
 
-- Use @Binds instead of a @Provides method when simply delegating one type to another.
+- Use `@Binds` instead of a `@Provides` method when simply delegating one type to another.
     - No code generation involved
-- Should I use an abstract class or interface?
+- Should I use an `abstract class` or `interface`?
     - Doesn’t matter
-    - Interface is more cleaner
-    - Abstract can have @JvmStatic
-- Interface with default implementation?
+    - `interface` is more cleaner
+    - `abstract` can have internal method
+- `interface` with default implementation?
     - No
 
 ^ Dagger use @Bind annotation to simply satify graph
@@ -1483,6 +1506,8 @@ class ViewModelActivity : DaggerAppCompatActivity {
 
 ## Dagger Factory's
 
+^ Sinan
+
 - Inject annotated classes generate factory at usage site
 - If `@Module` is not necessary in the gradle module
     - Prefer `@Inject` annotation
@@ -1494,6 +1519,8 @@ class ViewModelActivity : DaggerAppCompatActivity {
 
 ## Dagger Factory's
 
+^ Sinan
+
 - For keeping implementation internal prefer `abstract` module and use internal methods
 - Injected constructor can be internal
 - Root module needs dependencies for submodule
@@ -1504,6 +1531,8 @@ class ViewModelActivity : DaggerAppCompatActivity {
 ---
 
 ## Default Parameters in Dagger
+
+^ Sinan
 
 - Dagger doesn’t recognise default parameters even with `@JvmOverloads`
 - `@JvmOverloads` will generate all constructors with `@Inject`
