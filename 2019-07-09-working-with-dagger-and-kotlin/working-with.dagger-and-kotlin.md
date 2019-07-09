@@ -718,41 +718,6 @@ public final class ApplicationModule {
 
 ---
 
-## Use Kotlin interfaces for @Binds modules
-
-^ Sinan
-
-- Use `@Binds` instead of a `@Provides` method when simply delegating one type to another.
-    - No code generation involved
-- Should I use an `abstract class` or `interface`?
-    - Doesn’t matter
-    - `interface` is more cleaner
-    - `abstract` can have internal method
-- `interface` with default implementation?
-    - No
-
-^ Dagger use @Bind annotation to simply satify graph
-^ abstract method or interface doesnt matter but interface is more lean
-
----
-
-## Inlined method bodies in Kotlin
-
-^ Sinan
-
-- Kotlin return types can be inferred from method body
-- Android Studio shows inlining return types
-- Return types to hide implementation detail easily missed
-    - Interface vs Implemetation
-- Best practice to explicitly specify return type
-- Easier to review, easier to understand, avoids compiler errors
-- Framework types (Fragment.context) can be assumed nullable
-
-^ When we need to bind interface, if dont specify type. It bind implementation
-^ Providing anything from Java or Android SDK can be assumed null
-
----
-
 # Kotlin: Generics<? : T>
 
 ^ Ash
@@ -1501,6 +1466,42 @@ class ViewModelActivity : DaggerAppCompatActivity {
 ^ Works out of the box, interoperable with Dagger as backing type
 
 ^ Since backing fields are often primitive can lead to issues
+
+---
+
+## Use Kotlin interfaces for @Binds modules
+
+^ Sinan
+
+- Delegating one type to another
+    - Use `@Binds` instead of a `@Provides` method 
+    - No code generation involved
+- Should I use an `abstract class` or `interface`?
+    - Doesn’t matter
+    - `interface` is more cleaner
+    - `abstract` can have internal method
+- `interface` with default implementation?
+    - No
+
+^ Dagger use @Bind annotation to simply satify graph
+^ abstract method or interface doesnt matter but interface is more lean
+
+---
+
+## Inlined method bodies in Kotlin
+
+^ Sinan
+
+- Kotlin return types can be inferred from method body
+- Android Studio shows inlining return types
+- Return types to hide implementation detail easily missed
+    - Interface vs Implemetation
+- Best practice to explicitly specify return type
+- Easier to review, easier to understand, avoids compiler errors
+- Framework types (Fragment.context) can be assumed nullable
+
+^ When we need to bind interface, if dont specify type. It bind implementation
+^ Providing anything from Java or Android SDK can be assumed null
 
 ---
 
