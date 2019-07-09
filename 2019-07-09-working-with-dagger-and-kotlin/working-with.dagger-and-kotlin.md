@@ -1162,8 +1162,8 @@ class InjectedViewModelFactory @Inject constructor() : ViewModelProvider.Factory
 ## Dagger Factory's
 
 - Inject annotated classes generate factory at usage site
-- If @Module is not necessary in the gradle module
-    - Prefer @Inject annotation
+- If `@Module` is not necessary in the gradle module
+    - Prefer `@Inject` annotation
     - Don't use dagger compiler where possible
 
 ^ For better compiler performance in pure kotlin module try to avoid having dagger compiler
@@ -1183,12 +1183,12 @@ class InjectedViewModelFactory @Inject constructor() : ViewModelProvider.Factory
 
 ## Default Parameters in Dagger
 
-^ Sinan
-
-- Dagger doesn’t recognise default parameters even with @JvmOverloads
-- @JvmOverloads will generate all constructors with @Inject
-- Types may only contain one @Inject constructor
+- Dagger doesn’t recognise default parameters even with `@JvmOverloads`
+- `@JvmOverloads` will generate all constructors with `@Inject`
+- Class can only have one `@Inject` constructor
 - Best practice to define an alternative annotated constructor
+
+^ For testing purpuse, if a new constructor needed dont use default param
 
 ---
 
