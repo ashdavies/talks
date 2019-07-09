@@ -207,6 +207,12 @@ public final class Game {
 
 ---
 
+[.footer: ]
+
+![](excuse_me.gif)
+
+---
+
 # Specify annotation
 
 ```kotlin
