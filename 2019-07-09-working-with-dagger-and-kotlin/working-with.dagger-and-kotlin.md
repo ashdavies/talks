@@ -42,7 +42,7 @@ text: Google Sans
 
 ---
 
-# Dagger Qualifiers 🗡
+# Dagger Qualifiers
 
 Qualifiers used to identify dependencies with identical signatures
 
@@ -150,6 +150,7 @@ class Game @Inject constructor() {
 }
 ```
 
+^ This scenerio can happen with Activity and Fragment (Fragments will have constructor support in near future)
 ^ Normal looking properties
 ^ But kotlin properties arent same as Java properties
 
@@ -175,6 +176,7 @@ public final class Game {
    public final void setPlayer2(Player var1) {...}
 ```
 
+^ Simplified
 ^ @Named annotations are applied on additional static methods
 ^ property access syntax via accessors
 ^ Dagger processor will fail; it cannot know which player to inject
@@ -207,7 +209,27 @@ public final class Game {
 
 # Specify annotation
 
-We need to specify where annotation needs to apply in Java world
+```kotlin
+class Game @Inject constructor() {
+
+  @Inject @field:Named("P1") lateinit var player1: Player
+  @Inject @field:Named("P2") lateinit var player2: Player
+}
+```
+
+ - We need to specify where annotation needs to apply in Java world
+    - @field:...
+    - @set:...
+    - @get:...
+    - @param:...
+    - @property:...
+    - @setparam:...
+    - @receiver:...
+    - @delegete:...
+
+---
+
+# Specify annotation
 
 ```kotlin
 class Game @Inject constructor() {
@@ -217,22 +239,9 @@ class Game @Inject constructor() {
 }
 ```
 
-@field:...
-@set:...
-@get:...
-@param:...
-@property:...
-@setparam:...
-@receiver:...
-@field:...
-@delegete:...
-
----
-
-# Specify annotation
-
 ```java
-public final class Game1 {
+public final class Game {
+    
    @Inject @Named("P1") public Player player1;
    @Inject @Named("P2") public Player player2;
 
@@ -243,6 +252,7 @@ public final class Game1 {
    public final Player getPlayer2() {...}
 
    public final void setPlayer2(Player var1) {...}
+
 }
 ```
 
