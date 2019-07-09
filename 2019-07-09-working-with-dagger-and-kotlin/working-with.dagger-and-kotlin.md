@@ -991,54 +991,328 @@ object ListModule {
 
 ---
 
-# Jetpack: ViewModel
+# Jetpack
+## ViewModel
 
-^ Ash´
-
--  Jetpack introduced us to ViewModel that persists through config change
-    -  Most Dagger components scoped to life of instance
-    -  ViewModel persistence is a form of scoping
-    -  Scope greater than activity or component instance scope
-    -  ViewModel can leak dependencies injected from Dagger
-    -  Dagger and ViewModel should be used with caution
--  ViewModel annotated with Inject can be built with graph dependencies
-    -  Jetpack expects us to build ViewModel with Provider Factory
-    -  Using both in conjunction requires compatibility glue code
-    
----
-
-![inline](one-does-not.jpg)
-
-^ Injected ViewModel will be lost on activity death
-
-^ Persistence achieved through ViewModelStore
-
-^ ViewModel should not exist in Dagger graph
-
-^ How can you still utilise Dagger?
+^ Ash
 
 ---
 
-# ViewModelProvider.Factory
+# Jetpack
+## ViewModel
 
-## Delegated constructor
+- Introduced at Google IO 2018
+
+- Bootstrap Android development
+
+- Opinionated implementations
+
+- Break up support libraries
+
+- Migrate to androidx namespace
+
+^ Last year Google introduced us to Android JetPack which included a variety of tools
+  
+^ Dedicated to helping us bootstrap Android development
+  
+^ Opinionated and clean implementations for common problems
+  
+^ With the additional of compartmentalising the support libraries
+  
+^ Renaming support dependencies to androidx and starting with independent versioning
+
+![right 100%](jetpack-hero.png)
+  
+---
+
+[.background-color: #ffffff]
+[.text: #666666]
+
+# Jetpack
+## ViewModel
+
+![right](view-model-scope.png)
+
+^ Most importantly ViewModel allows us to persist the scope of a configuration change
+
+^ ViewModel persisted with `NonConfigurationInstances` in headless fragment
+
+---
+
+# Jetpack
+## ViewModel
+
+- Android `Application` created
+- Android `Activity` created
+- Dagger `@Component` created
+- Androidx `ViewModel` created
+- Androidx `Fragment` created
+
+^ Consider ViewModel Fragment persistence to be a method of scoping
+
+^ What would this look like with a typical Dagger application
+
+---
+
+[.build-lists: false]
+
+# Jetpack
+## ViewModel
+
+- **Android `Application` created ←**
+- ~~Android `Activity` created~~ 💀
+- ~~Dagger `@Component` created~~ 💀
+- **AndroidX `ViewModel` created ←**
+- **AndroidX `Fragment` created ←**
+
+^ On configuration change the activity and its component will be destroyed
+
+^ But the application, `ViewModel` and `Fragment will be persisted
+
+---
+
+[.background-color: #feefe3]
+[.text: #bf360c]
+
+> ## ⚠️ Caution: A `ViewModel` must never reference a view, `Lifecycle`, <br />or any class that may hold a reference to the activity context.
+
+^ Its because of this your `ViewModel` should not contain `Context`
+
+---
+
+[.footer: © 2019 Viacom International Inc.]
+
+![](spongebob-thinking.gif)
+
+^ So if the Dagger `@Component` is created in your `Activity`
+
+^ How can we utilise Dagger to help build our `ViewModel`?
+
+---
+
+[.footer: © 2019 20th Century Fox]
+
+![](simpsons-steady.gif)
+
+^ Carefully, carefully is how we do it
+
+---
+
+# JetPack
+## ViewModel
 
 ```kotlin
-class DelegatedViewModelFactory @Inject constructor(
+class SampleViewModel @Inject constructor() : ViewModel {
+}
+
+class Activity : DaggerAppCompatActivity {
+
+    @Inject lateinit var model: SampleViewModel
+}
+```    
+
+^ Whilst this will work it will result in a new ViewModel every time
+
+^ We need to delegate through ViewModelStore
+
+---
+
+# JetPack
+## ViewModel
+
+```kotlin, [.highlight: 6]
+class SampleViewModel @Inject constructor() : ViewModel {
+}
+
+class Activity : DaggerAppCompatActivity {
+
+    @Inject lateinit var model: SampleViewModel
+}
+```    
+
+^ Which means we simply just cant directly inject the ViewModel
+
+^ Dagger will always try to use its own Provider types
+
+---
+
+[.background-color: #000000]
+
+![fit](one-does-not.jpg)
+
+---
+
+# Jetpack: ViewModel
+## Dagger Multi-Binding
+
+^ Most popular way so far is to use Dagger multi-binding
+
+---
+
+# Jetpack: ViewModel
+## Dagger Multi-Binding
+
+```kotlin
+class ActivityViewModel @Inject constructor() : ViewModel() {
+}
+```
+
+^ First take our @Inject annotated ViewModel
+
+^ Allows Dagger to generate Factory
+
+^ We still control it's usage
+
+---
+
+# Jetpack: ViewModel
+## Dagger Multi-Binding
+
+```kotlin
+@MapKey
+@Retention(RUNTIME)
+annotation class ViewModelKey(val value: KClass<out ViewModel>)
+
+@Module
+interface ActivityViewModelModule {
+
+  @Binds
+  @IntoMap
+  @ViewModelKey(ViewModel::class)
+  fun model(model: ActivityViewModel): ViewModel
+}
+```
+
+^ Next we create the qualifier annotation to map by ViewModel class
+
+^ Dagger module to bind the implementation of the ViewModel to the map
+
+^ This creates a map of creators for all our ViewModels in our application graph
+
+---
+
+# Jetpack: ViewModel
+## Dagger Multi-Binding
+
+```kotlin
+class ViewModelFactory @Inject constructor(
+    private val creators: Map<Class<out ViewModel>, 
+    @JvmSuppressWildcards Provider<ViewModel>>
+) : ViewModelProvider.Factory {
+
+    @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel> create(kls: Class<T>): T {
+        var creator: Provider<out ViewModel>? = creators[kls]
+        
+        creator ?: creators.keys.firstOrNull(kls::isAssignableFrom)?.apply { creator = creators[this] }
+        creator ?: throw IllegalArgumentException("Unrecognised class $kls")
+        
+        return creator.get() as T
+    }
+}
+```
+
+^ Next creating a factory that can be used for all of your apps ViewModels
+
+^ Injects a map of ViewModel providers that the Factory checks for at runtime
+
+^ Note the usage of @JvmSuppressWildcards to ensure that we can inject our Dagger map
+
+---
+
+# Jetpack: ViewModel
+## Dagger Multi-Binding
+
+```kotlin
+class ViewModelActivity : DaggerAppCompatActivity {
+
+    private lateinit var model: ActivityViewModel
+    
+    @Inject internal lateinit var factory: ViewModelFactory
+    
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        ...
+        
+        model = ViewModelProviders
+            .of(this, factory)
+            .get(ActivityViewModel::class.java)
+    }
+}
+```
+
+^ Finally creating an activity to inject the factory and use the ViewModel
+
+^ Inject application ViewModel factory and create the ViewModel via providers
+
+---
+
+# Jetpack: ViewModel
+## androidx.activity:activity-ktx:1.0.0-rc01
+
+```kotlin
+class ViewModelActivity : DaggerAppCompatActivity {
+
+    private val model: ActivityViewModel by viewModels { factory }
+  
+    @Inject internal lateinit var factory: ViewModelFactory
+  
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        ...
+    }
+}
+```
+
+^ Compatible with the viewModels extension available in activity-ktx
+
+---
+
+# Jetpack: ViewModel
+### bit.ly/view-model-factory
+
+- Uses Dagger Multi-Binding to build map of `Provider`'s
+
+- Global `Factory` to create all ViewModel's
+
+- `Factory` injected into `Activity` to create `ViewModel`
+
+- Complicated initial set-up configuration
+
+- Needs map binding `@Module` for every `ViewModel`
+
+- Application graph polluted with all `Factory`'s
+
+^ This can be a great approach to solving the problem
+
+^ But it has some drawbacks in implementation
+
+^ Each new ViewModel requires several considerations
+
+^ Alternatives?
+
+---
+
+[.footer: github.com/android/plaid/blob/master/app/src/main/java/io/plaidapp/ui/HomeViewModelFactory.kt]
+
+# Plaid: HomeViewModelFactory
+
+```kotlin
+class HomeViewModelFactory @Inject constructor(
     private val dataManager: DataManager,
-    private val loginRepository: LoginRepository,
+    private val designerNewsLoginRepository: LoginRepository,
     private val sourcesRepository: SourcesRepository,
     private val dispatcherProvider: CoroutinesDispatcherProvider
 ) : ViewModelProvider.Factory {
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        if (modelClass != DelegatedViewModel::class.java) {
+        if (modelClass != HomeViewModel::class.java) {
             throw IllegalArgumentException("Unknown ViewModel class")
         }
-        return DelegatedViewModel(
+        return HomeViewModel(
             dataManager,
-            loginRepository,
+            designerNewsLoginRepository,
             sourcesRepository,
             dispatcherProvider
         ) as T
@@ -1046,25 +1320,27 @@ class DelegatedViewModelFactory @Inject constructor(
 }
 ```
 
-^ ViewModel dependencies are delegated through the Factory constructor
+^ Another popular way to achieve this is through a delegate factory
 
-^ ViewModel need not be annotated with @Inject as manually constructed
+^ Factory is manually created, but exists as a single class
+
+^ Respects SRP, ViewModel manually created without @Inject constructor
 
 ---
 
-# ViewModelProvider.Factory
+[.footer: https://github.com/android/plaid/blob/master/about/src/main/java/io/plaidapp/about/ui/model/AboutViewModelFactory.kt]
 
-## One simply injected a ViewModel...
+# Plaid: AboutViewModelFactory
 
 ```kotlin
-class InjectedViewModelFactory @Inject constructor() : ViewModelProvider.Factory {
+internal class AboutViewModelFactory @Inject constructor() : ViewModelProvider.Factory {
 
-    @Inject lateinit var sampleViewModel: InjectedViewModel
+    @Inject lateinit var aboutViewModel: AboutViewModel
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return if (modelClass.isAssignableFrom(InjectedViewModel::class.java)) {
-            sampleViewModel as T
+        return if (modelClass.isAssignableFrom(AboutViewModel::class.java)) {
+            aboutViewModel as T
         } else {
             throw IllegalArgumentException(
                 "Class ${modelClass.name} is not supported in this factory."
@@ -1074,48 +1350,84 @@ class InjectedViewModelFactory @Inject constructor() : ViewModelProvider.Factory
 }
 ```
 
-^ Bad example of how to use Dagger with ViewModels
-
----
-
-# ViewModelProvider.Factory
-
-## One simply injected a ViewModel...
-
-```kotlin, [.highlight: 3, 8]
-class InjectedViewModelFactory @Inject constructor() : ViewModelProvider.Factory {
-
-    @Inject lateinit var sampleViewModel: InjectedViewModel
-
-    @Suppress("UNCHECKED_CAST")
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return if (modelClass.isAssignableFrom(InjectedViewModel::class.java)) {
-            sampleViewModel as T
-        } else {
-            throw IllegalArgumentException(
-                "Class ${modelClass.name} is not supported in this factory."
-            )
-        }
-    }
-}
-```
+^ Similar way of doing so is to inject the ViewModel into the factory
 
 ^ ViewModel is created and injected every time the factory is registered
 
-^ Every time the activity is created, wasted ViewModel created
+^ Activity uses correct ViewModel, but new unused instance created
 
 ---
 
--  Implementing a Dagger ViewModelProvider.Factory
-    -  Scout: ApplicationViewModelFactory (Multibinding)
-        -  Application scoped view model knows everything
-        -  Requires binding expression to include ViewModel in set
-    -  Scout: ViewModelFactory (ViewModel Scope)
-        -  Ideal, ProviderFactory once per ViewModel
-        -  Useful for dynamic features, independent of application
-        -  Constructor Provider generated by Dagger
-        -  Single responsibility preserved
--  Fragment and Activity Factories can be defined in a similar fashion
+[.footer: © 2019 Viacom International Inc.]
+
+![](spongebob-thinking.gif)
+
+^ Surely there must be a way to combine these approaches
+
+^ Without polluting application scope
+
+^ Without complex multi-bindings
+
+^ Without duplicated constructors
+
+---
+
+# Jetpack: ViewModel
+## bit.ly/view-model-provider
+
+```kotlin
+internal class ViewModelFactory(
+    private val provider: Provider<out ViewModel>
+) : ViewModelProvider.Factory {
+
+    @Suppress("UNCHECKED_CAST")
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        return try {
+            provider.get() as T
+        } catch (exception: ClassCastException) {
+            throw IllegalArgumentException(
+                "Class ${modelClass.name} is not supported by this factory", 
+                exception
+            )
+        }
+    }
+}
+```
+
+^ Simplify the `ViewModelProvider.Factory` to take a `Provider<ViewModel>`
+
+^ Perform a quick class type check and return the result of the provider
+
+^ Instance only created when `ViewModelProvider` requires
+
+---
+
+# Jetpack: ViewModel
+## bit.ly/view-model-provider
+
+```kotlin
+class ActivityViewModel @Inject constructor() : ViewModel() {
+
+    class Factory @Inject constructor(
+        provider: Provider<ActivityViewModel>
+    ) : ViewModelFactory(provider)
+}
+
+class ViewModelActivity : DaggerAppCompatActivity {
+
+    private val model: ActivityViewModel by viewModels { factory }
+  
+    @Inject internal lateinit var factory: ActivityViewModel.Factory
+}
+```
+
+^ Then create the `ViewModel` and `Activity` appropriately
+
+^ Create a Factory on the ViewModel extending the ViewModelFactory
+
+^ Uses the Dagger generated `Provider` with the AndroidX `Factory`
+
+^ Provider and Factory generated in the same module
 
 ---
 
