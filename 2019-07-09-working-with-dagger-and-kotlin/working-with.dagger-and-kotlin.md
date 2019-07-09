@@ -728,6 +728,8 @@ public final class ApplicationModule {
 
 # Kotlin: Generics<? : T>
 
+---
+
 ## Java Interoperability
 
 ^ Complicated part of Java interoperability is wildcards
@@ -1159,21 +1161,23 @@ class InjectedViewModelFactory @Inject constructor() : ViewModelProvider.Factory
 
 ## Dagger Factory's
 
-^ Sinan
+- Inject annotated classes generate factory at usage site
+- If @Module is not necessary in the gradle module
+    - Prefer @Inject annotation
+    - Don't use dagger compiler where possible
+
+^ For better compiler performance in pure kotlin module try to avoid having dagger compiler
 
 ---
 
 ## Dagger Factory's
 
-- Inject annotated classes generate factory at usage sites
-- Prefer inject annotation as the module compiler isn’t necessary
-- Modules can be used to generate internal classes by abstract type
-- Internal constructor for public classes with internal dependencies
-- Dependency required in root module for submodule dependencies
-    - Ie submodule using Coroutines requires app to include dependency
-    - Even if it’s internal, if in Dagger graph, is required in app module
-- Internal implementations can be hidden behind interfaces
-- Submodule requires Dagger compiler to function correctly
+- For keeping implementation internal prefer `abstract` module and use internal methods
+- Injected constructor can be internal
+- Root module needs dependencies for submodule
+    - if in Dagger graph, is required in app module
+
+^ Dont expose internal implementation detail if not necessary
 
 ---
 
