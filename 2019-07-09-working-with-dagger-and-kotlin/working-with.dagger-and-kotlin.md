@@ -1493,13 +1493,17 @@ class ViewModelActivity : DaggerAppCompatActivity {
 
 # Android: *Factory
 
-- `AppComponentFactory` 🥧🎉
+- `AppComponentFactory`
+    <sup>Android Pie 🥧</sup>
 
--  `FragmentFactory` <sup>fragmentx:1.1.0-rc01</sup>
+-  `FragmentFactory`
+    <sup>fragmentx:1.1.0-rc01</sup>
 
-- `AbstractSavedStateVMFactory` <sup>lifecycle-viewmodel-savedstate:1.0.0-alpha02</sup>
+- `AbstractSavedStateVMFactory`
+    <sup>lifecycle-viewmodel-savedstate:1.0.0-alpha02</sup>
 
-- `LayoutInflater.Factory2` 🧁
+- `LayoutInflater.Factory2`
+    <sup>Android Cupcake 🧁</sup>
 
 ^ `ViewModel`s aren't the only Android element to accept a Factory
 
