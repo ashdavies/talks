@@ -134,7 +134,7 @@ class Game @Inject constructor() {
 
 ---
 
-# Decompiled lateinit var 🛑
+# Decompiled lateinit var
 
 ```java
 public final class Game {
@@ -160,7 +160,7 @@ public final class Game {
 
 ---
 
-# Decompiled lateinit var 🛑
+# Decompiled lateinit var
 
 ```java, [.highlight: 2-3, 5, 11]
 public final class Game {
@@ -179,6 +179,8 @@ public final class Game {
 
    public final void setPlayer2(Player var1) {...}
 ```
+
+^ This happens because Inject is Target annotation but Named is Qualifier annotation
 
 ---
 
@@ -254,18 +256,6 @@ public final class Game1 {
   - Kotlin properties uses property access syntax via accessors
   - Unclear where the annotation is applied, accessor or property
   - Dont forget to use with `@field:`
-
----
-
-- Qualified field injection requires @field annotation on property
-    - Generated JVM code for both @field:Qualifier and @Qualifer
-    - Generated JVM code for property getter and setter
-    - Show where @Inject annotation is applied by default
-    - Show JVM code for @set:Inject with @Qualifer
-- Qualifier also required for constructor injection but clearer
-- Java declarations explicit whereas Kotlin requires specification
-    - Kotlin uses syntactic sugar to reduce boilerplate
-    - Not clear to Kotlin compiler what we want to annotate
 
 ---
 
