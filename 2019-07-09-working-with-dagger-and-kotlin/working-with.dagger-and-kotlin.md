@@ -1419,6 +1419,93 @@ class ViewModelActivity : DaggerAppCompatActivity {
 
 ---
 
+![](south-park-more.gif)
+
+---
+
+# Android: *Factory
+
+- `AppComponentFactory` 🥧🎉
+
+-  `FragmentFactory` <sup>fragmentx:1.1.0-rc01</sup>
+
+- `AbstractSavedStateVMFactory` <sup>lifecycle-viewmodel-savedstate:1.0.0-alpha02</sup>
+
+- `LayoutInflater.Factory2` 🧁
+
+^ `ViewModel`s aren't the only Android element to accept a Factory
+
+^ We can use the same mechanism as we have with ViewModel factory
+
+^ Android Pie brings `AppComponentFactory` to control instantiation of manifest elements
+
+^ FragmentX 1.1.0 brings FragmentFactory to control creation of Fragments
+
+^ We can also use saved state factory with the ViewModel Factory
+
+^ Finally we can also use the LayoutInflater factory to create views
+
+---
+
+# Android: LayoutInflater.Factory2
+## github.com/square/AssistedInject
+
+```kotlin
+class ImageLoaderView @AssistedInject constructor(
+    @Assisted context: Context,
+    @Assisted attrs: AttributeSet,
+    private val loader: ImageLoader
+) : ImageView(context, attrs) {
+
+    @AssistedInject.Factory
+    interface Factory {
+    
+        fun create(
+            context: Context,
+            attrs: AttributeSet
+        ): ImageLoaderView
+    }
+}
+```
+^ Combined with the Dagger assist library from Square
+
+^ Create a layout inflater from the nearest component
+
+^ Provide your view elements with graph dependencies
+
+---
+
+# Android: LayoutInflater.Factory2
+## github.com/square/AssistedInject
+
+```kotlin
+class ApplicationLayoutInflaterFactory @Inject constructor(
+    private val imageLoaderFactory: ImageLoaderView.Factory
+) : LayoutInflater.Factory {
+
+    override fun onCreateView(
+        name: String,
+        context: Context,
+        attrs: AttributeSet
+    ): View? {
+        if (name == ImageLoaderView::class.java.name) {
+            return imageLoaderFactory.create(context, attrs)
+        }
+        return null
+    }
+}
+```
+
+^ Create and register your layout inflater with your assisted factory
+
+^ Dependencies can be provided from Activity or Fragment graph
+
+^ Resolves canonical issue as to where to retrieve the graph
+
+^ https://github.com/google/dagger/issues/720
+
+---
+
 # Kotlin: Experimental 🧪
 
 ^ Ash
@@ -1565,8 +1652,6 @@ class ViewModelActivity : DaggerAppCompatActivity {
 
 ^ https://github.com/JakeWharton/dagger-reflect
 
-^ https://github.com/square/AssistedInject
-      
 ---
 
 ![right inline 15%](immobilienscout24.png)
