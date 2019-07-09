@@ -27,7 +27,7 @@ text: Google Sans
 - It is written for only Java in mind
 - It is used extensively outside of Android ecosystem
 
-^ It is a powerful tool for big project
+^ Powerful tool for big project
 ^ Compile time safety and no runtime involvement are main goal
 ^ No magic or hack behind it
 ^ It is used in Google as well
@@ -52,8 +52,8 @@ Qualifiers used to identify dependencies with identical signatures
   - The type and qualifier annotation will both be used to identify the dependency.
 
 ^ If there are multiple different instance of same class/interface in graph
-^ Passing String, Int or similar type into Graph will work for first one 
-^ But it will start failing when there are multiple provider for them
+^ Passing String, Int or similar type into Graph will work for first one
+^ it fails when there are multiple provider for type
 
 ---
 
@@ -158,6 +158,14 @@ class Game @Inject constructor() {
 
 # Decompiled lateinit var
 
+```kotlin
+class Game @Inject constructor() {
+
+  @Inject @Named("P1") lateinit var player1: Player
+  @Inject @Named("P2") lateinit var player2: Player
+}
+```
+
 ```java
 public final class Game {
    @Inject public Player player1;
@@ -184,6 +192,14 @@ public final class Game {
 ---
 
 # Decompiled lateinit var
+
+```kotlin
+class Game @Inject constructor() {
+
+  @Inject @Named("P1") lateinit var player1: Player
+  @Inject @Named("P2") lateinit var player2: Player
+}
+```
 
 ```java, [.highlight: 2-3, 5, 11]
 public final class Game {
@@ -1710,7 +1726,7 @@ class ApplicationLayoutInflaterFactory @Inject constructor(
 - For keeping implementation internal prefer `abstract` module and use internal methods
 - Injected constructor can be internal
 - Root module needs dependencies for submodule
-    - if in Dagger graph, is required in app module
+    - if it is in Dagger graph, it is required in app module
 
 ^ Dont expose internal implementation detail if not necessary
 
