@@ -718,11 +718,15 @@ public final class ApplicationModule {
 ^ Sinan
 
 - Kotlin return types can be inferred from method body
-- Android Studio even suggests inlining return types
+- Android Studio shows inlining return types
 - Return types to hide implementation detail easily missed
+    - Interface vs Implemetation
 - Best practice to explicitly specify return type
 - Easier to review, easier to understand, avoids compiler errors
 - Framework types (Fragment.context) can be assumed nullable
+
+^ When we need to bind interface, if dont specify type. It bind implementation
+^ Providing anything from Java or Android SDK can be assumed null
 
 ---
 
