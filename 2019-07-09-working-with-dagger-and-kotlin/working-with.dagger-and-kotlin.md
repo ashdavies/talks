@@ -247,7 +247,7 @@ class Game @Inject constructor() {
 
 ```java
 public final class Game {
-    
+
    @Inject @Named("P1") public Player player1;
    @Inject @Named("P2") public Player player2;
 
@@ -258,7 +258,6 @@ public final class Game {
    public final Player getPlayer2() {...}
 
    public final void setPlayer2(Player var1) {...}
-
 }
 ```
 
@@ -266,8 +265,17 @@ public final class Game {
 
 # Specify annotation
 
+```kotlin
+class Game @Inject constructor() {
+
+  @Inject @field:Named("P1") lateinit var player1: Player
+  @Inject @field:Named("P2") lateinit var player2: Player
+}
+```
+
 ```java, [.highlight: 2-3]
-public final class Game1 {
+public final class Game {
+
    @Inject @Named("P1") public Player player1;
    @Inject @Named("P2") public Player player2;
 
@@ -280,6 +288,12 @@ public final class Game1 {
    public final void setPlayer2(Player var1) {...}
 }
 ```
+
+---
+
+[.footer: ]
+
+![](perfect.gif)
 
 ---
 
@@ -294,7 +308,7 @@ public final class Game1 {
   - Unclear where the annotation is applied, accessor or property
   - Dont forget to use with `@field:`
 
-  ^ lateinit var is error prone and hacky to test
+^ lateinit var is error prone and hacky to test
 
 ---
 
