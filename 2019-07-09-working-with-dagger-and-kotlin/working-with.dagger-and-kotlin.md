@@ -1690,6 +1690,32 @@ class ApplicationLayoutInflaterFactory @Inject constructor(
 
 ---
 
+# Keeping internal implementation internal 
+
+This doesn't compile;
+
+```kotlin
+internal class Player
+
+class Game @Inject constructor(
+    @Named("P1") private val player1: Player,
+    @Named("P2") private val player2: Player
+)
+``` 
+
+But this will;
+
+```kotlin
+internal class Player
+
+class Game @Inject internal constructor(
+    @Named("P1") private val player1: Player,
+    @Named("P2") private val player2: Player
+)
+``` 
+
+---
+
 ## Default Parameters in Dagger
 
 ^ Sinan
@@ -1700,6 +1726,15 @@ class ApplicationLayoutInflaterFactory @Inject constructor(
 - Best practice to define an alternative annotated constructor
 
 ^ For testing purpuse, if a new constructor needed dont use default param
+
+---
+
+# JvmOverloads
+
+- Create multiple constructor with @Inject annotation
+    - Dagger requires only one @Inject annotated constructor
+    - That is why it doesn't know which one to use
+    - Doesn't even compile
 
 ---
 
