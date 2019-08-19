@@ -28,8 +28,11 @@ text: Google Sans
 - It is used extensively outside of Android ecosystem
 
 ^ Powerful tool for big project
+
 ^ Compile time safety and no runtime involvement are main goal
+
 ^ No magic or hack behind it
+
 ^ It is used in Google as well
 
 ---
@@ -52,7 +55,9 @@ Qualifiers used to identify dependencies with identical signatures
   - The type and qualifier annotation will both be used to identify the dependency.
 
 ^ If there are multiple different instance of same class/interface in graph
+
 ^ Passing String, Int or similar type into Graph will work for first one
+
 ^ it fails when there are multiple provider for type
 
 ---
@@ -80,6 +85,7 @@ class Game @Inject constructor(
 ```
 
 ^ Simple Game class with Injected construtor
+
 ^ We have named player instance in dagger graph
 
 ---
@@ -151,7 +157,9 @@ class Game @Inject constructor() {
 ```
 
 ^ This scenerio can happen with Activity and Fragment (Fragments will have constructor support in near future)
+
 ^ Normal looking properties
+
 ^ But kotlin properties arent same as Java properties
 
 ---
@@ -185,8 +193,11 @@ public final class Game {
 ```
 
 ^ Simplified
+
 ^ @Named annotations are applied on additional static methods
+
 ^ property access syntax via accessors
+
 ^ Dagger processor will fail; it cannot know which player to inject
 
 ---
@@ -449,7 +460,7 @@ internal object ApplicationModule {
 # @Scope 🙅‍♂️
 
 ```kotlin
-@ActivityScope
+@ActivityScope // Don't do this!
 class ActivityRepository @Inject constructor() {
 }
 ```
@@ -983,16 +994,6 @@ class ListAdapter @Inject constructor(strings: List<String>)
 
 ## Java Interoperability
 
-```kotlin
-class ListAdapter @Inject constructor(strings: List<String>)
-```
-
----
-
-# Kotlin: Generics<? : T>
-
-## Java Interoperability
-
 ```java
 public final class ListAdapter {
    @Inject
@@ -1008,8 +1009,7 @@ public final class ListAdapter {
 ---
 
 # Kotlin: Generics<? : T>
-
-## Java Interoperability
+## Dagger Multi-Binding
 
 ```kotlin
 @Module
@@ -1057,36 +1057,14 @@ class ListAdapter @Inject constructor(strings: @JvmSuppressWildcards List<String
 
 ---
 
-# Kotlin: Generics<? : T>
+# Jetpack
 
-## Dagger Multi-Bindings
-
-```kotlin
-@Module
-object ListModule {
-
-    @IntoSet
-    @Provides
-    @JvmStatic
-    fun hello(): String = "Hello"
-
-    @IntoSet
-    @Provides
-    @JvmStatic
-    fun world(): String = "World"
-}
-```
-
-^ Here were specifying in each method the set type
-
-^ No generics being used
+^ Ash
 
 ---
 
 # Jetpack
 ## ViewModel
-
-^ Ash
 
 ---
 
@@ -1420,7 +1398,7 @@ class HomeViewModelFactory @Inject constructor(
 
 ---
 
-[.footer: https://github.com/android/plaid/blob/master/about/src/main/java/io/plaidapp/about/ui/model/AboutViewModelFactory.kt]
+[.footer: github.com/android/plaid/blob/master/about/src/main/java/io/plaidapp/about/ui/model/AboutViewModelFactory.kt]
 
 # Plaid: AboutViewModelFactory
 
@@ -1610,7 +1588,7 @@ class ApplicationLayoutInflaterFactory @Inject constructor(
 
 ^ Resolves canonical issue as to where to retrieve the graph
 
-^ https://github.com/google/dagger/issues/720
+^ github.com/google/dagger/issues/720
 
 ---
 
@@ -1664,13 +1642,14 @@ class ApplicationLayoutInflaterFactory @Inject constructor(
 
 ---
 
+[.background-color: #000000]
 [.footer: ]
 
 ![fit](drax_listening.gif)
 
 ---
 
-## Use Kotlin interfaces for @Binds modules
+# Use Kotlin interfaces for @Binds modules
 
 ^ Sinan
 
@@ -1685,11 +1664,12 @@ class ApplicationLayoutInflaterFactory @Inject constructor(
     - No
 
 ^ Dagger use @Bind annotation to simply satify graph
+
 ^ abstract method or interface doesnt matter but interface is more lean
 
 ---
 
-## Inlined method bodies in Kotlin
+# Inlined method bodies in Kotlin
 
 ^ Sinan
 
@@ -1702,11 +1682,12 @@ class ApplicationLayoutInflaterFactory @Inject constructor(
 - Framework types (Fragment.context) can be assumed nullable
 
 ^ When we need to bind interface, if dont specify type. It bind implementation
+
 ^ Providing anything from Java or Android SDK can be assumed null
 
 ---
 
-## Dagger Factory's
+# Dagger Factory's
 
 ^ Sinan
 
@@ -1719,7 +1700,7 @@ class ApplicationLayoutInflaterFactory @Inject constructor(
 
 ---
 
-## Dagger Factory's
+# Dagger Factory's
 
 ^ Sinan
 
@@ -1758,7 +1739,7 @@ class Game @Inject internal constructor(
 
 ---
 
-## Default Parameters in Dagger
+# Default Parameters in Dagger
 
 ^ Sinan
 
@@ -1783,21 +1764,21 @@ class Game @Inject internal constructor(
 # Further Reading 📖
 
 - **Dave Leeds: Inline Classes and Autoboxing**
-    - https://typealias.com/guides/inline-classes-and-autoboxing/
+    https://typealias.com/guides/inline-classes-and-autoboxing/
 - **Kotlin: Declaration Site Variance**
-    - https://kotlinlang.org/docs/reference/generics.html#declaration-site-variance
+    https://kotlinlang.org/docs/reference/generics.html#declaration-site-variance
 - **Kotlin: Variant Generics**
-    - https://kotlinlang.org/docs/reference/java-to-kotlin-interop.html#variant-generics
+    https://kotlinlang.org/docs/reference/java-to-kotlin-interop.html#variant-generics
 - **Jake Wharton: Helping Dagger Help You**
-    - https://jakewharton.com/helping-dagger-help-you/
+    https://jakewharton.com/helping-dagger-help-you/
 - **Dagger: Kotlin Dagger Best Practices**
-    - https://github.com/google/dagger/issues/900
+    https://github.com/google/dagger/issues/900
 - **Fred Porciúncula: Dagger 2 Official Guidelines**
-    - https://proandroiddev.com/dagger-2-on-android-the-official-guidelines-you-should-be-following-2607fd6c002e
+    https://proandroiddev.com/dagger-2-on-android-the-official-guidelines-you-should-be-following-2607fd6c002e
 - **Warren Smith: Dagger & Kotlin**
-    - https://medium.com/@naturalwarren/dagger-kotlin-3b03c8dd6e9b
+    https://medium.com/@naturalwarren/dagger-kotlin-3b03c8dd6e9b
 - **Nazmul Idris: Advanced Dagger 2 w/ Android and Kotlin**
-    - https://developerlife.com/2018/10/21/dagger2-and-kotlin/
+    https://developerlife.com/2018/10/21/dagger2-and-kotlin/
 
 ^ https://github.com/JakeWharton/dagger-reflect
 
