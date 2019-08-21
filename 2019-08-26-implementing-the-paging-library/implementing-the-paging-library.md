@@ -161,13 +161,13 @@ class ListAdapter() : BaseAdapter() {
 
 ---
 
-# Paging
+# Paging 📄
 
 ^ How would you handle infinite scrolling with a list view?
 
 ---
 
-# Paging
+# Paging 📄
 ## OnScrollListener
 
 ^ Attach a scroll listener to listen for scroll events
@@ -213,9 +213,11 @@ class ListAdapter() : BaseAdapter() {
 
 ^ Though OnClickListener, and item dividers handled manually
 
+^ Still managing list of items via `RecyclerView.Adapter`
+
 ---
 
-# Paging
+# Paging 📄
 ## `AsyncListUtil` 
 
 ^ Many early paging attempts achieved with Cursor to load chunks
@@ -228,48 +230,313 @@ class ListAdapter() : BaseAdapter() {
 
 ---
 
-ListAdapter
+# Diffing
+## `DiffUtil` / `AsyncListDiffer`
 
-- Takes immutable lists
-- Provides animated updates
-- Computes diff in background
-- Released in support lib 27.1
-- See also AsyncListDiffer
+^ Unlike `ListView`, `RecyclerView` allows more granular control of item invalidation
 
-^ How to migrate to the ListAdapter from standard RecyclerView.Adapter
+^ Now possible to invalidate specific items, and animate adding and removing accordingly
+
+^ `DiffUtil` and async counterpart `AsyncListDiffer` added in support library December 2016
 
 ---
 
-# ItemCallback
+[.background-color: #ffffff]
+[.text: #666666]
+
+[.footer: medium.com/skyrise/the-myers-diff-algorithm-and-kotlin-observable-properties-69dfb18541b]
+
+# DiffUtil
+## Myers Diff Algorithm
+
+![right 100%](adrian-defus-diff-game.gif)
+
+^ `DiffUtil` uses Myers diff algorithm to detect the fewest amount of changes between data sets
+
+^ Article from Adrian Defus explaining how the Myers diff algorithm works with DiffUtil
+
+---
+
+# ListAdapter 📜
+
+^ Then came the `ListAdapter` introduced to support library in February 2018
+
+^ Just a few months before the paging library in May indicates direction of ideal architecture
+
+^ Represents fundamental bridge in migration to using the paging library
+
+---
+
+# ListAdapter 📜
+## Immutability 💪
+
+^ Utilises all the existing strengths of `RecyclerView`
+
+^ Computes diff in background with animated updates
+
+^ Most importantly takes immutable lists
+
+---
+
+# ListAdapter
+## `submitList(...)`
+
+^ Achieves immutability this by taking control of the list
+
+^ Where previously an adapter would manage the list of items
+
+^ Allowing you to focus on binding the `ViewHolder`
+
+---
+
+# Migration
+## [fit] `RecyclerView.Adapter<T>` -> `ListAdapter<T>`
+
+^ Since the `ListAdapter` plays such an important role as a precursor to the paging library
+
+^ It's generally good idea to use it wherever possible if you're not already doing so
+
+^ How could we migrate if we're already using the `RecyclerView.Adapter` 
+
+---
+
+# RecyclerView.Adapter
 
 ```kotlin
-abstract class ItemCallback<T> {
-    
-  abstract fun areItemsTheSame(oldItem: T, newItem: T): Boolean
+class UserAdapter : RecyclerView.Adapter<UserViewHolder>() {
 
-  abstract fun areContentsTheSame(oldItem: T, newItem: T): Boolean
+  private var items: List<User> = emptyList()
+  
+  override fun getItemCount() = items.size
+  
+  override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(items[position])
+  
+  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder { /* ... */ }
+  
+  fun updateList(items: List<User>) {
+    val result: DiffResult = DiffUtil.calculate(DiffCallback(this.items, items))
+    result.dispatchUpdatesTo(this)
+  }
+    
+  class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    
+    fun bind(item: User) { /* ... */ }
+  }
+}
+```
+
+^ Naive implementation of a recycler view adapter
+
+^ Already assuming a lot about your implementation
+
+---
+
+# RecyclerView.Adapter
+
+```kotlin, [.highlight: 11-14]
+class UserAdapter : RecyclerView.Adapter<UserViewHolder>() {
+
+  private var items: List<User> = emptyList()
+  
+  override fun getItemCount() = items.size
+  
+  override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(items[position])
+  
+  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder { /* ... */ }
+  
+  fun updateList(items: List<User>) {
+    val result: DiffResult = DiffUtil.calculate(UserComparator(this.items, items))
+    result.dispatchUpdatesTo(this)
+  }
+    
+  class UserViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    
+    fun bind(item: User) { /* ... */ }
+  }
+}
+```
+
+^ Already using `DiffUtil` to dispatch updates on updating list
+
+---
+
+# DiffUtil.Callback
+
+```kotlin
+class UserComparator(
+    private val oldItems: List<User>, 
+    private val newItems: List<User>
+) : DiffUtil.Callback() {
+
+  override fun getOldListSize(): Int = oldItems.size
+
+  override fun getNewListSize(): Int = newItems.size
+  
+  override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+    return oldItems[oldItemPosition].id == newItems[newItemPosition].id
+  }
+
+  override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+    return oldItems[oldItemPosition] == newItems[newItemPosition]
+  }
+}
+```
+
+^ Our `DiffUtil` callback might look like this
+
+^ Returning the size of our item sets
+
+^ Comparing items, and contents
+
+---
+
+# DiffUtil.ItemCallback<User>
+
+```kotlin
+object UserComparator : DiffUtil.ItemCallback<User>() {
+
+  override fun areItemsTheSame(oldItem: User, newItem: User): Boolean {
+    return oldItem.id == newItem.id
+  }
+
+  override fun areContentsTheSame(oldItem: User, newItem: User): Boolean {
+    return oldItem == newItem
+  }
+}
+```
+
+^ Item callback allows us to drop the instance and use an object
+
+^ Performing only the two operations, comparing items, and contents
+
+^ Here we're instructing the adapter the equality of items
+
+^ So that it can apply the algorithm to accurately calculate the diff
+
+^ Give us the buttery smooth animations our users love so much
+
+---
+
+# DiffUtil.ItemCallback<User>
+
+```kotlin, [.highlight: 4, 8]
+object UserComparator : DiffUtil.ItemCallback<User>() {
+
+  override fun areItemsTheSame(oldItem: User, newItem: User): Boolean {
+    return oldItem.id == newItem.id
+  }
+
+  override fun areContentsTheSame(oldItem: User, newItem: User): Boolean {
+    return oldItem == newItem
+  }
 }
 ```
 
 ^ Null assumed to be the same and not equal to not null value
 
-^ areContentsTheSame only called if areItemsTheSame returns true for both
+^ `areContentsTheSame` only called if areItemsTheSame returns true for both
 
-^ areItemsTheSame used to compare unique identifiers
+^ `areItemsTheSame` used to compare unique identifiers
+
+---
+
+# RecyclerView.Adapter
+
+```kotlin
+class UserAdapter : RecyclerView.Adapter<UserViewHolder>() {
+
+  private var items: List<User> = emptyList()
+  
+  override fun getItemCount() = items.size
+  
+  override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(items[position])
+  
+  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder { /* ... */ }
+  
+  fun updateList(items: List<User>) { /* ... */ }
+   
+  class UserViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    
+    fun bind(item: User) { /* ... */ }
+  }
+}
+```
+
+^ Now that we've migrated out comparator callback lets revisit our `RecyclerView`
+
+---
+
+# ListAdapter
+
+```kotlin, [.highlight: 1]
+class UserAdapter : ListAdapter<User, UserViewHolder>(UserComparator) {
+
+  private var items: List<User> = emptyList()
+  
+  override fun getItemCount() = items.size
+  
+  override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(items[position])
+  
+  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder { /* ... */ }
+  
+  fun updateList(items: List<User>) { /* ... */ }
+   
+  class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    
+    fun bind(item: User) { /* ... */ }
+  }
+}
+```
+
+^ Changing the adapter to extend the list adapter with the type and view holder
+
+^ Making sure to pas in our diff util callback to the adapter
+
+---
+
+# ListAdapter
+
+```kotlin
+class UserAdapter : ListAdapter<User, UserViewHolder>(UserComparator) {
+
+  override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(items[position])
+  
+  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder { /* ... */ }
+  
+  class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    
+    fun bind(item: User) { /* ... */ }
+  }
+}
+```
+
+^ We can now drop the item management from the adapter handled by `ListAdapter`
+
+^ Implementation much simpler and more lightweight
+
+^ Allowing the `ListAdapter` to do the heavy lifting
+
+---
+
+# ListAdapter 💪
+
+^ It already makes a lot of sense to use `ListAdapter` wherever possible
+
+^ Migration is fairly straightforward from existing `RecyclerView.Adapter`'s
+
+^ Makes moving to the paging library much simpler
 
 ---
 
 ![inline 100%](jetpack-hero.png)
 
-^ Last year Google introduced us to Android JetPack which included a variety of tools
+^ Lets quickly review JetPack and the paging library
+
+^ Last year Google introduced us to Android JetPack
 
 ^ Dedicated to helping us bootstrap Android development
 
 ^ Opinionated and clean implementations for common problems
-
-^ With the additional of compartmentalising the support library fragment 
-
-^ Renaming support dependencies to androidx and starting with independent versioning 
 
 ---
 
