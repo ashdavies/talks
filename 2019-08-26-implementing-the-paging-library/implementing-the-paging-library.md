@@ -290,7 +290,7 @@ class ListAdapter() : BaseAdapter() {
 ---
 
 # Migration
-## [fit] `RecyclerView.Adapter<T>` -> `ListAdapter<T>`
+## `ListAdapter<T>`
 
 ^ Since the `ListAdapter` plays such an important role as a precursor to the paging library
 
@@ -309,9 +309,13 @@ class UserAdapter : RecyclerView.Adapter<UserViewHolder>() {
   
   override fun getItemCount() = items.size
   
-  override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(items[position])
+  override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    holder.bind(items[position])
+  }
   
-  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder { /* ... */ }
+  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+    /* ... */
+  }
   
   fun updateList(items: List<User>) {
     val result: DiffResult = DiffUtil.calculate(DiffCallback(this.items, items))
@@ -320,7 +324,9 @@ class UserAdapter : RecyclerView.Adapter<UserViewHolder>() {
     
   class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     
-    fun bind(item: User) { /* ... */ }
+    fun bind(item: User) {
+      /* ... */
+    }
   }
 }
 ```
@@ -333,16 +339,20 @@ class UserAdapter : RecyclerView.Adapter<UserViewHolder>() {
 
 # RecyclerView.Adapter
 
-```kotlin, [.highlight: 11-14]
+```kotlin, [.highlight: 15-18]
 class UserAdapter : RecyclerView.Adapter<UserViewHolder>() {
 
   private var items: List<User> = emptyList()
   
   override fun getItemCount() = items.size
   
-  override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(items[position])
+  override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    holder.bind(items[position])
+  }
   
-  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder { /* ... */ }
+  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+    /* ... */
+  }
   
   fun updateList(items: List<User>) {
     val result: DiffResult = DiffUtil.calculate(UserComparator(this.items, items))
@@ -351,7 +361,9 @@ class UserAdapter : RecyclerView.Adapter<UserViewHolder>() {
     
   class UserViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     
-    fun bind(item: User) { /* ... */ }
+    fun bind(item: User) {
+      /* ... */
+    }
   }
 }
 ```
@@ -390,6 +402,36 @@ class UserComparator(
 
 ---
 
+# DiffUtil.Callback
+
+```kotlin, [.highlight: 10-16]
+class UserComparator(
+    private val oldItems: List<User>, 
+    private val newItems: List<User>
+) : DiffUtil.Callback() {
+
+  override fun getOldListSize(): Int = oldItems.size
+
+  override fun getNewListSize(): Int = newItems.size
+  
+  override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+    return oldItems[oldItemPosition].id == newItems[newItemPosition].id
+  }
+
+  override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+    return oldItems[oldItemPosition] == newItems[newItemPosition]
+  }
+}
+```
+
+^ Since `ListAdapter` will take care of our item management
+
+^ We no longer need to be concerned about the items
+
+^ Only need the actual comparison functions
+
+---
+
 # DiffUtil.ItemCallback<User>
 
 ```kotlin
@@ -405,7 +447,7 @@ object UserComparator : DiffUtil.ItemCallback<User>() {
 }
 ```
 
-^ Item callback allows us to drop the instance and use an object
+^ Extend `ItemCallback` instead allows us to use object instead of class
 
 ^ Performing only the two operations, comparing items, and contents
 
@@ -449,15 +491,23 @@ class UserAdapter : RecyclerView.Adapter<UserViewHolder>() {
   
   override fun getItemCount() = items.size
   
-  override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(items[position])
+  override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    holder.bind(items[position])
+  }
   
-  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder { /* ... */ }
+  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+    /* ... */
+  }
   
-  fun updateList(items: List<User>) { /* ... */ }
+  fun updateList(items: List<User>) {
+    /* ... */
+  }
    
   class UserViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     
-    fun bind(item: User) { /* ... */ }
+    fun bind(item: User) {
+      /* ... */
+    }
   }
 }
 ```
@@ -475,15 +525,23 @@ class UserAdapter : ListAdapter<User, UserViewHolder>(UserComparator) {
   
   override fun getItemCount() = items.size
   
-  override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(items[position])
+  override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    holder.bind(items[position])
+  }
   
-  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder { /* ... */ }
+  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+    /* ... */
+  }
   
-  fun updateList(items: List<User>) { /* ... */ }
+  fun updateList(items: List<User>) {
+    /* ... */
+  }
    
   class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     
-    fun bind(item: User) { /* ... */ }
+    fun bind(item: User) {
+      /* ... */
+    }
   }
 }
 ```
@@ -496,16 +554,56 @@ class UserAdapter : ListAdapter<User, UserViewHolder>(UserComparator) {
 
 # ListAdapter
 
+```kotlin, [.highlight: 1, 7-9, 11-13, 19-24]
+class UserAdapter : ListAdapter<User, UserViewHolder>(UserComparator) {
+
+  private var items: List<User> = emptyList()
+  
+  override fun getItemCount() = items.size
+  
+  override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    holder.bind(items[position])
+  }
+  
+  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+    /* ... */
+  }
+  
+  fun updateList(items: List<User>) {
+    /* ... */
+  }
+   
+  class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    
+    fun bind(item: User) {
+      /* ... */
+    }
+  }
+}
+```
+
+^ Keeping our view holder behaviours we can then remove the item management
+
+---
+
+# ListAdapter
+
 ```kotlin
 class UserAdapter : ListAdapter<User, UserViewHolder>(UserComparator) {
 
-  override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(items[position])
+  override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    holder.bind(items[position])
+  }
   
-  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder { /* ... */ }
+  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+    /* ... */
+  }
   
   class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     
-    fun bind(item: User) { /* ... */ }
+    fun bind(item: User) {
+      /* ... */
+    }
   }
 }
 ```
@@ -593,7 +691,7 @@ class UserAdapter : ListAdapter<User, UserViewHolder>(UserComparator) {
 ---
 
 # Android JetPack
-## Paging 
+## Paging Library
 
 ![right 100%](jetpack-hero.png)
 
@@ -603,7 +701,8 @@ class UserAdapter : ListAdapter<User, UserViewHolder>(UserComparator) {
 
 ---
 
-## Android JetPack: Paging ![](jetpack-hero.png)
+# Android JetPack ![](jetpack-hero.png)
+## Paging Library
 
 - DataSource ⛲️
 - PagedList 📑
