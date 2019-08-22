@@ -723,18 +723,18 @@ class UserAdapter : ListAdapter<User, UserViewHolder>(UserComparator) {
 # Android JetPack ![](jetpack-hero.png)
 ## Paging Library
 
-- `DataSource` / `DataSource.Factory` ⛲️
-- `PagedList` 📑
 - `PagedListAdapter` ⚙️
+- `PagedList` 📑
+- `DataSource` / `DataSource.Factory` ⛲️
 - `BoundaryCallback` 🏁
 
 ^ Like many of the JetPack components, paging built from three fundamental parts
 
-^ `DataSource` and `DataSource.Factory` base class for loading data with relevant subclasses
+^ `PagedListAdapter`as an adapter to present loaded data and manage diffing
 
 ^ `PagedList` implements list to manage loading of data from `DataSource`
 
-^ `PagedListAdapter`as an adapter to present loaded data and manage diffing
+^ `DataSource` and `DataSource.Factory` base class for loading data with relevant subclasses
 
 ^ `BoundaryCallback` to signal when a `PagedList` has reached the end of available data
 
@@ -833,15 +833,28 @@ class UserAdapter : ListAdapter<User, UserViewHolder>(UserComparator) {
 
 ---
 
-# PagedList
+[.background-color: #ffffff]
+[.text: #666666]
 
-^ But whats going on with `PagedList`, how is it building data?
+![inline](assumed-architecture-pagedlist.png)
+
+^ One of the first steps in migration is integrating the `PagedList`
+
+^ The `PagedList` is propagated through our hierarchy to the UI
+
+---
+
+# `PagedList` ❔
+
+![right](confused-meme.jpg)
+
+^ But what is `PagedList` and where is it coming from? How is it building data?
 
 ^ `PagedList` is a pretty complex lazy loading list
 
 ---
 
-# PagedList
+# `PagedList`
 ## `PagedList<T> : List<T>`
 
 ^ Extending a list it is able to retrieve a potentially infinite list of data 
@@ -852,15 +865,246 @@ class UserAdapter : ListAdapter<User, UserViewHolder>(UserComparator) {
 
 ---
 
+# `PagedList`
+## `PagedListBuilder` 🏗
+
+- Data sources / cache management
+- Page size / prefetch distance
+- Offline characteristics
+- Loading behaviour
+
+^ But we cannot directly instantiate a `PagedList` as there are many complexities
+
+^ As described previously we need to configure how paging should occur
+
+^ How to ensure the data is up-to-date and relevant
+
+^ How much data to load in one chunk and how much to preload
+
+^ How to manage offline caching and data invalidation
+
+^ What UX behaviour to display whilst loading
+
+---
+
+
+# `PagedList`
+## `PagedListBuilder` 🏗
+
+- `LiveDataPagedListBuilder`
+- `RxPagedListBuilder`
+- `FlowPagedListBuilder`[^1]
+
+[^1]: github.com/chrisbanes/tivi/blob/master/data-android/src/main/java/app/tivi/data/FlowPagedListBuilder.kt
+
+^ There are a couple of options for building paged lists
+
+^ Each specific to the container type
+
+---
+
+# `PagedList`
+## `LiveDataPagedListBuilder` 🏗
+
+^ To get started lets take a look at the `LiveData` builder
+
+^ This is the default builder used with Room
+
+---
+
+# `PagedList`
+## `LiveDataPagedListBuilder` 🏗
+
+```kotlin
+class UserRepository(private val service: UserService) {
+
+  fun users(): LiveData<PagedList<User>> {
+    /* ... */
+  }
+}
+```
+
+^ Lets take our repository returning a `PagedList`
+
+^ It's not so important where you build your `PagedList`
+
+^ But to build a `PagedList` we need a `DataSource.Factory`
+
+---
+
+![](table-flip.gif)
+
+^ Bear with me
+
+---
+
+# `PagedList`
+## `LiveDataPagedListBuilder` 🏗
+
+```kotlin, [.highlight: 4-5, 10]
+class UserRepository(private val service: UserService) {
+
+  fun users(): LiveData<PagedList<User>> {
+    val factory: DataSource.Factory = service.users()
+    return LivePagedListBuilder(factory, PAGE_SIZE).build()
+  }
+  
+  companion object {
+  
+    private const val PAGE_SIZE = 20
+  }
+}
+```
+
+^ Lets assume for now we can retrieve a `DataSource.Factory` from our service
+
+^ Build a `LivePagedListBuilder` with the factory and page size
+
+---
+
+# `PagedList.Config`
+## `LiveDataPagedListBuilder` 🏗
+
+```kotlin, [.highlight: 4-9]
+class UserRepository(private val service: UserService) {
+
+  fun users(): LiveData<PagedList<User>> {
+    val factory: DataSource.Factory = service.users()
+    val config: PagedList.Config = PagedList.Config.Builder()
+        .setPageSize(PAGE_SIZE)
+        .build()
+        
+    return LivePagedListBuilder(factory, config).build()
+  }
+  
+  companion object {
+  
+    private const val PAGE_SIZE = 20
+  }
+}
+```
+
+^ To make changes to our setup we can also provide a config instead of the page size
+
+^ But we can add much more to this configuration
+
+---
+
+# `PagedList.Config`
+## `LiveDataPagedListBuilder` 🏗
+
+```kotlin, [.highlight: 7]
+class UserRepository(private val service: UserService) {
+
+  fun users(): LiveData<PagedList<User>> {
+    val factory: DataSource.Factory = service.users()
+    val config: PagedList.Config = PagedList.Config.Builder()
+        .setPageSize(PAGE_SIZE)
+        .setInitialLoadSizeHint(50)
+        .build()
+        
+    return LivePagedListBuilder(factory, config).build()
+  }
+  
+  companion object {
+  
+    private const val PAGE_SIZE = 20
+  }
+}
+```
+
+^ We can also specify the initial load size
+
+^ Defaults to three times the page size
+
+---
+
+# `PagedList.Config`
+## `LiveDataPagedListBuilder` 🏗
+
+```kotlin, [.highlight: 7]
+class UserRepository(private val service: UserService) {
+
+  fun users(): LiveData<PagedList<User>> {
+    val factory: DataSource.Factory = service.users()
+    val config: PagedList.Config = PagedList.Config.Builder()
+        .setPageSize(PAGE_SIZE)
+        .setInitialLoadSizeHint(50)
+        .setPrefetchDistance(10)
+        .build()
+        
+    return LivePagedListBuilder(factory, config).build()
+  }
+  
+  companion object {
+  
+    private const val PAGE_SIZE = 20
+  }
+}
+```
+
+^ We can also specify the prefetch distance
+
+^ Defaults to the page size
+
+---
+
+# PagedList.Config
+
+```kotlin
+val config: PagedList.Config = PagedList.Config.Builder()
+    .setEnablePlaceholders(true)
+    .setInitialLoadSizeInt(50)
+    .setPrefetchDistance(10)
+    .setPageSize(20)
+    .build()
+
+val data: LiveData<PagedList<T>> = LivePagedListBuilder(factory, config)
+    .build()
+```
+
+---
+
+# Placeholders
+
+- Users can scroll past whats loaded
+- Scrollbars look correct
+- Don't need loading spinner
+
+---
+
+# Placeholders
+
+- Items should be same size
+- Adapter must handle null items
+- DataSource must count items
+
+---
+
+# RxJava
+## RxHavaPagedListBuilder()
+
+- `buildObservable()`
+- `buildFlowable()`
+
+---
+
+[.footer: github.com/chrisbanes/tivi/blob/master/data-android/src/main/java/app/tivi/data/FlowPagedListBuilder.kt]
+
+# Coroutines
+## FlowPagedListBuilder()
+
+---
+
+# DataSource.Factory
+
+---
+
 # Paging ❤ Room
 
 ^ In the code lab and in much of the documentation paging is written with Room in mind
 
 ^ Paging works really really well with room
-
----
-
-# DataSource.Factory
 
 ---
 
@@ -1090,50 +1334,12 @@ interface UserDao {
 
 ---
 
-# PagedList.Config
+[.background-color: #ffffff]
+[.text: #666666]
 
-```kotlin
-val config: PagedList.Config = PagedList.Config.Builder()
-    .setEnablePlaceholders(true)
-    .setInitialLoadSizeInt(50)
-    .setPrefetchDistance(10)
-    .setPageSize(20)
-    .build()
+![inline](paging-library-data-flow.png)
 
-val data: LiveData<PagedList<T>> = LivePagedListBuilder(factory, config)
-    .build()
-```
-
----
-
-# Placeholders
-
-- Users can scroll past whats loaded
-- Scrollbars look correct
-- Don't need loading spinner
-
----
-
-# Placeholders
-
-- Items should be same size
-- Adapter must handle null items
-- DataSource must count items
-
----
-
-# RxJava
-## RxHavaPagedListBuilder()
-
-- `buildObservable()`
-- `buildFlowable()`
-
----
-
-[.footer: github.com/chrisbanes/tivi/blob/master/data-android/src/main/java/app/tivi/data/FlowPagedListBuilder.kt]
-
-# Coroutines
-## FlowPagedListBuilder()
+^ Dependent on your application architecture
 
 ---
 
@@ -1154,6 +1360,24 @@ val data: LiveData<PagedList<T>> = LivePagedListBuilder(factory, config)
 
 ---
 
-## Thanks!
+# Further Reading 📖
+
+- **Florina Muntenescu: Migrating to Paging Library**
+    youtube.com/watch?v=8DPgwrV_9-g
+- **Chris Craik & Yigit Boyar: Manage infinite lists with RecyclerView and Paging**
+    youtube.com/watch?v=BE5bsyGGLf4
+- **Android Paging Codelab**
+    codelabs.developers.google.com/codelabs/android-paging/#0
+- **Chris Banes: FlowPagedListBuilder**
+    github.com/chrisbanes/tivi/blob/master/data-android/src/main/java/app/tivi/data/FlowPagedListBuilder.kt
+    
+---
+
+# Slides
+## [fit] github.com/ashdavies/talks/tree/master/2019-08-26-implementing-the-paging-library
+
+---
+
+# Thanks!
 
 ![right](blurred-books.jpg)
