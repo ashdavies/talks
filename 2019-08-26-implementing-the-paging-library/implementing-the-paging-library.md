@@ -11,7 +11,7 @@ text: Open Sans
 ![right inline 15%](immobilienscout24.png)
 
 ## [fit] Implementing the Paging Library
-### Droidcon NYC
+### Droidcon NYC 🇺🇸
 
 ![left inline 30%](gde-badge-round.png)
 
@@ -1022,7 +1022,7 @@ class UserRepository(private val service: UserService) {
 # `PagedList.Config`
 ## `LiveDataPagedListBuilder` 🏗
 
-```kotlin, [.highlight: 7]
+```kotlin, [.highlight: 8]
 class UserRepository(private val service: UserService) {
 
   fun users(): LiveData<PagedList<User>> {
@@ -1044,28 +1044,44 @@ class UserRepository(private val service: UserService) {
 ```
 
 ^ We can also specify the prefetch distance
+ 
+^ Useful if your API is unreliable or network unpredictable
 
 ^ Defaults to the page size
 
 ---
 
-# PagedList.Config
+# `PagedList.Config`
+## `LiveDataPagedListBuilder` 🏗
 
-```kotlin
-val config: PagedList.Config = PagedList.Config.Builder()
-    .setEnablePlaceholders(true)
-    .setInitialLoadSizeInt(50)
-    .setPrefetchDistance(10)
-    .setPageSize(20)
-    .build()
+```kotlin, [.highlight: 9]
+class UserRepository(private val service: UserService) {
 
-val data: LiveData<PagedList<T>> = LivePagedListBuilder(factory, config)
-    .build()
+  fun users(): LiveData<PagedList<User>> {
+    val factory: DataSource.Factory = service.users()
+    val config: PagedList.Config = PagedList.Config.Builder()
+        .setPageSize(PAGE_SIZE)
+        .setInitialLoadSizeHint(50)
+        .setPrefetchDistance(10)
+        .setEnablePlaceholders(false)
+        .build()
+        
+    return LivePagedListBuilder(factory, config).build()
+  }
+  
+  companion object {
+  
+    private const val PAGE_SIZE = 20
+  }
+}
 ```
 
 ---
 
 # Placeholders
+## Advantages
+
+![right](placeholder-state.png)
 
 - Users can scroll past whats loaded
 - Scrollbars look correct
@@ -1074,6 +1090,9 @@ val data: LiveData<PagedList<T>> = LivePagedListBuilder(factory, config)
 ---
 
 # Placeholders
+## Disadvantages
+
+![right](placeholder-state.png)
 
 - Items should be same size
 - Adapter must handle null items
@@ -1081,18 +1100,58 @@ val data: LiveData<PagedList<T>> = LivePagedListBuilder(factory, config)
 
 ---
 
-# RxJava
-## RxHavaPagedListBuilder()
+# `PagedList.Config`
+## `RxPagedListBuilder` 🏗
 
-- `buildObservable()`
-- `buildFlowable()`
+```kotlin, [.highlight: 3, 9-10]
+class UserRepository(private val service: UserService) {
+
+  fun users(): Observable<PagedList<User>> {
+    val factory: DataSource.Factory = service.users()
+    val config: PagedList.Config = PagedList.Config.Builder()
+        .setPageSize(PAGE_SIZE)
+        .build()
+        
+    return RxPagedListBuilder(factory, config)
+        .buildObservable() // or buildFlowable()
+  }
+  
+  companion object {
+  
+    private const val PAGE_SIZE = 20
+  }
+}
+```
+
+^ You can use RxPagedListBuilder to return Rx types
 
 ---
 
 [.footer: github.com/chrisbanes/tivi/blob/master/data-android/src/main/java/app/tivi/data/FlowPagedListBuilder.kt]
 
 # Coroutines
-## FlowPagedListBuilder()
+## `FlowPagedListBuilder` 💪
+
+```kotlin, [.highlight: 3, 9]
+class UserRepository(private val service: UserService) {
+
+  fun users(): Flow<PagedList<User>> {
+    val factory: DataSource.Factory = service.users()
+    val config: PagedList.Config = PagedList.Config.Builder()
+        .setPageSize(PAGE_SIZE)
+        .build()
+        
+    return FlowPagedListBuilder(factory, config).buildFlow()
+  }
+  
+  companion object {
+  
+    private const val PAGE_SIZE = 20
+  }
+}
+```
+
+^ Snippet from Chris Banes Tivi project
 
 ---
 
@@ -1343,6 +1402,10 @@ interface UserDao {
 
 ---
 
+# `BoundaryCallback`
+
+---
+
 # Source of truth
 
 - Consistent data presentation
@@ -1374,7 +1437,7 @@ interface UserDao {
 ---
 
 # Slides
-## [fit] github.com/ashdavies/talks/tree/master/2019-08-26-implementing-the-paging-library
+## bit.ly/paging-library
 
 ---
 
