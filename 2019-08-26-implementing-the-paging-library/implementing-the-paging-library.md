@@ -39,6 +39,25 @@ text: Open Sans
 
 ^ Should poll for updates or push notifications
 
+^ How to animate these changes to delivery
+
+^ Calculate difference in the background
+
+---
+
+[.background-color: #ffffff]
+[.text: #666666]
+
+# Large Data-Sets
+
+![right 90%](large-data.png)
+
+^ Not to be confused with BigData, how to handle large data sets efficiently
+
+^ Stream content, load data in snapshot chunks
+
+^ Ensuring large amounts of data sit around in memory
+
 ---
 
 # Offline
@@ -704,28 +723,370 @@ class UserAdapter : ListAdapter<User, UserViewHolder>(UserComparator) {
 # Android JetPack ![](jetpack-hero.png)
 ## Paging Library
 
-- DataSource ⛲️
-- PagedList 📑
-- PagedListAdapter ⚙️
+- `DataSource` / `DataSource.Factory` ⛲️
+- `PagedList` 📑
+- `PagedListAdapter` ⚙️
+- `BoundaryCallback` 🏁
 
 ^ Like many of the JetPack components, paging built from three fundamental parts
 
-^ `DataSource` base class for loading data with relevant subclasses
+^ `DataSource` and `DataSource.Factory` base class for loading data with relevant subclasses
 
 ^ `PagedList` implements list to manage loading of data from `DataSource`
 
-^ Finally `PagedListAdapter` to present loaded data and manage diffing
+^ `PagedListAdapter`as an adapter to present loaded data and manage diffing
+
+^ `BoundaryCallback` to signal when a `PagedList` has reached the end of available data
+
+---
+
+[.background-color: #ffffff]
+[.text: #666666]
+
+![inline](assumed-architecture-guide.png)
+
+^ If you check out the codelab you'll see the assumed architecture
+
+^ Mainly making use of existing architecture components
+
+^ Most notably the `ViewModel` between UI and repository and database
+
+---
+
+[.background-color: #ffffff]
+[.text: #666666]
+
+![inline](assumed-architecture-livedata.png)
+
+^ Include LiveData with this architecture for observability
+
+^ Allowing the UI to observe a lifecycle aware source
+
+^ Ensure data is not loading when the user not looking at the screen
+
+---
+
+[.background-color: #ffffff]
+[.text: #666666]
+
+![inline](assumed-architecture-pagedlist.png)
+
+^ The paging library introduces the concept of paged lists
+
+^ Lists implementing the interface capable of loading data snapshots
+
+^ Providing the repository with a builder it can produce `LiveData`
+
+---
+
+[.background-color: #ffffff]
+[.text: #666666]
+
+![inline](assumed-architecture-database.png)
+
+^ Adding the data elements from paging to retrieve data
+
+^ Managing a single source of truth via database
+
+^ Using the boundary callback to indicate data required
+
+---
+
+[.background-color: #ffffff]
+[.text: #666666]
+
+![inline](paging-codelab-architecture.png)
+
+^ Finally including interaction cues from the codelab documentation
+
+^ Makes it a little clearer on how these individual components interact
+
+^ So hopefully you all have a clearer idea on how paging works
+
+---
+
+[.background-color: #000000]
+
+![fit](too-fast.gif)
+
+---
+
+[.background-color: #ffffff]
+[.text: #666666]
+
+![inline](assumed-architecture-guide.png)
+
+^ Displaying lists of data will generally require you to traverse through each layer of your application architecture
+
+^ From your database, and data service, through your repositories, interactors, view models, and UI
+
+---
+
+[.background-color: #ffffff]
+[.text: #666666]
+
+![inline](assumed-architecture-livedata.png)
+
+^ By using `LiveData` extensively we can ensure data is only loaded when user is looking at the screen
+
+^ Data changes are lifecycle aware so you can be sure that your app behaves as expected
+
+---
+
+# PagedList
+
+^ But whats going on with `PagedList`, how is it building data?
+
+^ `PagedList` is a pretty complex lazy loading list
+
+---
+
+# PagedList
+## `PagedList<T> : List<T>`
+
+^ Extending a list it is able to retrieve a potentially infinite list of data 
+
+^ Manages executors and scheduling to asynchronously prepare data from data source
+
+^ It's not so necessary to understand how it works besides the fact that it is basically a lazy list
 
 ---
 
 # Paging ❤ Room
 
+^ In the code lab and in much of the documentation paging is written with Room in mind
+
+^ Paging works really really well with room
+
 ---
 
-# PagedList<T> : List<T>
+# DataSource.Factory
 
-- Loads data asynchronously
-- Backed by a DataSource
+---
+
+# Paging ❤ Room
+
+```kotlin
+@Dao
+interface UserDao {
+
+  @Query("SELECT * FROM user")
+  fun users(): DataSource.Factory<Int, User>
+}
+
+```
+
+^ Room already works really well on it's own and with Kotlin
+
+^ Android tooling allows for integration with SQL statements
+
+^ Room able to build data sources factories automatically
+
+---
+
+# Paging ❤ Room
+
+```kotlin, [.highlight: 5]
+@Dao
+interface UserDao {
+
+  @Query("SELECT * FROM user")
+  fun users(): DataSource.Factory<Int, User>
+}
+```
+
+^ So when using room we simply replace `List` with `PagedList` in the service definition
+
+---
+
+![](so-what.gif)
+
+^ All well and good if Room is your only data source, but this is most likely not the case
+
+^ Will need data to insert into the database in the first place
+
+^ You may not be using a database at all
+
+---
+
+# Remote Data Source
+## Backend ☁️
+
+^ Say we're working with a remote data source
+
+^ Such as an our backend service or Firebase
+
+---
+
+# Remote Data Source
+## Index 🗂
+
+^ We need to then decide on how our remote data resource is indexed or keyed
+
+^ Once we know this we can decide on the correct data source
+
+---
+
+# `DataSource<K, V>`
+
+- `PositionalDataSource` 🏎
+
+- `ItemKeyedDataSource` 🔑
+
+- `PageKeyedDataSource` 🔢
+
+^ Paging provides three different types of data sources by key
+
+^ `PositionalDataSource` is ideal for a fixed-size countable data set
+
+^ `ItemKeyedDataSource` when items are ordered and can be identified based on their contents
+
+^ and `PageKeyedDataSource` to retrieve data by page number, quite common with remote API's
+
+---
+
+[.background-color: #ffffff]
+[.text: #666666]
+
+# [fit] `PositionalDataSource`
+## [fit] `PositionalDataSource<User>`
+
+![right](contacts-app.png)
+ 
+- Able to scroll to different elements
+- Load pages of requested sizes
+- Load pages at arbitrary positions
+- Assumed ordering by integer index
+- Provide a fixed item count
+ 
+^ Works well for apps similar to that of the contacts app
+
+^ Allows scrolling through or jumping to a particular position
+
+^ If you can load pages of a requested size at arbitrary positions
+
+^ Assumes an integer as a key thus only requires one parameter
+
+^ The data set should be a fixed-size countable data set
+
+---
+
+[.background-color: #ffffff]
+[.text: #666666]
+
+# [fit] `PositionalDataSource`
+## [fit] `PositionalDataSource<User>`
+
+![right](contacts-app.png)
+ 
+- `loadInitial()`
+ - `requestedStartPosition`
+ - `requestedLoadSize`
+ - `pageSize`
+ - `placeholdersEnabled`
+
+- `loadRange()`
+ - `startPosition`
+ - `loadSize`
+
+^ `requestedStartPosition` will likely be zero on `loadInitial` 
+
+^ But may be a different position if data is invalidated
+
+^ Information necessary for you to decide what data to request
+
+^ `loadRange` will be called every time the users scrolls to the boundary
+
+^ Required only to load from position x with the given size
+
+---
+ 
+# [fit] `ItemKeyedDataSource`
+## [fit] `ItemKeyedDataSource<String, User>`
+
+![right](german-verbs.png)
+ 
+- Great for ordered data sets
+- Items can be uniquely identified
+- Item key indicates position
+- Detect items before or after
+
+---
+ 
+# [fit] `ItemKeyedDataSource`
+## [fit] `ItemKeyedDataSource<String, User>`
+
+![right](german-verbs.png)
+ 
+- `getKey()`
+ 
+- `loadInitial()`
+ - `requestedInitialKey`
+ - `requestedLoadSize`
+ - `placeholdersEnabled`
+ 
+- `loadAfter()`
+ - `key`
+ - `requestedLoadSize`
+ 
+- `loadBefore()`
+ - `key`
+ - `requestedLoadSize`
+
+^ Provide the key for each item so the paging library knows how to index your data
+
+^ Instead of a position we receive a key on `loadInitial` to indicate the start position
+
+^ As the user scrolls up or down the `loadAfter` and `loadBefore` methods will be called
+
+---
+ 
+# [fit] `PageKeyedDataSource`
+## [fit] `PageKeyedDataSource<String, User>`
+
+![right](github-repo-search.png)
+ 
+- Common for API responses
+ - GitHub
+ - Twitter
+ - Reddit
+
+^ Common of API responses like GitHub to provide a prev and next page
+
+^ Similar to a LinkedList, items linked to previous and next items
+
+---
+ 
+# [fit] `PageKeyedDataSource`
+## [fit] `PageKeyedDataSource<String, User>`
+
+![right](github-repo-search.png)
+
+- `loadInitial()`
+ - `requestedLoadSize`
+ - `placeholdersEnabled`
+
+- `loadAfter()`
+ - `key`
+ - `requestedLoadSize`
+ 
+- `loadBefore()`
+ - `key`
+ - `requestedLoadSize`
+
+^ No pointer available for `loadInitial`
+
+^ Also when data is invalidated but user is usually already at the top
+
+^ Provide page keys after data load
+
+^ Key provided for `loadAfter` should return `adjacentPageKey`
+ 
+---
+
+![](phew.gif)
+
+^ That was quite a lot to take in
 
 ---
 
@@ -773,27 +1134,6 @@ val data: LiveData<PagedList<T>> = LivePagedListBuilder(factory, config)
 
 # Coroutines
 ## FlowPagedListBuilder()
-
----
-
-# PositionalDataSource
-
-- Able to scroll to different elements
-- Load initial with start position
-- Returns position with total count
-- Load range with start position
-
----
-
-# ItemKeyedDataSource
-
-- List of names from `DataSource`
-- Item key indicates positon
-- Works well for ordered lists
-
----
-
-# PageKeyedDataSource
 
 ---
 
