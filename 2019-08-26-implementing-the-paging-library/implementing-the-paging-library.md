@@ -728,9 +728,9 @@ class UserAdapter : ListAdapter<User, UserViewHolder>(UserComparator) {
 - `DataSource` / `DataSource.Factory` ⛲️
 - `BoundaryCallback` 🏁
 
-^ Like many of the JetPack components, paging built from three fundamental parts
+^ Like many of the JetPack components, paging built from four fundamental parts
 
-^ `PagedListAdapter`as an adapter to present loaded data and manage diffing
+^ `PagedListAdapter` as an adapter to present loaded data and manage diffing
 
 ^ `PagedList` implements list to manage loading of data from `DataSource`
 
@@ -1076,6 +1076,10 @@ class UserRepository(private val service: UserService) {
 }
 ```
 
+^ Placeholders are a really great UX concept
+
+^ Popular in many recent apps
+
 ---
 
 # Placeholders
@@ -1083,9 +1087,10 @@ class UserRepository(private val service: UserService) {
 
 ![right](placeholder-state.png)
 
-- Users can scroll past whats loaded
-- Scrollbars look correct
-- Don't need loading spinner
+- Continuous scrolling
+- Less abrupt UI changes
+- Scrollbars maintain consistency
+- Accurately indicate loading state
 
 ---
 
@@ -1094,9 +1099,9 @@ class UserRepository(private val service: UserService) {
 
 ![right](placeholder-state.png)
 
-- Items should be same size
-- Adapter must handle null items
-- DataSource must count items
+- Irregular sized items cause UI jank
+- Prepare view holder without item
+- Data set must be quantifiable
 
 ---
 
@@ -1393,16 +1398,30 @@ interface UserDao {
 
 ---
 
+# Architecture 🏢
+
+^ You'll need to choose the right option for you 
+
+^ Based on your API structure and architecture
+
+---
+
 [.background-color: #ffffff]
 [.text: #666666]
 
 ![inline](paging-library-data-flow.png)
 
-^ Dependent on your application architecture
+^ Depending
 
 ---
 
-# `BoundaryCallback`
+# Database ![](database-icon.png)
+
+^ If your're using a database as a cache
+
+^ Offline backup or storage
+
+^ Establish a single source of truth
 
 ---
 
@@ -1415,11 +1434,16 @@ interface UserDao {
 
 ---
 
-# Database + Network
+# `BoundaryCallback` 🏁
 
-- Needs out of data signal from DB
-- Triggers network load from DB
-- Paging calls BoundaryCallback
+- Signals end of data from database
+- Triggers network load to populate
+- Provided to `PagedListBuilder`
+
+---
+
+# `BoundaryCallback` 🏁
+## `PagedList.BoundaryCallback<User>`
 
 ---
 
