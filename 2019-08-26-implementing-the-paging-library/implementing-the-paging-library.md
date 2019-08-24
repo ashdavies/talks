@@ -3,7 +3,6 @@ build-lists: true
 footer: @askashdavies
 footer-style: Open Sans
 header: Open Sans
-slidenumbers: true
 slide-transition: true
 theme: Plain Jane, 3
 text: Open Sans
@@ -1445,6 +1444,23 @@ interface UserDao {
 # `BoundaryCallback` 🏁
 ## `PagedList.BoundaryCallback<User>`
 
+```java
+public abstract static class BoundaryCallback<T> {
+  
+  public void onZeroItemsLoaded() { }
+
+  public void onItemAtFrontLoaded(@NonNull T itemAtFront) { }
+
+  public void onItemAtEndLoaded(@NonNull T itemAtEnd) { }
+}
+```
+
+^ `onZeroItemsLoaded` called when zero items are returned from an initial load
+
+^ `onItemAtFrontLoaded` called when item at front has been loaded within prefetch distance
+
+^ `onItemAtEndLoaded` called when item at end has been loaded within prefetch distance
+
 ---
 
 # Further Reading 📖
@@ -1455,13 +1471,21 @@ interface UserDao {
     youtube.com/watch?v=BE5bsyGGLf4
 - **Android Paging Codelab**
     codelabs.developers.google.com/codelabs/android-paging/#0
+- **Google Samples: Paging with Network Sample**
+    github.com/googlesamples/android-architecture-components/tree/master/PagingWithNetworkSample
 - **Chris Banes: FlowPagedListBuilder**
     github.com/chrisbanes/tivi/blob/master/data-android/src/main/java/app/tivi/data/FlowPagedListBuilder.kt
     
 ---
 
-# Slides
-## bit.ly/paging-library
+# [fit] Implementing the Paging Library
+
+### bit.ly/github-repo-search
+### bit.ly/paging-library
+
+![right](github-repo-search.png)
+
+^ Sample application demonstrating paging library
 
 ---
 
