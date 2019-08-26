@@ -24,9 +24,21 @@ text: Open Sans
 
 ^ Nearly all applications display lists of data
 
-^ Surprisingly hard to find SFW screenshots
+^ Structured data provided in feed form
 
 ^ Simple concept but many hidden complexities
+
+^ Surprisingly hard to find SFW app screenshots
+
+---
+
+# Challenges 🤔
+
+^ But presentation of feed content isn't so simple
+
+^ Faced with many challenges in ensuring a good user experience
+
+^ Seamless delivery of structured and personalised content
 
 ---
 
@@ -51,7 +63,7 @@ text: Open Sans
 
 ![right 90%](large-data.png)
 
-^ Not to be confused with BigData, how to handle large data sets efficiently
+^ How to handle large data sets efficiently
 
 ^ Stream content, load data in snapshot chunks
 
@@ -63,7 +75,11 @@ text: Open Sans
 
 ![right 25%](offline-screenshot.png)
 
-^ How should your content behave when offline
+^ How should your content behave when offline or under poor network conditions
+
+^ Abundance of network connectivity shouldn't be assumed
+
+^ Especially in developing countries, or if you live in Germany
 
 ---
 
@@ -72,6 +88,12 @@ text: Open Sans
 ![right 25%](empty-state.png)
 
 ^ How to accurately represent state to users
+
+^ Not limited to architecture
+
+^ Appropriately convey to the user the state of your app
+
+^ Loading information, useful error messages, etc
 
 ---
 
@@ -82,13 +104,19 @@ text: Open Sans
 
 ![autoplay right](loading-indicator.mp4)
 
-^ Indicate progress and network operations
+^ Indicate appropriate progress on network operations
+
+^ With so many loading state options available
+
+^ Selecting the option best suited for your user experience
 
 ---
 
 # 🛠 🕰
 
-^ How could we have handled this before paging?
+^ Lets dive into a bit of Android history
+
+^ What options did we have available before JetPack?
 
 ---
 
@@ -175,13 +203,19 @@ class ListAdapter() : BaseAdapter() {
 
 ^ Additionally we would have to implement retrieval of items
 
-^ Notification of data invalidation
+^ Notification of invalidation for entire data set
+
+^ No support for data range invalidation or diffing
 
 ---
 
-# Paging 📄
+# Pagination 📄
 
 ^ How would you handle infinite scrolling with a list view?
+
+^ Many solutions would opt for a next button at the bottom of the list
+
+^ Could be achieved with a scroll listener
 
 ---
 
@@ -192,7 +226,9 @@ class ListAdapter() : BaseAdapter() {
 
 ^ Detect if the user has scrolled sufficiently and load data
 
-^ Really unreliable and blindly updating data
+^ Unreliable and blindly updating data
+
+^ Difficult to manage if previously loaded data becomes invalidated
 
 ---
 
@@ -203,7 +239,7 @@ class ListAdapter() : BaseAdapter() {
 - Notify entire data set of change
 - Not capable of diffing items
 
-^ What else do we have available
+^ Base adapter list view combination review
 
 ---
 
@@ -215,7 +251,7 @@ class ListAdapter() : BaseAdapter() {
 
 ^ Independent of Android platform, though AndroidX requires 28
 
-^ Previous artifacts available via Maven if you're really unlucky
+^ Previous artifacts available via Maven if you're unlucky enough to target an earlier API
 
 ---
 
@@ -299,18 +335,18 @@ class ListAdapter() : BaseAdapter() {
 # ListAdapter
 ## `submitList(...)`
 
-^ Achieves immutability this by taking control of the list
+^ Achieves immutability by taking control of the list
 
 ^ Where previously an adapter would manage the list of items
 
-^ Allowing you to focus on binding the `ViewHolder`
+^ Allowing you to focus on view creation and binding behaviour
 
 ---
 
 # Migration
 ## `ListAdapter<T>`
 
-^ Since the `ListAdapter` plays such an important role as a precursor to the paging library
+^ Since the `ListAdapter` plays such an important role as a precursor (or post-cursor) to the paging library
 
 ^ It's generally good idea to use it wherever possible if you're not already doing so
 
@@ -566,7 +602,7 @@ class UserAdapter : ListAdapter<User, UserViewHolder>(UserComparator) {
 
 ^ Changing the adapter to extend the list adapter with the type and view holder
 
-^ Making sure to pas in our diff util callback to the adapter
+^ Making sure to pass in our diff util callback to the adapter
 
 ---
 
@@ -713,9 +749,7 @@ class UserAdapter : ListAdapter<User, UserViewHolder>(UserComparator) {
 
 ![right 100%](jetpack-hero.png)
 
-^ Introducing JetPack
-
-^ JetPack is...
+^ Half way through the talk and I've not yet told you about the Paging library
 
 ---
 
@@ -727,15 +761,15 @@ class UserAdapter : ListAdapter<User, UserViewHolder>(UserComparator) {
 - `DataSource` / `DataSource.Factory` ⛲️
 - `BoundaryCallback` 🏁
 
-^ Like many of the JetPack components, paging built from four fundamental parts
+^ Like many of the JetPack components, paging built from three or four fundamental parts
 
-^ `PagedListAdapter` as an adapter to present loaded data and manage diffing
+^ - `PagedListAdapter` as an adapter to present loaded data and manage diffing
 
-^ `PagedList` implements list to manage loading of data from `DataSource`
+^ - `PagedList` implements list to manage loading of data from `DataSource`
 
-^ `DataSource` and `DataSource.Factory` base class for loading data with relevant subclasses
+^ - `DataSource` and `DataSource.Factory` base class for loading data with relevant subclasses
 
-^ `BoundaryCallback` to signal when a `PagedList` has reached the end of available data
+^ - `BoundaryCallback` to signal when a `PagedList` has reached the end of available data
 
 ---
 
@@ -800,7 +834,7 @@ class UserAdapter : ListAdapter<User, UserViewHolder>(UserComparator) {
 
 ^ Makes it a little clearer on how these individual components interact
 
-^ So hopefully you all have a clearer idea on how paging works
+^ So hopefully this explains everything you need to know about the paging library
 
 ---
 
@@ -851,6 +885,8 @@ class UserAdapter : ListAdapter<User, UserViewHolder>(UserComparator) {
 
 ^ `PagedList` is a pretty complex lazy loading list
 
+^ Thankfully, complexity hidden from usage
+
 ---
 
 # `PagedList`
@@ -874,15 +910,13 @@ class UserAdapter : ListAdapter<User, UserViewHolder>(UserComparator) {
 
 ^ But we cannot directly instantiate a `PagedList` as there are many complexities
 
-^ As described previously we need to configure how paging should occur
+^ - How to ensure the data is up-to-date and relevant
 
-^ How to ensure the data is up-to-date and relevant
+^ - How much data to load in one chunk and how much to preload
 
-^ How much data to load in one chunk and how much to preload
+^ - How to manage offline caching and data invalidation
 
-^ How to manage offline caching and data invalidation
-
-^ What UX behaviour to display whilst loading
+^ - What UX behaviour to display whilst loading
 
 ---
 
@@ -899,6 +933,12 @@ class UserAdapter : ListAdapter<User, UserViewHolder>(UserComparator) {
 ^ There are a couple of options for building paged lists
 
 ^ Each specific to the container type
+
+^ - `LiveDataPagedListBuilder` for a ´LiveData´ type
+
+^ - `RxPagedListBuilder` for reactive java
+
+^ - Unofficial `FlowPagedListBuilder` implementation from Chris Banes
 
 ---
 
@@ -927,13 +967,19 @@ class UserRepository(private val service: UserService) {
 
 ^ It's not so important where you build your `PagedList`
 
+^ Can be in `ViewModel`, `Repository`, `UseCase`, `Fragment`, or `Activity`
+
+^ This isn't a talk about architecture, use your best judgement
+
 ^ But to build a `PagedList` we need a `DataSource.Factory`
 
 ---
 
 ![](table-flip.gif)
 
-^ Bear with me
+^ We were already building a `PagedList`, how do we build a `DataSource.Factory`?
+
+^ There is a bit of hierarchy here, but bear with me
 
 ---
 
@@ -1221,7 +1267,7 @@ interface UserDao {
 
 ^ Say we're working with a remote data source
 
-^ Such as an our backend service or Firebase
+^ Such as an a backend service or with Firebase
 
 ---
 
@@ -1242,13 +1288,13 @@ interface UserDao {
 
 - `PageKeyedDataSource` 🔢
 
-^ Paging provides three different types of data sources by key
+^ The Paging library provides three different types of data sources by key
 
-^ `PositionalDataSource` is ideal for a fixed-size countable data set
+^ - `PositionalDataSource` is ideal for a fixed-size countable data set
 
-^ `ItemKeyedDataSource` when items are ordered and can be identified based on their contents
+^ - `ItemKeyedDataSource` when items are ordered and can be identified based on their contents
 
-^ and `PageKeyedDataSource` to retrieve data by page number, quite common with remote API's
+^ - and `PageKeyedDataSource` to retrieve data by page number, quite common with remote API's
 
 ---
 
@@ -1268,13 +1314,13 @@ interface UserDao {
  
 ^ Works well for apps similar to that of the contacts app
 
-^ Allows scrolling through or jumping to a particular position
+^ - Allows scrolling through or jumping to a particular position
 
-^ If you can load pages of a requested size at arbitrary positions
+^ - If you can load pages of a requested size at arbitrary positions
 
-^ Assumes an integer as a key thus only requires one parameter
+^ - Assumes an integer as a key thus only requires one parameter
 
-^ The data set should be a fixed-size countable data set
+^ - The data set should be a fixed-size countable data set
 
 ---
 
@@ -1296,15 +1342,15 @@ interface UserDao {
  - `startPosition`
  - `loadSize`
 
-^ `requestedStartPosition` will likely be zero on `loadInitial` 
+^ - `requestedStartPosition` will likely be zero on `loadInitial` 
 
-^ But may be a different position if data is invalidated
+^ - But may be a different position if data is invalidated
 
-^ Information necessary for you to decide what data to request
+^ - Information necessary for you to decide what data to request
 
-^ `loadRange` will be called every time the users scrolls to the boundary
+^ - `loadRange` will be called every time the users scrolls to the boundary
 
-^ Required only to load from position x with the given size
+^ - Required only to load from position x with the given size
 
 ---
  
@@ -1340,11 +1386,11 @@ interface UserDao {
  - `key`
  - `requestedLoadSize`
 
-^ Provide the key for each item so the paging library knows how to index your data
+^ - Provide the key for each item so the paging library knows how to index your data
 
-^ Instead of a position we receive a key on `loadInitial` to indicate the start position
+^ - Instead of a position we receive a key on `loadInitial` to indicate the start position
 
-^ As the user scrolls up or down the `loadAfter` and `loadBefore` methods will be called
+^ - As the user scrolls up or down the `loadAfter` and `loadBefore` methods will be called
 
 ---
  
@@ -1469,6 +1515,8 @@ public abstract static class BoundaryCallback<T> {
     youtube.com/watch?v=8DPgwrV_9-g
 - **Chris Craik & Yigit Boyar: Manage infinite lists with RecyclerView and Paging**
     youtube.com/watch?v=BE5bsyGGLf4
+-- **ADB: Prefetch and Paging**
+    androidbackstage.blogspot.com/2018/10/episode-101-prefetch-and-paging.html
 - **Android Paging Codelab**
     codelabs.developers.google.com/codelabs/android-paging/#0
 - **Google Samples: Paging with Network Sample**
@@ -1489,6 +1537,6 @@ public abstract static class BoundaryCallback<T> {
 
 ---
 
-# Thanks!
+# Happy Paging!
 
 ![right](blurred-books.jpg)
