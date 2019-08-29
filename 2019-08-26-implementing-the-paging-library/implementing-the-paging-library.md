@@ -232,6 +232,12 @@ class ListAdapter() : BaseAdapter() {
 
 ---
 
+![](eew.gif)
+
+^ Not ideal
+
+---
+
 # BaseAdapter / ListView
 
 - Manages list of it's own data
@@ -864,6 +870,10 @@ class UserAdapter : ListAdapter<User, UserViewHolder>(UserComparator) {
 
 ^ Data changes are lifecycle aware so you can be sure that your app behaves as expected
 
+^ This also works with other observable types such as RxJava or Flow
+
+^ But you must handle lifecycle events yourself
+
 ---
 
 [.background-color: #ffffff]
@@ -1267,7 +1277,7 @@ interface UserDao {
 
 ^ Say we're working with a remote data source
 
-^ Such as an a backend service or with Firebase
+^ Such as a backend service or Firebase
 
 ---
 
@@ -1456,7 +1466,9 @@ interface UserDao {
 
 ![inline](paging-library-data-flow.png)
 
-^ Depending
+^ Depending on your situation may want to use app purely with backend
+
+^ You may have multiple data sources with network and database
 
 ---
 
@@ -1515,10 +1527,10 @@ public abstract static class BoundaryCallback<T> {
     youtube.com/watch?v=8DPgwrV_9-g
 - **Chris Craik & Yigit Boyar: Manage infinite lists with RecyclerView and Paging**
     youtube.com/watch?v=BE5bsyGGLf4
--- **ADB: Prefetch and Paging**
+- **ADB: Prefetch and Paging**
     androidbackstage.blogspot.com/2018/10/episode-101-prefetch-and-paging.html
 - **Android Paging Codelab**
-    codelabs.developers.google.com/codelabs/android-paging/#0
+    codelabs.developers.google.com/codelabs/android-paging/
 - **Google Samples: Paging with Network Sample**
     github.com/googlesamples/android-architecture-components/tree/master/PagingWithNetworkSample
 - **Chris Banes: FlowPagedListBuilder**
