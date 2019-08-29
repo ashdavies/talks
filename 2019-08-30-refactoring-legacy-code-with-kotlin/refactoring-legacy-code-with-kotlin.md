@@ -9,8 +9,8 @@ text: Open Sans
 
 ![right inline 15%](immobilienscout24.png)
 
-## [fit] Refactoring Legacy Code with Kotlin
-### Kotlin Everywhere: Hamburg
+# [fit] Refactoring Legacy Code with Coroutines
+## Kotlin Everywhere: Hamburg
 
 ![left inline 30%](gde-badge-round.png)
 
@@ -20,10 +20,18 @@ text: Open Sans
 
 ![right inline 15%](immobilienscout24.png)
 
-## [fit] How to prepare a talk in under 24 hours ⏰
-### Kotlin Everywhere: Hamburg
+# [fit] ~~Refactoring Legacy Code with Coroutines~~
+## [fit] Refactoring Legacy Code with Kotlin
 
 ![left inline 30%](gde-badge-round.png)
+
+![right](abandoned-antique.jpg)
+
+---
+
+![right inline 15%](immobilienscout24.png)
+
+# [fit] How to prepare a talk in under 24 hours ⏰
 
 ![right](abandoned-antique.jpg)
 
@@ -255,6 +263,87 @@ text: Open Sans
 - android.github.io/kotlin-guides/style.html
 
 ^ Android and Jetbrains both define a common code style
+
+---
+
+# Refactoring Legacy Code
+
+^ How does this relate to refactoring legacy code
+
+---
+
+# ⌃⌥⇧K
+
+---
+
+![](job-done.gif)
+
+^ Job done lets go home
+
+---
+
+![](no.gif)
+
+^ Please don't do this
+
+^ Let me explain why
+
+---
+
+```java
+public class CrappyJavaActivity extends DaggerAppCompatActivity {
+
+  @Inject Chameleon chameleon;
+}
+```
+
+^ Chameleon is an internal library we use for configuration
+
+^ Auto formatting makes a lot of general assumptions
+
+---
+
+![](general-assumptions.jpg)
+
+# General Assumptions 👮‍♂️
+
+---
+
+```kotlin
+class CrappyKotlinActivity : DaggerAppCompatActivity() {
+
+  @Inject internal var chameleon: Chameleon? = null
+}
+```
+
+^ Parameters are assumed to be null if not directly instantiated
+
+---
+
+```kotlin
+class SlightlyLessCrapKotlinActivity : DaggerAppCompatActivity() {
+
+  @Inject internal lateinit var chameleon: Chameleon
+}
+```
+
+^ Opting for a lateinit variable allows you to configure the property
+
+^ Needs to be a var to make setting property visible
+
+---
+
+# [fit] UninitializedPropertyAccessException!
+
+^ Throws a generic exception on property access
+
+---
+
+```kotlin
+lateinit var file: File    
+
+if (::file.isInitialized) { /* ... */ }
+```
 
 ---
 
