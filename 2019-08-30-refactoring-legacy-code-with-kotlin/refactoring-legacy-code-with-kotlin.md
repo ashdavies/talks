@@ -441,6 +441,14 @@ data class User(val firstName: String, val lastName: String)
 
 ---
 
+```kotlin
+data class User(val firstName: String, val lastName: String? = null)
+```
+
+^ This also works for default parameters and nullable properties
+
+---
+
 ```java
 @NotNull
 public final User copy(@Nullable String firstName, @Nullable String lastName) {
@@ -456,18 +464,167 @@ public final User copy(@Nullable String firstName, @Nullable String lastName) {
 
 # Kotlin
 
-- Implementing singletons
-- Handling strings
+- Singleton objects
+- String interpolation
 - Elvis operator 🕺
 - Destructuring
-- Properties and backing properties
-- Default arguments and named parameters
-- Working with collections
 - Extension functions
-- Top-level functions and parameters
-- let, apply, with, and run keywords
+- Scoping functions
 
 ^ Kotlin offers a variety of other niceties
+
+---
+
+# Maintaining History
+
+^ One of the main frustration about migrating to Kotlin is retaining VCS history
+
+^ A few tricks can achieve this
+
+---
+
+# Maintaining History
+
+- Change extension `.java` -> `.kt` 
+- First commit
+- Apply Kotlin conversion
+- Second commit
+
+^ Whilst this will technically work
+
+^ Some reasoning and change history will still be lost
+
+^ Commit purpose doesn't hold business value
+
+---
+
+# Maintaining History
+## Refactoring
+
+^ Better to migrate to Kotlin through abstraction and refactoring
+
+^ Apply single responsibility principle to complex classes
+
+---
+
+# Refactoring
+
+^ Better to migrate to Kotlin through abstraction and refactoring
+
+^ Apply single responsibility principle to complex classes
+
+---
+
+# Refactoring
+## SOLID
+
+- Single-responsibility
+- Open-closed
+- Liskov substitution
+- Interface segregation
+- Dependency inversion
+
+^ We should all be familiar with solid design
+
+---
+
+# Refactoring
+## Single Responsibility
+
+^ Identifying when a class has too much responsibility allows abstraction
+
+^ Creating new classes also reveals intent can be better tracked
+
+---
+
+# Perspective 🔭
+
+^ Solving the same problem in a different way results in a better understanding of the requirements
+
+^ Same reason we perform Kata exercises to hone our skills
+
+---
+
+# Asynchronicity
+
+^ Which brings us to asynchronicity, many tasks don't immediately return a value
+
+^ Need to perform background operations or computation
+
+^ Especially important in UI environments
+
+---
+
+# Concurrency is Hard 🚄
+
+^ When managing multiple threads we can run into issues
+
+^ Race conditions a problem with a shared mutable state
+
+---
+
+# Thread
+
+```java
+new Thread(() -> {
+  foo();
+}).start();
+```
+
+^ The simplest of these operations is a new thread
+
+^ Not very efficient, resource intensive
+
+^ Result not encapsulated, not easily cancellable
+
+---
+
+# CompletableFuture
+
+```java
+CompletableFuture.supplyAsync(this::findSomeData)
+  .thenApply(this:: intReturningMethod)
+  .thenAccept(this::notify);
+```
+
+^ Bit more useful, only available in Java 8
+
+---
+
+# RxJava
+
+```java
+Observable
+  .fromIterable(resourceDraft.getResources())
+  .flatMap(resourceServiceApiClient::createUploadContainer)
+  .zipWith(Observable.fromIterable(resourceDraft.getResources()), Pair::create)
+  .flatMap(uploadResources())
+  .toList()
+  .toObservable()
+  .flatMapMaybe(resourceCache.getResourceCachedItem())
+  .defaultIfEmpty(Resource.getDefaultItem())
+  .flatMap(postResource(resourceId, resourceDraft.getText(), currentUser, resourceDraft.getIntent()))
+  .observeOn(AndroidSchedulers.mainThread())
+  .subscribeOn(Schedulers.io())
+  .subscribe(
+      resource -> repository.setResource(resourceId, resource, provisionalResourceId),
+      resourceUploadError(resourceId, resourceDraft, provisionalResourceId)
+  );
+```
+
+---
+
+![](escalated-quickly.jpg)
+
+^ That escalated quickly
+
+---
+
+# What If? 🤔
+
+^ But what if we could write asynchronous code in a synchronous imperitive fashion
+
+^ Whilst retaining reactive state and managing a hierarchy of concurrency?
 
 ---
 
@@ -584,6 +741,24 @@ fun main() {
 ```kotlin
 @ExperimentalCoroutinesApi // ⚠️
 
+@FlowPreview // ⚠️
+```
+
+^ Flow is a newer architectural model that attempts to model chaining behaviour
+
+^ Much like a sequence that is only consumed on a terminal operator
+
+^ Cold observable easily replayed and reusable
+
+---
+
+# Annotations
+
+```kotlin
+@ExperimentalCoroutinesApi // ⚠️
+
+@FlowPreview // ⚠️
+
 @ObsoleteCoroutinesApi // ⚠️
 ```
 
@@ -600,6 +775,8 @@ fun main() {
 ```kotlin
 @ExperimentalCoroutinesApi // ⚠️
 
+@FlowPreview // ⚠️
+
 @ObsoleteCoroutinesApi // ⚠️
 
 @InternalCoroutinesApi // ☠️
@@ -611,11 +788,20 @@ fun main() {
 
 ---
 
+# Annotations
+## `@Experimental`
+
+^ All of these are annotated with experimental
+
+^ Sometimes causing an error, and sometimes a warning
+
+^ Can be extended with your own annotations 
+
+---
+
 # 💪 Coroutines 💪
 
 ^ What makes everybody want to jump on the Coroutine bandwagon?
-
-^ Two left arms because RTL emojis aren't a thing yet
 
 ---
 
@@ -631,6 +817,16 @@ fun main() {
 
 ---
 
+# Efficient 🌮
+
+^ Coroutines are fast and memory efficient
+
+^ Leaning on the compiler to perform thread optimisations
+
+^ Launch hundreds of thousands of threads without any performance issues
+
+---
+
 # 😊 Easy-to-use
 
 ^ Learning curve for getting started is really simple
@@ -642,6 +838,82 @@ fun main() {
 ^ Create suspended methods with the suspend operations
 
 ^ Methods need not care about scheduling
+
+^ Suspended functions are easy to refactor
+
+---
+
+# 👌 Suspend
+
+```kotlin
+fun main() {
+    GlobalScope.launch {
+        delay(1000L)
+        println("World!")
+    }
+    println("Hello,")
+    Thread.sleep(2000L)
+}
+
+// Hello,
+// World!
+```
+
+^ Lets take our suspend example from earlier
+
+---
+
+# 👌 Suspend
+
+```kotlin, [.highlight: 3, 8-11]
+fun main() {
+  GlobalScope.launch {
+    doWorld()
+    println("Hello,")
+    Thread.sleep(2000L)
+  }
+}
+
+suspend fun doWorld() {
+  delay(1000L)
+  println("World!")
+}
+
+// Hello,
+// World!
+```
+
+^ The extracted function is simply marked as suspend
+
+^ Allows called to manage execution context
+
+^ But what if I need a different context?
+
+---
+
+# 👌 Suspend
+
+```kotlin, [.highlight: 10-13]
+fun main() {
+  GlobalScope.launch {
+    doWorld()
+    println("Hello,")
+    Thread.sleep(2000L)
+  }
+}
+
+suspend fun doWorld() {
+  withContext(Dispatchers.IO) {
+    delay(1000L)
+    println("World!")
+  }
+}
+
+// Hello,
+// World!
+```
+
+^ Call `withContext` providing a dispatcher or context
 
 ---
 
