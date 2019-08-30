@@ -943,6 +943,27 @@ suspend fun doWorld() {
 
 ---
 
+# Testing
+
+```kotlin
+@Test
+fun testFoo() = runBlockingTest {
+  val actual = foo() 
+  // ...
+}
+
+suspend fun foo() {
+  delay(1_000)
+  // ...
+}
+```
+
+^ Simply use the Coroutine builder `runBlockingTest` to build a testable context
+
+^ Suspended operations in `runBlockingTest` will be auto-advanced virtual time
+
+---
+
 # Thanks!
 
 ![right](abandoned-antique.jpg)
