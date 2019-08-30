@@ -964,6 +964,19 @@ suspend fun foo() {
 
 ---
 
+# Further Reading 📖
+
+- **Google Codelab: Refactoring to Kotlin**
+    https://codelabs.developers.google.com/codelabs/java-to-kotlin/
+- **KotlinX Coroutine Test**
+    https://github.com/Kotlin/kotlinx.coroutines/tree/master/kotlinx-coroutines-test
+- **Sean McQuillan: Coroutines + Testing = ❤️**
+    https://www.droidcon.com/media-detail?video=352671106
+- **Ash Davies: RxJava & Coroutines: A Practical Analysis v3**
+    https://speakerdeck.com/ashdavies/rxjava-and-coroutines-a-practical-analysis-v3
+
+---
+
 # Thanks!
 
 ![right](abandoned-antique.jpg)
