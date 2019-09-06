@@ -2,7 +2,7 @@ autoscale: true
 build-lists: true
 footer: @askashdavies
 footer-style: Open Sans
-header: Google Sans
+header: Open Sans
 slide-transition: true
 theme: Simple, 3
 text: Open Sans
@@ -15,6 +15,10 @@ text: Open Sans
 ![left inline 30%](gde-badge-round.png)
 
 ![right](abandoned-antique.jpg)
+
+^ Micheal Feathers defines legacy code as anything that isn't reliably tested
+
+^ I'm considering this to include anything that's Java
 
 ---
 
@@ -58,13 +62,13 @@ text: Open Sans
 
 # Kotlin ![](kotlin-logo.png)
 
-^ Many arguments for Kotlin of Java
+^ Many arguments for Kotlin over Java
 
-^ Code that looks familiar
+^ Code that looks consistently familiar
 
 ^ Code that behaves idiomatically
 
-^ Code that looks concise
+^ Code that looks terse and concise
 
 ^ Aggressive development including new features
 
@@ -87,6 +91,8 @@ if (foo == null) {
   bar();
 }
 ```
+
+^ Probably seen these littered all over
 
 ---
 
@@ -870,8 +876,8 @@ fun main() {
   GlobalScope.launch {
     doWorld()
     println("Hello,")
-    Thread.sleep(2000L)
   }
+  Thread.sleep(2000L)
 }
 
 suspend fun doWorld() {
@@ -896,10 +902,10 @@ suspend fun doWorld() {
 ```kotlin, [.highlight: 10-13]
 fun main() {
   GlobalScope.launch {
-    doWorld()
+    launch { doWorld() }
     println("Hello,")
-    Thread.sleep(2000L)
   }
+  Thread.sleep(2000L)
 }
 
 suspend fun doWorld() {
@@ -967,13 +973,13 @@ suspend fun foo() {
 # Further Reading 📖
 
 - **Google Codelab: Refactoring to Kotlin**
-    https://codelabs.developers.google.com/codelabs/java-to-kotlin/
+    codelabs.developers.google.com/codelabs/java-to-kotlin/
 - **KotlinX Coroutine Test**
-    https://github.com/Kotlin/kotlinx.coroutines/tree/master/kotlinx-coroutines-test
+    github.com/Kotlin/kotlinx.coroutines/tree/master/kotlinx-coroutines-test
 - **Sean McQuillan: Coroutines + Testing = ❤️**
-    https://www.droidcon.com/media-detail?video=352671106
+    droidcon.com/media-detail?video=352671106
 - **Ash Davies: RxJava & Coroutines: A Practical Analysis v3**
-    https://speakerdeck.com/ashdavies/rxjava-and-coroutines-a-practical-analysis-v3
+    speakerdeck.com/ashdavies/rxjava-and-coroutines-a-practical-analysis-v3
 
 ---
 
