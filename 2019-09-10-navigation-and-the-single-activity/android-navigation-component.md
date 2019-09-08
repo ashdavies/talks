@@ -4,46 +4,19 @@ footer: @askashdavies
 footer-style: Open Sans
 header: Open Sans
 slide-transition: true
-theme: Simple, 6
+theme: Plain Jane, 3
 text: Open Sans
 
 ![right inline 15%](immobilienscout24.png)
 
-## [fit] Navigation and the Single Activity
-### Learnings from a Skeptic
+# [fit] Navigation and the Single Activity
+## Learnings from a Skeptic
 
 ![left inline 30%](gde-badge-round.png)
 
 ![right](aerial-shot-ship.jpg)
 
 ^ Speaker introduction
-
----
-
-[.background-color: #EEA243]
-![right inline 15%](immobilienscout24.png)
-
-## Random Slides
-### Cheese
-
-![left inline 30%](gde-badge-round.png)
-
-![right](cheese.jpeg)
-
-^ Or was it cheese?
-
----
-
-![right inline 15%](immobilienscout24.png)
-
-## [fit] Navigation and the Single Activity
-### Learnings from a Skeptic
-
-![left inline 30%](gde-badge-round.png)
-
-![right](aerial-shot-ship.jpg)
-
-^ Stick to the stuff I'm good with
 
 ---
 
@@ -93,7 +66,7 @@ class MainActivity : AppCompatActivity {
 
 ---
 
-## 😰
+# 😰
 
 ^ Activities dependent on other activity implementations
 
@@ -103,7 +76,7 @@ class MainActivity : AppCompatActivity {
 
 ---
 
-> ### "Once we have gotten in to this entry-point to your UI, we really don't care how you organise the flow inside."
+> ## "Once we have gotten in to this entry-point to your UI, we really don't care how you organise the flow inside."
 -- Dianne Hackborn, Android Framework team, 2016
 
 ^ 2016 back when Google Plus was still a thing
@@ -114,7 +87,7 @@ class MainActivity : AppCompatActivity {
 
 ---
 
-## 🍯 🐝
+# 🍯 🐝
 
 ^ Honeycomb (14) breaks up screens into Fragments
 
@@ -255,7 +228,7 @@ public class MainActivity extends FragmentActivity {
 
 ---
 
-## Activity Lifecycle != Fragment Lifecycle
+# [fit] Activity Lifecycle != Fragment Lifecycle
 
 ^ Not just creation and use of fragments that included more complexity
 
@@ -263,7 +236,7 @@ public class MainActivity extends FragmentActivity {
 
 ---
 
-## [fit] Activity Lifecycle != Fragment Lifecycle != View Lifecycle
+# [fit] Activity Lifecycle != Fragment Lifecycle != View Lifecycle
 
 ^ Fragment lifecycle being detached from an activity makes view lifecycle even more complicated
 
@@ -281,7 +254,7 @@ public class MainActivity extends FragmentActivity {
 
 ---
 
-## ➡️ ⬆️ ➡️ ⬅️ ➡️
+# ⬆️ ⬆️ ⬇️ ⬇️ ⬅️ ➡️️ ⬅️ ➡️️ ⏮ ⏭
 
 ^ Explicitly invoke addToBackStack or add on transactions
 
@@ -291,7 +264,7 @@ public class MainActivity extends FragmentActivity {
 
 ---
 
-### (supportFragmentManager || childFragmentManager)?
+# (`supportFragmentManager` || `childFragmentManager`)?
 
 ^ Fragments allow adding fragments inside fragments
 
@@ -309,7 +282,7 @@ public class MainActivity extends FragmentActivity {
 
 ---
 
-## Bundles 📦
+# Bundles 📦
 
 ^ Like activities we must let the system manage instance
 
@@ -319,8 +292,8 @@ public class MainActivity extends FragmentActivity {
 
 ---
 
-## FragmentFactory
-### androidx.fragment:fragment:1.1.0-beta01
+# FragmentFactory
+## androidx.fragment:fragment:1.1.0
 
 ^ As of 1.1.0 you can set a FragmentFactory on any FragmentManager
 
@@ -328,7 +301,7 @@ public class MainActivity extends FragmentActivity {
 
 ---
 
-## Fragments? 🙀
+# Fragments? 🙀
 
 ^ These are pretty compelling arguments to avoid Fragments in general
 
@@ -338,13 +311,13 @@ public class MainActivity extends FragmentActivity {
 
 ---
 
-## Fragments? 🤔
+# Fragments? 🤔
 
 ^ There may be some good reasons to use Fragments
 
 ---
 
-## Activity Capabilities ⏳
+# Activity Capabilities ⏳
 
 ^ Activity capabilities tied to API version, need to wait for new features
 
@@ -352,7 +325,7 @@ public class MainActivity extends FragmentActivity {
 
 ---
 
-## Shared Element Transition (API 21+)
+# Shared Element Transition (API 21+)
 
 ![right 80% autoplay loop](shared-element-animation.mp4)
 
@@ -362,7 +335,7 @@ public class MainActivity extends FragmentActivity {
 
 ---
 
-## CompatShims < Enough
+# CompatShims < Enough
 
 ^ Sometimes demonstrated erratic visual behaviour
 
@@ -371,7 +344,7 @@ public class MainActivity extends FragmentActivity {
 ---
 
 ## ~~android.app.Fragment~~
-## `androidx.fragment.app.Fragment`
+# [fit] `androidx.fragment.app.Fragment`
 
 ^ Native Android fragment deprecated in API 28
 
@@ -379,7 +352,7 @@ public class MainActivity extends FragmentActivity {
 
 ---
 
-## Scopes 🔍
+# Scopes 🔍
 
 ^ One of the real benefits comes in the form of scoping
 
@@ -388,7 +361,7 @@ public class MainActivity extends FragmentActivity {
 [.background-color: #ffffff]
 [.text: #666666]
 
-## Scopes
+# Scopes
 
 ![inline](activity-isolated.png)
 
@@ -401,7 +374,7 @@ public class MainActivity extends FragmentActivity {
 [.background-color: #ffffff]
 [.text: #666666]
 
-## Scopes
+# Scopes
 
 ![inline](application-activity-scope.png)
 
@@ -414,7 +387,7 @@ public class MainActivity extends FragmentActivity {
 [.background-color: #ffffff]
 [.text: #666666]
 
-## Scopes
+# Scopes
 
 ![inline](application-fragment-scope.png)
 
@@ -431,16 +404,6 @@ public class MainActivity extends FragmentActivity {
 ^ To benefit from the features available in fragments
 
 ^ Without suffering from the difficulties of using them
-
----
-
-[.background-color: #ffffff]
-
-![fit 100%](more-cheese.jpg)
-
-^ Cheese is how we do it
-
-^ Done with the cheese jokes
 
 ---
 
@@ -461,9 +424,10 @@ public class MainActivity extends FragmentActivity {
 [.background-color: #ffffff]
 [.text: #666666]
 
-## Android JetPack 
+# Android JetPack 
+## Foundation Components
 
-![inline](jetpack-foundation.png)
+![inline 100%](foundation-components.png)
 
 ^ Foundation picking up where the support library left off
 
@@ -474,9 +438,10 @@ public class MainActivity extends FragmentActivity {
 [.background-color: #ffffff]
 [.text: #666666]
 
-## Android JetPack 
+# Android JetPack 
+## Architecture Components
 
-![inline](jetpack-architecture.png)
+![inline 100%](architecture-components.png)
 
 ^ Architecture encompassing the arch components like LiveData and ViewModel
 
@@ -487,9 +452,10 @@ public class MainActivity extends FragmentActivity {
 [.background-color: #ffffff]
 [.text: #666666]
 
-## Android JetPack 
+# Android JetPack
+## Behaviour Components
 
-![inline](jetpack-behaviour.png)
+![inline 100%](behaviour-components.png)
 
 ^ Media playback, notifications, permissions, and slices
 
@@ -498,15 +464,16 @@ public class MainActivity extends FragmentActivity {
 [.background-color: #ffffff]
 [.text: #666666]
 
-## Android JetPack 
+# Android JetPack
+## UI Components
 
-![inline](jetpack-ui.png)
+![inline](ui-components.png)
 
 ^ Finally UI, including Fragments, Transitions, Animations, and Emoji
 
 ---
 
-## Android JetPack: Navigation ![](jetpack-hero.png)
+# Android JetPack: Navigation ![](jetpack-hero.png)
 
 ^ Introducing JetPack
 
@@ -514,7 +481,7 @@ public class MainActivity extends FragmentActivity {
 
 ---
 
-## Android JetPack: Navigation ![](jetpack-hero.png)
+# Android JetPack: Navigation ![](jetpack-hero.png)
 
 - Libraries 📚
 - Plugin 🔌
@@ -537,7 +504,7 @@ public class MainActivity extends FragmentActivity {
 
 ---
 
-## Principles of Navigation
+# Principles of Navigation
 
 ^ Navigation core part of UX, principles set consistent / intuitive UX
 
@@ -548,7 +515,7 @@ public class MainActivity extends FragmentActivity {
 [.background-color: #ffffff]
 [.text: #666666]
 
-## Fixed Start Destination
+# Fixed Start Destination
 
 ![inline](navigation-principles-start-destination.png)
 
@@ -558,7 +525,7 @@ public class MainActivity extends FragmentActivity {
 
 ---
 
-## State as Stack 🥞
+# State as Stack 🥞
 
 ^ Navigation state is represented as a stack of destinations
 
@@ -566,13 +533,13 @@ public class MainActivity extends FragmentActivity {
 
 ---
 
-## ⬆️ ⬅️
+# ⬆️ ⬅️
 
 ^ Up and back are identical within your apps task
 
 ---
 
-## ⬆️ 🙅‍♀️
+# ⬆️ 🙅‍♀️
 
 ^ Up never exist your application
 
@@ -581,7 +548,7 @@ public class MainActivity extends FragmentActivity {
 [.background-color: #ffffff]
 [.text: #666666]
 
-## Deep Link Simulates Manual Navigation
+# Deep Link Simulates Manual Navigation
 
 ![inline](navigation-principles-deep-linking.png) 
 
@@ -589,7 +556,7 @@ public class MainActivity extends FragmentActivity {
 
 ---
 
-## JetPack: Navigation
+# JetPack: Navigation
 
 ![right 100%](jetpack-hero.png)
 
@@ -601,7 +568,7 @@ public class MainActivity extends FragmentActivity {
 
 ---
 
-## Navigation Graph
+# Navigation Graph
 
 ![](navigation-graph_2x-callouts.png)
 
@@ -630,7 +597,7 @@ public class MainActivity extends FragmentActivity {
 
 ---
 
-## Destination Types
+# Destination Types
 
 - Activity `<activity>`
 
@@ -642,8 +609,8 @@ public class MainActivity extends FragmentActivity {
 
 ---
 
-## Destination Types (Custom)
-#### developer.android.com/guide/navigation/navigation-add-new
+# Destination Types (Custom)
+## developer.android.com/guide/navigation/navigation-add-new
 
 - Extend `Navigator<T>` with your type
 
@@ -689,7 +656,7 @@ public class MainActivity extends FragmentActivity {
 
 ---
 
-## Resource Inflation 🎈
+# Resource Inflation 🎈
 
 ^ Due to the navigation resource being an XML document, this means that the navigation controller
 
@@ -699,7 +666,7 @@ public class MainActivity extends FragmentActivity {
 
 ---
 
-## NavHostFragment
+# NavHostFragment
 
 ```xml
 <fragment
@@ -721,7 +688,7 @@ public class MainActivity extends FragmentActivity {
 
 ---
 
-## NavController
+# NavController
 
 - `Fragment.findNavController()`
 
@@ -737,7 +704,7 @@ public class MainActivity extends FragmentActivity {
 
 ---
 
-## Actions
+# Actions
 
 ```kotlin
 viewTransactionsButton.setOnClickListener { view ->
@@ -759,7 +726,7 @@ button.setOnClickListener(
 
 ---
 
-## Deep Links 🔥
+# Deep Links 🔥
 
 ^ The navigation component can generate deep link intent filters for you
 
@@ -767,7 +734,7 @@ button.setOnClickListener(
 
 ---
 
-## Deep Links 🔥
+# Deep Links 🔥
 
 ```xml, [.highlight: 10]
 <?xml version="1.0" encoding="utf-8"?>
@@ -788,7 +755,7 @@ button.setOnClickListener(
 
 ---
 
-## Deep Links 🔥
+# Deep Links 🔥
 
 ```kotlin
 <fragment 
@@ -801,15 +768,15 @@ button.setOnClickListener(
 
 ---
 
-## Navigation Styles 📐
+# Navigation Styles 📐
 
 ---
 
 [.background-color: #dfdfdf]
 [.text: #666666]
 
-## Navigation Styles 📐
-### Toolbar
+# Navigation Styles 📐
+## Toolbar
 
 ![inline](title-navigation.png)![inline](contextual-toolbar.png)
 
@@ -820,8 +787,8 @@ button.setOnClickListener(
 [.background-color: #dfdfdf]
 [.text: #666666]
 
-## Navigation Styles 📐
-### Bottom
+# Navigation Styles 📐
+## Bottom
 
 ![inline](bottom-navigation.png)
 
@@ -834,8 +801,8 @@ button.setOnClickListener(
 [.background-color: #dfdfdf]
 [.text: #666666]
 
-## Navigation Styles 📐
-### Drawer
+# Navigation Styles 📐
+## Drawer
 
 ![inline](navigation-drawer.png)
 
@@ -843,8 +810,8 @@ button.setOnClickListener(
 
 ---
 
-## NavigationUI
-### `setupWithNavController()`
+# NavigationUI
+## `setupWithNavController()`
 
 ^ Configuration of your navigation structure is provided with an AppBarConfiguration
 
@@ -874,7 +841,7 @@ class AwesomeActivity : AppCompatActivity() {
 
 ---
 
-## NavigationUI
+# NavigationUI
 
 ```kotlin
 NavigationUI.setupActionBarWithNavController(
@@ -898,7 +865,7 @@ NavigationUI.setupWithNavController(
 
 ---
 
-## NavigationUI: AppBarConfiguration
+# NavigationUI: AppBarConfiguration
 
 - Top level destinations
 
@@ -916,8 +883,8 @@ NavigationUI.setupWithNavController(
 
 ---
 
-## OnDestinationChangedListener
-### NavController.addOnDestinationChangedListener
+# OnDestinationChangedListener
+## NavController.addOnDestinationChangedListener
 
 ```kotlin
 interface OnDestinationChangedListener {
@@ -934,7 +901,7 @@ interface OnDestinationChangedListener {
 
 ---
 
-## Bundles 📦
+# Bundles 📦
 
 ^ Despite having a better scope hierarchy some parameters need to be serialised
 
@@ -942,15 +909,15 @@ interface OnDestinationChangedListener {
 
 ---
 
-## Honourable Mention
-### Eugenio Marletti: Android Extras Delegates
-#### github.com/Takhion/android-extras-delegates
+# Honourable Mention
+## Eugenio Marletti: Android Extras Delegates
+### github.com/Takhion/android-extras-delegates
 
 ^ When starting off with Kotlin, this was our goto choice for serialising intent and bundle extras
 
 ---
 
-## Android Extras Delegates 👍
+# Android Extras Delegates 👍
 
 ```kotlin
 class SomeActivity : Activity() {
@@ -971,7 +938,7 @@ class SomeActivity : Activity() {
 
 ---
 
-## SafeArgs 💪
+# SafeArgs 💪
 
 ^ Simple concept, plugin enables generation of type safe args from your nav graph
 
@@ -983,9 +950,9 @@ class SomeActivity : Activity() {
 
 ---
 
-## SafeArgs: Directions
+# SafeArgs: Directions
 
-#### [fit] `MainFragmentDirections.mainToViewBalance()`
+## [fit] `MainFragmentDirections.mainToViewBalance()`
 
 ```xml
 <fragment
@@ -1007,7 +974,7 @@ class SomeActivity : Activity() {
 
 ---
 
-## SafeArgs: Directions
+# SafeArgs: Directions
 
 ```xml
 <fragment
@@ -1031,7 +998,7 @@ class SomeActivity : Activity() {
 
 ---
 
-## SafeArgs: Args
+# SafeArgs: Args
 
 [.code-highlight: 7, 17-18]
 
@@ -1064,7 +1031,7 @@ class ViewBalanceFragment : Fragment() {
 
 ---
 
-## SafeArgs: Generated Args 💻
+# SafeArgs: Generated Args 💻
 
 ```kotlin
 data class ViewBalanceFragmentArgs(val balanceAmount: Int) : NavArgs {
@@ -1099,7 +1066,7 @@ data class ViewBalanceFragmentArgs(val balanceAmount: Int) : NavArgs {
 
 ---
 
-## SafeArgs: Generated Directions 💻
+# SafeArgs: Generated Directions 💻
 
 ```kotlin
 class MainFragmentDirections private constructor() {
@@ -1124,7 +1091,7 @@ class MainFragmentDirections private constructor() {
 
 ---
 
-## Single Source of Truth
+# Single Source of Truth
 
 ^ By defining your navigation graph as a resource
 
@@ -1134,7 +1101,7 @@ class MainFragmentDirections private constructor() {
 
 ---
 
-## SafeArgs: Activities 🎉🍾
+# SafeArgs: Activities 🎉🍾
 
 ^ Also works with activity destinations
 
@@ -1142,7 +1109,7 @@ class MainFragmentDirections private constructor() {
 
 ---
 
-## SafeArgs: Activities
+# SafeArgs: Activities
 
 ```kotlin
 class MainActivity : Activity {
@@ -1164,7 +1131,7 @@ class MainActivity : Activity {
 
 ---
 
-## SafeArgs: Getting Started
+# SafeArgs: Getting Started
 
 ```gradle
 buildscript {
@@ -1182,7 +1149,7 @@ apply plugin: 'androidx.navigation.safeargs.kotlin'
 
 ---
 
-## 🛠 Migrating
+# 🛠 Migrating
 
 ^ May be Difficult with heavy use of activities
 
@@ -1192,7 +1159,7 @@ apply plugin: 'androidx.navigation.safeargs.kotlin'
 
 ---
 
-## 🛠 Migrating
+# 🛠 Migrating
 
 ![](cheese-list.png)
 ![](cheese-details.png)
@@ -1203,9 +1170,9 @@ apply plugin: 'androidx.navigation.safeargs.kotlin'
 
 ---
 
-## 🛠 Migrating
+# 🛠 Migrating
 
-### Move screen behaviour away from activities
+## Move screen behaviour away from activities
 
 ^ Should already be using an architecture to keep modular components separate
 
@@ -1215,9 +1182,9 @@ apply plugin: 'androidx.navigation.safeargs.kotlin'
 
 ---
 
-## 🛠 Migrating
+# 🛠 Migrating
 
-### Create new activity for `Fragment`'s
+## Create new activity for `Fragment`'s
 
 ^ Blank activity to host fragments 
 
@@ -1227,9 +1194,9 @@ apply plugin: 'androidx.navigation.safeargs.kotlin'
 
 ---
 
-## 🛠 Migrating
+# 🛠 Migrating
 
-### Move existing activity logic to fragment
+## Move existing activity logic to fragment
 
 - FragmentBindings -> ActivityBindings
 
@@ -1253,13 +1220,13 @@ apply plugin: 'androidx.navigation.safeargs.kotlin'
 
 ---
 
-## 🛠 Migrating
+# 🛠 Migrating
 
-### Initialise fragment in host activity
+## Initialise fragment in host activity
 
 ---
 
-## Initialise fragment in host activity
+# Initialise fragment in host activity
 
 ```kotlin
 override fun onCreate(savedInstanceState: Bundle?) {
@@ -1283,7 +1250,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 
 ---
 
-## Pass arguments as necessary
+# Pass arguments as necessary
 
 ```kotlin
 override fun onCreate(savedInstanceState: Bundle?) {
@@ -1308,13 +1275,13 @@ override fun onCreate(savedInstanceState: Bundle?) {
 
 ---
 
-## 🛠 Migrating
+# 🛠 Migrating
 
-### Create navigation graph
+## Create navigation graph
 
 ---
 
-## Create navigation graph
+# Create navigation graph
 
 ```
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
@@ -1338,7 +1305,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 
 ---
 
-## Create navigation host
+# Create navigation host
 
 ```
 <fragment
@@ -1358,7 +1325,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 
 ---
 
-## 🛠 Migrating
+# 🛠 Migrating
 
 ```
 class CheeseHostActivity : AppCompatActivity() {
@@ -1376,7 +1343,7 @@ class CheeseHostActivity : AppCompatActivity() {
 
 ---
 
-### Navigation Directions
+## Navigation Directions
 
 ```xml, [.highlight: 11-13, 23-25]
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
@@ -1418,7 +1385,7 @@ class CheeseHostActivity : AppCompatActivity() {
 
 ---
 
-## CheeseListFragment 🧀
+# CheeseListFragment 🧀
 
 ```
 class CheeseListFragment : Fragment() {
@@ -1439,11 +1406,11 @@ class CheeseListFragment : Fragment() {
 
 ---
 
-## 💰 Profit
+# 💰 Profit
 
 ---
 
-## onActivityResult?
+# onActivityResult?
 
 ^ Activity and fragment onActivityResult still available for calling other activities
 
@@ -1451,19 +1418,19 @@ class CheeseListFragment : Fragment() {
 
 ---
 
-## onActivityResult
-### https://issuetracker.google.com/issues/79672220
+# onActivityResult
+## [fit] https://issuetracker.google.com/issues/79672220
 
 ---
 
-## Jose Alcérreca: LiveData<Event<T>>
-### http://bit.ly/2YuSYXi
+# Jose Alcérreca: LiveData<Event<T>>
+## http://bit.ly/2YuSYXi
 
 ---
 
-## Dynamic Features
+# Dynamic Features
 
-### Coming Soon? ™
+## Coming Soon? ™
 
 ^ A lot of discussion about how these two might integrate
 
@@ -1475,8 +1442,8 @@ class CheeseListFragment : Fragment() {
 
 [.footer: ]
 
-## Ian Lake: Single Activity: Why, When, and How 
-### bit.ly/2Jo94x9
+# Ian Lake: Single Activity: Why, When, and How 
+## bit.ly/2Jo94x9
 
 ![inline](ian-lake-single-activity.jpg)
 
@@ -1486,6 +1453,6 @@ class CheeseListFragment : Fragment() {
 
 ---
 
-## Thanks!
+# Thanks!
 
 ![right](aerial-shot-ship.jpg)
