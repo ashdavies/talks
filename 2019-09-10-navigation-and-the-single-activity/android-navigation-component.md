@@ -1442,7 +1442,7 @@ class CheeseListFragment : Fragment() {
 
 [.footer: ]
 
-# Ian Lake: Single Activity: Why, When, and How 
+# [fit] Ian Lake: Single Activity: Why, When, and How 
 ## bit.ly/2Jo94x9
 
 ![inline](ian-lake-single-activity.jpg)
