@@ -906,6 +906,58 @@ button.setOnClickListener(
 
 ---
 
+# Deep Links 🔗
+## Implicit Links 🤝
+
+^ Implementation for implicit deep links
+
+^ Accessible by url navigation
+
+^ Work best with app links
+
+---
+
+# Deep Links 🔗
+## Explicit Links 🖕
+
+^ Explicit deep links are built programmatically to produce a pending intent
+
+^ Pending intents can be applied to notification, widget or view click listeners
+
+---
+
+# Deep Links 🔗
+## Explicit Links 🖕
+
+```kotlin
+val pendingIntent = NavDeepLinkBuilder(context)
+    .setGraph(R.navigation.nav_graph)
+    .setDestination(R.id.android)
+    .setArguments(args)
+    .createPendingIntent()
+```
+
+^ Use the nav deep link builder to build a pending intent
+
+---
+
+# Deep Links 🔗
+## Explicit Links 🖕
+
+```kotlin
+val pendingIntent = findNavController()
+    .createDeepLink()
+    .setDestination(R.id.android)
+    .setArguments(args)
+    .createPendingIntent()
+```
+
+^ Can also use NavController should already have navigation graph from host
+
+^ Call `startActivites` from builder
+
+---
+
 # Navigation Styles 📐
 
 ^ Lets say your app uses an alternative navigation style
@@ -1551,6 +1603,16 @@ class CheeseListFragment : Fragment() {
 ---
 
 # 💰 Profit
+
+---
+
+![](random-slides.jpg)
+
+^ Not obsessed with cheese
+
+^ Berlin random slides
+
+^ I don't even like cheese
 
 ---
 
