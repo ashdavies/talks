@@ -1281,12 +1281,14 @@ buildscript {
   }
   
   dependencies {
-    classpath "androidx.navigation:navigation-safe-args-gradle-plugin:2.0.0"
+    classpath "androidx.navigation:navigation-safe-args-gradle-plugin:2.1.0"
   }
 }
 
 apply plugin: 'androidx.navigation.safeargs.kotlin'
 ```
+
+^ Simply apply the plugin with navigation resources
 
 ---
 
@@ -1305,7 +1307,7 @@ apply plugin: 'androidx.navigation.safeargs.kotlin'
 ![](cheese-list.png)
 ![](cheese-details.png)
 
-^ Consider on the left an activity to display a lis
+^ Consider on the left an activity to display a list
 
 ^ and on the right an activity to view the details
 
@@ -1347,17 +1349,17 @@ apply plugin: 'androidx.navigation.safeargs.kotlin'
 
 - `getViewLifecycleOwner()`
 
-^ Update layouts for fragments with databinding layouts changing
+^ - Update layouts for fragments with databinding layouts changing
 
-^ Don't include toolbar of other navigation layouts in Fragment
+^ - Don't include toolbar of other navigation layouts in Fragment
 
-^ onCreate becomes onCreateView to inflate your layout with parent and state
+^ - onCreate becomes onCreateView to inflate your layout with parent and state
 
-^ Move post view creation behaviour to onViewCreated()
+^ - Move post view creation behaviour to onViewCreated()
 
-^ ViewLifecycyleOwner should be used instead of Fragment
+^ - ViewLifecycyleOwner should be used instead of Fragment
 
-^ Inconsistencies of view lifecycle for retained fragments
+^ - Inconsistencies of view lifecycle for retained fragments
 
 ---
 
@@ -1561,12 +1563,12 @@ class CheeseListFragment : Fragment() {
 ---
 
 # onActivityResult
-## [fit] https://issuetracker.google.com/issues/79672220
+## [fit] issuetracker.google.com/issues/79672220
 
 ---
 
 # Jose Alcérreca: LiveData<Event<T>>
-## http://bit.ly/2YuSYXi
+## bit.ly/2YuSYXi
 
 ---
 
