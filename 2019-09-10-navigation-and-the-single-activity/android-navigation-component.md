@@ -11,8 +11,9 @@ text: Open Sans
 
 # [fit] Navigation and the Single Activity
 ## Learnings from a Skeptic
+### Droidcon Lisbon 🇵🇹
 
-![left inline 30%](gde-badge-round.png)
+![left inline 20%](gde-badge-round.png)
 
 ![right](aerial-shot-ship.jpg)
 
@@ -1646,6 +1647,8 @@ class CheeseListFragment : Fragment() {
 
 ---
 
+[.background-color: #ffffff]
+[.text: #444444]
 [.footer: ]
 
 # [fit] Ian Lake: Single Activity: Why, When, and How 
@@ -1659,6 +1662,13 @@ class CheeseListFragment : Fragment() {
 
 ---
 
-# Thanks!
+# Thanks! 🍻
 
 ![right](aerial-shot-ship.jpg)
+
+---
+
+# Droidcon Lisbon 🇵🇹
+
+### 13:20 - RxJava & Coroutines: A Practical Analysis
+### 17:40 - Implementing the Paging Library
