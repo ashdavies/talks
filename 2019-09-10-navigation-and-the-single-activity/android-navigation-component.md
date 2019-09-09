@@ -16,19 +16,23 @@ text: Open Sans
 
 ![right](aerial-shot-ship.jpg)
 
-^ Speaker introduction
+^ Skepticism on fragments
+
+^ Disliked fragments
+
+^ Fragment hate
 
 ---
 
 ![](developing-hard.png)
 
-^ Navigation is hard. Misnomer not great start to talk
+^ Navigation is hard
+
+^ Misnomer not great start to talk
 
 ^ Often a topic of confusion, difficult for new developers
 
 ^ Navigating from screen to screen being fundamental to your app
-
-^ What makes navigation so confusing?
 
 ---
 
@@ -36,9 +40,13 @@ text: Open Sans
 
 ![75%](starting-activity.png)
 
-^ Started with activities, Android level component
+^ But this is just moving from one activity to the next?
 
-^ like content providers, services and broadcast receivers
+^ What makes navigation so confusing?
+
+^ Android Framework components
+
+^ Activity, content providers, services and broadcast receivers
 
 ---
 
@@ -60,19 +68,19 @@ class MainActivity : AppCompatActivity {
 }
 ```
 
-^ Simplest form, use Intent to navigate
-
-^ Quickly out of hand in larger projects
-
----
-
-# 😰
+^ Simplest form, use Intent to navigate from one activity to the next
 
 ^ Activities dependent on other activity implementations
 
 ^ Store complex intent argument compositions
 
 ^ Conditional navigation difficult to maintain
+
+---
+
+# 😰
+
+^ Hard to manage as your application grows in size
 
 ---
 
@@ -106,7 +114,16 @@ class MainActivity : AppCompatActivity {
 
 ^ Responsive layout for larger screens (tablets)
 
-^ "also run properly on smaller screen devices"
+---
+
+[.background-color: #ffffff]
+[.text: #666666]
+
+![100%](tablet-handset-fragments.png)
+
+^ An example of two fragments can be combined into one activity for a tablet design
+
+^ Separated for a handset design, "also run properly on smaller screen devices"
 
 ---
 
@@ -236,21 +253,21 @@ public class MainActivity extends FragmentActivity {
 
 ---
 
-# [fit] Activity Lifecycle != Fragment Lifecycle != View Lifecycle
+## Activity Lifecycle != Fragment Lifecycle != View Lifecycle
+
+![right](confused-meme.jpg)
 
 ^ Fragment lifecycle being detached from an activity makes view lifecycle even more complicated
 
 ---
 
-[.footer: Jose Alcerreca | Lifecycles cheet sheet beta1 (AndroidP/Jetpack 1.0) ]
+[.footer: github.com/JoseAlcerreca/android-lifecycles/blob/a5dfd030a70989ad2496965f182e5fa296e6221a/cheatsheetfragments.pdf]
 [.footer-style: #666666]
 [.background-color: #ffffff]
 
 ![inline](fragment-lifecycle.png)
 
-^ Graph created by Jose Alcerreca
-
-^ https://github.com/JoseAlcerreca/android-lifecycles/blob/a5dfd030a70989ad2496965f182e5fa296e6221a/cheatsheetfragments.pdf
+^ Jose Alcerreca | Lifecycle cheat sheet beta1 (AndroidP/Jetpack 1.0)
 
 ---
 
@@ -262,9 +279,11 @@ public class MainActivity extends FragmentActivity {
 
 ^ Invalid stack, unexpected behaviour on configuration change.
 
+^ Actually the Konami cheat code
+
 ---
 
-# (`supportFragmentManager` || `childFragmentManager`)?
+### (`supportFragmentManager` || `childFragmentManager`)?
 
 ^ Fragments allow adding fragments inside fragments
 
@@ -288,7 +307,9 @@ public class MainActivity extends FragmentActivity {
 
 ^ Serialisation of data provided through bundles
 
-^ Don't use fragment constructors
+^ Android framework needs to instantiate components
+
+^ Shouldn't use fragment constructors 
 
 ---
 
@@ -325,7 +346,7 @@ public class MainActivity extends FragmentActivity {
 
 ---
 
-# Shared Element Transition (API 21+)
+## Shared Element Transition (API 21+)
 
 ![right 80% autoplay loop](shared-element-animation.mp4)
 
@@ -335,7 +356,7 @@ public class MainActivity extends FragmentActivity {
 
 ---
 
-# CompatShims < Enough
+## CompatShims < Enough
 
 ^ Sometimes demonstrated erratic visual behaviour
 
@@ -477,19 +498,28 @@ public class MainActivity extends FragmentActivity {
 
 ^ Introducing JetPack
 
-^ JetPack is...
+^ JetPack is a set of...
 
 ---
 
-# Android JetPack: Navigation ![](jetpack-hero.png)
-
-- Libraries 📚
-- Plugin 🔌
-- Tooling 🔧
-
-^ a set of libraries, a plugin, and tooling for unifying and simplifying Android Navigation
+## Android JetPack: Navigation
+# Libraries 📚
 
 ---
+
+## Android JetPack: Navigation
+# Plugin 🔌
+
+---
+
+## Android JetPack: Navigation
+# Tooling 🔧
+
+^ Unifying and simplifying Android Navigation
+
+---
+
+# Android JetPack: Navigation
 
 - Fragment transactions
 - Up and back actions
@@ -564,61 +594,53 @@ public class MainActivity extends FragmentActivity {
 
 ^ Not private or limited by library scope
 
-^ built from three components
+^ as mentioned, built from three components
 
 ---
 
+# Navigation: Tooling 🔧
 # Navigation Graph
 
 ![](navigation-graph_2x-callouts.png)
 
-^ Android Studio 3.3 introduces the new navigation editor
+^ Android Studio 3.3 introduces the new navigation editor as tooling
 
 ^ graphical editor to build your application navigation graph
+
+^ composed of...
 
 ---
 
 [.background-color: #2d3032]
 [.footer: ]
 
-![inline](navigation-editor_2x.png)
+![inline](navigation-editor-destinations.png)
 
-^ Destinations to the left showing the host and graph hierarchy
+^ First, destinations to the left showing the host and graph hierarchy
 
 ^ destinations can be an activity, fragment, dialog, or custom view
 
-^ graph editor contains a visual representation showing how the destinations interact
+---
+
+[.background-color: #2d3032]
+[.footer: ]
+
+![inline](navigation-editor-graph.png)
+
+^ Second, graph editor contains a visual representation showing how the destinations interact
 
 ^ the arrows indicate actions which can be invoked programmatically
+
+---
+
+[.background-color: #2d3032]
+[.footer: ]
+
+![inline](navigation-editor-attributes.png)
 
 ^ each destination has attributes displayed on the right
 
 ^ attributes allow you to configure arguments and deeplinks
-
----
-
-# Destination Types
-
-- Activity `<activity>`
-
-- Fragment `<fragment>`
-
-- Dialog `<dialog>` (2.1.0+)
-
-^ Navigation destinations can be an activity
-
----
-
-# Destination Types (Custom)
-## developer.android.com/guide/navigation/navigation-add-new
-
-- Extend `Navigator<T>` with your type
-
-- Provide `Destination` implementation
-
-- Configure arguments after inflation
-
-- Augment `NavController`
 
 ---
 
@@ -656,16 +678,50 @@ public class MainActivity extends FragmentActivity {
 
 ---
 
+# Destination Types
+
+- Activity `<activity>`
+
+- Fragment `<fragment>`
+
+- Dialog `<dialog>` (2.1.0+)
+
+^ Navigation destinations can be an activity, fragment, or dialog
+
+---
+
+# Destination Types (Custom)
+## [fit] developer.android.com/guide/navigation/navigation-add-new
+
+- Extend `Navigator<T>` with your type
+
+- Provide `Destination` implementation
+
+- Configure arguments after inflation
+
+- Augment `NavController`
+
+^ If you have a destination not covered by these common framework types
+
+^ You can provide a custom navigator to instruct navigation on how to navigate
+
+^ Things like handling back stack and how to instantiate elements
+
+---
+
 # Resource Inflation 🎈
 
 ^ Due to the navigation resource being an XML document, this means that the navigation controller
 
-^ Inflates the resource at runtime, thus resulting in graph errors at runtime not at compile time
+^ Subject to same lint rules as layouts, compile time validation of resource names, etc
+
+^ Inflates the resource at runtime, thus resulting in graph errors at runtime with bad references
 
 ^ Negligible inflation cost, part of your layouting
 
 ---
 
+## Navigation: Libraries 📚
 # NavHostFragment
 
 ```xml
@@ -688,6 +744,7 @@ public class MainActivity extends FragmentActivity {
 
 ---
 
+## Navigation: Libraries 📚
 # NavController
 
 - `Fragment.findNavController()`
@@ -698,9 +755,9 @@ public class MainActivity extends FragmentActivity {
 
 ^ Each NavHostFragment has controller that allows you to invoke navigation actions 
 
-^ NavController can be retrieved from fragment, activity, or view
+^ NavController object manages navigation within navigation host
 
-^ Recommended mechanism is with navigate method
+^ NavController can be retrieved from fragment, activity, or view
 
 ---
 
@@ -726,15 +783,51 @@ button.setOnClickListener(
 
 ---
 
-# Deep Links 🔥
+```xml
+<activity
+    android:name="com.example.android.GizmosActivity"
+    android:label="@string/title_gizmos" >
+    <intent-filter android:label="@string/filter_view_http_gizmos">
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+        <!-- Accepts URIs that begin with "http://www.example.com/gizmos” -->
+        <data android:scheme="http"
+              android:host="www.example.com"
+              android:pathPrefix="/gizmos" />
+        <!-- note that the leading "/" is required for pathPrefix-->
+    </intent-filter>
+    <intent-filter android:label="@string/filter_view_example_gizmos">
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+        <!-- Accepts URIs that begin with "example://gizmos” -->
+        <data android:scheme="example"
+              android:host="gizmos" />
+    </intent-filter>
+</activity>
+```
 
-^ The navigation component can generate deep link intent filters for you
-
-^ Declare the relevant graph in your manifest
+^ Who loves creating intent filters in their Android manifest?
 
 ---
 
-# Deep Links 🔥
+[.background-color: #000000]
+[.footer: ]
+
+![fit](nah.gif)
+
+---
+
+# Deep Links 🔗
+
+![right](oh-really.gif)
+
+^ The navigation component can generate deep link intent filters for you
+
+---
+
+# Deep Links 🔗
 
 ```xml, [.highlight: 10]
 <?xml version="1.0" encoding="utf-8"?>
@@ -753,26 +846,73 @@ button.setOnClickListener(
 </manifest>
 ```
 
+^ Declare the relevant graph in your manifest to import
+
 ---
 
-# Deep Links 🔥
+# Deep Links 🔗
 
-```kotlin
+```kotlin, [.highlight: 5-6]
 <fragment 
   android:id="@+id/profile"
   android:name=".ProfileActivity">
 
-  <deepLink app:uri="www.example.com/profile/{userId}" />
+  <deepLink android:autoVerify="true"
+      app:uri="www.example.com/profile/{userId}" />
+      
 </fragment>
 ```
+
+^ Define the deep link in your navigation graph destination
+
+^ Define parameters as part of the URL to match the arguments
+
+^ Include auto verify to enable link handling verification
+
+---
+
+# Deep Links 🔗
+
+```kotlin, [.highlight: 5-6]
+<fragment 
+  android:id="@+id/profile"
+  android:name=".ProfileActivity">
+
+  <deepLink android:autoVerify="true"
+      app:uri="www.example.com/profile/?userId={userId}" />
+      
+</fragment>
+```
+
+^ Adjust your URL to match your requirements if you need queries
+
+---
+
+[.footer ]
+
+![](nice.gif)
+
+---
+
+# Deep Links 🔗
+## Optional Args
+### `2.2.0-alpha02`
+
+^ Deep links use regex matching under the hood
+
+^ Stable release all parameters must be present to match
+
+^ Alpha release permits args with default values
 
 ---
 
 # Navigation Styles 📐
 
+^ Lets say your app uses an alternative navigation style
+
 ---
 
-[.background-color: #dfdfdf]
+[.background-color: #e5e5e5]
 [.text: #666666]
 
 # Navigation Styles 📐
@@ -784,7 +924,7 @@ button.setOnClickListener(
 
 ---
 
-[.background-color: #dfdfdf]
+[.background-color: #e5e5e5]
 [.text: #666666]
 
 # Navigation Styles 📐
@@ -798,7 +938,7 @@ button.setOnClickListener(
 
 ---
 
-[.background-color: #dfdfdf]
+[.background-color: #e5e5e5]
 [.text: #666666]
 
 # Navigation Styles 📐
@@ -909,7 +1049,7 @@ interface OnDestinationChangedListener {
 
 ---
 
-# Honourable Mention
+# Honourable Mention 🙇‍♂️
 ## Eugenio Marletti: Android Extras Delegates
 ### github.com/Takhion/android-extras-delegates
 
@@ -938,6 +1078,7 @@ class SomeActivity : Activity() {
 
 ---
 
+## Plugin 🔌
 # SafeArgs 💪
 
 ^ Simple concept, plugin enables generation of type safe args from your nav graph
@@ -1164,9 +1305,9 @@ apply plugin: 'androidx.navigation.safeargs.kotlin'
 ![](cheese-list.png)
 ![](cheese-details.png)
 
-^ Consider on the left an activity to display a list of cheeses
+^ Consider on the left an activity to display a lis
 
-^ and on the right an activity to view the cheese details
+^ and on the right an activity to view the details
 
 ---
 
@@ -1231,7 +1372,7 @@ apply plugin: 'androidx.navigation.safeargs.kotlin'
 ```kotlin
 override fun onCreate(savedInstanceState: Bundle?) {
   super.onCreate(savedInstanceState)
-  setContentView(R.layout.cheese_activity)
+  setContentView(R.layout.main_activity)
 
   if (savedInstanceState == null) {
     supportFragmentManager
@@ -1240,8 +1381,8 @@ override fun onCreate(savedInstanceState: Bundle?) {
             .commit()
   }
 
-  fun navigateToCheeseDetail(productId: String) {
-    ...
+  fun navigateToDetails(productId: String) {
+    /* ... */
   }
 }
 ```
@@ -1255,20 +1396,20 @@ override fun onCreate(savedInstanceState: Bundle?) {
 ```kotlin
 override fun onCreate(savedInstanceState: Bundle?) {
   super.onCreate(savedInstanceState)
-  setContentView(R.layout.cheese_activity)
+  setContentView(R.layout.main_activity)
 
   if (savedInstanceState == null) {
     val fragment = CheeseListFragment() // 🧀
     fragment.arguments = intent.extras
 
     supportFragmentManager
-            .beginTransaction()
-            .add(R.id.main_content, fragment)
-            .commit()
+        .beginTransaction()
+        .add(R.id.main_content, fragment)
+        .commit()
   }
 
-  fun navigateToCheeseDetail(productId: String) {
-    ...
+  fun navigateToDetails(productId: String) {
+    /* ... */
   }
 }
 ```
@@ -1313,7 +1454,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
    android:layout_width="match_parent"
    android:layout_height="match_parent"
    android:name="androidx.navigation.fragment.NavHostFragment"
-   app:navGraph="@navigation/cheese_list_graph"
+   app:navGraph="@navigation/main_graph"
    app:defaultNavHost="true" />
 ```
 
@@ -1328,11 +1469,11 @@ override fun onCreate(savedInstanceState: Bundle?) {
 # 🛠 Migrating
 
 ```
-class CheeseHostActivity : AppCompatActivity() {
+class MainHostActivity : AppCompatActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
-      super.onCreate(savedInstanceState)
-      setContentView(R.layout.cheese_activity)
+    super.onCreate(savedInstanceState)
+    setContentView(R.layout.main_activity)
   }
 }
 ```
@@ -1348,7 +1489,7 @@ class CheeseHostActivity : AppCompatActivity() {
 ```xml, [.highlight: 11-13, 23-25]
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:startDestination="@+id/cheeseGraph">
+    app:startDestination="@+id/cheeseListFragment">
 
   <fragment
       android:id="@+id/cheeseListFragment"
@@ -1357,7 +1498,7 @@ class CheeseHostActivity : AppCompatActivity() {
       tools:layout="@layout/cheese_list_fragment">
   
     <action
-        android:id="@+id/navigateToCheeseDetails"
+        android:id="@+id/navigateToDetails"
         app:destination="@+id/cheeseDetailsFragment"/>
 
   </fragment>
@@ -1369,7 +1510,7 @@ class CheeseHostActivity : AppCompatActivity() {
       tools:layout="@layout/cheese_details_fragment">
   
     <argument
-      android:name="cheeseId"
+      android:name="itemId"
       app:argType="string" />
     
   </fragment>
@@ -1391,14 +1532,15 @@ class CheeseHostActivity : AppCompatActivity() {
 class CheeseListFragment : Fragment() {
   ...
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-      cheeseAdapter = CheeseAdapter(cheeseClickCallback)
-      binding.productsList.setAdapter(productAdapter)
+    binding
+      .productsList
+      .adapter = ListAdapter(clickCallback)
   }
   ...
 
   // The callback makes the call to the activity to make the transition.
-  private val productClickCallback = ProductClickCallback { cheese ->
-    val directions = CheeseListDirections.navigateToCheeseDetails(cheese.id)
+  private val clickCallback = ClickCallback { item ->
+    val directions = MainDirections.navigateToDetails(item.id)
     findNavController().navigate(directions)
   }
 }
