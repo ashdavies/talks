@@ -280,6 +280,12 @@ public class MainActivity extends FragmentActivity {
 
 ^ Invalid stack, unexpected behaviour on configuration change.
 
+^ Does anybody recognise this sequence?
+
+---
+
+![](konami-code.gif)
+
 ^ Actually the Konami cheat code
 
 ---
@@ -495,7 +501,10 @@ public class MainActivity extends FragmentActivity {
 
 ---
 
-# Android JetPack: Navigation ![](jetpack-hero.png)
+# Android JetPack
+## Navigation
+
+![right](jetpack-hero-navigation.png)
 
 ^ Introducing JetPack
 
@@ -587,9 +596,10 @@ public class MainActivity extends FragmentActivity {
 
 ---
 
-# JetPack: Navigation
+# Android JetPack
+## Navigation
 
-![right 100%](jetpack-hero.png)
+![right](jetpack-hero-navigation.png)
 
 ^ Primary ideal of Navigation is to use existing an accessible APIs
 
@@ -1342,6 +1352,18 @@ apply plugin: 'androidx.navigation.safeargs.kotlin'
 ```
 
 ^ Simply apply the plugin with navigation resources
+
+---
+
+# 🛠 Migrating
+
+^ How should you migrate to the paging library
+
+---
+
+![](careful.gif)
+
+^ With any migration, carefully
 
 ---
 
