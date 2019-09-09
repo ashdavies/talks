@@ -9,10 +9,11 @@ footer-style: Open Sans
 
 ![right inline 15%](immobilienscout24.png)
 
-## RxJava & Coroutines
-### A Practical Analysis
+# RxJava & Coroutines
+## A Practical Analysis
+### Droidcon Lisbon 🇵🇹
 
-![left inline](gde-badge-round.png)
+![left inline 20%](gde-badge-round.png)
 
 ![right](concurrency.jpg)
 
@@ -78,7 +79,7 @@ footer-style: Open Sans
 
 ---
 
-## ![](kotlin-logo.png) Coroutines 
+# ![](kotlin-logo.png) Coroutines 
 
 ^ Coroutines available as experimental in Kotlin 1.1 stable in 1.3 (Oct '18)
 
@@ -148,13 +149,13 @@ fun main() {
 
 ---
 
-## Coroutine Builders
+# Coroutine Builders
 
 ^ Coroutines library provides two coroutine builder functions on a scope
 
 ---
 
-## Coroutine Builders
+# Coroutine Builders
 
 ```kotlin
 val deferred: Deferred<String> = async { "Hello World!" }
@@ -164,7 +165,7 @@ val deferred: Deferred<String> = async { "Hello World!" }
 
 ---
 
-## Coroutine Builders
+# Coroutine Builders
 
 ```kotlin, [.highlight: 2]
 val deferred: Deferred<String> = async { "Hello World!" }
@@ -177,7 +178,7 @@ val result: String = deferred.await()
 
 ---
 
-## Coroutine Builders
+# Coroutine Builders
 
 ```kotlin, [.highlight: 4]
 val deferred: Deferred<String> = async { "Hello World!" }
@@ -190,7 +191,7 @@ val job: Job = launch { "Hello World!" }
 
 ---
 
-## Coroutine Builders
+# Coroutine Builders
 
 ```kotlin, [.highlight: 5]
 val deferred: Deferred<String> = async { "Hello World!" }
@@ -206,7 +207,7 @@ job.join()
 
 ---
 
-## ⚖️ Stability
+# ⚖️ Stability
 
 ^ In the abstract I had mentioned "with coroutines approaching stability"
 
@@ -222,9 +223,9 @@ job.join()
 
 ---
 
-## @Annotations
+# @Annotations
 
-### (🐉 Here be dragons)
+## (🐉 Here be dragons)
 
 ^ Though coroutines are stable some API elements are still under development
 
@@ -232,7 +233,7 @@ job.join()
 
 ---
 
-## Annotations
+# Annotations
 
 ```kotlin
 @ExperimentalCoroutinesApi // ⚠️
@@ -244,10 +245,28 @@ job.join()
 
 ---
 
-## Annotations
+# Annotations
 
 ```kotlin
 @ExperimentalCoroutinesApi // ⚠️
+
+@FlowPreview // ⚠️
+```
+
+^ Flow is a newer architectural model that attempts to model chaining behaviour
+
+^ Much like a sequence that is only consumed on a terminal operator
+
+^ Cold observable easily replayed and reusable
+
+---
+
+# Annotations
+
+```kotlin
+@ExperimentalCoroutinesApi // ⚠️
+
+@FlowPreview // ⚠️
 
 @ObsoleteCoroutinesApi // ⚠️
 ```
@@ -260,10 +279,12 @@ job.join()
 
 ---
 
-## Annotations
+# Annotations
 
 ```kotlin
 @ExperimentalCoroutinesApi // ⚠️
+
+@FlowPreview // ⚠️
 
 @ObsoleteCoroutinesApi // ⚠️
 
@@ -276,7 +297,18 @@ job.join()
 
 ---
 
-## 💪 Coroutines 💪
+# Annotations
+# `@Experimental`
+
+^ All of these are annotated with experimental
+
+^ Sometimes causing an error, and sometimes a warning
+
+^ Can be extended with your own annotations 
+
+---
+
+# 💪 Coroutines 💪
 
 ^ What makes everybody want to jump on the Coroutine bandwagon?
 
@@ -284,7 +316,7 @@ job.join()
 
 ---
 
-## 🥇 Native first-party library
+# 🥇 Native first-party library
 
 ^ First class support and documentation from JetBrains
 
@@ -296,13 +328,13 @@ job.join()
 
 ---
 
-## 😊 Easy-to-use
+# 😊 Easy-to-use
 
 ^ Learning curve for getting started is really simple
 
 ---
 
-## 👌 `suspend fun`
+# 👌 `suspend fun`
 
 ^ Create suspended methods with the suspend operations
 
@@ -310,15 +342,27 @@ job.join()
 
 ---
 
-## `Dispatchers`
+# `Dispatchers`
 
-^ Dispatchers provided by the framework for common use cases
+- Default
+- IO
+- Main
+ - Android (Main Thread Dispatcher)
+ - JavaFx (Application Thread Dispatcher)
+ - Swing (Event Dispatcher Thread)
+- Unconfined
 
-^ Support for Android, JavaFX and Swing
+^ - Default: Default for builders like launch, async, etc if neither a dispatcher or interceptor is specified
+
+^ - IO: Designed for offloading blocking IO tasks to a shared pool of threads.
+
+^ - Main: Confined to the Main thread operating with UI objects. Usually single-threaded.
+
+^ - Unconfined: A coroutine dispatcher that is not confined to any specific thread
 
 ---
 
-## 🕰️ History of Android
+# 🕰️ History of Android
 
 ^ Handling asynchronous operations on Android has been really hard
 
@@ -326,47 +370,47 @@ job.join()
 
 ---
 
-## Background Processes
+# Background Processes
 
 ^ Too many options for background tasks make it hard for beginners
 
 ---
 
-### Background Processes
+## Background Processes
 
-## 🏛️️ `Runnable` / `Handler`
+# 🏛️️ `Runnable` / `Handler`
 
 ^ The de facto standard for Android and Java background tasks
 
 ---
 
-### Background Processes
+## Background Processes
 
-## 🤢 `AsyncTask`
+# 🤢 `AsyncTask`
 
 ^ Beloved AsyncTask risks memory leaks and confuses UI/background logic
 
 ---
 
-### Background Processes
+## Background Processes
 
-## 😕 `IntentService`
+# 😕 `IntentService`
 
 ^ Intent service "work queue processor" pattern to offload tasks
 
 ---
 
-### Background Processes
+## Background Processes
 
-## 🍯 `Loader<T>`
+# 🍯 `Loader<T>`
 
 ^ Lifecycle aware loaders introduced in Honeycomb and compatibility library
 
 ---
 
-### Background Processes
+## Background Processes
 
-## ![](jetpack-icon.png) `WorkManager`
+# ![](jetpack-icon.png) `WorkManager`
 
 ^ WorkManager released with JetPack, defers to JobScheduler, JobDispatcher or AlarmManager
 
@@ -374,7 +418,7 @@ job.join()
 
 ---
 
-## 😩
+# 😩
 
 ^ Not even a comprehensive list, another ten native Android options
 
@@ -396,19 +440,19 @@ job.join()
 
 ---
 
-## RxJava to the rescue
+# RxJava to the rescue
 
 ![right](rabbid-superhero.gif)
 
 ---
 
-## ⛓️ Chained operations
+# ⛓️ Chained operations
 
 ^ Allows us to compose chained operator sequences
 
 ---
 
-## ⬆️ ⬇️ Abstracted threading
+# ⬆️ ⬇️ Abstract threading
 
 ^ Abstract away threading, synchronisation, concerns
 
@@ -416,7 +460,7 @@ job.join()
 
 ![right](over-the-top.gif)
 
-## 😮 Reactive
+# 😮 Reactive
 
 ^ Introduced the concept of reactive programming
 
@@ -464,9 +508,9 @@ job.join()
 
 ---
 
-## 👍 Asynchronous APIs
+# 👍 Asynchronous APIs
 
-## Synchronous APIs 👎
+# Synchronous APIs 👎
 
 ^ Many of these libraries do a good job of providing asynchronous API's
 
@@ -487,7 +531,7 @@ job.join()
 
 ---
 
-## 🤦‍♀️
+# 🤦‍♀️
 
 ```java
 Observable
@@ -527,7 +571,7 @@ Observable
 
 ---
 
-## ⚙️ Hidden complexity
+# ⚙️ Hidden complexity
 
 ^ Business behaviour can often be hidden behind difficult to understand operators
 
@@ -535,7 +579,7 @@ Observable
 
 ---
 
-## 😭 Hidden gotchas
+# 😭 Hidden gotchas
 
 ^ Behaviour often unpredictable when converting from Rx2 types
 
@@ -547,7 +591,7 @@ Observable
 
 ---
 
-## 💾 Memory footprint
+# 💾 Memory footprint
 
 ^ RxJava objects take a lot of memory
 
@@ -555,7 +599,7 @@ Observable
 
 ---
 
-## ⤴️ Steep learning curve
+# ⤴️ Steep learning curve
 
 ^ Steep learning curve for learning operator functions
 
@@ -575,8 +619,8 @@ Observable
 
 ---
 
-## #RxMustDie
-### pca.st/7IJG
+# #RxMustDie
+## pca.st/7IJG
 
 ![right](rx-must-die.jpg)
 
@@ -601,13 +645,13 @@ Observable
 
 ---
 
-## Coroutine Use Cases
+# Coroutine Use Cases
 
 ^ Simple use cases can be achieved in Coroutines without the overhead of reactive frameworks
 
 ---
 
-## Network Call Handling
+# Network Call Handling
 
 ```kotlin
 // RxJava2: Single<T>
@@ -625,7 +669,7 @@ suspend fun getUser(): User = /* ... */
 
 ---
 
-## Cache Retrieval
+# Cache Retrieval
 
 ```kotlin
 // RxJava2: Maybe<T>
@@ -639,7 +683,7 @@ suspend fun getUser(): User? = /* ... */
 
 ---
 
-## Background Task Handling
+# Background Task Handling
 
 ```kotlin
 // RxJava2: Completable
@@ -651,7 +695,7 @@ suspend fun storeUser(user: User) { /* ... */ }
 
 ---
 
-## Thread Handling
+# Thread Handling
 
 ```kotlin
 // RxJava2
@@ -677,7 +721,7 @@ launch(Dispatchers.Main) {
 
 ---
 
-## 💪 ~~FlatMap~~
+# 💪 ~~FlatMap~~
 
 ```kotlin
 // RxJava2
@@ -700,7 +744,7 @@ launch(Dispatchers.Main) {
 
 ---
 
-## Callback Consumption
+# Callback Consumption
 
 ```kotlin
 // RxJava2
@@ -728,7 +772,7 @@ suspend fun getCoroutine() : T = suspendCoroutine { continuation ->
 
 ---
 
-## Task Cancellation
+# Task Cancellation
 
 ```kotlin, [.highlight: 5, 10]
 // RxJava2
@@ -753,7 +797,7 @@ parent.cancelChildren()
 
 ---
 
-## 💪 Backpressure
+# 💪 Backpressure
 
 ^ RxJava Observables not originally backpressure aware
 
@@ -761,7 +805,7 @@ parent.cancelChildren()
 
 ---
 
-## 💪 Backpressure
+# 💪 Backpressure
 
 ```kotlin
 launch { 
@@ -775,9 +819,9 @@ launch {
 
 ---
 
-## `ViewModel.viewModelScope`
+# [fit] `ViewModel.viewModelScope`
 
-### `androidx.lifecycle:2.1.0-alpha01`
+## `androidx.lifecycle:2.1.0`
 
 ^ Coroutine scope hierarchy allows view model scope with androidx lifecycle
 
@@ -785,7 +829,7 @@ launch {
 
 ---
 
-## Channels 🚇
+# Channels 🚇
 
 ^ Still marked as Obsolete, promoted to Experimental, use with care
 
@@ -799,8 +843,8 @@ launch {
 
 ![right](subset-over-drift-ice.jpg)
 
-### Roman Elizarov
-## Cold flows, hot channels
+## Roman Elizarov
+# Cold flows, hot channels
 
 ```kotlin
 Flow.collect { 
@@ -812,7 +856,28 @@ Flow.collect {
 
 ---
 
-## ⚙️ RxJava: Complex Business Logic
+# Testing
+
+```kotlin
+@Test
+fun testFoo() = runBlockingTest {
+  val actual = foo() 
+  // ...
+}
+
+suspend fun foo() {
+  delay(1_000)
+  // ...
+}
+```
+
+^ Simply use the Coroutine builder `runBlockingTest` to build a testable context
+
+^ Suspended operations in `runBlockingTest` will be auto-advanced virtual time
+
+---
+
+# ⚙️ RxJava: Complex Business Logic
 
 ^ Debouncing, distinct filtering, side-effects
 
@@ -828,9 +893,9 @@ Flow.collect {
 
 [.footer: medium.com/capital-one-tech/coroutines-and-rxjava-an-asynchronicity-comparison-part-1-asynchronous-programming-e726a925342a]
 
-## Asynchronicity Comparison
+# [fit] Asynchronicity Comparison
 
-### Manuel Vivo (@manuelvicnt)
+## Manuel Vivo (@manuelvicnt)
 
 ^ Would like to go into more detail on these comparisons
 
@@ -840,13 +905,13 @@ Flow.collect {
  
 ---
 
-## [fit] Is Coroutines a replacement for RxJava?
+# [fit] Is Coroutines a replacement for RxJava?
 
 ^ Golden question
 
 ---
 
-### Maybe...
+## Maybe...
 
 ^ The answer isn't so clear... maybe, but not really
 
@@ -858,11 +923,11 @@ Flow.collect {
 
 ---
 
-## Should I migrate to Coroutines?
+# [fit] Should I migrate to Coroutines?
 
 ---
 
-### Probably not...
+## Probably not...
 
 ^ If something is already working, it does not need to be migrated
 
@@ -884,13 +949,13 @@ Flow.collect {
 
 ---
 
-## Did "you" migrate to Coroutines?
+# [fit] Did *"you"* migrate to Coroutines?
 
 ^ If you asked me if I migrated?
 
 ---
 
-# 😜 Yes!
+![](hells-yeah.gif)
 
 ^ Kotlin and Coroutines are fun and a joy to use
 
@@ -900,11 +965,11 @@ Flow.collect {
 
 ---
 
-## How could I migrate to Coroutines?
+# [fit] How *could* I migrate to Coroutines?
 
 ---
 
-## 🤝 Migration Policy
+# 🤝 Migration Policy
 
 ^ Agree upon a migration policy with your team
 
@@ -912,19 +977,16 @@ Flow.collect {
 
 ---
 
-## Retrofit Services
+# Retrofit Services
 
 ---
 
-[.footer: github.com/JakeWharton/retrofit2-kotlin-coroutines-adapter]
+[.footer: github.com/square/retrofit/blob/master/CHANGELOG.md#version-260-2019-06-05]
 
-## [fit] Retrofit2 Coroutines Adapter 
-
-### [fit] `com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:+`
+# Retrofit 2.6.0
+## Built-in suspend support
 
 ^ Retrofit Coroutine adapter library from Jake Wharton
-
-^ Not advocating dynamic versions with (+)
 
 ---
 
@@ -932,71 +994,27 @@ Flow.collect {
 interface UserService {
 
   @GET("/user")
-  fun getUser(): Deferred<User>
+  suspend fun getUser(): User
 }
-
-val retrofit = Retrofit.Builder()
-    .baseUrl("https://example.com/")
-    .addCallAdapterFactory(CoroutineCallAdapterFactory())
-    .build()
 
 GlobalScope.launch {
     val user = retrofit
         .create<UserService>() // >= 2.5.0
         .getUser()
-        .await()
 }
 ```
 
 ^ Reified type create call available from 2.5.0
 
----
-
-```kotlin, [.highlight: 4, 9, 16]
-interface UserService {
-
-  @GET("/user")
-  fun getUser(): Deferred<User>
-}
-
-val retrofit = Retrofit.Builder()
-    .baseUrl("https://example.com/")
-    .addCallAdapterFactory(CoroutineCallAdapterFactory())
-    .build()
-
-GlobalScope.launch {
-    val user = retrofit
-        .create<UserService>() // >= 2.5.0
-        .getUser()
-        .await()
-}
-```
-
-^ Service should return Deferred instead of Single or Observable
+^ Service defined as suspended
 
 ^ Can also wrap Response or Result as normal
 
-^ Use provided Coroutine call adapter factory when building retrofit client
-
-^ Await the response of deferred type inside Coroutine context
-
 ---
 
-[.footer: github.com/square/retrofit/pull/2886]
+# Coroutines RxJava2
 
-## Retrofit 
-
-### First-party "suspend" support
-
-^ Pull request on Retrofit repo from Jake Wharton
-
-^ Anywhere between now and the end of time
-
----
-
-## Coroutines RxJava2
-
-### [fit] `org.jetbrains.kotlinx:kotlinx-coroutines-rx2:+`
+## [fit] `org.jetbrains.kotlinx:kotlinx-coroutines-rx2:+`
 
 ^ Convert suspended functions seamlessly
 
@@ -1037,7 +1055,7 @@ GlobalScope
 
 ---
 
-## Completable.await()
+# Completable.await()
 
 ```kotlin, [.highlight: 4]
 GlobalScope.launch {
@@ -1053,7 +1071,7 @@ GlobalScope.launch {
 
 ---
 
-## Maybe.await()
+# Maybe.await()
 
 ```kotlin, [.highlight: 4]
 GlobalScope.launch {
@@ -1071,7 +1089,7 @@ GlobalScope.launch {
 
 [.footer: kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-rx2/kotlinx.coroutines.rx2/io.reactivex.-observable-source/index.html]
 
-## Observable.await...
+# Observable.await...
 
 ```kotlin
 val observable = Observable.just(1, 2, 3, 4)
@@ -1094,11 +1112,11 @@ observable
 
 ---
 
-## Exceptions
+# Exceptions
 
 ---
 
-## 😅 Conclusion
+# 😅 Conclusion
 
 ^ Good idea of when its appropriate to use RxJava or Coroutines
 
@@ -1113,8 +1131,6 @@ observable
 ![right inline 15%](immobilienscout24.png)
 
 # Cheers! 🍻
-
-## bit.ly/2WxajRi
 
 ![left inline](gde-badge-round.png)
 
