@@ -847,12 +847,58 @@ launch {
 # Cold flows, hot channels
 
 ```kotlin
-Flow.collect { 
-  it.emit("Hello World!")
+flow {
+  emit("Hello")
+  emit("World")
 }
 ```
 
-^ But there is hope, flow allows cold streams, some channel behaviours promoted
+^ Flow allows us to create cold streams and interact with channels
+
+^ Requires coroutine context only for terminal operations
+
+^ Can be considered as an asynchronous sequence
+
+---
+
+# Flow 🌊
+
+```kotlin
+Observable.create { emitter: ObservableEmitter<String> ->
+  emitter.onNext("Hello")
+  emitter.onNext("World")
+}
+```
+
+^ Observable creation that might seem familiar
+
+---
+
+# Flow 🌊
+
+```kotlin
+flow { collector: FlowCollector<String> ->
+  collector.emit("Hello")
+  collector.emit("World")
+}
+```
+
+^ Can in most cases simply replace an observable
+
+---
+
+# Flow 🌊
+
+```kotlin
+flow { emit("Hello world") }
+    .onEach { delay(500) }
+    .map { it.length }
+    .collect { println("Length: $it") }
+```
+
+^ Growing set of chainable operations for flow
+
+^ Allows similar behaviour as from RxJava
 
 ---
 
