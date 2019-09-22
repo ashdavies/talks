@@ -930,7 +930,6 @@ class UserAdapter : ListAdapter<User, UserViewHolder>(UserComparator) {
 
 ---
 
-
 # `PagedList`
 ## `PagedListBuilder` 🏗
 
@@ -949,6 +948,17 @@ class UserAdapter : ListAdapter<User, UserViewHolder>(UserComparator) {
 ^ - `RxPagedListBuilder` for reactive java
 
 ^ - Unofficial `FlowPagedListBuilder` implementation from Chris Banes
+
+---
+
+# Observability
+# `PagedList`
+
+^ It's important for the `PagedList` to be observable if the dataset is modified
+
+^ The database or network can inform us that the data has changed
+
+^ Paging must occur on new data set
 
 ---
 
@@ -1505,11 +1515,17 @@ interface UserDao {
 ```java
 public abstract static class BoundaryCallback<T> {
   
-  public void onZeroItemsLoaded() { }
+  public void onZeroItemsLoaded() {
+    /* ... */
+  }
 
-  public void onItemAtFrontLoaded(@NonNull T itemAtFront) { }
+  public void onItemAtFrontLoaded(@NonNull T itemAtFront) {
+    /* ... */
+  }
 
-  public void onItemAtEndLoaded(@NonNull T itemAtEnd) { }
+  public void onItemAtEndLoaded(@NonNull T itemAtEnd) {
+    /* ... */
+  }
 }
 ```
 
@@ -1518,6 +1534,279 @@ public abstract static class BoundaryCallback<T> {
 ^ `onItemAtFrontLoaded` called when item at front has been loaded within prefetch distance
 
 ^ `onItemAtEndLoaded` called when item at end has been loaded within prefetch distance
+
+---
+
+# `BoundaryCallback` 🏁
+
+```kotlin
+class UserBoundaryCallback(
+    private val service: UserService,
+    private val dao: UserDao,
+    private val query: String
+) : PagedList.BoundaryCallback<User>() {
+
+  private var page: Int = 0
+
+  override fun onZeroItemsLoaded() {
+    requestItems()
+  }
+
+  override fun onItemAtEndLoaded(itemAtEnd: User) {
+    requestItems()
+  }
+
+  private fun requestItems() {
+    GlobalScope.launch { // Ignore structured concurrency
+      dao.insert(service.users(query, page, 50))
+      page++
+    }
+  }
+}
+```
+
+^ IO Dispatcher not necessary as retrofit and room manage scheduling
+
+^ Take service, dao, and query to construct individual request
+
+---
+
+# `BoundaryCallback` 🏁
+
+```kotlin, [.highlight: 2-4, 7, 10, 14, 18-21]
+class UserBoundaryCallback(
+    private val service: UserService,
+    private val dao: UserDao,
+    private val query: String
+) : PagedList.BoundaryCallback<User>() {
+
+  private var page: Int = 0
+
+  override fun onZeroItemsLoaded() {
+    requestItems()
+  }
+
+  override fun onItemAtEndLoaded(itemAtEnd: User) {
+    requestItems()
+  }
+
+  private fun requestItems() {
+    GlobalScope.launch { // Ignore structured concurrency
+      dao.insert(service.users(query, page, 50))
+      page++
+    }
+  }
+}
+```
+
+^ Page incremented with each request and provided on network call
+
+^ Better practice would take `itemAtEnd` for loading more items
+
+---
+
+# `BoundaryCallback` 🏁
+
+```kotlin
+class UserRepository(
+    private val service: UserService
+) {
+
+  fun users(query: String): LiveData<PagedList<Repo>> {
+    val factory: DataSource.Factory = service.users()
+    val config: PagedList.Config = PagedList.Config.Builder()
+        .setPageSize(PAGE_SIZE)
+        .setInitialLoadSizeHint(50)
+        .setPrefetchDistance(10)
+        .setEnablePlaceholders(false)
+        .build()
+        
+    return LivePagedListBuilder(factory, config)
+      .build()
+  }
+}
+```
+
+^ We then need to include our boundary callback in the `LivePagedListBuilder`
+
+---
+
+# `BoundaryCallback` 🏁
+
+```kotlin, [.highlight: 6]
+class UserRepository(
+    private val service: UserService
+) {
+
+  fun users(query: String): LiveData<PagedList<Repo>> {
+    val factory: DataSource.Factory = service.users()
+    val config: PagedList.Config = PagedList.Config.Builder()
+        .setPageSize(PAGE_SIZE)
+        .setInitialLoadSizeHint(50)
+        .setPrefetchDistance(10)
+        .setEnablePlaceholders(false)
+        .build()
+        
+    return LivePagedListBuilder(factory, config)
+        .build()
+  }
+}
+```
+
+^ Instead of the service being the data source factory
+
+---
+
+# `BoundaryCallback` 🏁
+
+```kotlin, [.highlight: 3, 7]
+class UserRepository(
+    private val service: UserService,
+    private val dao: UserDao
+) {
+
+  fun repos(query: String): LiveData<PagedList<Repo>> {
+    val factory: DataSource.Factory<Int, Repo> = dao.repos(query)
+
+    val config: PagedList.Config = PagedList.Config.Builder()
+        .setPageSize(20)
+        .setEnablePlaceholders(true)
+        .setPrefetchDistance(50)
+        .build()
+
+    return LivePagedListBuilder(factory, config)
+        .build()
+  }
+}
+```
+
+^ In our `UserRepository` we adjust `LivePagedListBuilder` to take the dao as the source of truth
+
+---
+
+# `BoundaryCallback` 🏁
+
+```kotlin, [.highlight: 8, 17]
+class UserRepository(
+    private val service: UserService,
+    private val dao: UserDao
+) {
+
+  fun repos(query: String): LiveData<PagedList<Repo>> {
+    val factory: DataSource.Factory<Int, Repo> = dao.repos(query)
+    val callback = RepoBoundaryCallback(service, dao, query)
+
+    val config: PagedList.Config = PagedList.Config.Builder()
+        .setPageSize(20)
+        .setEnablePlaceholders(true)
+        .setPrefetchDistance(50)
+        .build()
+
+    return LivePagedListBuilder(factory, config)
+        .setBoundaryCallback(callback)
+        .build()
+  }
+}
+```
+
+---
+
+# Error Handling 💥
+
+^ Data sources don't have in-built error handling because errors can be handled so differently
+
+^ Often you would want to display an error state to your user
+
+---
+
+# Error Handling 💥
+
+![right fit](connectivity-error-android.png)
+
+^ Some errors can be recoverable, whilst others not so much
+
+^ Want to give the user the option to retry where possible
+
+---
+
+# Error Handling 💥
+
+```kotlin
+class UserBoundaryCallback : PagedList.BoundaryCallback<Repo>() {
+
+  // LiveData of network errors.
+  private val _errors = MutableLiveData<String>()
+  val errors: LiveData<String> get() = _errors
+          
+   /* 
+    * ...
+    * */
+}
+```
+
+^ The recommended approach is to expose exception messages from the boundary callback
+
+^ Could  be included as a state object instead of an additional property
+
+---
+
+# Error Handling 💥
+
+```kotlin
+class UserRepository(
+    private val service: UserService,
+    private val dao: UserDao
+) {
+
+  fun repos(query: String): LiveData<PagedList<Repo>> {
+    val factory: DataSource.Factory<Int, Repo> = dao.repos(query)
+    val callback = RepoBoundaryCallback(service, dao, query)
+
+    val config: PagedList.Config = PagedList.Config.Builder()
+        .setPageSize(20)
+        .setEnablePlaceholders(true)
+        .setPrefetchDistance(50)
+        .build()
+
+    return LivePagedListBuilder(factory, config)
+        .setBoundaryCallback(callback)
+        .build()
+  }
+}
+```
+
+^ Back to our `UserRepository` we can chance the return type to include the error
+
+---
+
+# Error Handling 💥
+
+```kotlin, [.highlight: 6, 8, 20]
+class UserRepository(
+    private val service: UserService,
+    private val dao: UserDao
+) {
+
+  fun repos(query: String): Pair<LiveData<PagedList<User>>, LiveData<Throwable>> {
+    val factory: DataSource.Factory<Int, User> = dao.repos(query)
+    val callback = UserBoundaryCallback(service, dao, query)
+
+    val config: PagedList.Config = PagedList.Config.Builder()
+        .setPageSize(20)
+        .setEnablePlaceholders(true)
+        .setPrefetchDistance(50)
+        .build()
+
+    val data: LiveData<PagedList<User>> = LivePagedListBuilder(factory, config)
+        .setBoundaryCallback(callback)
+        .build()
+
+    return data to callback.errors
+  }
+}
+```
+
+^ Here it's a pair but can be a specific class to include error in state
 
 ---
 

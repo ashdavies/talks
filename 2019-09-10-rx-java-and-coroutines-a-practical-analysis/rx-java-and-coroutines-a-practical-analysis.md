@@ -3,7 +3,6 @@ autoscale: true
 build-lists: true
 header: Open Sans
 text: Open Sans
-slidenumbers: true
 theme: Merriweather, 3
 footer-style: Open Sans
 
@@ -520,7 +519,7 @@ job.join()
 
 ---
 
-[.background-color: #222222]
+[.background-color: #2d2d2d]
 [.footer-style: #ffffff]
 
 ![inline](rx-java-mapping.png)
@@ -655,7 +654,9 @@ Observable
 
 ```kotlin
 // RxJava2: Single<T>
-fun getUser(): Single<User> = Single.fromCallable { /* ... */ }
+fun getUser(): Single<User> = Single.fromCallable {
+  /* ... */
+}
 
 // Coroutines: T
 suspend fun getUser(): User = /* ... */
@@ -673,7 +674,9 @@ suspend fun getUser(): User = /* ... */
 
 ```kotlin
 // RxJava2: Maybe<T>
-fun getUser(): Maybe<User> = Maybe.fromCallable { /* ... */ }
+fun getUser(): Maybe<User> = Maybe.fromCallable {
+  /* ... */
+}
 
 // Coroutines: T?
 suspend fun getUser(): User? = /* ... */
@@ -687,7 +690,9 @@ suspend fun getUser(): User? = /* ... */
 
 ```kotlin
 // RxJava2: Completable
-fun storeUser(user: User): Completable.fromCallable { /* ... */ }
+fun storeUser(user: User): Completable.fromCallable {
+  /* ... */
+}
 
 // Coroutines: Unit
 suspend fun storeUser(user: User) { /* ... */ }
@@ -902,6 +907,8 @@ flow { emit("Hello world") }
 
 ---
 
+[.footer: github.com/Kotlin/kotlinx.coroutines/tree/master/kotlinx-coroutines-test]
+
 # Testing
 
 ```kotlin
@@ -923,7 +930,17 @@ suspend fun foo() {
 
 ---
 
-# ⚙️ RxJava: Complex Business Logic
+# `runBlockingTest`
+
+- Auto-advancing of time ⏱⏩
+- Explicit time control 🎛
+- Eager execution of launch or async 🏃‍♂️
+- Pause, manually advance, and restart execution ⏯
+- Report uncaught exceptions as test failures 💥
+
+---
+
+# [fit] ⚙️ RxJava: Complex Business Logic
 
 ^ Debouncing, distinct filtering, side-effects
 
