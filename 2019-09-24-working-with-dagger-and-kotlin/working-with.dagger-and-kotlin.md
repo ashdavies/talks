@@ -1,18 +1,18 @@
 autoscale: true
 build-lists: true
-footer: @snnkzk | @askashdavies
-footer-style: Google Sans
-header: Google Sans
+footer: @askashdavies
+footer-style: Open Sans
+header: Open Sans
 slide-transition: true
-theme: Libre, 1
-text: Google Sans
+text: Open Sans
+theme: Merriweather, 3
 
 ![right inline 15%](immobilienscout24.png)
 
-## [fit] Working with Dagger and Kotlin
-#### Sinan Kozak & Ash Davies
+# [fit] Working with Dagger and Kotlin
+### Droidcon Greece 🇬🇷
 
-![left inline 50%](sinan-kozak.png)![left inline 33%](gde-badge-round.png)
+![left inline 35%](gde-badge-round.png)
 
 ![right](graph-background.jpg)
 
@@ -22,18 +22,70 @@ text: Google Sans
 
 # Introduction 👋
 
-- Dagger 2 is a fast dependency injector for Android and Java
-- One of goals is having compile time safety
-- It is written for only Java in mind
-- It is used extensively outside of Android ecosystem
+- Dagger 2 is a dependency injector for Android and Java
+- Compile time safety through code generations
+- Written in Java, for Java, by Java?
+- Used extensively outside of Android
 
-^ Powerful tool for big project
+---
 
-^ Compile time safety and no runtime involvement are main goal
+[.footer: jakewharton.com/helping-dagger-help-you/]
 
-^ No magic or hack behind it
+![](helping-dagger-help-you.png)
 
-^ It is used in Google as well
+^ Great few opening slides from Jake on using Dagger for scalability
+
+^ Dagger helps us by generating the code for reliable dependency injection
+
+^ Code generated is the same as code you would write yourself
+
+---
+
+# History 🧓
+
+^ Not exactly the new kid on the block
+
+^ Dagger has been through a few iterations and has a long history
+
+---
+
+# Guice 🥤
+#### (Pronounced 'juice')
+
+^ Origins in Guice developed by Google
+
+^ Around for a very long time still under active development
+
+---
+
+# Dagger ![](square-logo.png)
+#### (JSR-330)
+
+^ Square built Dagger, influenced by Guice, but not extended
+
+^ Build on the JSR-330 standard introduces DI for Android
+
+---
+
+[.footer: youtube.com/watch?v=oK_XtfXPkqw]
+
+# Dagger 2 ![](google-logo.png)
+#### (Sans-Reflection)
+
+^ Forked and extended by the big G, brought back into the fold
+
+^ Efforts to remove reflection through code generation
+
+^ Improved performance for Android
+
+^ Talk from Greg Kick explaining the improvements
+
+---
+
+# Kotlin ![](kotlin-logo.png)
+#### (noun: freakin' awesome)
+
+^ Created in 2011 project Kotlin, stable release 2014
 
 ---
 
