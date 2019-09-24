@@ -16,16 +16,95 @@ theme: Merriweather, 3
 
 ![right](graph-background.jpg)
 
-^ Speaker introduction
-
 ---
 
 # Introduction 👋
 
-- Dagger 2 is a dependency injector for Android and Java
-- Compile time safety through code generations
-- Written in Java, for Java, by Java?
-- Used extensively outside of Android
+^ Speaker introduction
+
+^ Who knows dependency inversion/injection?
+
+---
+
+# What is Dagger 🗡
+
+^ Dagger 2 is a dependency injector for Android and Java
+
+^ Compile time safety through code generation
+
+---
+
+# In Java
+
+^ Written purely in Java
+
+---
+
+# In Java, for Java
+
+^ For Java applications
+
+---
+
+# In Java, for Java, by Java
+
+^ Generating Java code
+
+---
+
+# In Java, for Java, by Java, with Java developers
+
+^ Designed by Java developers
+
+---
+
+# In Java, for Java, by Java, with Java developers, for Ja....
+
+^ You get the idea
+
+---
+
+# Java ☕️
+
+---
+
+![](wait-what.gif)
+
+^ Wait what?
+
+^ What is code generation
+
+---
+
+# Code Generation 📠
+
+^ It's important to understand what code generation is
+
+^ Code generation is based upon annotation processors
+
+^ Annotation processors process annotated class and generate new code
+
+---
+
+# AutoValue ⚙️
+ 
+^ This is how auto value works prior to the data classes of Kotlin
+
+^ Evaluates the properties of existing Java classes
+
+---
+
+# Lombok 🧙‍♀️
+
+^ Other methods like Lombok use byte weaving to modify existing byte code
+
+^ Fucking voodoo, stay the hell away
+
+---
+
+# Dagger 🗡
+
+^ Lets get back to Dagger before I lead you off on a tangent
 
 ---
 
@@ -89,11 +168,16 @@ theme: Merriweather, 3
 
 ---
 
-# Dagger 2 and Kotlin ☕ 🗡
+# Dagger 2 🗡
+## Kotlin ♥
 
-- Dagger 2 can work with Kotlin
-- But generated code is plain Java source code
-- Kotlin generated code won't like to happen
+^ Dagger *can* work with Kotlin but it's generated in Java
+
+^ Relies upon Kotlin interoperability to function
+
+^ Kotlin compatiblity has already begun
+
+^ TODO LINK GITHUB DAGGER COMPAT
 
 ---
 
@@ -144,13 +228,6 @@ class Game @Inject constructor(
 
 # Constructor injection
 
-```kotlin
-class Game @Inject constructor(
-    @Named("P1") private val player1: Player,
-    @Named("P2") private val player2: Player
-)
-```
-
 ```java
 public final class Game {
    private final Player player1;
@@ -166,18 +243,13 @@ public final class Game {
 }
 ```
 
-^ Decomipled version of Kotlin class (Simplified)
+^ Decompiled version of Kotlin class (Simplified)
+
+^ But those annotations? How do they affect the compiled code?
 
 ---
 
-# Constructor injection
-
-```kotlin
-class Game @Inject constructor(
-    @Named("P1") private val player1: Player,
-    @Named("P2") private val player2: Player
-)
-```
+# Constructor Injection
 
 ```java, [.highlight: 6-7]
 public final class Game {
@@ -198,7 +270,7 @@ public final class Game {
 
 ---
 
-# lateinit var 🛑
+# Field Injection: lateinit var 🛑
 
 ```kotlin
 class Game @Inject constructor() {
@@ -208,23 +280,13 @@ class Game @Inject constructor() {
 }
 ```
 
-^ This scenerio can happen with Activity and Fragment (Fragments will have constructor support in near future)
-
-^ Normal looking properties
+^ What about field property injections
 
 ^ But kotlin properties arent same as Java properties
 
 ---
 
 # Decompiled lateinit var
-
-```kotlin
-class Game @Inject constructor() {
-
-  @Inject @Named("P1") lateinit var player1: Player
-  @Inject @Named("P2") lateinit var player2: Player
-}
-```
 
 ```java
 public final class Game {
@@ -256,14 +318,6 @@ public final class Game {
 
 # Decompiled lateinit var
 
-```kotlin
-class Game @Inject constructor() {
-
-  @Inject @Named("P1") lateinit var player1: Player
-  @Inject @Named("P2") lateinit var player2: Player
-}
-```
-
 ```java, [.highlight: 2-3, 5, 11]
 public final class Game {
    @Inject public Player player1;
@@ -284,6 +338,8 @@ public final class Game {
 
 ^ This happens because Inject is Target annotation but Named is Qualifier annotation
 
+^ Doesnt look right
+
 ---
 
 [.footer: ]
@@ -292,29 +348,28 @@ public final class Game {
 
 ---
 
-# Specify annotation
+# Specify Annotations
 
-```kotlin
-class Game @Inject constructor() {
+- @field:...
+- @set:...
+- @get:...
+- @param:...
+- @property:...
+- @setparam:...
+- @receiver:...
+- @delegete:...
 
-  @Inject @field:Named("P1") lateinit var player1: Player
-  @Inject @field:Named("P2") lateinit var player2: Player
-}
-```
+^ We need to specify where annotation apply in Java world
 
- - We need to specify where annotation needs to apply in Java world
-    - @field:...
-    - @set:...
-    - @get:...
-    - @param:...
-    - @property:...
-    - @setparam:...
-    - @receiver:...
-    - @delegete:...
+^ They can have many different targets
 
 ---
 
-# Specify annotation
+![](derp.gif)
+
+---
+
+# Specify Annotations
 
 ```kotlin
 class Game @Inject constructor() {
@@ -323,6 +378,12 @@ class Game @Inject constructor() {
   @Inject @field:Named("P2") lateinit var player2: Player
 }
 ```
+
+^ Adding the specifier on the annotation
+
+---
+
+# Specify Annotations
 
 ```java
 public final class Game {
@@ -340,33 +401,7 @@ public final class Game {
 }
 ```
 
----
-
-# Specify annotation
-
-```kotlin
-class Game @Inject constructor() {
-
-  @Inject @field:Named("P1") lateinit var player1: Player
-  @Inject @field:Named("P2") lateinit var player2: Player
-}
-```
-
-```java, [.highlight: 2-3]
-public final class Game {
-
-   @Inject @Named("P1") public Player player1;
-   @Inject @Named("P2") public Player player2;
-
-   public final Player getPlayer1() {...}
-
-   public final void setPlayer1(Player var1) {...}
-
-   public final Player getPlayer2() {...}
-
-   public final void setPlayer2(Player var1) {...}
-}
-```
+^ Now the field is correctly annotated
 
 ---
 
@@ -379,21 +414,22 @@ public final class Game {
 # Constructor vs Property injection
 
 - Constructor val
-  - Easy to use
-  - Safe at runtime if project compile successfully
+  - Easier to use
+  - Reliable dependency injection
+  - Compilation safety
 
 - Property lateinit var injection
-  - Kotlin properties uses property access syntax via accessors
-  - Unclear where the annotation is applied, accessor or property
+  - Synthetic property accessors
+  - Unclear where the annotation is applied
   - Dont forget to use with `@field:`
 
 ^ lateinit var is error prone and hacky to test
 
+^ Constructor injection is much clearer
+
 ---
 
 # Scope Annotations 🎯
-
-^ Ash
 
 ---
 
@@ -423,7 +459,7 @@ public @interface Scope {
 
 ---
 
-# @Singleton != Singleton Pattern
+# [fit] @Singleton != Singleton Pattern
 
 ^ Important to remember the singleton is not the same as the singleton pattern
 
@@ -877,8 +913,6 @@ public final class ApplicationModule {
 
 # Kotlin: Generics<? : T>
 
-^ Ash
-
 ^ Lets cheer ourselves up with some generics
 
 ---
@@ -1111,8 +1145,6 @@ class ListAdapter @Inject constructor(strings: @JvmSuppressWildcards List<String
 
 # Jetpack
 
-^ Ash
-
 ---
 
 # Jetpack
@@ -1196,7 +1228,7 @@ class ListAdapter @Inject constructor(strings: @JvmSuppressWildcards List<String
 [.background-color: #feefe3]
 [.text: #bf360c]
 
-> ## ⚠️ Caution: A `ViewModel` must never reference a view, `Lifecycle`, <br />or any class that may hold a reference to the activity context.
+> ## ⚠️ Caution: A `ViewModel` must never reference a view, `Lifecycle`, or any class that may hold a reference to the activity context.
 
 ^ Its because of this your `ViewModel` should not contain `Context`
 
@@ -1370,7 +1402,7 @@ class ViewModelActivity : DaggerAppCompatActivity {
 ---
 
 # Jetpack: ViewModel
-## androidx.activity:activity-ktx:1.0.0-rc01
+## androidx.activity:activity-ktx:1.0.0
 
 ```kotlin
 class ViewModelActivity : DaggerAppCompatActivity {
@@ -1417,7 +1449,7 @@ class ViewModelActivity : DaggerAppCompatActivity {
 
 [.footer: github.com/android/plaid/blob/master/app/src/main/java/io/plaidapp/ui/HomeViewModelFactory.kt]
 
-# Plaid: HomeViewModelFactory
+# Good: HomeViewModelFactory
 
 ```kotlin
 class HomeViewModelFactory @Inject constructor(
@@ -1450,19 +1482,17 @@ class HomeViewModelFactory @Inject constructor(
 
 ---
 
-[.footer: github.com/android/plaid/blob/master/about/src/main/java/io/plaidapp/about/ui/model/AboutViewModelFactory.kt]
-
-# Plaid: AboutViewModelFactory
+# Not So Good: OtherViewModelFactory
 
 ```kotlin
-internal class AboutViewModelFactory @Inject constructor() : ViewModelProvider.Factory {
+internal class OtherViewModelFactory @Inject constructor() : ViewModelProvider.Factory {
 
-    @Inject lateinit var aboutViewModel: AboutViewModel
+    @Inject lateinit var otherViewModel: OtherViewModel
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return if (modelClass.isAssignableFrom(AboutViewModel::class.java)) {
-            aboutViewModel as T
+        return if (modelClass.isAssignableFrom(OtherViewModel::class.java)) {
+            otherViewModel as T
         } else {
             throw IllegalArgumentException(
                 "Class ${modelClass.name} is not supported in this factory."
@@ -1563,10 +1593,10 @@ class ViewModelActivity : DaggerAppCompatActivity {
     <sup>Android Pie 🥧</sup>
 
 -  `FragmentFactory`
-    <sup>fragmentx:1.1.0-rc01</sup>
+    <sup>fragmentx:1.1.0</sup>
 
 - `AbstractSavedStateVMFactory`
-    <sup>lifecycle-viewmodel-savedstate:1.0.0-alpha02</sup>
+    <sup>lifecycle-viewmodel-savedstate:1.0.0-alpha05</sup>
 
 - `LayoutInflater.Factory2`
     <sup>Android Cupcake 🧁</sup>
@@ -1575,13 +1605,13 @@ class ViewModelActivity : DaggerAppCompatActivity {
 
 ^ We can use the same mechanism as we have with ViewModel factory
 
-^ Android Pie brings `AppComponentFactory` to control instantiation of manifest elements
+^ - Android Pie brings `AppComponentFactory` to control instantiation of manifest elements
 
-^ FragmentX 1.1.0 brings FragmentFactory to control creation of Fragments
+^ - FragmentX 1.1.0 brings FragmentFactory to control creation of Fragments
 
-^ We can also use saved state factory with the ViewModel Factory
+^ - We can also use saved state factory with the ViewModel Factory
 
-^ Finally we can also use the LayoutInflater factory to create views
+^ - Finally we can also use the LayoutInflater factory to create views
 
 ---
 
@@ -1646,8 +1676,6 @@ class ApplicationLayoutInflaterFactory @Inject constructor(
 
 # Kotlin: Experimental 🧪
 
-^ Ash
-
 ---
 
 # Kotlin: Experimental 🧪
@@ -1664,13 +1692,13 @@ class ApplicationLayoutInflaterFactory @Inject constructor(
 
 - Sometimes represented as boxed type...
 
-^ Wrapping types for business logic requires additional heap allocations
+^ - Wrapping types for business logic requires additional heap allocations
 
-^ Primitive types heavily optimised by the runtime
+^ - Primitive types heavily optimised by the runtime
 
-^ Compiler will inline where possible, but sometimes it's necessary to use wrapper
+^ - Compiler will inline where possible, but sometimes it's necessary to use wrapper
 
-^ How does this behave with Dagger?
+^ - How does this behave with Dagger?
 
 ---
 
@@ -1694,36 +1722,73 @@ class ApplicationLayoutInflaterFactory @Inject constructor(
 
 ---
 
-[.background-color: #000000]
-[.footer: ]
-
-![fit](drax_listening.gif)
+# `@Binds`
 
 ---
 
-# Use Kotlin interfaces for @Binds modules
+# `@Binds`
 
-^ Sinan
+```kotlin
+@Module
+interface MySuperAwesomeHappyFantasticModule {
 
-- Delegating one type to another
-    - Use `@Binds` instead of a `@Provides` method 
-    - No code generation involved
-- Should I use an `abstract class` or `interface`?
-    - Doesn’t matter
-    - `interface` is more cleaner
-    - `abstract` can have internal method
-- `interface` with default implementation?
-    - No
+  @Binds
+  fun activity(activity: FragmentActivity): MySuperAwesomeHappyFantasticActivity
+}
+```
 
-^ Dagger use @Bind annotation to simply satify graph
+^ Method body not required
 
-^ abstract method or interface doesnt matter but interface is more lean
+^ Just an instruction to Dagger
+
+^ To provide this type
+
+---
+
+# `@Binds`
+
+
+```kotlin
+@Module
+abstract class MySuperAwesomeHappyFantasticModule {
+
+  @Binds
+  abstract fun activity(activity: FragmentActivity): MySuperAwesomeHappyFantasticActivity
+}
+```
+
+^ Can also use an abstract class to achieve the same
+
+---
+
+# `@Binds`
+
+```kotlin
+@Module
+interface MySuperAwesomeHappyFantasticModule {
+
+  @Binds
+  fun activity(activity: FragmentActivity): MySuperAwesomeHappyFantasticActivity
+}
+```
+
+^ Interfaces have fewer words
+
+---
+
+# Defaults
+
+^ Can I use interfaces with default implementations?
+
+---
+
+![](no.gif)
+
+^ No since Kotlin will delegate to a synthetic nested class which goes unrecognised
 
 ---
 
 # Inlined method bodies in Kotlin
-
-^ Sinan
 
 - Kotlin return types can be inferred from method body
 - Android Studio shows inlining return types
@@ -1733,41 +1798,13 @@ class ApplicationLayoutInflaterFactory @Inject constructor(
 - Easier to review, easier to understand, avoids compiler errors
 - Framework types (Fragment.context) can be assumed nullable
 
-^ When we need to bind interface, if dont specify type. It bind implementation
+^ When we need to bind interface, if dont specify type. It binds implementation
 
 ^ Providing anything from Java or Android SDK can be assumed null
 
 ---
 
-# Dagger Factory's
-
-^ Sinan
-
-- Inject annotated classes generate factory at usage site
-- If `@Module` is not necessary in the gradle module
-    - Prefer `@Inject` annotation
-    - Don't use dagger compiler where possible
-
-^ For better compiler performance in pure kotlin module try to avoid having dagger compiler
-
----
-
-# Dagger Factory's
-
-^ Sinan
-
-- For keeping implementation internal prefer `abstract` module and use internal methods
-- Injected constructor can be internal
-- Root module needs dependencies for submodule
-    - if it is in Dagger graph, it is required in app module
-
-^ Dont expose internal implementation detail if not necessary
-
----
-
-# Keeping internal implementation internal 
-
-This doesn't compile;
+# [fit] Keeping internal implementation internal 
 
 ```kotlin
 internal class Player
@@ -1778,7 +1815,11 @@ class Game @Inject constructor(
 )
 ``` 
 
-But this will;
+^ Does not compile
+
+---
+
+# [fit] Keeping internal implementation internal 
 
 ```kotlin
 internal class Player
@@ -1787,29 +1828,45 @@ class Game @Inject internal constructor(
     @Named("P1") private val player1: Player,
     @Named("P2") private val player2: Player
 )
-``` 
+```
+
+^ This will because constructor is internal so doesn't leak internal class
 
 ---
 
-# Default Parameters in Dagger
+# Default Parameters?
 
-^ Sinan
-
-- Dagger doesn’t recognise default parameters even with `@JvmOverloads`
-- `@JvmOverloads` will generate all constructors with `@Inject`
-- Class can only have one `@Inject` constructor
-- Best practice to define an alternative annotated constructor
-
-^ For testing purpuse, if a new constructor needed dont use default param
+^ Can you use default parameters?
 
 ---
 
-# JvmOverloads
+# ~~Default Parameters?~~ 🙅‍♂️
 
-- Create multiple constructor with @Inject annotation
-    - Dagger requires only one @Inject annotated constructor
-    - That is why it doesn't know which one to use
-    - Doesn't even compile
+^ No dagger doesn't recognised default parameters even with `@JvmOverloads`
+
+---
+
+# `@JvmOverloads`
+
+^ Use `JvmOverloads` to create multiple constructors 
+
+---
+
+# ~~`@JvmOverloads`~~ 🙅‍♂️
+
+^ All generated constructors will be generated with `@Inject`
+
+^ Not compatible with `@Inject` as Dagger doesn't know which to use
+
+---
+
+# Hope 🙏
+
+## bit.ly/dagger-kotlin-support
+
+^ Proposal from Zac Sweers for Dagger support
+
+^ Includes recognition of inline classes and type aliases, objects, etc
 
 ---
 
@@ -1840,9 +1897,6 @@ class Game @Inject internal constructor(
 
 ## Thanks!
 
-#### Sinan Kozak & Ash Davies
-
-
-![left inline 50%](sinan-kozak.png)![left inline 33%](gde-badge-round.png)
+![left inline 33%](gde-badge-round.png)
 
 ![right](graph-background.jpg)
