@@ -10,9 +10,9 @@ text: Google Sans
 ![right inline 15%](immobilienscout24.png)
 
 # [fit] Refactoring Legacy Code with Kotlin
-## Kotlin Everywhere: Coimbra 🇵🇹
+## [fit] Kotlin Everywhere: Coimbra 🇵🇹
 
-![left inline 30%](gde-badge-round.png)
+![inline 50%](kotlin-everywhere.png)![inline 25%](gde-badge-round.png)
 
 ![right](abandoned-antique.jpg)
 
@@ -189,7 +189,7 @@ if (foo == null) {
 
 [.background-color: #ffffff]
 
-![inline](android-kotlin-hero.png)
+![inline 100%](android-kotlin-hero.png)
 
 ^ What did that mean for our green robot friend?
 
@@ -352,17 +352,29 @@ Using, containing, or denoting expressions that are natural to a native speaker
 
 ---
 
+[.footer: ]
+
 ![](job-done.gif)
 
 ^ Job done lets go home
 
 ---
 
+[.footer: ]
+
 ![](please-dont.gif)
 
 ^ Please don't do this
 
-^ Let me explain why
+---
+
+[.footer: ]
+
+![](but-why.gif)
+
+^ But why shouldn't we use this in-built tool from Jetbrains?
+
+^ Surely they should know what's best right?
 
 ---
 
@@ -373,15 +385,24 @@ public class BadJavaActivity extends Activity {
 }
 ```
 
-^ Public for common dependency injection library
+^ Take an example, public property common dependency injection library
 
 ^ Auto formatting makes a lot of general assumptions
 
 ---
 
+[.text: #ffffff]
 [.footer: How I Met Your Mother, CBS]
 
-![](general-assumptions.jpg)
+![original](general-assumptions.jpg)
+
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
 
 # General Assumptions 👮‍♂️
 
@@ -443,17 +464,128 @@ if (::file.isInitialized) { /* ... */ }
 
 ---
 
-```kotlin
-requireNotNull(myNullableVal)
+```java
+// Throws NullPointerException 🔥
+myNullVal.myMethod() 
 ```
+
+^ Accessing a method on a nullable property will throw an NPE
 
 ---
 
-```java
-if (foo == null) {
-  bar();
+```kotlin
+// Still throws NullPointerException 🔥
+myNullVal!!.myMethod()
+```
+
+^ After converting uses the double bang to compile
+
+---
+
+```kotlin
+// Does nothing 🤷‍♂️
+myNullVal?.myMethod()
+```
+
+^ We could just use the null operator
+
+---
+
+```kotlin
+// Still does nothing 🤷‍♂️
+myNullVal?.also {
+  it.myMethod()
 }
 ```
+
+^ Or even better use Kotlin scope functions
+
+---
+
+```kotlin
+// Defensive Code <🛡>
+myNullVal?.also {
+  it.myMethod()
+}
+```
+
+^ This is defensive code
+
+^ and language abuse
+
+^ fails to handle error
+
+---
+
+```kotlin
+// Offensive Code <🖕>
+myNullVal!!.myMethod()
+```
+
+^ So we actually want to prefer our offensive code
+
+^ But how to avoid the double bang?
+
+---
+
+```kotlin
+// throws IllegalArgumentException("Required value was null.")
+requireNotNull(myNullVal).myMethod()
+```
+
+^ We can require the value as not null with this Kotlin method
+
+---
+
+```kotlin
+// throws IllegalArgumentException("myNullVaL was null because ...")
+requireNotNull(myNullVal) { "myNullVaL was null because ..." }.myMethod()
+```
+
+^ But even better we can provide a specific message
+
+^ Gives more informative information about the failure
+
+---
+
+```kotlin
+class ImpossibleException : IllegalArgumentException()
+
+// throws ImpossibleException()
+val myNotNullVal = myNullVall ?: throw ImpossibleException()
+
+myNotNullVal.myMethod()
+```
+
+^ But even more better we can provide a specific exception
+
+---
+
+[.background-color: #ffffff]
+[.footer: xkcd.com/2200/]
+
+![right 50%](unreachable-state.png)
+
+```kotlin
+class ImpossibleException : IllegalArgumentException("""
+    If you're seeing this, the code is in what I thought was an unreachable state.
+    I could give you advice for what to do, but honestly, why should you trust me?
+    I clearly screwed this up. I'm writing a message that should never appear,
+    yet I know it will probably appear someday.
+    
+    On a deep level, I know I'm not up to this task.
+    I'm so sorry.
+""")
+
+// throws ImpossibleException()
+val myNotNullVal = myNullVall ?: throw ImpossibleException()
+
+myNotNullVal.myMethod()
+```
+
+^ Then you can use the exception to provide more information
+
+^ Implement custom behaviour and any fallback mechanisms
 
 ---
 
@@ -541,7 +673,10 @@ class User(var firstName: String?, var lastName: String?) {
 ---
 
 ```kotlin
-data class User(val firstName: String, val lastName: String)
+data class User(
+  val firstName: String,
+  val lastName: String
+)
 ```
 
 ^ Not only more concise and easier to read
@@ -551,7 +686,10 @@ data class User(val firstName: String, val lastName: String)
 ---
 
 ```kotlin
-data class User(val firstName: String, val lastName: String? = null)
+data class User(
+  val firstName: String, 
+  val lastName: String? = null
+)
 ```
 
 ^ This also works for default parameters and nullable properties
@@ -571,7 +709,9 @@ public final User copy(@Nullable String firstName, @Nullable String lastName) {
 
 ---
 
-# Kotlin
+[.footer: kotlinlang.org/docs/reference/idioms.html]
+
+# Kotlin: Idioms
 
 - Singleton objects
 - String interpolation
@@ -634,6 +774,12 @@ public final User copy(@Nullable String firstName, @Nullable String lastName) {
 - Dependency inversion
 
 ^ We should all be familiar with solid design
+
+---
+
+![](uncle-bob-watching.jpg)
+
+^ We should be practicing these practices these any way
 
 ---
 
@@ -817,93 +963,13 @@ fun main() {
 
 ---
 
-# ⚖️ Stability
+# Stability
 
-^ In the abstract I had mentioned "with coroutines approaching stability"
+^ If you're familiar with the androidx release process
 
-^ As of Kotlin 1.3 (Oct '18) coroutines API graduated to "fully" stable
+^ Alpha, beta, release candidate, stable
 
----
-
-[.footer-style: #ffffff]
-
-![](lie-detected.gif)
-
-^ That wasn't completely true, but lets cover the basics
-
----
-
-# @Annotations
-
-## (🐉 Here be dragons)
-
-^ Though coroutines are stable some API elements are still under development
-
-^ Kotlin introduced annotations to manage these aspects
-
----
-
-# Annotations
-
-```kotlin
-@ExperimentalCoroutinesApi // ⚠️
-```
-
-^ Experimental API's design declarations may still change
-
-^ Applies to Rx conversion, and channel production
-
----
-
-# Annotations
-
-```kotlin
-@ExperimentalCoroutinesApi // ⚠️
-
-@FlowPreview // ⚠️
-```
-
-^ Flow is a newer architectural model that attempts to model chaining behaviour
-
-^ Much like a sequence that is only consumed on a terminal operator
-
-^ Cold observable easily replayed and reusable
-
----
-
-# Annotations
-
-```kotlin
-@ExperimentalCoroutinesApi // ⚠️
-
-@FlowPreview // ⚠️
-
-@ObsoleteCoroutinesApi // ⚠️
-```
-
-^ Obsolete API's will be deprecated in the future but not yet known what will replace them
-
-^ Difference between obsolete and experimental is intent, @Experimental may graduate, @Obsolete unknown
-
-^ Applies to channel consumptions, actors, Rx conversion functions
-
----
-
-# Annotations
-
-```kotlin
-@ExperimentalCoroutinesApi // ⚠️
-
-@FlowPreview // ⚠️
-
-@ObsoleteCoroutinesApi // ⚠️
-
-@InternalCoroutinesApi // ☠️
-```
-
-^ Should only be used internally by Kotlin coroutines
-
-^ Can change without warning or migration aids
+^ Coroutines achieves this with annotations
 
 ---
 
@@ -918,13 +984,20 @@ fun main() {
 
 ---
 
+[.footer: speakerdeck.com/jossiwolf/building-sdks-the-kotlin-way-ccb4a237-b45c-42e7-8391-640dd058f50c]
+
+# [fit] Building SDKs - The Kotlin Way
+## [fit] Kotlin Everywhere: Hamburg - Jossi Wolf
+
+---
+
 # 💪 Coroutines 💪
 
 ^ What makes everybody want to jump on the Coroutine bandwagon?
 
 ---
 
-# 🥇 Native first-party library
+# 🥇 Native library
 
 ^ First class support and documentation from JetBrains
 
@@ -1036,32 +1109,6 @@ suspend fun doWorld() {
 
 ---
 
-# `Dispatchers`
-
-^ Dispatchers provided by the framework for common use cases
-
----
-
-# `Dispatchers`
-
-- Default
-- IO
-- Main
- - Android (Main Thread Dispatcher)
- - JavaFx (Application Thread Dispatcher)
- - Swing (Event Dispatcher Thread)
-- Unconfined
-
-^ - Default: Default for builders like launch, async, etc if neither a dispatcher or interceptor is specified
-
-^ - IO: Designed for offloading blocking IO tasks to a shared pool of threads.
-
-^ - Main: Confined to the Main thread operating with UI objects. Usually single-threaded.
-
-^ - Unconfined: A coroutine dispatcher that is not confined to any specific thread
-
----
-
 # Testing
 
 ```kotlin
@@ -1096,6 +1143,21 @@ suspend fun foo() {
 
 ---
 
-# Thanks!
+[.background-color: #ffffff]
+[.footer: ]
 
-![right](abandoned-antique.jpg)
+# Thanks!
+### bit.ly/refactoring-legacy-code
+
+![left 100%](kotlin-everywhere.png)
+
+---
+
+[.background-color: #ffffff]
+[.footer: ]
+
+![left 100%](kotlin-everywhere.png)
+
+# Questions?
+## sli.do/Z169
+
