@@ -18,6 +18,13 @@ text: Google Sans
 
 ---
 
+# Questions
+## sli.do/Z169
+
+![right](abandoned-antique.jpg)
+
+---
+
 # Legacy
 
 **adj.**
@@ -67,7 +74,7 @@ Denoting or relating to software or hardware that has been superseded but is dif
 
 # JVM != ART
 
-^ Because the Java virtual machine uses bytecode different from Android Runtime
+^ Because the Java virtual machine uses APIs slightly different from Android Runtime
 
 ---
 
