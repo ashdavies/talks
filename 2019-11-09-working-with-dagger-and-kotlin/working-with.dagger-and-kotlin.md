@@ -318,18 +318,11 @@ class Car {
 
 ^ Kotlin compatiblity has already begun
 
-^ TODO LINK GITHUB DAGGER COMPAT
-
 ---
 
 # Dagger Qualifiers
 
 Qualifiers used to identify dependencies with identical signatures
-
-  - Factories use qualifiers to decide the instance use
-  - Can create your own qualifier annotations, or just use @Named.
-  - Apply qualifiers by annotating the field or parameter of interest.
-  - The type and qualifier annotation will both be used to identify the dependency.
 
 ^ If there are multiple different instance of same class/interface in graph
 
@@ -337,16 +330,15 @@ Qualifiers used to identify dependencies with identical signatures
 
 ^ it fails when there are multiple provider for type
 
+^ Create your own or use provided Named annotation
+
 ---
 
 # Retention Annotation
 
 Use Kotlin retention annotations instead of Java retention
-  
-  - Java retention support is depreceted in Kotlin
-  - At least BINARY retention but RUNTIME is ideal
-  - Dagger 2 doesn’t operate on source files
-  - Annotations are necessary for kapt
+
+^ Use RUNTIME retention since Dagger doesn't operate on source files
 
 ^ Determines whether an annotation is stored in binary output and visible for reflection
 
@@ -410,6 +402,29 @@ public final class Game {
 ^ named annotations are at the place dagger needs
 
 ---
+
+![](https://media.giphy.com/media/qP1mEdNmgwEP6/giphy.gif)
+
+^ Before we continue I should warn you that things have changed
+
+---
+
+![](out-of-date.gif)
+
+^ Even if the content changes by the time you finish preparing it
+
+^ You should still give your talk!
+
+---
+
+![fit 65%](dagger-pain-points.png)
+
+^ The Dagger team are continuously developing Android and Kotlin support
+
+^ I will let you know where the content has changed
+
+---
+
 
 # Field Injection: lateinit var 🛑
 
@@ -483,12 +498,6 @@ public final class Game {
 
 ---
 
-[.footer: ]
-
-![](excuse_me.gif)
-
----
-
 # Specify Annotations
 
 - @field:...
@@ -546,27 +555,52 @@ public final class Game {
 
 ---
 
-[.footer: ]
+# Constructor vs Property injection
+## Constructor injection
 
-![](perfect.gif)
+- Immutable 💪
+- Easy to use 😅
+- Reliable injection 🧱
+- Compilation safety 🛠
 
 ---
 
 # Constructor vs Property injection
+## Property injection
 
-- Constructor val
-  - Easier to use
-  - Reliable dependency injection
-  - Compilation safety
-
-- Property lateinit var injection
-  - Synthetic property accessors
-  - Unclear where the annotation is applied
-  - Dont forget to use with `@field:`
+- Mutable (lateinit) properties 💔
+- Annotation target unclear 🤷‍♂️
+- Difficult to configure tests 📐
 
 ^ lateinit var is error prone and hacky to test
 
 ^ Constructor injection is much clearer
+
+---
+
+# Property injection
+
+^ But why have property injection if we constructor is better?
+
+---
+
+![fit 10%](little-green-friend.png)
+
+^ Thats because of our little green friend
+
+---
+
+# Android
+
+- Activity
+- Fragment
+- Service
+
+^ For now android framework types need to be created by Android
+
+^ Meaning classes need to have a no-arg constructor
+
+^ More details on this later
 
 ---
 
@@ -668,7 +702,6 @@ annotation class ActivityScope
 internal object ApplicationModule {
 
     @Provides
-    @JvmStatic
     @ActivityScope
     fun context(application: Application): Context = application
 }
@@ -874,7 +907,6 @@ public abstract class ApplicationModule {
         return new SampleRepository(name);
     }
 }
-
 ```
 
 ^ The current status quo for Java modules
@@ -1052,9 +1084,95 @@ public final class ApplicationModule {
 
 ---
 
+# But wait...
+
+---
+
+# Dagger 2.25.2 🎉🥳
+
+## Kotlin support
+
+- Qualifier annotations on fields can now be understood without the need for @field:MyQualifier (646e033)
+- @Module object classes no longer need @JvmStatic on the provides methods. (0da2180)
+
+---
+
+![](forget-everything.gif)
+
+^ Forget everything I just told you
+
+---
+
+# Qualifier annotations
+
+```kotlin
+class Game @Inject constructor() {
+
+  @Inject @field:Named("P1") lateinit var player1: Player
+  @Inject @field:Named("P2") lateinit var player2: Player
+}
+```
+
+^ Remember our qualified fields?
+^ Forget everything I just told you
+
+---
+
+# Qualifier annotations
+
+```kotlin, [.highlight: 3-4]
+class Game @Inject constructor() {
+
+  @Inject @Named("P1") lateinit var player1: Player
+  @Inject @Named("P2") lateinit var player2: Player
+}
+```
+
+^ Remember our qualified fields?
+
+---
+
+# Dagger: Modules
+
+```kotlin
+object ApplicationModule {
+
+    @Provides
+    @JvmStatic
+    fun context(application: Application): Context = application
+    
+    @Provides
+    @JvmStatic
+    fun repository(name: String): SampleRepository = SampleRepository(name)
+}
+```
+
+^ and remember that Kotlin module I told you about
+
+---
+
+# Dagger: Modules
+
+```kotlin
+object ApplicationModule {
+
+    @Provides
+    fun context(application: Application): Context = application
+    
+    @Provides
+    fun repository(name: String): SampleRepository = SampleRepository(name)
+}
+```
+
+---
+
+# 🎉
+
+---
+
 # Kotlin: Generics<? : T>
 
-^ Lets cheer ourselves up with some generics
+^ Lat's celebrate this by learning about generics!
 
 ---
 
@@ -1087,7 +1205,7 @@ public final class ApplicationModule {
 ```java
 interface Collection<E> extends Iterable<E> {
     
-    boolean addAll(Collection<? extends E> collection);
+  boolean addAll(Collection<? extends E> collection);
 }
 ```
 
@@ -1104,7 +1222,7 @@ interface Collection<E> extends Iterable<E> {
 ```java
 interface Collection<E> extends Iterable<E> {
     
-    boolean addAll(Collection<E> collection);
+  boolean addAll(Collection<E> collection);
 }
 ```
 
@@ -1277,10 +1395,26 @@ object ListModule {
 ## Java Interoperability
 
 ```kotlin
-class ListAdapter @Inject constructor(strings: @JvmSuppressWildcards List<String>)
+class ListAdapter @Inject constructor(
+  strings: @JvmSuppressWildcards List<String>
+)
 ```
 
 ^ Most convenient to use this as many times this will be an issue with Dagger multi-bindings
+
+---
+
+# Kotlin: Generics<? : T>
+
+## Java Interoperability
+
+```kotlin
+class ListAdapter @Inject constructor(
+  strings: List<String>
+)
+```
+
+^ This will hopefully no longer be necessary in future versions of Dagger
 
 ---
 
@@ -2017,6 +2151,8 @@ interface ApplicationModule {
 
 - **Manuel Vivo: An Opinionated Guide to Dependency Injection on Android**
     youtube.com/watch?v=o-ins1nvbDg
+- **Google Codelab: Using Dagger in your Android app
+    codelabs.developers.google.com/codelabs/android-dagger/
 - **Dave Leeds: Inline Classes and Autoboxing**
     typealias.com/guides/inline-classes-and-autoboxing/
 - **Kotlin: Declaration Site Variance**
