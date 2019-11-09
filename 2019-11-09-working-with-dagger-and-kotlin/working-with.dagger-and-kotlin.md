@@ -2067,7 +2067,10 @@ interface ApplicationModule {
 
 ---
 
-![](no.gif)
+[.background-color: #000000]
+[.footer: ]
+
+![fit](lol-no.gif)
 
 ^ No since Kotlin will delegate to a synthetic nested class which goes unrecognised
 
@@ -2075,17 +2078,15 @@ interface ApplicationModule {
 
 # Inlined method bodies in Kotlin
 
-- Kotlin return types can be inferred from method body
-- Android Studio shows inlining return types
-- Return types to hide implementation detail easily missed
-    - Interface vs Implemetation
-- Best practice to explicitly specify return type
-- Easier to review, easier to understand, avoids compiler errors
-- Framework types (Fragment.context) can be assumed nullable
+Kotlin return types can be inferred from method body
 
-^ When we need to bind interface, if dont specify type. It binds implementation
+^ Android Studio shows inlining return types
 
-^ Providing anything from Java or Android SDK can be assumed null
+^ Hide implementation detail easily missed
+
+^ Best practice to explicitly specify return type
+
+^ Java or Android SDK can be assumed null framework type
 
 ---
 
@@ -2151,22 +2152,18 @@ interface ApplicationModule {
 
 - **Manuel Vivo: An Opinionated Guide to Dependency Injection on Android**
     youtube.com/watch?v=o-ins1nvbDg
-- **Google Codelab: Using Dagger in your Android app
+- **Google Codelab: Using Dagger in your Android app**
     codelabs.developers.google.com/codelabs/android-dagger/
 - **Dave Leeds: Inline Classes and Autoboxing**
     typealias.com/guides/inline-classes-and-autoboxing/
-- **Kotlin: Declaration Site Variance**
-    kotlinlang.org/docs/reference/generics.html#declaration-site-variance
 - **Jake Wharton: Helping Dagger Help You**
     jakewharton.com/helping-dagger-help-you/
 - **Dagger: Kotlin Dagger Best Practices**
     github.com/google/dagger/issues/900
 - **Fred Porciúncula: Dagger 2 Official Guidelines**
     proandroiddev.com/dagger-2-on-android-the-official-guidelines-you-should-be-following-2607fd6c002e
-- **Warren Smith: Dagger & Kotlin**
-    medium.com/@naturalwarren/dagger-kotlin-3b03c8dd6e9b
 - **Zac Sweers: Dagger Party tricks**
-    www.zacsweers.dev/dagger-party-tricks-deferred-okhttp-init/
+    zacsweers.dev/dagger-party-tricks-deferred-okhttp-init/
 
 ^ - Manuel and Daniel of Google at ADS
 
