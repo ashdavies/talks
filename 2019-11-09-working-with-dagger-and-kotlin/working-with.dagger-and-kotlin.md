@@ -9,19 +9,163 @@ theme: Plex, 1
 
 ![](dev-fest-introduction.jpg)
 
----
-
-![original](dev-fest-background.jpg)
-
-# Introduction 👋
-
 ^ Speaker introduction
+
+^ Thank you for coming to my talk on bad jokes, memes, and dated internet humour.
 
 ^ Who knows dependency inversion/injection?
 
 ---
 
+# What is dependency injection? 🤔
+
+---
+
+[.footer: developer.android.com/training/dependency-injection]
+
+# Dependency Injection
+
+```kotlin
+class Car {
+  
+  private val engine = Engine()
+
+  fun start() {
+    engine.start()
+  }
+}
+
+fun main(args: Array) {
+  val car = Car()
+  car.start()
+}
+```
+
+^ Lets take a thermosiphon that implements pump
+
+^ If the heater is hot it pumps
+
+^ How could we test this class
+
+---
+
+[.footer: developer.android.com/training/dependency-injection]
+
+# Dependency Injection
+
+```kotlin, [.highlight: 3]
+class Car {
+  
+  private val engine = Engine()
+
+  fun start() {
+    engine.start()
+  }
+}
+
+fun main(args: Array) {
+  val car = Car()
+  car.start()
+}
+```
+
+^ If electric heater performs a blocking operation it becomes difficult to test
+
+^ What if we wanted to reuse the implementation with a different type of heater?
+
+---
+
+[.footer: developer.android.com/training/dependency-injection]
+
+# Dependency Injection
+
+```kotlin, [.highlight: 1, 9-10]
+class Car(private val engine: Engine) {
+
+  fun start() {
+    engine.start()
+  }
+}
+
+fun main(args: Array) {
+  val engine = Engine()
+  val car = Car(engine)
+  car.start()
+}
+```
+
+^ By moving this value to the constructor you provide the class with its dependency
+
+^ Dependencies being "injected" through the constructor allow testability
+
+---
+
+# Wtf 🤷‍♀️
+
+> Dagger sounds confusing, I'll just use something else
+
+^ Many people react to Dagger with confusion
+
+^ Opt to use alternative methods such as Koin
+
+---
+
+![fit 65%](koin-reddit.png)
+
+^ Led to the question on Reddit comparing two popular frameworks
+
+---
+
+![fit 65%](koin-reddit-jake.png)
+
+^ Uh oh
+
+---
+
+[.background-color: #000000]
+[.footer: ]
+
+![fit](triggered.gif)
+
+^ If the head of sales at bobs discount action bars does not approve?
+
+---
+
+[.footer: developer.android.com/training/dependency-injection]
+
+# Service Locator
+
+```kotlin
+object ServiceLocator {
+  
+  fun getEngine(): Engine = Engine()
+}
+
+class Car {
+
+  private val engine = ServiceLocator.getEngine()
+
+  fun start() {
+    engine.start()
+  }
+}
+```
+
+^ How is a service locator different from dependency injection
+
+^ Dependencies are retrieved from container instead of provided
+
+^ Fine for small projects, home rolled, but doesn't scale well
+
+---
+
 # What is Dagger 🗡
+
+- Dependency injection implementation
+
+- Generates code for injection
+
+- Compile time - sans reflection
 
 ^ Dagger 2 is a dependency injector for Android and Java
 
@@ -62,6 +206,8 @@ theme: Plex, 1
 # Java ☕️
 
 ---
+
+[.footer: HBO]
 
 ![](wait-what.gif)
 
@@ -454,7 +600,7 @@ public @interface Scope {
 
 ---
 
-# [fit] @Singleton != Singleton Pattern
+# @Singleton != Singleton Pattern
 
 ^ Important to remember the singleton is not the same as the singleton pattern
 
@@ -1771,7 +1917,17 @@ interface MySuperAwesomeHappyFantasticModule {
 
 ---
 
-# Defaults
+# Default Implementations?
+
+```kotlin
+interface ApplicationModule {
+
+    @Provides
+    @JvmStatic
+    @ActivityScope
+    fun context(application: Application): Context = application
+}
+```
 
 ^ Can I use interfaces with default implementations?
 
@@ -1796,36 +1952,6 @@ interface MySuperAwesomeHappyFantasticModule {
 ^ When we need to bind interface, if dont specify type. It binds implementation
 
 ^ Providing anything from Java or Android SDK can be assumed null
-
----
-
-# [fit] Keeping internal implementation internal 
-
-```kotlin
-internal class Player
-
-class Game @Inject constructor(
-    @Named("P1") private val player1: Player,
-    @Named("P2") private val player2: Player
-)
-``` 
-
-^ Does not compile
-
----
-
-# [fit] Keeping internal implementation internal 
-
-```kotlin
-internal class Player
-
-class Game @Inject internal constructor(
-    @Named("P1") private val player1: Player,
-    @Named("P2") private val player2: Player
-)
-```
-
-^ This will because constructor is internal so doesn't leak internal class
 
 ---
 
@@ -1865,33 +1991,55 @@ class Game @Inject internal constructor(
 
 ---
 
-# Further Reading 📖
+[.footer:  youtube.com/watch?v=o-ins1nvbDg]
 
-- **Dave Leeds: Inline Classes and Autoboxing**
-    https://typealias.com/guides/inline-classes-and-autoboxing/
-- **Kotlin: Declaration Site Variance**
-    https://kotlinlang.org/docs/reference/generics.html#declaration-site-variance
-- **Kotlin: Variant Generics**
-    https://kotlinlang.org/docs/reference/java-to-kotlin-interop.html#variant-generics
-- **Jake Wharton: Helping Dagger Help You**
-    https://jakewharton.com/helping-dagger-help-you/
-- **Dagger: Kotlin Dagger Best Practices**
-    https://github.com/google/dagger/issues/900
-- **Fred Porciúncula: Dagger 2 Official Guidelines**
-    https://proandroiddev.com/dagger-2-on-android-the-official-guidelines-you-should-be-following-2607fd6c002e
-- **Warren Smith: Dagger & Kotlin**
-    https://medium.com/@naturalwarren/dagger-kotlin-3b03c8dd6e9b
-- **Nazmul Idris: Advanced Dagger 2 w/ Android and Kotlin**
-    https://developerlife.com/2018/10/21/dagger2-and-kotlin/
+![original](dependency-injection-android.jpg)
 
-^ https://github.com/JakeWharton/dagger-reflect
+^ Essential talk from Manuel and Daniel from ADS
 
 ---
 
-![right inline 15%](immobilienscout24.png)
+# dagger.android 🙅‍♂️
 
-## Thanks!
+## `@ContributesAndroidInjector`
 
-![left inline 33%](gde-badge-round.png)
+^ Development has been halted
 
-![right](graph-background.jpg)
+^ No new features will be added
+
+---
+
+![](manuel-vicnt.jpg)
+
+---
+
+# Further Reading 📖
+
+- **Manuel Vivo: An Opinionated Guide to Dependency Injection on Android**
+    youtube.com/watch?v=o-ins1nvbDg
+- **Dave Leeds: Inline Classes and Autoboxing**
+    typealias.com/guides/inline-classes-and-autoboxing/
+- **Kotlin: Declaration Site Variance**
+    kotlinlang.org/docs/reference/generics.html#declaration-site-variance
+- **Jake Wharton: Helping Dagger Help You**
+    jakewharton.com/helping-dagger-help-you/
+- **Dagger: Kotlin Dagger Best Practices**
+    github.com/google/dagger/issues/900
+- **Fred Porciúncula: Dagger 2 Official Guidelines**
+    proandroiddev.com/dagger-2-on-android-the-official-guidelines-you-should-be-following-2607fd6c002e
+- **Warren Smith: Dagger & Kotlin**
+    medium.com/@naturalwarren/dagger-kotlin-3b03c8dd6e9b
+- **Zac Sweers: Dagger Party tricks**
+    www.zacsweers.dev/dagger-party-tricks-deferred-okhttp-init/
+
+^ - Manuel and Daniel of Google at ADS
+
+^ - Dave Leeds on when classes are inlined and Kotlin perf
+
+^ - https://github.com/JakeWharton/dagger-reflect
+
+---
+
+![](dev-fest-background.jpg)
+
+# Thanks! 👋🍻
