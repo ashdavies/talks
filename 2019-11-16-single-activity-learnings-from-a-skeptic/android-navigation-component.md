@@ -120,7 +120,7 @@ class MainActivity : AppCompatActivity {
 [.background-color: #ffffff]
 [.text: #666666]
 
-![100%](tablet-handset-fragments.png)
+![150%](tablet-handset-fragments.png)
 
 ^ An example of two fragments can be combined into one activity for a tablet design
 
@@ -670,9 +670,7 @@ public class MainActivity extends FragmentActivity {
 
 # Resource Inflation 🎈
 
-^ Due to the navigation resource being an XML document, this means that the navigation controller
-
-^ Subject to same lint rules as layouts, compile time validation of resource names, etc
+^ Navigation resource being an XML document subject to same lint rules as layouts, compile time validation of resource names, etc
 
 ^ Inflates the resource at runtime, thus resulting in graph errors at runtime with bad references
 
@@ -857,11 +855,9 @@ button.setOnClickListener(
 ## Optional Args
 ### `2.2.0`
 
-^ Deep links use regex matching under the hood
+^ Deep links use regex matching under the hood, will ignore params if doesn't match exactlay
 
-^ Stable release all parameters must be present to match
-
-^ Alpha release permits args with default values
+^ As of version 2.2.0 parameters evaluated as nullable types with default values
 
 ---
 
@@ -1260,6 +1256,8 @@ class MainActivity : Activity {
 
 ---
 
+[.footer: © Fox Entertainment]
+
 ![](careful.gif)
 
 ^ With any migration, carefully
@@ -1536,13 +1534,22 @@ class CheeseListFragment : Fragment() {
 
 ---
 
-# onActivityResult
-## [fit] issuetracker.google.com/issues/79672220
+# [fit] ⭐️ issuetracker.google.com/issues/79672220
+
+^ Development announced at ADS more coming soon
+
+^ Star this issue, do not comment +1
 
 ---
 
-# Jose Alcérreca: LiveData<Event<T>>
+# LiveData<Event<T>>
 ## bit.ly/2YuSYXi
+
+^ Using an event with LiveData from Jose Alcérreca
+
+^ Communicate safely with navigation commands
+
+^ Not executed again after configuration change
 
 ---
 
@@ -1562,7 +1569,7 @@ class CheeseListFragment : Fragment() {
 [.text: #444444]
 [.footer: ]
 
-# [fit] Ian Lake: Single Activity: Why, When, and How 
+# [fit] Single Activity: Why, When, and How 
 ## bit.ly/2Jo94x9
 
 ![inline](ian-lake-single-activity.jpg)
@@ -1573,13 +1580,17 @@ class CheeseListFragment : Fragment() {
 
 ---
 
-# Thanks! 🍻
+[.background-color: #f1f6d2]
+[.text: #444444]
+[.footer: ]
 
-![right](aerial-shot-ship.jpg)
+# [fit] Fragments: Past, present future
+## bit.ly/fragments-ads-19
+
+![inline](fragments-past-future-present.jpg)
 
 ---
 
-# Droidcon Lisbon 🇵🇹
+# Thanks! 🍻
 
-### 13:20 - RxJava & Coroutines: A Practical Analysis
-### 17:40 - Implementing the Paging Library
+![right](aerial-shot-ship.jpg)
