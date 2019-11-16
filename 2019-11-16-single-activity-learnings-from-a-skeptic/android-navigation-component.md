@@ -449,62 +449,10 @@ public class MainActivity extends FragmentActivity {
 
 ---
 
-[.background-color: #ffffff]
-[.text: #666666]
-
-# Android JetPack 
-## Foundation Components
-
-![inline 100%](foundation-components.png)
-
-^ Foundation picking up where the support library left off
-
-^ Including ktx helpers, multidex and security
-
----
-
-[.background-color: #ffffff]
-[.text: #666666]
-
-# Android JetPack 
-## Architecture Components
-
-![inline 100%](architecture-components.png)
-
-^ Architecture encompassing the arch components like LiveData and ViewModel
-
-^ Navigation, paging, and room persistence
-
----
-
-[.background-color: #ffffff]
-[.text: #666666]
-
-# Android JetPack
-## Behaviour Components
-
-![inline 100%](behaviour-components.png)
-
-^ Media playback, notifications, permissions, and slices
-
----
-
-[.background-color: #ffffff]
-[.text: #666666]
-
-# Android JetPack
-## UI Components
-
-![inline](ui-components.png)
-
-^ Finally UI, including Fragments, Transitions, Animations, and Emoji
-
----
-
 # Android JetPack
 ## Navigation
 
-![right](jetpack-hero-navigation.png)
+![right 25%](jetpack-hero-navigation.png)
 
 ^ Introducing JetPack
 
@@ -599,7 +547,7 @@ public class MainActivity extends FragmentActivity {
 # Android JetPack
 ## Navigation
 
-![right](jetpack-hero-navigation.png)
+![right 25%](jetpack-hero-navigation.png)
 
 ^ Primary ideal of Navigation is to use existing an accessible APIs
 
@@ -907,7 +855,7 @@ button.setOnClickListener(
 
 # Deep Links 🔗
 ## Optional Args
-### `2.2.0-alpha02`
+### `2.2.0`
 
 ^ Deep links use regex matching under the hood
 
@@ -1112,35 +1060,6 @@ interface OnDestinationChangedListener {
 
 ---
 
-# Honourable Mention 🙇‍♂️
-## Eugenio Marletti: Android Extras Delegates
-### github.com/Takhion/android-extras-delegates
-
-^ When starting off with Kotlin, this was our goto choice for serialising intent and bundle extras
-
----
-
-# Android Extras Delegates 👍
-
-```kotlin
-class SomeActivity : Activity() {
-
-  companion object : ActivityCompanion<IntentOptions>(
-    intentOptions = IntentOptions, 
-    kclass = SomeActivity::class
-  )
-
-  object IntentOptions {
-  
-    var Intent.someExtra by IntentExtra.String()
-  }
-}
-```
-
-^ This was nice because naming of the parameter could be taken care of in a single location
-
----
-
 ## Plugin 🔌
 # SafeArgs 💪
 
@@ -1332,26 +1251,6 @@ class MainActivity : Activity {
 ^ Destinations class not generated for destinations without navigation host
 
 ^ Directly use args class for intent bundle
-
----
-
-# SafeArgs: Getting Started
-
-```gradle
-buildscript {
-  repositories {
-    google()
-  }
-  
-  dependencies {
-    classpath "androidx.navigation:navigation-safe-args-gradle-plugin:2.1.0"
-  }
-}
-
-apply plugin: 'androidx.navigation.safeargs.kotlin'
-```
-
-^ Simply apply the plugin with navigation resources
 
 ---
 
@@ -1629,16 +1528,6 @@ class CheeseListFragment : Fragment() {
 
 ---
 
-![](random-slides.jpg)
-
-^ Not obsessed with cheese
-
-^ Berlin random slides
-
-^ I don't even like cheese
-
----
-
 # onActivityResult?
 
 ^ Activity and fragment onActivityResult still available for calling other activities
@@ -1659,13 +1548,13 @@ class CheeseListFragment : Fragment() {
 
 # Dynamic Features
 
-## Coming Soon? ™
+## bit.ly/navigation-dynamic
 
-^ A lot of discussion about how these two might integrate
+^ Dynamic features can be installed at runtime so compile time support is limited
 
-^ Ideal world would simply have dynamic toggle on graph
+^ Starting to see support with this after ADS but it's still early access
 
-^ Safe args across modules a problem
+^ Deep links, safe args, navigation editor in dynamic graphs not yet supported
 
 ---
 
