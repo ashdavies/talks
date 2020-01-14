@@ -1,6 +1,6 @@
 autoscale: true
 build-lists: true
-footer: @askashdavies
+footer: ![](twitter-logo.png) @askashdavies
 footer-style: Open Sans
 header: Open Sans
 slide-transition: true
