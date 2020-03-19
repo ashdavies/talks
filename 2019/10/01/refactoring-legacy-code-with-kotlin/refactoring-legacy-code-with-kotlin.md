@@ -1122,12 +1122,14 @@ suspend fun doWorld() {
 @Test
 fun testFoo() = runBlockingTest {
   val actual = foo() 
-  // ...
+
+  ...
 }
 
 suspend fun foo() {
-  delay(1_000)
-  // ...
+  delay(1_000L)
+
+  ...
 }
 ```
 

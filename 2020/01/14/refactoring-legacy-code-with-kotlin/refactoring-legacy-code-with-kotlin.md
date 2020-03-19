@@ -4,6 +4,7 @@ footer: @askashdavies
 footer-style: Google Sans
 header: Google Sans
 slide-transition: true
+slidenumbers: true
 theme: Merriweather, 3
 text: Google Sans
 
@@ -787,7 +788,7 @@ public final User copy(@Nullable String firstName, @Nullable String lastName) {
 
 # Perspective 🔭
 
-^ Solving the same problem in a different way results in a better understanding of the requirements
+^ Solving the same problem differently results in a better understanding of the requirements
 
 ^ Same reason we perform Kata exercises to hone our skills
 
