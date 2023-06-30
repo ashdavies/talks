@@ -24,6 +24,7 @@ theme: Plex, 1
 [.footer: developer.android.com/training/dependency-injection]
 
 # Dependency Injection
+Why We Should Embrace Testing Without Mocking Frameworks
 
 ```kotlin
 class Car {
