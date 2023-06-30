@@ -22,10 +22,6 @@ Denoting or relating to software or hardware that has been superseded but is dif
 
 ---
 
-# Seam
-
----
-
 # Testing
 
 ![right 100%](test-pyramid.png)
@@ -51,10 +47,129 @@ Denoting or relating to software or hardware that has been superseded but is dif
 
 ---
 
+# Anti-Patterns and Code Smell
+
+^ It's not until we start writing tests that we realise how difficult it is to test our code.
+
+^ This is often a sign that our code is not structured well.
+
+---
+
+# Extreme Programming 🤘
+## Test-Driven Development
+
+^ Let to the consideration of "extreme" programming practices like test driven development.
+
+^ Taking an extreme approach to testing, and writing tests before writing code.
+
+^ Tested code is often more structured, with lower cognitive load, and easier to understand.
+
+---
+
 > Debugging is like being the detective in a crime movie where you are also the murderer.
 -- Filipe Fortes
 
 ^ Often git blame will reveal the suspect, which is quite often me.
+
+---
+
+# 🧵 Seams
+
+^ A seam is a place where you can separate behaviour in your program without editing in that place.
+
+^ Often achieved with interfaces, or abstract classes.
+
+---
+
+# 🧵 Seams
+## Preprocessing
+
+- Kotlin Symbol Processing
+- Kotlin Compiler Plugins
+
+^ Preprocessed seams make use of earlier processing steps prior to compilation.
+
+^ Whilst this is widely supported in Kotlin with KSP and Compiler Plugins (see Compose), it is rarely used for this purpose.
+
+^ This mechanism is unruly due to poor code clarity, but allows for sensing without modifying code.
+
+---
+
+# 🧵 Seams
+## Linking (Classpath)
+
+```kotlin
+import fit.Parser
+
+internal class FitFilter {
+  private val parser: Parser =
+    Parser.newInstance()
+}
+```
+
+^ When classes are imported the Java virtual machine uses the classpath environment variable.
+
+^ You could then override the classpath with your own implementation for specific classes.
+
+---
+
+# 🧵 Seams
+## Linking: Classpath
+
+```kotlin
+buildscript {
+    dependencies {
+        val googleServicesVersion = libs.versions.google.services.get()
+        classpath("com.google.gms:google-services:$googleServicesVersion")
+    }
+}
+```
+
+^ You will have already configured the classpath in your project using plugins
+
+---
+
+# 🧵 Seams
+## Objects
+
+```kotlin
+internal class FitFilter {
+  private val parser: Parser =
+    Parser.newInstance()
+}
+```
+
+^ Objects are the most useful seam, as they allow for the replacement of behaviour without modifying code.
+
+^ This is also the most common type of refactoring, as it utilising the existing compiler configuration.
+
+---
+
+# 🧵 Seams
+## Objects: Refactoring
+
+![right](intellij-refactor-overlay.png)
+
+[.code-highlight: 1-4, 10-12]
+
+```kotlin
++ internal fun interface FitFilter {
++   fun filter(input: String): String
++ }
++ 
+- internal class FitFilter {
+-   private val parser: Parser =
+-     Parser.newInstance()
+- }
+- 
++ internal fun FitFilter(parser: Parser) = FitFilter { input ->
++   parser.parse(input)
++ }
+```
+
+^ Requires modern refactoring techniques, and a good understanding of idomatic code.
+
+^ Thankfully IntelliJ offers a lot of support for this, and it's often as simple as a few clicks.
 
 ---
 
@@ -77,12 +192,14 @@ Denoting or relating to software or hardware that has been superseded but is dif
 
 # Test SDKs
 
-- Coroutines
-- Androidx
+- androidx.test:core
+- kotlinx-coroutines-test
 
 ---
 
 # android.content.Context
+
+![right](android-context-structure.png)
 
 ^ The Android context is considered by many to be a "god object"
 
@@ -96,13 +213,17 @@ Denoting or relating to software or hardware that has been superseded but is dif
 
 ---
 
+[.footer: Image: dribbble.com/shots/3251806-Interface-Segregation-Principle]
+
 # Interface Segregation Principle
 
-^ No code should be forced to depend on methods it does not use.
+No code should be forced to depend on methods it does not use.
+
+![right](interface-segration-principle.webp)
 
 ---
 
-# 🥟 Ravioli Code
+# 🥟 Ravioli Code 🤌
 
 ^ The antithesis of the god principle is apparently referred to as Ravioli code.
 
@@ -122,6 +243,10 @@ Denoting or relating to software or hardware that has been superseded but is dif
 
 ---
 
+# Final
+
+---
+
 # Conclusion
 
 - Don’t mock classes you don’t own.
@@ -129,6 +254,7 @@ Denoting or relating to software or hardware that has been superseded but is dif
 - Don’t mock classes.
 
 ---
+<!--
 
 Testing approaches, benefits of unit tests
 
@@ -185,8 +311,17 @@ Encouragement to embrace these alternatives for more effective and maintainable 
 Q&A session to address any remaining doubts or questions from the audience.
 
 ---
+-->
 
 # Thanks!
+
+github.com/ashdavies/playground.ashdavies.dev/
+  blob/feature/beyond-the-mockery/
+  app-launcher/common/src/jvmTest/
+  kotlin/io/ashdavies/playground/
+  CoffeeMakerTest.kt
+
+^ Short links in progress
 
 ---
 
