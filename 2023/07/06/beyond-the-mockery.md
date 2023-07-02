@@ -21,7 +21,6 @@ theme: Plex, 1
 - Explanation of how these alternatives provide faster feedback and increase confidence in code.
 - Advantages of Fakes and In-Memory Implementations (10 minutes)
 
-- Demonstrating how fakes and in-memory implementations offer more robust testing.
 - Discussing how they can be used to provide faster feedback loops during development.
 - Exploring how these alternatives improve code maintainability, especially as the codebase evolves.
 - Implementing Fakes and In-Memory Implementations (10 minutes)
@@ -45,6 +44,8 @@ Solution: Verify domain state, or use a fake.
 Forces interface segregation
 Alternatives to mocking?
 Fakes, Stubs, Concretions
+
+In-Memory implementations (also good for production)
 
 Fake, concrete implementation of interface, written with the production code, provides better documentation, insight, into the purpose of behaviour.
 
@@ -590,6 +591,17 @@ val heater = mock<Heater> {
 ---
 
 # Testing: Mocks
+## API Sensitivity
+
+^ Kotlin allows changes without breaking API compatibility.
+
+^ e.g. defaults, named parameters, and ordering, Kotlin
+
+^ This can backfire with mocks.
+
+---
+
+# Testing: Mocks
 ## Default Answers
 
 ```kotlin
@@ -747,6 +759,20 @@ Framework generated mocks introduce a shared, mutable, dynamic, runtime declarat
 ---
 
 # Testing: Mocks
+
+## Don't Mock Classes You Don't Own
+
+---
+
+# You Don't Own Your Code
+
+## Your code belongs to your team.
+
+### Be considerate.
+
+---
+
+# Testing: Mocks
 ## Considerations
 
 ^ Not shitting on Mockito, it's a great tool.
@@ -754,6 +780,17 @@ Framework generated mocks introduce a shared, mutable, dynamic, runtime declarat
 ^ Extensive features, powerful DSL.
 
 ^ Overused.
+
+---
+
+# Testing: Mocks
+## Alternatives
+
+![right](pedro-monkey-puppet.gif)
+
+^ Mocks are a tool, not a solution.
+
+^ What are our alternatives?
 
 ---
 
@@ -768,37 +805,6 @@ Framework generated mocks introduce a shared, mutable, dynamic, runtime declarat
 ^ Fakes are a type of test double, which are used to replace dependencies in tests.
 
 ---
-
-# Testing: Android
-## Legacy Inheritance
-
-![right 15%](green-robot.png)
-
-^ Like many frameworks and platforms, Android has a long history of legacy code.
-
-^ Advances in Jetpack, AndroidX, and Project Mainline have improved this.
-
-^ Still framework code to deal with.
-
----
-
-# android.content.Context
-
-![right](android-context-structure.png)
-
-^ The Android context is considered by many to be a "god object"
-
----
-
-# God Objects 🪽
-
-^ God objects often reference a large number of distinct types, and/or unrelated methods.
-
-^ Since they command so much, it's difficult to provide alternative implementations.
-
----
-
-[.footer: Image: dribbble.com/shots/3251806-Interface-Segregation-Principle]
 
 # Interface Segregation Principle
 
@@ -931,6 +937,37 @@ Build versatile and scalable applications with careful API decisions.
 ^ Talk at Berlin, London, and Chicago.
 
 ---
+
+# Testing: Android
+## Legacy Inheritance
+
+![right 15%](green-robot.png)
+
+^ Like many frameworks and platforms, Android has a long history of legacy code.
+
+^ Advances in Jetpack, AndroidX, and Project Mainline have improved this.
+
+^ Still framework code to deal with.
+
+---
+
+# android.content.Context
+
+![right](android-context-structure.png)
+
+^ The Android context is considered by many to be a "god object"
+
+---
+
+# God Objects 🪽
+
+^ God objects often reference a large number of distinct types, and/or unrelated methods.
+
+^ Since they command so much, it's difficult to provide alternative implementations.
+
+---
+
+[.footer: Image: dribbble.com/shots/3251806-Interface-Segregation-Principle]
 
 # Conclusion
 
