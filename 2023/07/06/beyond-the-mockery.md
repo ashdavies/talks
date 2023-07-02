@@ -11,22 +11,36 @@ theme: Plex, 1
 
 <!--
 
+- Overview of the talk's objective: Exploring the limitations of mocks and advocating for the use of fakes and in-memory implementations.
+- Understanding the limitations of mocks, including their potential to create brittle tests.
+- Exploring how mocks can slow down development by introducing dependencies on external systems.
+- Discussing how mocks can hinder code refactoring efforts, making them difficult to maintain.
+- Introduction to Fakes and In-Memory Implementations (5 minutes)
+
+- Introduction to fakes and in-memory implementations as alternatives to mocks.
+- Explanation of how these alternatives provide faster feedback and increase confidence in code.
+- Advantages of Fakes and In-Memory Implementations (10 minutes)
+
+- Demonstrating how fakes and in-memory implementations offer more robust testing.
+- Discussing how they can be used to provide faster feedback loops during development.
+- Exploring how these alternatives improve code maintainability, especially as the codebase evolves.
+- Implementing Fakes and In-Memory Implementations (10 minutes)
+
+- Step-by-step examples of implementing fakes and in-memory implementations in Kotlin.
+- Providing simple, easy-to-understand code examples to showcase the practical application of these alternatives.
+- Demonstrating their usefulness in different testing scenarios, including unit testing and integration testing.
+
+- Recap of the drawbacks of mocks and the advantages of fakes and in-memory implementations.
+- Encouragement to embrace these alternatives for more effective and maintainable testing in Kotlin.
+- Q&A session to address any remaining doubts or questions from the audience.
+
 Test code is just production code that doesn't ship
-Dynamic shared mutable state
 
 There is always a way!
 This is the way.
 
 Use Case: Verifying functions without a return type
 Solution: Verify domain state, or use a fake.
-
-Scenarios:
-Change of method signature
-Change of interface contract
-Narrowing type inheritance
-Mockito type safety
-Default return types
-Mocks delegate to concretion
 
 Forces interface segregation
 Alternatives to mocking?
@@ -35,42 +49,18 @@ Fakes, Stubs, Concretions
 Fake, concrete implementation of interface, written with the production code, provides better documentation, insight, into the purpose of behaviour.
 
 Oxford vs Chicago school of testing
-RETURNS_DEEP_STUBS
-
----
-
-Introduction (5 minutes)
-
-Overview of the talk's objective: Exploring the limitations of mocks and advocating for the use of fakes and in-memory implementations.
-
-Understanding the limitations of mocks, including their potential to create brittle tests.
-Exploring how mocks can slow down development by introducing dependencies on external systems.
-Discussing how mocks can hinder code refactoring efforts, making them difficult to maintain.
-Introduction to Fakes and In-Memory Implementations (5 minutes)
-
-Introduction to fakes and in-memory implementations as alternatives to mocks.
-Explanation of how these alternatives provide faster feedback and increase confidence in code.
-Advantages of Fakes and In-Memory Implementations (10 minutes)
-
-Demonstrating how fakes and in-memory implementations offer more robust testing.
-Discussing how they can be used to provide faster feedback loops during development.
-Exploring how these alternatives improve code maintainability, especially as the codebase evolves.
-Implementing Fakes and In-Memory Implementations (10 minutes)
-
-Step-by-step examples of implementing fakes and in-memory implementations in Kotlin.
-Providing simple, easy-to-understand code examples to showcase the practical application of these alternatives.
-Demonstrating their usefulness in different testing scenarios, including unit testing and integration testing.
-Conclusion (5 minutes)
-
-Recap of the drawbacks of mocks and the advantages of fakes and in-memory implementations.
-Encouragement to embrace these alternatives for more effective and maintainable testing in Kotlin.
-Q&A session to address any remaining doubts or questions from the audience.
-
----
 -->
 
 # Beyond the Mockery
 ## Ash Davies
+
+## <br />
+## <br />
+## <br />
+## <br />
+## <br />
+
+## ![10%](experts-logo.png)
 
 ^ Speaker introduction...
 
@@ -575,7 +565,7 @@ assertTrue(maker.brew())
 ---
 
 # Testing: Dependencies
-## Test Doubles: Mockito
+## Mockito
 
 "Tasty mocking framework for unit tests in Java".
 
@@ -583,8 +573,7 @@ assertTrue(maker.brew())
 
 ---
 
-# Testing: Dependencies
-## Test Doubles: Mockito
+# Testing: Mocks
 
 ```kotlin
 val heater = mock<Heater>()
@@ -604,8 +593,7 @@ assertTrue(maker.brew())
 
 ---
 
-# Testing: Dependencies
-## Test Doubles: Mockito
+# Testing: Mocks
 
 ```kotlin
 val heater = mock<Heater>()
@@ -623,8 +611,7 @@ assertTrue(maker.brew()) // ⚠ Fails!
 
 ---
 
-# Testing: Dependencies
-## Test Doubles: Mockito
+# Testing: Mocks
 
 [.code-highlight: 1-7]
 
@@ -651,8 +638,7 @@ assertTrue(maker.brew())
 
 ---
 
-# Testing: Dependencies
-## Mockito DSL
+# Testing: Mocks
 
 javadoc.io/doc/
   org.mockito/mockito-core/latest/
@@ -660,9 +646,214 @@ javadoc.io/doc/
 
 ^ Mockito DSL is extensive, and can be used to build complex mocks.
 
-^ Also a bit verbose, and can be difficult to read.
-
 ^ What also has an extensive DSL for building classes? Kotlin.
+
+---
+
+# Testing: Mocks
+## Footguns 🦶🔫
+
+^ Mockito is a powerful tool, easy to shoot yourself in the foot.
+
+^ Declaring a mock implementation at runtime is complicated.
+
+---
+
+# Testing: Mocks
+## API Sensitivity
+
+```kotlin
+internal interface Heater {
+  val isHeating: Boolean
+}
+
+val heater = mock<Heater> {
+  on { isHeating } doAnswer { true }
+}
+```
+
+^ Creating a runtime implementation is rarely type safe.
+
+^ If the API changes, the mock may still compile.
+
+---
+
+# Testing: Mocks
+## API Sensitivity
+
+[.code-highlight: 2]
+
+```diff
+  internal interface Heater {
++   fun <T : Any> heat(body: () -> T): T
+    val isHeating: Boolean
+  }
+  
+  val heater = mock<Heater> {
+    on { isHeating } doAnswer { true }
+  }
+```
+
+^ Mock already compiled without stubbing.
+
+^ Further changes are ignored.
+
+---
+
+# Testing: Mocks
+## Default Answers
+
+```kotlin
+val heater: Heater = mock() // No default answer
+val isHeating: Boolean = heater.isHeating // Null
+```
+
+^ By default Mockito returns null for all methods without stubbing.
+
+^ Unexpected nulls throw deep in the execution stack.
+
+---
+
+# Testing: Mocks
+## Default Answers
+
+```kotlin
+val heater: Heater = mock(defaultAnswer = RETURNS_SMART_NULLS)
+val isHeating: Boolean = heater.isHeating // false
+```
+
+^ By default Mockito returns null for all methods without stubbing.
+
+^ Unexpected nulls throw deep in the execution stack.
+
+---
+
+# Testing: Mocks
+## Default Answers
+
+- CALLS\_REAL\_METHODS
+- RETURNS\_DEEP\_STUBS
+- RETURNS\_DEFAULTS
+- RETURNS\_MOCKS
+- RETURNS\_SELF
+- RETURNS\_SMART\_NULLS
+
+^ Mockito provides a number of default answers.
+
+^ Seek help.
+
+---
+
+# Testing: Mocks
+## Type Safety
+
+```java
+public interface OngoingStubbing<T> {
+  OngoingStubbing<T> thenAnswer(Answer<?> answer);
+}
+```
+
+^ Mockito Kotlin provides reified type safety.
+
+^ Underlying API much more dangerous.
+
+---
+
+# Testing: Mocks
+## Performance
+
+Expensive real implementations replaced by expensive mocks.
+
+- Runtime code generation
+- Bytecode manipulation
+- Reflection 😱
+
+^ Ironically, mocks are expensive to create, and expensive to execute.
+
+^ Authors have optimized well, but expensive due to nature of operation.
+
+---
+
+# Testing: Mocks
+## Performance
+
+```kotlin
+internal class CoffeeMakerTest {
+  
+  private lateinit var heater: Heater
+  
+  @Before
+  fun setUp() {
+    heater = mock {
+      on { isHeating } doAnswer { true }
+    }
+  }
+}
+```
+
+^ Oft seen practice of creating mocks in `@Before` methods.
+
+^ Anecdotal, reports of improved performance.
+
+^ Mutable state between tests
+
+---
+
+# Testing: Mocks
+## Dynamic Mutability
+
+[.code-highlight: 12-15]
+
+```kotlin
+internal class CoffeeMakerTest {
+  
+  private lateinit var heater: Heater
+  
+  @Before
+  fun setUp() {
+    heater = mock {
+      on { isHeating } doAnswer { true }
+    }
+  }
+  
+  @Test
+  fun `should brew coffee`() {
+    // heater already has state!
+  }
+}
+```
+
+^ Minimal impact here, but on a larger scale is a nightmare.
+
+^ Unpredictable state, hard to people to understand.
+
+---
+
+# Unpredictability
+## Victims
+
+- Junior developers
+- New team members
+- Future you
+
+^ Unpredictable state is a nightmare for people to understand.
+
+^ Not just junior developers, but new team members, and future you.
+
+---
+
+# Testing: Mocks
+
+---
+
+# Testing: Mocks
+## Considerations
+
+^ Not shitting on Mockito, it's a great tool.
+
+^ Extensive features, powerful DSL.
+
+^ Overused.
 
 ---
 
@@ -772,6 +963,9 @@ martinfowler.com/articles/practical-test-pyramid.html
 
 **Michael Feathers: Working Effectively with Legacy Code**
 ISBN: 978-0-13117-705-5
+
+**Steve Freeman, Nat Pryce: Growing Object-Oriented Software, Guided by Tests**
+ISBN: 978-0-32150-362-6
 
 **Testing on the Toilet: Don't mock Types You Don't Own**
 testing.googleblog.com/2020/07/testing-on-toilet-dont-mock-types-you.html
