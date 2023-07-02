@@ -4,16 +4,15 @@ footer: ashdavies.dev | ashdavies@androiddev.social
 footer-style: Product Sans
 header: Product Sans
 slide-transition: true
+slidenumbers: true
 text-strong: Google Sans 18pt
 text: Google Sans 18pt
 theme: Plex, 1
 
 <!--
 
-Why do we test?
-Why do we replace mocks? (Remove IO operations in unit tests for performance)
-
 Test code is just production code that doesn't ship
+Dynamic shared mutable state
 
 There is always a way!
 This is the way.
@@ -21,16 +20,13 @@ This is the way.
 Use Case: Verifying functions without a return type
 Solution: Verify domain state, or use a fake.
 
-Testing approaches, benefits of unit tests
-Unit tests for stability, structured code.
-Importance of unit testing
-
 Scenarios:
 Change of method signature
 Change of interface contract
 Narrowing type inheritance
 Mockito type safety
 Default return types
+Mocks delegate to concretion
 
 Forces interface segregation
 Alternatives to mocking?
@@ -39,14 +35,13 @@ Fakes, Stubs, Concretions
 Fake, concrete implementation of interface, written with the production code, provides better documentation, insight, into the purpose of behaviour.
 
 Oxford vs Chicago school of testing
+RETURNS_DEEP_STUBS
 
 ---
 
 Introduction (5 minutes)
 
-Software development challenges and the role of mocking in simulating dependencies and testing behavior.
 Overview of the talk's objective: Exploring the limitations of mocks and advocating for the use of fakes and in-memory implementations.
-Drawbacks of Mocking (10 minutes)
 
 Understanding the limitations of mocks, including their potential to create brittle tests.
 Exploring how mocks can slow down development by introducing dependencies on external systems.
@@ -77,41 +72,71 @@ Q&A session to address any remaining doubts or questions from the audience.
 # Beyond the Mockery
 ## Ash Davies
 
+^ Speaker introduction...
+
 ---
 
-# Legacy 
-## adj.
+# Legacy (adj.)
 
 Denoting or relating to software or hardware that has been superseded but is difficult to replace because of its wide use.
 
-^ When inheriting a legacy project, it can be tough to know where to start.
+^ Can be tough to know where to start with legacy projects.
 
 ---
 
-# Beyond the Mockery: Why Test?
+# Change
 
-- 👀 Awareness
-- 🏗 Architecture
-- 💪 Confidence
-- 📖 Documentation
-- 💯 Stability
+^ Nothing is permanent, at some point, and you'll need to change something.
 
-^ Awareness: Writing test code at the same time as code that ships gives you a better perspective of edge cases
+^ Can mean adding a new feature, fixing a bug, or refactoring some code.
 
-^ Architecture: Poor code is often synonymous with poor architecture, and poor testability.
-
-^ Confidence: Confidence in your tests, means confidence in your code, and confidence in refactoring.
-
-^ Documentation: Tests documentation often provides better insight into the purpose of domain behaviour.
-
-^ Stability: Well written unit tests provide robust protection, and early feedback, against regressions.
+^ How can you be confident about your changes?
 
 ---
 
-# Beyond the Mockery
-## Testing
+# Testing
 
-^ Not the goal of this talk to convince you to write tests, but to convince you to write better tests.
+^ Covering your code with tests can give confidence your changes don't break anything.
+
+^ Michael Feathers describes this as "Cover and Modify" instead of "Edit and Pray".
+
+---
+
+# Testing: Awareness 👀
+
+^ Writing test code at the same time as production code gives you a better perspective of edge cases.
+
+---
+
+# Testing: Architecture 🏗
+
+^ Poor code is often synonymous with poor architecture, and poor testability.
+
+---
+
+# Testing: Confidence 💪
+
+^ Confidence in your tests, means confidence in your code, and confidence in refactoring.
+
+---
+
+# Testing: Documentation 📖
+
+^ Tests documentation often provides better insight into the purpose of domain behaviour.
+
+---
+
+# Testing: Stability 💯
+
+^ Well written unit tests provide robust protection, and early feedback, against regressions.
+
+---
+
+# Testing
+
+^ Not my goal to convince you to write tests, but to to write better tests.
+
+^ If you're not interested in writing tests, this talk may not be for you.
 
 ---
 
@@ -119,24 +144,28 @@ Denoting or relating to software or hardware that has been superseded but is dif
 
 ![right 100%](test-pyramid.png)
 
-- ⛳️ Unit Tests
-- 📱 Instrumentation Tests
-- 🖇️ Integration Tests
-- ↔ E2E Tests
-- 🙈 Monkey Tests
-- 🔥 Smoke Tests
+- Unit
+- Instrumentation
+- Integration
+- End-to-End
+- Monkey
+- Smoke
+
+^ Focus on unit testing, important to understand types of tests.
+
+^ Diverse suite of tests, provides more robust regression protection.
 
 ---
 
 [.background-color: #fff]
 
-![original 35%](fixing-unit-tests.png)
+![original 35%](monkeyuser-fixing-unit-tests.png)
 
-^ Fixing unit tests can often feel like navigating a minefield, in the dark, with a blindfold on.
+^ Fixing unit tests, feels like navigating a minefield, in the dark, with a blindfold.
 
-^ The history of a test can be difficult to follow, and the code can be difficult to understand.
+^ History, difficult to follow; code, difficult to understand.
 
-^ The tests themselves can be difficult to run, and the results can be difficult to interpret.
+^ Tests, difficult to run; results, difficult to interpret.
 
 ---
 
@@ -151,18 +180,18 @@ Denoting or relating to software or hardware that has been superseded but is dif
 # Extreme Programming 🤘
 ## Test-Driven Development
 
-^ Let to the consideration of "extreme" programming practices like test driven development.
+^ Tested code is more structured, with lower cognitive load, and easier to understand.
 
-^ Taking an extreme approach to testing, and writing tests before writing code.
+^ Led to "extreme" programming practices like test driven development.
 
-^ Tested code is often more structured, with lower cognitive load, and easier to understand.
+^ Writing tests before writing code.
 
 ---
 
 > Debugging is like being the detective in a crime movie where you are also the murderer.
 -- Filipe Fortes
 
-^ Often git blame will reveal the suspect, which is quite often me.
+^ Git blame will always reveal you the suspect.
 
 ---
 
@@ -171,9 +200,7 @@ Denoting or relating to software or hardware that has been superseded but is dif
 
 Awesome.
 
-^ The guiding principle of Kotlin is to make it easy for engineers to write good, safe code.
-
-^ By making it gradually more difficult to write bad code!
+^ Guiding principle of Kotlin is to make it easy to write good code.
 
 ^ Primary tenet of that is the concept of mutability.
 
@@ -196,9 +223,7 @@ fun sumAbsolute(list: MutableList<Int>): Int {
 }
 ```
 
-^ Consider the following code, this mutates the list directly in-place.
-
-^ Impure function, results in an non-deterministic state, hard to predict.
+^ Impure, in-place mutations, non-deterministic state, hard to predict.
 
 ---
 
@@ -215,27 +240,23 @@ partyDate.month = partyDate.month + 1
 // Date is mutable 🤦‍♂️
 ```
 
-^ Another shared mutable state example, this time with a date.
-
-^ The Date class is mutable, and can be changed by any other class.
+^ Date class returned by function is mutable, consumers can modify upstream value.
 
 ---
 
 # Kotlin: Mutability
 ## Shared Mutable State ⚠️
 
-^ Shared mutable state is the root of all evil.
+^ Shared mutable state, causes race conditions, non-deterministic behaviour.
+
+^ Thread-safe confinement, mutex, semaphores, help mitigate this risk.
 
 ---
 
 # Kotlin: Immutability
 ## Unidirectional Data Flow 🏆
 
-^ Unidirectional data flow is a pattern that is used in many modern frameworks.
-
-^ Its a great way of ensuring a predictable state, where date flows in one direction.
-
-^ Easier to find bugs, replay events, predict application state.
+^ Ensures predictable state, easier to find bugs, replay events, predict application state.
 
 ---
 
@@ -243,13 +264,14 @@ partyDate.month = partyDate.month + 1
 ## Collections
 
 ```kotlin
-fun Map<K, V>.toMutableMap(): MutableMap<K, V>
 fun List<T>.toMutableList(): MutableList<T>
+
+fun Map<K, V>.toMutableMap(): MutableMap<K, V>
+
+fun Set<T>.toMutableSet(): MutableSet<T>
 ```
 
-^ One of the mechanisms Kotlin uses to encourage immutability is to provide separate types.
-
-^ The immutable types can be converted to mutable types, which produce a new copy.
+^ Kotlin provides immutable collections types, converting to mutable, creates new instance.
 
 ---
 
@@ -258,9 +280,9 @@ fun List<T>.toMutableList(): MutableList<T>
 
 ![right](intellij-mutable-variables.png)
 
-^ IntelliJ formats code even to highlight mutable variables as underlined.
+^ IntelliJ formats code to highlight mutable variables as underlined.
 
-^ This subconscious "encouragement" makes the variable look "out-of-place"
+^ Subconscious "encouragement" makes the variable look out-of-place.
 
 ---
 
@@ -269,13 +291,16 @@ fun List<T>.toMutableList(): MutableList<T>
 
 By default, Kotlin classes are final – they can't be inherited
 
+^ Finally, classes final by default; encourages composition over inheritance.
+
+---
+
+# Kotlin: Immutability
+## Final Concretions 🧱
+
 ```kotlin
 open class Base // Class is open for inheritance
 ```
-
-^ Finally, and most importantly, Kotlin makes all classes final by default.
-                                                                                                                                         
-^ Encourages composition over inheritance, enabling powerful delegation patterns.
 
 ^ Kotlin classes can be made open, but this is a conscious decision.
 
@@ -286,35 +311,32 @@ open class Base // Class is open for inheritance
 
 `org.jetbrains.kotlin.plugin.allopen`
 
-^ For circumstances where open classes are required, the all-open plugin can be used.
-
-^ Though the documentation implies this is meant for use with frameworks such as Spring AOP.
+^ All-Open plugin for open classes as required for frameworks such as Spring AOP.
 
 ---
 
-# 🧵 Seams
+# Anti-Patterns and Code Smell
+## Refactoring: Seams 🧵
 
-^ A seam is a place where you can separate behaviour in your program without editing in that place.
+^ Large clusters hard to break into testable units.
 
-^ Often achieved with interfaces, or abstract classes.
+^ Seams used to separate behaviour, without editing.
 
 ---
 
-# 🧵 Seams
+# Refactoring: Seams 🧵
 ## Preprocessing
 
 - Kotlin Symbol Processing
 - Kotlin Compiler Plugins
 
-^ Preprocessed seams make use of earlier processing steps prior to compilation.
+^ Supported in Kotlin with KSP and Compiler Plugins, it is rarely used for this purpose.
 
-^ Whilst this is widely supported in Kotlin with KSP and Compiler Plugins (see Compose), it is rarely used for this purpose.
-
-^ This mechanism is unruly due to poor code clarity, but allows for sensing without modifying code.
+^ Poor code clarity, but allows for sensing without modifying code.
 
 ---
 
-# 🧵 Seams
+# Refactoring: Seams 🧵
 ## Linking: Classpath
 
 ```kotlin
@@ -326,13 +348,13 @@ internal class FitFilter {
 }
 ```
 
-^ When classes are imported the Java virtual machine uses the classpath environment variable.
+^ JVM takes classpath as an argument to load classes.
 
-^ You could then override the classpath with your own implementation for specific classes.
+^ Can override with custom implementations.
 
 ---
 
-# 🧵 Seams
+# Refactoring: Seams 🧵
 ## Linking: Classpath
 
 ```kotlin
@@ -348,7 +370,7 @@ buildscript {
 
 ---
 
-# 🧵 Seams
+# Refactoring: Seams 🧵
 ## Objects
 
 ```kotlin
@@ -358,37 +380,40 @@ internal class FitFilter {
 }
 ```
 
-^ Objects are the most useful seam, as they allow for the replacement of behaviour without modifying code.
+^ Objects most useful, allow for replacement of behaviour without modifying implementation.
 
-^ This is also the most common type of refactoring, as it utilising the existing compiler configuration.
+^ Most common type of refactoring, utilises existing compiler configuration.
 
 ---
 
-# 🧵 Seams
+# Refactoring: Seams 🧵
 ## Objects: Refactoring
 
 ![right](intellij-refactor-overlay.png)
 
-[.code-highlight: 1-4, 10-12]
+[.code-highlight: 9-15]
 
-```kotlin
-+ internal fun interface FitFilter {
-+   fun filter(input: String): String
-+ }
-+ 
+```diff
+===================================================================
+diff --git a/FitFilter.kt b/FitFilter.kt
+
 - internal class FitFilter {
 -   private val parser: Parser =
 -     Parser.newInstance()
 - }
 - 
++ internal fun interface FitFilter {
++   fun filter(input: String): String
++ }
++
 + internal fun FitFilter(parser: Parser) = FitFilter { input ->
 +   parser.parse(input)
 + }
 ```
 
-^ Requires modern refactoring techniques, and a good understanding of idomatic code.
+^ Requires modern refactoring techniques, good understanding of idiomatic code.
 
-^ Thankfully IntelliJ offers a lot of support for this, and it's often as simple as a few clicks.
+^ IntelliJ assists with these techniques in a few clicks.
 
 ---
 
@@ -399,22 +424,245 @@ Build versatile and scalable applications with careful API decisions.
 
 ![right](everything-is-an-api.jpeg)
 
----
+^ Everything is an API, and APIs are everywhere.
 
-# Test Tools
-
-- Espresso
-- Robolectric
-- Mockito
-- JUnit
-- Hamcrest
+^ Talk at Berlin, London, and Chicago.
 
 ---
 
-# Test SDKs
+# Refactoring: Dependencies
 
-- androidx.test:core
-- kotlinx-coroutines-test
+^ Biggest problem with refactoring is dependencies.
+
+---
+
+# Refactoring: Dependencies
+
+[.code-highlight: 8-12]
+
+```diff
+===================================================================
+diff --git a/CoffeeMaker.kt b/CoffeeMaker.kt
+
+- internal class CoffeeMaker {
+-   private val heater: Heater = ElectricHeater()
+-   private val pump: Pump = Thermosiphon(heater)
+- }
+
++ internal class CoffeeMaker(
++   private val heater: Heater,
++   private val pump: Pump,
++ )
+```
+
+^ Common refactor to invert control, requires caller to provide dependencies. 
+
+---
+
+# Refactoring: Dependencies
+
+[.code-highlight: 4-5, 7-13, 15]
+
+```diff
+===================================================================
+diff --git a/CoffeeMaker.kt b/CoffeeMaker.kt
+
++ internal class CoffeeMaker(
++   private val heater: Heater,
+-   private val thermosiphon: Thermosiphon,
++   private val pump: Pump,
++ )
++
++ internal interface Pump {
++   fun pump()
++ }
++
+- internal class Thermosiphon {
++ internal class Thermosiphon : Pump {
+```
+
+^ Reduce dependency scope by narrowing type or interface.
+
+---
+
+# Testing: Dependencies
+## Dependency Injection
+
+```kotlin
+internal class CoffeeMaker(
+  private val heater: Heater,
+  private val pump: Pump,
+)
+```
+
+^ Dependencies injected into class constructor.
+
+^ With a seam we can start testing.
+
+---
+
+# Testing: Dependencies
+## Dependency Injection
+
+```kotlin
+val heater = NuclearFusionHeater() // Expensive!
+
+val maker = CoffeeMaker(
+  pump = Thermosiphon(heater),
+  heater = heater,
+)
+
+assertTrue(maker.brew())
+```
+
+^ Unit tests should be fast, should run in milliseconds.
+
+^ Expensive dependencies should be replaced.
+
+---
+
+# Testing: Dependencies
+## Dependency Injection
+
+[.code-highlight: 1]
+
+```kotlin
+val heater = DiskCachedHeater() // Stateful!
+
+val maker = CoffeeMaker(
+  pump = Thermosiphon(heater),
+  heater = heater,
+)
+
+assertTrue(maker.brew())
+```
+
+^ Not just performance, tests should be idempotent.
+
+^ Disk operations are stateful, can change.
+
+---
+
+# Testing: Dependencies
+## Dependency Injection
+
+[.code-highlight: 1]
+
+```kotlin
+val heater = UnbalancedHeater() // Error prone!
+
+val maker = CoffeeMaker(
+  pump = Thermosiphon(heater),
+  heater = heater,
+)
+
+assertTrue(maker.brew())
+```
+
+^ Further, may want to isolate error prone dependencies.
+
+^ Test single unit in isolation.
+
+---
+
+# Testing: Dependencies
+## Test Doubles
+
+^ Test doubles are a common technique to replace dependencies.
+
+^ Offer isolation, simplicity, isolation, and control.
+
+---
+
+# Testing: Dependencies
+## Test Doubles: Mockito
+
+"Tasty mocking framework for unit tests in Java".
+
+^ Mockito is a popular mocking framework for Java.
+
+---
+
+# Testing: Dependencies
+## Test Doubles: Mockito
+
+```kotlin
+val heater = mock<Heater>()
+val pump = mock<Pump>()
+
+val maker = CoffeeMaker(
+  heater = heater,
+  pump = pump,
+)
+
+assertTrue(maker.brew())
+```
+
+^ Provide class under test with mocks.
+
+^ Cross fingers, run test.
+
+---
+
+# Testing: Dependencies
+## Test Doubles: Mockito
+
+```kotlin
+val heater = mock<Heater>()
+val pump = mock<Pump>()
+
+val maker = CoffeeMaker(
+  heater = heater,
+  pump = pump,
+)
+
+assertTrue(maker.brew()) // ⚠ Fails!
+```
+
+^ Of course this fails, mocks don't do anything.
+
+---
+
+# Testing: Dependencies
+## Test Doubles: Mockito
+
+[.code-highlight: 1-7]
+
+```kotlin
+val heater = mock<Heater> {
+  on { isHeating } doAnswer { true }
+}
+
+val pump = mock<Pump> {
+  on { pump() } doAnswer { true }
+}
+
+val maker = CoffeeMaker(
+  heater = heater,
+  pump = pump,
+)
+
+assertTrue(maker.brew())
+```
+
+^ Configuring the mocks with an implementation.
+
+^ Mockito provides an extensive DSL for building mocks.
+
+---
+
+# Testing: Dependencies
+## Mockito DSL
+
+javadoc.io/doc/
+  org.mockito/mockito-core/latest/
+  org/mockito/Mockito.html
+
+^ Mockito DSL is extensive, and can be used to build complex mocks.
+
+^ Also a bit verbose, and can be difficult to read.
+
+^ What also has an extensive DSL for building classes? Kotlin.
 
 ---
 
@@ -439,7 +687,7 @@ Build versatile and scalable applications with careful API decisions.
 
 ---
 
-# 🪽 God Objects
+# God Objects 🪽
 
 ^ God objects often reference a large number of distinct types, and/or unrelated methods.
 
@@ -457,7 +705,7 @@ No code should be forced to depend on methods it does not use.
 
 ---
 
-# 🥟 Ravioli Code 🤌
+# Ravioli Code 🥟 🤌
 
 ^ The antithesis of the god principle is apparently referred to as Ravioli code.
 
@@ -516,14 +764,14 @@ github.com/ashdavies/playground.ashdavies.dev/
 
 # Further Reading
 
-**Michael Feathers: Working Effectively with Legacy Code**
-ISBN-13: 978-0-13117-705-5
-
-**Testing on the Toilet: Don't mock Types You Don't Own**
-testing.googleblog.com/2020/07/testing-on-toilet-dont-mock-types-you.html
+**Martin Flower: Mocks Aren't Stubs**
+martinfowler.com/articles/mocksArentStubs.html
 
 **Martin Fowler: Practical Test Pyramid**
 martinfowler.com/articles/practical-test-pyramid.html
 
-**Filipe Fortes: One Good Tweet**
-fortes.com/2017/one-good-tweet/
+**Michael Feathers: Working Effectively with Legacy Code**
+ISBN: 978-0-13117-705-5
+
+**Testing on the Toilet: Don't mock Types You Don't Own**
+testing.googleblog.com/2020/07/testing-on-toilet-dont-mock-types-you.html
