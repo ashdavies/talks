@@ -306,117 +306,6 @@ open class Base // Class is open for inheritance
 ---
 
 # Anti-Patterns and Code Smell
-## Refactoring: Seams 🧵
-
-^ Large clusters hard to break into testable units.
-
-^ Seams used to separate behaviour, without editing.
-
----
-
-# Refactoring: Seams 🧵
-## Preprocessing
-
-- Kotlin Symbol Processing
-- Kotlin Compiler Plugins
-
-^ Supported in Kotlin with KSP and Compiler Plugins, it is rarely used for this purpose.
-
-^ Poor code clarity, but allows for sensing without modifying code.
-
----
-
-# Refactoring: Seams 🧵
-## Linking: Classpath
-
-```kotlin
-import fit.Parser
-
-internal class FitFilter {
-  private val parser: Parser =
-    Parser.newInstance()
-}
-```
-
-^ JVM takes classpath as an argument to load classes.
-
-^ Can override with custom implementations.
-
----
-
-# Refactoring: Seams 🧵
-## Linking: Classpath
-
-```kotlin
-buildscript {
-    dependencies {
-        val googleServicesVersion = libs.versions.google.services.get()
-        classpath("com.google.gms:google-services:$googleServicesVersion")
-    }
-}
-```
-
-^ You will have already configured the classpath in your project using plugins
-
----
-
-# Refactoring: Seams 🧵
-## Objects
-
-```kotlin
-internal class FitFilter {
-  private val parser: Parser =
-    Parser.newInstance()
-}
-```
-
-^ Objects most useful, allow for replacement of behaviour without modifying implementation.
-
-^ Most common type of refactoring, utilises existing compiler configuration.
-
----
-
-# Refactoring: Seams 🧵
-## Objects: Refactoring
-
-![right](intellij-refactor-overlay.png)
-
-[.code-highlight: 9-15]
-
-```diff
-===================================================================
-diff --git a/FitFilter.kt b/FitFilter.kt
-
-- internal class FitFilter {
--   private val parser: Parser =
--     Parser.newInstance()
-- }
-- 
-+ internal fun interface FitFilter {
-+   fun filter(input: String): String
-+ }
-+
-+ internal fun FitFilter(parser: Parser) = FitFilter { input ->
-+   parser.parse(input)
-+ }
-```
-
-^ Requires modern refactoring techniques, good understanding of idiomatic code.
-
-^ IntelliJ assists with these techniques in a few clicks.
-
----
-
-# Everything is an API
-## [fit]ashdavies.dev/talks/everything-is-an-api-berlin-droidcon/
-
-Build versatile and scalable applications with careful API decisions.
-
-![right](everything-is-an-api.jpeg)
-
-^ Everything is an API, and APIs are everywhere.
-
-^ Talk at Berlin, London, and Chicago.
 
 ---
 
@@ -843,6 +732,17 @@ internal class CoffeeMakerTest {
 ---
 
 # Testing: Mocks
+## Dynamic Mutability
+
+![right](cat-kotti-judgemental.jpeg)
+
+Framework generated mocks introduce a shared, mutable, dynamic, runtime declaration. 
+
+^ Shared mutable state should feel uncomfortably bad.
+
+^ Dynamic runtime declarations should feel equally uncomfortable.
+
+^ Kotti knows it's wrong, and so should you.
 
 ---
 
@@ -854,6 +754,18 @@ internal class CoffeeMakerTest {
 ^ Extensive features, powerful DSL.
 
 ^ Overused.
+
+---
+
+# Stubs
+
+^ Stubs are a type of test double, which are used to replace dependencies in tests.
+
+---
+
+# Fakes
+
+^ Fakes are a type of test double, which are used to replace dependencies in tests.
 
 ---
 
@@ -905,22 +817,118 @@ No code should be forced to depend on methods it does not use.
 ^ Ravioli code is not considers a good thing, but it's better than the alternative.
 
 ---
+# Anti-Patterns and Code Smell
+## Refactoring: Seams 🧵
 
-# Mocks
+^ Large clusters hard to break into testable units.
 
-^ Mocks are a type of test double, which are used to replace dependencies in tests.
-
----
-
-# Stubs
-
-^ Stubs are a type of test double, which are used to replace dependencies in tests.
+^ Seams used to separate behaviour, without editing.
 
 ---
 
-# Fakes
+# Refactoring: Seams 🧵
+## Preprocessing
 
-^ Fakes are a type of test double, which are used to replace dependencies in tests.
+- Kotlin Symbol Processing
+- Kotlin Compiler Plugins
+
+^ Supported in Kotlin with KSP and Compiler Plugins, it is rarely used for this purpose.
+
+^ Poor code clarity, but allows for sensing without modifying code.
+
+---
+
+# Refactoring: Seams 🧵
+## Linking: Classpath
+
+```kotlin
+import fit.Parser
+
+internal class FitFilter {
+  private val parser: Parser =
+    Parser.newInstance()
+}
+```
+
+^ JVM takes classpath as an argument to load classes.
+
+^ Can override with custom implementations.
+
+---
+
+# Refactoring: Seams 🧵
+## Linking: Classpath
+
+```kotlin
+buildscript {
+    dependencies {
+        val googleServicesVersion = libs.versions.google.services.get()
+        classpath("com.google.gms:google-services:$googleServicesVersion")
+    }
+}
+```
+
+^ You will have already configured the classpath in your project using plugins
+
+---
+
+# Refactoring: Seams 🧵
+## Objects
+
+```kotlin
+internal class FitFilter {
+  private val parser: Parser =
+    Parser.newInstance()
+}
+```
+
+^ Objects most useful, allow for replacement of behaviour without modifying implementation.
+
+^ Most common type of refactoring, utilises existing compiler configuration.
+
+---
+
+# Refactoring: Seams 🧵
+## Objects: Refactoring
+
+![right](intellij-refactor-overlay.png)
+
+[.code-highlight: 9-15]
+
+```diff
+===================================================================
+diff --git a/FitFilter.kt b/FitFilter.kt
+
+- internal class FitFilter {
+-   private val parser: Parser =
+-     Parser.newInstance()
+- }
+- 
++ internal fun interface FitFilter {
++   fun filter(input: String): String
++ }
++
++ internal fun FitFilter(parser: Parser) = FitFilter { input ->
++   parser.parse(input)
++ }
+```
+
+^ Requires modern refactoring techniques, good understanding of idiomatic code.
+
+^ IntelliJ assists with these techniques in a few clicks.
+
+---
+
+# Everything is an API
+## [fit]ashdavies.dev/talks/everything-is-an-api-berlin-droidcon/
+
+Build versatile and scalable applications with careful API decisions.
+
+![right](everything-is-an-api.jpeg)
+
+^ Everything is an API, and APIs are everywhere.
+
+^ Talk at Berlin, London, and Chicago.
 
 ---
 
