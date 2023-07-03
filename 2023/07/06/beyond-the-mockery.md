@@ -19,19 +19,15 @@ theme: Plex, 1
 - Q&A session to address any remaining doubts or questions from the audience.
 
 What are mocks?
-Test code is just production code that doesn't ship
-
-There is always a way!
-This is the way.
 
 Use Case: Verifying functions without a return type
 Solution: Verify domain state, or use a fake.
 
 Forces interface segregation
 Alternatives to mocking?
-Fakes, Stubs, Concretions
 
 In-Memory implementations (also good for production)
+Fakes, Stubs, Concretions
 
 Fake, concrete implementation of interface, written with the production code, provides better documentation, insight, into the purpose of behaviour.
 
@@ -535,8 +531,6 @@ javadoc.io/doc/
 
 ^ Mockito DSL is extensive, and can be used to build complex mocks.
 
-^ What also has an extensive DSL for building classes? Kotlin.
-
 ---
 
 # Testing: Mocks
@@ -891,8 +885,6 @@ Framework generated mocks introduce a shared, mutable, dynamic, runtime declarat
 
 ---
 
----
-
 # Testing: Mocks
 ## Interaction Verification 👎
 
@@ -909,15 +901,91 @@ Framework generated mocks introduce a shared, mutable, dynamic, runtime declarat
 
 ![right](pedro-monkey-puppet.gif)
 
-^ Insights from experience, not regurgitating blog posts.
+^ Mockito has an extensive DSL for building runtime declarations.
 
-^ So what are our alternatives?
+^ What also has an extensive DSL for building classes? Kotlin.
 
 ---
 
-# Stubs
+# Testing: Stubs
 
-^ Stubs are a type of test double, which are used to replace dependencies in tests.
+^ You may have already encountered stubs.
+
+^ Simple implementation only meant to compile.
+
+---
+
+# Testing: Stubs
+## Simple
+
+```kotlin
+internal interface Pump {
+  fun pump(): Boolean
+}
+
+internal object StubPump : Pump {
+  override fun pump(): Boolean = true
+}
+```
+
+^ Stub can be the most simplest implementation.
+
+^ No verification logic.
+
+---
+
+# Testing: Stubs
+## Idiomatic
+
+```kotlin
+internal fun interface Pump {
+  fun pump(): Boolean
+}
+
+val stub = Pump { true }
+```
+
+^ Stubs implementations can be a bit more idiomatic.
+
+^ Kotlin functional interfaces make mocks redundant.
+
+---
+
+# Testing: Stubs
+## API Sensitive
+
+[.code-highlight: 1-2, 4, 6-7]
+
+```diff
++ private const val DEFAULT_AMOUNT = 250 // ml
++ 
+- internal fun interface Pump {
++ internal interface Pump {
+-   fun pump(): Boolean
++   fun pump(amount: Int = DEFAULT_AMOUNT): Boolean
++ }
+```
+
+^ Classes declared in Kotlin are sensitive to interface changes.
+
+---
+
+# Testing: Stubs
+## API Sensitive
+
+```kotlin
+private const val DEFAULT_AMOUNT = 250 // ml
+
+internal interface Pump {
+  fun pump(amount: Int = DEFAULT_AMOUNT): Boolean
+}
+
+val stub = Pump { true } // Compilation failure...
+```
+
+^ This change will not compile because the functional interfaces are no longer supported.
+
+^ We know this, because we wrote it, not reliant on a framework.
 
 ---
 
