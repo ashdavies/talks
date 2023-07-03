@@ -445,6 +445,15 @@ assertTrue(maker.brew())
 ---
 
 # Testing: Dependencies
+## Mocks
+
+^ Mocks are a type of test double that allow you to specify expectations.
+
+^ Often used to verify interactions with dependencies.
+
+---
+
+# Testing: Dependencies
 ## Mockito
 
 "Tasty mocking framework for unit tests in Java".
@@ -882,12 +891,27 @@ Framework generated mocks introduce a shared, mutable, dynamic, runtime declarat
 
 ---
 
+---
+
 # Testing: Mocks
-## Alternatives
+## Interaction Verification 👎
+
+^ Biggest problem with mocks, they verify the interaction, not the outcome.
+
+^ Doesn't matter if invocation is correct, if the outcome is wrong.
+
+^ At some point, you're testing the language.
+
+---
+
+# Testing: Mocks
+## What Now?
 
 ![right](pedro-monkey-puppet.gif)
 
-^ So we're already using mocks, what are our alternatives?
+^ Insights from experience, not regurgitating blog posts.
+
+^ So what are our alternatives?
 
 ---
 
@@ -1097,20 +1121,17 @@ github.com/ashdavies/playground.ashdavies.dev/
 
 # Further Reading
 
-**Martin Flower: Mocks Aren't Stubs**
+- **Martin Flower: Mocks Aren't Stubs**
 martinfowler.com/articles/mocksArentStubs.html
-
-**Martin Fowler: Practical Test Pyramid**
+- **Martin Fowler: Practical Test Pyramid**
 martinfowler.com/articles/practical-test-pyramid.html
-
-**Monkey User**
+- **Images: Monkey User**
 monkeyuser.com
-
-**Michael Feathers: Working Effectively with Legacy Code**
+- **Michael Feathers: Working Effectively with Legacy Code**
 ISBN: 978-0-13117-705-5
-
-**Steve Freeman, Nat Pryce: Growing Object-Oriented Software, Guided by Tests**
+- **Steve Freeman, Nat Pryce: Growing Object-Oriented Software, Guided by Tests**
 ISBN: 978-0-32150-362-6
-
-**Testing on the Toilet: Don't mock Types You Don't Own**
+- **Testing on the Toilet: Don't mock Types You Don't Own**
 testing.googleblog.com/2020/07/testing-on-toilet-dont-mock-types-you.html
+- **Testing on the Toilet: Know Your Test Doubles**
+testing.googleblog.com/2013/07/testing-on-toilet-know-your-test-doubles.html
