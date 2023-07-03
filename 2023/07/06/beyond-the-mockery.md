@@ -1,38 +1,24 @@
 autoscale: true
-build-lists: true
 footer: ashdavies.dev | ashdavies@androiddev.social
 footer-style: Product Sans
 header: Product Sans
 slide-transition: true
-slidenumbers: true
 text-strong: Google Sans 18pt
 text: Google Sans 18pt
 theme: Plex, 1
 
 <!--
 
-- Overview of the talk's objective: Exploring the limitations of mocks and advocating for the use of fakes and in-memory implementations.
-- Understanding the limitations of mocks, including their potential to create brittle tests.
-- Exploring how mocks can slow down development by introducing dependencies on external systems.
-- Discussing how mocks can hinder code refactoring efforts, making them difficult to maintain.
-- Introduction to Fakes and In-Memory Implementations (5 minutes)
-
-- Introduction to fakes and in-memory implementations as alternatives to mocks.
 - Explanation of how these alternatives provide faster feedback and increase confidence in code.
-- Advantages of Fakes and In-Memory Implementations (10 minutes)
-
 - Discussing how they can be used to provide faster feedback loops during development.
 - Exploring how these alternatives improve code maintainability, especially as the codebase evolves.
 - Implementing Fakes and In-Memory Implementations (10 minutes)
-
 - Step-by-step examples of implementing fakes and in-memory implementations in Kotlin.
-- Providing simple, easy-to-understand code examples to showcase the practical application of these alternatives.
-- Demonstrating their usefulness in different testing scenarios, including unit testing and integration testing.
-
 - Recap of the drawbacks of mocks and the advantages of fakes and in-memory implementations.
 - Encouragement to embrace these alternatives for more effective and maintainable testing in Kotlin.
 - Q&A session to address any remaining doubts or questions from the audience.
 
+What are mocks?
 Test code is just production code that doesn't ship
 
 There is always a way!
@@ -72,6 +58,8 @@ Oxford vs Chicago school of testing
 Denoting or relating to software or hardware that has been superseded but is difficult to replace because of its wide use.
 
 ^ Can be tough to know where to start with legacy projects.
+
+^ Legacy code, topic most common to developers.
 
 ---
 
@@ -130,6 +118,8 @@ Denoting or relating to software or hardware that has been superseded but is dif
 ^ If you're not interested in writing tests, this talk may not be for you.
 
 ---
+
+[.build-lists: true]
 
 # Testing
 
@@ -550,6 +540,34 @@ javadoc.io/doc/
 ---
 
 # Testing: Mocks
+## Accidental Invocation
+
+```kotlin
+val heater = mock<Heater> {
+  on { isHeating } doAnswer { true } // Actual invocation!
+}
+```
+
+^ When constructing mocks, and spying objects, Mockito will actually invoke the method.
+
+^ Goes unnoticed if method has no implementation, returns null.
+
+---
+
+# Testing: Mocks
+## Accidental Invocation
+
+```kotlin
+spy(emptyList<String>()) {
+  on { get(0) } doAnswer { "foo" } // throws IndexOutOfBoundsException
+}
+```
+
+^ Actually documented as an important gotcha
+
+---
+
+# Testing: Mocks
 ## API Sensitivity
 
 ```kotlin
@@ -593,11 +611,25 @@ val heater = mock<Heater> {
 # Testing: Mocks
 ## API Sensitivity
 
-^ Kotlin allows changes without breaking API compatibility.
+```kotlin
+internal interface CoffeeDistributor {
+  fun announce(vararg name: String): Boolean
+}
 
-^ e.g. defaults, named parameters, and ordering, Kotlin
+val mockDistributor = mock<CoffeeDistributor> {
+  on { announce(any(), any()) } doReturn true
+}
 
-^ This can backfire with mocks.
+val announced = mockDistributor.announce(
+  "Steve", "Roger", "Stan",
+)
+
+assertTrue(announced) // False: We only stubbed two names!
+```
+
+^ Mocks will only match exact method signatures configured.
+
+^ No fault of the library, but can be a source of bugs.
 
 ---
 
@@ -730,8 +762,76 @@ internal class CoffeeMakerTest {
 
 ---
 
+# Testing: Mocks
+## Dynamic Mutability
+
+![right](cat-kotti-judgemental.jpeg)
+
+Framework generated mocks introduce a shared, mutable, dynamic, runtime declaration. 
+
+^ Shared mutable state should feel uncomfortably bad.
+
+^ Dynamic runtime declarations should feel equally uncomfortable.
+
+^ Test code is production code that don't ship.
+
+^ Kotti knows it's wrong, and so should you.
+
+---
+
+# Unpredictability
+## Costs
+
+^ Predictability is a underrated metric.
+
+^ Although hard to quantify.
+
+---
+
+# Unpredictability: Costs
+## Learning Curve
+
+^ Most evident when onboarding new colleagues
+
+---
+
+# Unpredictability: Costs
+## Peer Review
+
+![right](waiting-code-review.jpeg)
+
+^ Hard to review code that is unpredictable.
+
+^ PRs remain open longer, sad, alone.
+
+---
+
+[.background-color: #fff]
+
+# Unpredictability: Costs
+## Risk of Bugs
+
+![50% right](monkeyuser-feature.png)
+
+^ Unpredictability means you cannot predict the edge cases.
+
+---
+
+# Unpredictability: Costs
+## Slowed Feature Delivery
+
+^ Technical debt must be repaid.
+
+^ Slows feature delivery.
+
+---
+
+[.background-color: #fff]
+
 # Unpredictability
 ## Victims
+
+![35% right](monkeyuser-unfinished-work.png)
 
 - Junior developers
 - New team members
@@ -744,23 +844,16 @@ internal class CoffeeMakerTest {
 ---
 
 # Testing: Mocks
-## Dynamic Mutability
-
-![right](cat-kotti-judgemental.jpeg)
-
-Framework generated mocks introduce a shared, mutable, dynamic, runtime declaration. 
-
-^ Shared mutable state should feel uncomfortably bad.
-
-^ Dynamic runtime declarations should feel equally uncomfortable.
-
-^ Kotti knows it's wrong, and so should you.
-
----
-
-# Testing: Mocks
 
 ## Don't Mock Classes You Don't Own
+
+### [fit] testing.googleblog.com/2020/07/testing-on-toilet-dont-mock-types-you.html
+
+^ Google Testing Blog: Don't Mock Types You Don't Own
+
+^ Mocked classes may change in ways you don't expect.
+
+^ Not exclusive to classes you don't own.
 
 ---
 
@@ -769,6 +862,12 @@ Framework generated mocks introduce a shared, mutable, dynamic, runtime declarat
 ## Your code belongs to your team.
 
 ### Be considerate.
+
+^ Naive developers may assume because they understand it, others will too.
+
+^ If your code introduces cognitive complexity, it's not good code.
+
+^ Keep It Simple Stupid.
 
 ---
 
@@ -788,9 +887,7 @@ Framework generated mocks introduce a shared, mutable, dynamic, runtime declarat
 
 ![right](pedro-monkey-puppet.gif)
 
-^ Mocks are a tool, not a solution.
-
-^ What are our alternatives?
+^ So we're already using mocks, what are our alternatives?
 
 ---
 
@@ -1005,6 +1102,9 @@ martinfowler.com/articles/mocksArentStubs.html
 
 **Martin Fowler: Practical Test Pyramid**
 martinfowler.com/articles/practical-test-pyramid.html
+
+**Monkey User**
+monkeyuser.com
 
 **Michael Feathers: Working Effectively with Legacy Code**
 ISBN: 978-0-13117-705-5
