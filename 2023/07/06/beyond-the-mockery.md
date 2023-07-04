@@ -10,16 +10,6 @@ theme: Plex, 1
 <!--
 Use Case: Verifying functions without a return type
 Solution: Verify domain state, or use a fake.
-
-Forces interface segregation
-Alternatives to mocking?
-
-In-Memory implementations (also good for production)
-Fakes, Stubs, Concretions
-
-Fake, concrete implementation of interface, written with the production code, provides better documentation, insight, into the purpose of behaviour.
-
-Oxford vs Chicago school of testing
 -->
 
 # Beyond the Mockery
@@ -1005,6 +995,10 @@ public class FakePump(private val onPump: (Boolean) -> Boolean) : Pump {
 }
 ```
 
+^ Pass lambda to control outcome, similar to functional interface.
+
+^ Additionally keeps list of inputs, and outcomes.
+
 ---
 
 # Testing: Fakes
@@ -1023,6 +1017,10 @@ private class DelegatingHeater(
   }
 }
 ```
+
+^ Full control over behaviour.
+
+^ Delegates to provided instance.
 
 ---
 
@@ -1063,27 +1061,88 @@ Those who wrote the code are the most uniquely qualified to write the tests.
 
 # Testing: Libraries
 
+- `androidx.compose.ui:ui-test-junit4`
+- `com.slack.circuit:circuit-test`
+- `io.ktor:ktor-server-test-host`
+- `io.ktor:ktor-client-mock`
+- `kotlinx-coroutines-test`
+
 ^ Fortunately many SDK developers provide test artifacts.
 
 ^ If you're an author, please consider doing so.
 
 ---
 
-# Interface Segregation Principle
+# Testing: In Memory
 
-No code should be forced to depend on methods it does not use.
+```kotlin
+internal fun interface CoffeeStore {
+  fun has(type: CoffeeType): Boolean
+}
 
-![right](interface-segration-principle.webp)
+internal enum class CoffeeType {
+  CAPPUCCINO,
+  ESPRESSO,
+  LATTE,
+}
+```
+
+^ Many circumstances an in-memory implementation is sufficient.
+
+^ Given a simple store interface, we can implement in-memory.
 
 ---
 
-# Ravioli Code 🥟 🤌
+# Testing: In Memory
 
-^ The antithesis of the god principle is apparently referred to as Ravioli code.
+```kotlin
+internal class InMemoryCoffeeStore : CoffeeStore {
 
-^ Either the Italians have a high opinion of themselves, or they've got it figured out.
+  private val _stock = mutableMapOf<CoffeeType, Int>()
+  val stock: Map<CoffeeType, Int> by ::_stock
 
-^ Ravioli code is not considers a good thing, but it's better than the alternative.
+  override fun has(type: CoffeeType): Boolean {
+    return (_stock[type] ?: 0) > 0
+  }
+
+  fun add(type: CoffeeType, amount: Int = 1) {
+    _stock[type] = (_stock[type] ?: 0) + amount
+  }
+}
+```
+
+^ Basic in-memory implementation also useful for debugging
+
+---
+
+# Testing: In Memory
+## Bonus!
+
+In-memory implementations for local or network overrides.
+
+^ Because we designed the code well, safe for production.
+
+---
+
+[.background-color: #fff]
+
+# Reality
+
+![35% right](monkeyuser-production-ready.png)
+
+^ Don't always have luxury of working with good code.
+
+---
+
+[.background-color: #64b6a8]
+[.footer: Image: dribbble.com/shots/3251806-Interface-Segregation-Principle]
+
+# Interface Segregation Principle
+
+![80% right](interface-segration-principle.webp)
+
+No code should be forced to depend on methods it does not use.
+
 
 ---
 # Anti-Patterns and Code Smell
@@ -1230,13 +1289,21 @@ Build versatile and scalable applications with careful API decisions.
 
 ---
 
-[.footer: Image: dribbble.com/shots/3251806-Interface-Segregation-Principle]
+# Ravioli Code 🥟 🤌
+
+^ The antithesis of the god principle is apparently referred to as Ravioli code.
+
+^ Either the Italians have a high opinion of themselves, or they've got it figured out.
+
+^ Ravioli code is not considers a good thing, but it's better than the alternative.
+
+---
 
 # Conclusion
 
 - Don’t mock classes you don’t own.
 - Don’t mock classes you do own.
-- Don’t mock classes.
+- Don’t mock classes (except Context).
 
 ---
 
