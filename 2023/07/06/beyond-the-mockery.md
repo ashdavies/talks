@@ -8,18 +8,6 @@ text: Google Sans 18pt
 theme: Plex, 1
 
 <!--
-
-- Explanation of how these alternatives provide faster feedback and increase confidence in code.
-- Discussing how they can be used to provide faster feedback loops during development.
-- Exploring how these alternatives improve code maintainability, especially as the codebase evolves.
-- Implementing Fakes and In-Memory Implementations (10 minutes)
-- Step-by-step examples of implementing fakes and in-memory implementations in Kotlin.
-- Recap of the drawbacks of mocks and the advantages of fakes and in-memory implementations.
-- Encouragement to embrace these alternatives for more effective and maintainable testing in Kotlin.
-- Q&A session to address any remaining doubts or questions from the audience.
-
-What are mocks?
-
 Use Case: Verifying functions without a return type
 Solution: Verify domain state, or use a fake.
 
@@ -172,8 +160,7 @@ Denoting or relating to software or hardware that has been superseded but is dif
 
 ---
 
-# Kotlin
-## noun
+# Kotlin (noun)
 
 Awesome.
 
@@ -323,6 +310,8 @@ diff --git a/CoffeeMaker.kt b/CoffeeMaker.kt
 
 ^ Common refactor to invert control, requires caller to provide dependencies. 
 
+^ Enjoyable using "thermosiphon", universally hated sample.
+
 ---
 
 # Refactoring: Dependencies
@@ -348,6 +337,8 @@ diff --git a/CoffeeMaker.kt b/CoffeeMaker.kt
 ```
 
 ^ Reduce dependency scope by narrowing type or interface.
+
+^ More examples later...
 
 ---
 
@@ -821,7 +812,7 @@ Framework generated mocks introduce a shared, mutable, dynamic, runtime declarat
 ---
 
 # Unpredictability: Costs
-## Slowed Feature Delivery
+## Slowed Feature Delivery ~~💰💰💰~~
 
 ^ Technical debt must be repaid.
 
@@ -860,7 +851,7 @@ Framework generated mocks introduce a shared, mutable, dynamic, runtime declarat
 
 ---
 
-# You Don't Own Your Code
+# You Don't Own Your Code!
 
 ## Your code belongs to your team.
 
@@ -893,6 +884,8 @@ Framework generated mocks introduce a shared, mutable, dynamic, runtime declarat
 ^ Doesn't matter if invocation is correct, if the outcome is wrong.
 
 ^ At some point, you're testing the language.
+
+^ This point deserves its own talk.
 
 ---
 
@@ -973,6 +966,8 @@ val stub = Pump { true }
 # Testing: Stubs
 ## API Sensitive
 
+[.code-highlight: 7]
+
 ```kotlin
 private const val DEFAULT_AMOUNT = 250 // ml
 
@@ -989,9 +984,88 @@ val stub = Pump { true } // Compilation failure...
 
 ---
 
-# Fakes
+# Testing: Fakes 🏆
 
-^ Fakes are a type of test double, which are used to replace dependencies in tests.
+^ But what if you need more than a stub?
+
+^ Still need to verify outcome.
+
+---
+
+# Testing: Fakes
+
+```kotlin
+public class FakePump(private val onPump: (Boolean) -> Boolean) : Pump {
+
+  public val pumped = mutableListOf<Pair<Boolean, Boolean>>()
+
+  override fun pump(full: Boolean): Boolean = onPump(full).also {
+    pumped += full to it
+  }
+}
+```
+
+---
+
+# Testing: Fakes
+## Additional Behaviour
+
+```kotlin
+private class DelegatingHeater(
+  private val delegate: Heater,
+) : Heater by delegate {
+
+  private val _drinks = mutableListOf<Any>()
+  val drinks: List<Any> by ::_drinks
+
+  override fun <T : Any> heat(body: () -> T): T {
+    return delegate.heat(body).also { _drinks += it }
+  }
+}
+```
+
+---
+
+# Testing: Fakes
+## Authoring
+
+^ Fakes ideal because you define the behaviour.
+
+^ Who is responsible for writing fakes?
+
+---
+
+[.background-color: #fff]
+
+# Testing: Fakes
+## Responsibility
+
+![fit right](uncle-sam-wants-you.jpeg)
+
+^ Yep, you.
+
+---
+
+[.background-color: #fff]
+
+# Testing: Fakes
+## Qualifications
+
+![fit right](uncle-sam-wants-you.jpeg)
+
+Those who wrote the code are the most uniquely qualified to write the tests.
+
+^ Because you are the person most uniquely qualified.
+
+^ At the time of authoring, you had the most context.
+
+---
+
+# Testing: Libraries
+
+^ Fortunately many SDK developers provide test artifacts.
+
+^ If you're an author, please consider doing so.
 
 ---
 
