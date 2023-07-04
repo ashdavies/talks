@@ -1318,13 +1318,7 @@ Build versatile and scalable applications with careful API decisions.
 
 # Thanks!
 
-github.com/ashdavies/playground.ashdavies.dev/
-  blob/feature/beyond-the-mockery/
-  app-launcher/common/src/jvmTest/
-  kotlin/io/ashdavies/playground/
-  CoffeeMakerTest.kt
-
-^ Short links in progress
+ashdavies.dev/talks/beyond-the-mockery-berlin/
 
 ---
 
