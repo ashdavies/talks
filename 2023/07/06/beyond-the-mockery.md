@@ -1,25 +1,32 @@
 autoscale: true
-footer: ashdavies.dev | ashdavies@androiddev.social
+build-lists: true
+footer: ashdavies.dev
 footer-style: Product Sans
 header: Product Sans
 slide-transition: true
 text-strong: Google Sans 18pt
 text: Google Sans 18pt
-theme: Plex, 1
+theme: Simple, 1
 
 <!--
 Use Case: Verifying functions without a return type
 Solution: Verify domain state, or use a fake.
+
+Use Case: Verify fake behaviour
+Solution: Test Fake Factories, write unit tests for your fakes, compare behaviour againt production classes in instrumentation
+
+Problem: Measure performance impact of mocks over fakes
+Solution: Mocking frameworks are unpredictable
 -->
 
 # Beyond the Mockery
-## Ash Davies
+## ashdavies.dev
 
-## <br />
-## <br />
-## <br />
-## <br />
-## <br />
+<br />
+<br />
+<br />
+<br />
+<br />
 
 ## ![10%](experts-logo.png)
 
@@ -132,6 +139,30 @@ Denoting or relating to software or hardware that has been superseded but is dif
 
 ---
 
+# Seams 🧵
+
+^ A seam is the place where two pieces of fabric meet
+
+^ This translates similarly in programming
+
+^ Logical separation point between two units of code
+
+^ The separation allows you to adjust the behaviour without changing the code
+
+---
+
+# Coupling 🔌
+
+![right fit](coupling-cohesion.png)
+
+^ Coupling describes how inter-connected modules are, often compared with cohesion
+
+^ Highly coupled code is difficult to separate, makes it hard to find a seam
+
+^ Loosely coupled code is easier to structure
+
+---
+
 # Extreme Programming 🤘
 ## Test-Driven Development
 
@@ -140,6 +171,21 @@ Denoting or relating to software or hardware that has been superseded but is dif
 ^ Led to "extreme" programming practices like test driven development.
 
 ^ Writing tests before writing code.
+
+---
+
+# Extreme Programming 🤘
+## Offensive Code <🖕>
+
+^ Another example of extreme programming is offensive code (or programming)
+
+^ Offensive (or fail first) code, removes fallback behaviour, fully utilise exceptions
+
+---
+
+# Anti-Patterns and Code Smell
+> My God, what is that smell? Oh.
+-- Veronica Corningstone
 
 ---
 
@@ -152,7 +198,7 @@ Denoting or relating to software or hardware that has been superseded but is dif
 
 # Kotlin (noun)
 
-Awesome.
+### Awesome.
 
 ^ Guiding principle of Kotlin is to make it easy to write good code.
 
@@ -227,6 +273,22 @@ fun Set<T>.toMutableSet(): MutableSet<T>
 
 ^ Kotlin provides immutable collections types, converting to mutable, creates new instance.
 
+^ Kotlin collection interfaces may still be backed by a mutable Java implementation
+
+---
+
+# org.jetbrains.kotlinx:kotlinx-collections-immutable
+
+```kotlin
+fun Iterable<T>.toPersistentList(): PersistentList<T>
+
+fun Iterable<T>.toPersistentSet(): PersistentSet<T>
+```
+
+^ Jetbrains provide an immutable collection library, highly advised
+
+^ Helpful with Compose, no longer need to annotate stable
+
 ---
 
 # Kotlin: Immutability
@@ -270,16 +332,123 @@ open class Base // Class is open for inheritance
 ---
 
 # Anti-Patterns and Code Smell
+## Refactoring: Seams 🧵
+
+^ Large clusters hard to break into testable units.
+
+^ Seams used to separate behaviour, without editing.
 
 ---
 
-# Refactoring: Dependencies
+# Refactoring: Seams 🧵
+## Preprocessing
 
-^ Biggest problem with refactoring is dependencies.
+- Kotlin Symbol Processing
+- Kotlin Compiler Plugins
+
+^ Supported in Kotlin with KSP and Compiler Plugins, it is rarely used for this purpose.
+
+^ Poor code clarity, but allows for sensing without modifying code.
 
 ---
 
-# Refactoring: Dependencies
+# Refactoring: Seams 🧵
+## Linking: Classpath
+
+```kotlin
+import fit.Parser
+
+internal class FitFilter {
+  private val parser: Parser =
+  Parser.newInstance()
+}
+```
+
+^ JVM takes classpath as an argument to load classes.
+
+^ Can override with custom implementations.
+
+---
+
+# Refactoring: Seams 🧵
+## Linking: Classpath
+
+```kotlin
+buildscript {
+  dependencies {
+    val googleServicesVersion = libs.versions.google.services.get()
+    classpath("com.google.gms:google-services:$googleServicesVersion")
+  }
+}
+```
+
+^ You will have already configured the classpath in your project using plugins
+
+---
+
+# Refactoring: Seams 🧵
+## Objects
+
+```kotlin
+internal class FitFilter {
+  private val parser: Parser =
+  Parser.newInstance()
+}
+```
+
+^ Objects most useful, allow for replacement of behaviour without modifying implementation.
+
+^ Most common type of refactoring, utilises existing compiler configuration.
+
+---
+
+# Refactoring: Seams 🧵
+## Objects: Refactoring
+
+[.code-highlight: 9-15]
+
+```diff
+===================================================================
+diff --git a/FitFilter.kt b/FitFilter.kt
+
+- internal class FitFilter {
+-   private val parser: Parser =
+-     Parser.newInstance()
+- }
+-
++ internal fun interface FitFilter {
++   fun filter(input: String): String
++ }
++
++ internal fun FitFilter(parser: Parser) = FitFilter { input ->
+  +   parser.parse(input)
++ }
+```
+
+^ Requires modern refactoring techniques, good understanding of idiomatic code.
+
+---
+
+# Refactoring: Seams 🧵
+## Objects: Refactoring
+
+![right](intellij-refactor-overlay.png)
+
+^ IntelliJ assists with these techniques in a few clicks.
+
+---
+
+# Refactoring
+## Dependency Injection
+
+^ Not to be confused with dependency frameworks such as Dagger
+
+^ Dependency injection is a coding paradigm
+
+---
+
+# Refactoring
+## Dependency Injection
 
 [.code-highlight: 8-12]
 
@@ -304,7 +473,8 @@ diff --git a/CoffeeMaker.kt b/CoffeeMaker.kt
 
 ---
 
-# Refactoring: Dependencies
+# Refactoring
+## Dependency Injection
 
 [.code-highlight: 4-5, 7-13, 15]
 
@@ -326,9 +496,9 @@ diff --git a/CoffeeMaker.kt b/CoffeeMaker.kt
 + internal class Thermosiphon : Pump {
 ```
 
-^ Reduce dependency scope by narrowing type or interface.
+^ Reducing the behaviour of Thermosiphon by better defining its requirements
 
-^ More examples later...
+^ Thereby reduce dependency scope by narrowing type
 
 ---
 
@@ -346,10 +516,14 @@ internal class CoffeeMaker(
 
 ^ With a seam we can start testing.
 
+^ Why do we replace depenendices?
+
 ---
 
 # Testing: Dependencies
 ## Dependency Injection
+
+[.code-highlight: 1]
 
 ```kotlin
 val heater = NuclearFusionHeater() // Expensive!
@@ -365,6 +539,8 @@ assertTrue(maker.brew())
 ^ Unit tests should be fast, should run in milliseconds.
 
 ^ Expensive dependencies should be replaced.
+
+^ Achieving nuclear fusion is probably overkill for a unit test
 
 ---
 
@@ -384,7 +560,7 @@ val maker = CoffeeMaker(
 assertTrue(maker.brew())
 ```
 
-^ Not just performance, tests should be idempotent.
+^ Not just performance, tests should be stateless (or idempotent [eye-dem-potent]).
 
 ^ Disk operations are stateful, can change.
 
@@ -433,7 +609,7 @@ assertTrue(maker.brew())
 # Testing: Dependencies
 ## Mockito
 
-"Tasty mocking framework for unit tests in Java".
+### "Tasty mocking framework for unit tests in Java".
 
 ^ Mockito is a popular mocking framework for Java.
 
@@ -618,6 +794,21 @@ assertTrue(announced) // False: We only stubbed two names!
 ---
 
 # Testing: Mocks
+## Data Classes
+
+^ Some might be tempted to mock data classes
+
+---
+
+# Testing: Mocks
+## ~~Data Classes~~
+### Just Don't.
+
+^ Data classes should never be mocked
+
+---
+
+# Testing: Mocks
 ## Default Answers
 
 ```kotlin
@@ -686,6 +877,8 @@ Expensive real implementations replaced by expensive mocks.
 - Reflection 😱
 
 ^ Ironically, mocks are expensive to create, and expensive to execute.
+
+^ Mockito stores every interaction with mocks, small aggregations accumulate quickly.
 
 ^ Authors have optimized well, but expensive due to nature of operation.
 
@@ -779,10 +972,10 @@ Framework generated mocks introduce a shared, mutable, dynamic, runtime declarat
 
 ---
 
-# Unpredictability: Costs
+# [fit] Unpredictability: Costs
 ## Peer Review
 
-![right](waiting-code-review.jpeg)
+![right 90%](waiting-code-review.jpeg)
 
 ^ Hard to review code that is unpredictable.
 
@@ -792,7 +985,7 @@ Framework generated mocks introduce a shared, mutable, dynamic, runtime declarat
 
 [.background-color: #fff]
 
-# Unpredictability: Costs
+# [fit] Unpredictability: Costs
 ## Risk of Bugs
 
 ![50% right](monkeyuser-feature.png)
@@ -1143,108 +1336,6 @@ In-memory implementations for local or network overrides.
 
 No code should be forced to depend on methods it does not use.
 
-
----
-# Anti-Patterns and Code Smell
-## Refactoring: Seams 🧵
-
-^ Large clusters hard to break into testable units.
-
-^ Seams used to separate behaviour, without editing.
-
----
-
-# Refactoring: Seams 🧵
-## Preprocessing
-
-- Kotlin Symbol Processing
-- Kotlin Compiler Plugins
-
-^ Supported in Kotlin with KSP and Compiler Plugins, it is rarely used for this purpose.
-
-^ Poor code clarity, but allows for sensing without modifying code.
-
----
-
-# Refactoring: Seams 🧵
-## Linking: Classpath
-
-```kotlin
-import fit.Parser
-
-internal class FitFilter {
-  private val parser: Parser =
-    Parser.newInstance()
-}
-```
-
-^ JVM takes classpath as an argument to load classes.
-
-^ Can override with custom implementations.
-
----
-
-# Refactoring: Seams 🧵
-## Linking: Classpath
-
-```kotlin
-buildscript {
-    dependencies {
-        val googleServicesVersion = libs.versions.google.services.get()
-        classpath("com.google.gms:google-services:$googleServicesVersion")
-    }
-}
-```
-
-^ You will have already configured the classpath in your project using plugins
-
----
-
-# Refactoring: Seams 🧵
-## Objects
-
-```kotlin
-internal class FitFilter {
-  private val parser: Parser =
-    Parser.newInstance()
-}
-```
-
-^ Objects most useful, allow for replacement of behaviour without modifying implementation.
-
-^ Most common type of refactoring, utilises existing compiler configuration.
-
----
-
-# Refactoring: Seams 🧵
-## Objects: Refactoring
-
-![right](intellij-refactor-overlay.png)
-
-[.code-highlight: 9-15]
-
-```diff
-===================================================================
-diff --git a/FitFilter.kt b/FitFilter.kt
-
-- internal class FitFilter {
--   private val parser: Parser =
--     Parser.newInstance()
-- }
-- 
-+ internal fun interface FitFilter {
-+   fun filter(input: String): String
-+ }
-+
-+ internal fun FitFilter(parser: Parser) = FitFilter { input ->
-+   parser.parse(input)
-+ }
-```
-
-^ Requires modern refactoring techniques, good understanding of idiomatic code.
-
-^ IntelliJ assists with these techniques in a few clicks.
-
 ---
 
 # Everything is an API
@@ -1273,7 +1364,7 @@ Build versatile and scalable applications with careful API decisions.
 
 ---
 
-# android.content.Context
+# [fit] android.content.Context
 
 ![right](android-context-structure.png)
 
@@ -1299,11 +1390,37 @@ Build versatile and scalable applications with careful API decisions.
 
 ---
 
+# Recap
+## Extreme Programming
+
+^ It's important to consider this as another extreme coding approach
+
+^ Like code katas, tdd or offensive code, good to practice
+
+^ Choose when is most appropriate, but consider all options!
+
+---
+
+# Recap
+
+- Mocks
+- Stubs
+- Fakes
+
+^ Mocks are designed with APIs to verify interactions, black magic voodoo, Java reflection
+
+^ Stubs perform bare minimum to allow your tests to pass
+
+^ Fakes are hand coded implementations use for testing
+
+---
+
 # Conclusion
 
 - Don’t mock classes you don’t own.
 - Don’t mock classes you do own.
-- Don’t mock classes (except Context).
+- Don’t mock classes.
+- **Except `Context`.**
 
 ---
 
@@ -1318,7 +1435,9 @@ Build versatile and scalable applications with careful API decisions.
 
 # Thanks!
 
-ashdavies.dev/talks/beyond-the-mockery-berlin/
+^ Slides available on my website ashdavies.dev
+
+^ This Year in Android tomorrow same room at 11:40
 
 ---
 
@@ -1332,9 +1451,14 @@ martinfowler.com/articles/practical-test-pyramid.html
 monkeyuser.com
 - **Michael Feathers: Working Effectively with Legacy Code**
 ISBN: 978-0-13117-705-5
+- **Sam Edwards: Wrapping Mockito Mocks for Reusability**
+handstandsam.com/2020/06/08/wrapping-mockito-mocks-for-reusability
 - **Steve Freeman, Nat Pryce: Growing Object-Oriented Software, Guided by Tests**
 ISBN: 978-0-32150-362-6
 - **Testing on the Toilet: Don't mock Types You Don't Own**
 testing.googleblog.com/2020/07/testing-on-toilet-dont-mock-types-you.html
 - **Testing on the Toilet: Know Your Test Doubles**
 testing.googleblog.com/2013/07/testing-on-toilet-know-your-test-doubles.html
+- **Marcello Galhardo: No Mocks Allowed**
+marcellogalhardo.dev/posts/no-mocks-allowed
+
