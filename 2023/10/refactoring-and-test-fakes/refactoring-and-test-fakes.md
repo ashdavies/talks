@@ -6,6 +6,7 @@ header: Product Sans
 slide-transition: true
 text-strong: Google Sans 18pt
 text: Google Sans 18pt
+theme: Simple, 1
 
 [.footer: ]
 
@@ -46,100 +47,11 @@ Denoting or relating to software or hardware that has been superseded but is dif
 
 ---
 
-# Testing
+# Uncertainty
 
-^ Covering your code with tests can give confidence your changes don't break anything.
+![right](unstable-bridge.webp)
 
-^ Michael Feathers describes this as "Cover and Modify" instead of "Edit and Pray".
-
----
-
-# Testing: Awareness 👀
-
-^ Writing test code at the same time as production code gives you a better perspective of edge cases.
-
----
-
-# Testing: Architecture 🏗
-
-^ Poor code is often synonymous with poor architecture, and poor testability.
-
----
-
-# Testing: Confidence 💪
-
-^ Confidence in your tests, means confidence in your code, and confidence in refactoring.
-
----
-
-# Testing: Documentation 📖
-
-^ Tests documentation often provides better insight into the purpose of domain behaviour.
-
----
-
-# Testing: Stability 💯
-
-^ Well written unit tests provide robust protection, and early feedback, against regressions.
-
----
-
-# Testing
-
-^ Not my goal to convince you to write tests, but to to write better tests.
-
-^ If you're not interested in writing tests, this talk may not be for you.
-
----
-
-[.build-lists: true]
-
-# Testing
-
-![right 100%](test-pyramid.png)
-
-- Unit
-- Instrumentation
-- Integration
-- End-to-End
-- Monkey
-- Smoke
-
-^ Focus on unit testing, important to understand types of tests.
-
-^ Diverse suite of tests, provides more robust regression protection.
-
----
-
-[.background-color: #fff]
-
-![original 35%](monkeyuser-fixing-unit-tests.png)
-
-^ Fixing unit tests, feels like navigating a minefield, in the dark, with a blindfold.
-
-^ History, difficult to follow; code, difficult to understand.
-
-^ Tests, difficult to run; results, difficult to interpret.
-
----
-
-# Anti-Patterns and Code Smell
-
-^ It's not until we start writing tests that we realise how difficult it is to test our code.
-
-^ This is often a sign that our code is not structured well.
-
----
-
-# Seams 🧵
-
-^ A seam is the place where two pieces of fabric meet
-
-^ This translates similarly in programming
-
-^ Logical separation point between two units of code
-
-^ The separation allows you to adjust the behaviour without changing the code
+^ How to proceed with an existing project with certainty
 
 ---
 
@@ -155,42 +67,96 @@ Denoting or relating to software or hardware that has been superseded but is dif
 
 ---
 
-# Extreme Programming 🤘
-## Test-Driven Development
+# Inheritance
 
-^ Tested code is more structured, with lower cognitive load, and easier to understand.
+![right fit](cpp-inheritance.webp)
 
-^ Led to "extreme" programming practices like test driven development.
+^ Complex hierarchy of inheritance with unclear responsibilities, invisible behaviour
 
-^ Writing tests before writing code.
+^ Often from an attempt to reuse code, shared code is moved to an abstract class
+
+^ Further adds to the unpredictable nature of our system
+
+---
+
+[.footer: Photo by Richard Horvath on Unsplash]
+[.footer-style: #CCC]
+
+# Mutability
+
+![right](blue-red-light.jpeg)
+
+^ Unnecessary mutability introduces change into our system
+
+^ Undetermined change causes unpredictably and unreliability
+
+^ Makes it more difficult to assert an expected state
+
+---
+
+# Unpredictability
+
+![right](dice-in-motion.jpeg)
+
+^ Unpredictable code is by definition difficult to predict, difficult to assert expectations
+
+^ Uncertainty caused by polymorphism, behaves differently
+
+^ Backup code, unnecessary checks
+
+---
+
+# ?
+
+^ Many approaches to manage these issues available to us
+
+^ Ultimately means choosing the right tool for the job
 
 ---
 
 # Extreme Programming 🤘
-## Offensive Code <🖕>
 
-^ Another example of extreme programming is offensive code (or programming)
+^ Extreme coding practices intentionally takes best practices to an extreme level
 
-^ Offensive (or fail first) code, removes fallback behaviour, fully utilise exceptions
+^ Some consider it to be a poor use of time, need to go quick and fix later (shortsighted)
 
----
-
-# Anti-Patterns and Code Smell
-> My God, what is that smell? Oh.
--- Veronica Corningstone
+^ Even if not used all the time, very helpful to practice and improve your ability as an engineer
 
 ---
 
-> Debugging is like being the detective in a crime movie where you are also the murderer.
--- Filipe Fortes
+# Pair Programming
 
-^ Git blame will always reveal you the suspect.
+![right 35%](monkeyuser-pair-programming.png)
+
+^ Most commonly includes approaches like pair programming
+
+^ Working closely with a colleague for a single task
+
+^ Intense scrutiny useful for difficult tasks
 
 ---
 
-# Kotlin (noun)
+# Test Driven Development
 
-### Awesome.
+![right 35%](monkeyuser-applied-tdd.png)
+
+^ Test driven development focuses on writing tests before the implementation
+
+^ Helps reframe your understanding of requirements, often leading to leaner solutions
+
+---
+
+# Offensive Programming <🖕>
+
+^ Another approach embraces errors as a behaviour to disprove developer assumptions
+
+^ Removes unnecessary checks, polymorphisms, and fallback behaviour sometimes
+
+^ Source of errors are no longer obscured, can be resolved much easier
+
+---
+
+![10%](kotlin-logo.png)
 
 ^ Guiding principle of Kotlin is to make it easy to write good code.
 
@@ -199,14 +165,12 @@ Denoting or relating to software or hardware that has been superseded but is dif
 ---
 
 # Kotlin: Mutability
-## Risks of Mutation
 
 ^ What is mutability, and what are the risks of mutation?
 
 ---
 
 # Kotlin: Mutability
-## Risks of Mutation
 
 ```kotlin
 fun sumAbsolute(list: MutableList<Int>): Int {
@@ -220,7 +184,6 @@ fun sumAbsolute(list: MutableList<Int>): Int {
 ---
 
 # Kotlin: Mutability
-## Risks of Mutation
 
 ```kotlin
 private val GROUNDHOG_DAY = TODO("java.util.Date()")
@@ -269,7 +232,7 @@ fun Set<T>.toMutableSet(): MutableSet<T>
 
 ---
 
-# org.jetbrains.kotlinx:kotlinx-collections-immutable
+# [fit] org.jetbrains.kotlinx:kotlinx-collections-immutable
 
 ```kotlin
 fun Iterable<T>.toPersistentList(): PersistentList<T>
@@ -314,77 +277,94 @@ open class Base // Class is open for inheritance
 
 ---
 
-# Kotlin: Immutability
-## All-Open Compiler Plugin
+[.footer: Photo by DiEGO MüLLER on Unsplash]
+[.footer-style: #CCC]
 
-`org.jetbrains.kotlin.plugin.allopen`
+# Testing
 
-^ All-Open plugin for open classes as required for frameworks such as Spring AOP.
+![right](safety-harness.jpeg)
+
+^ Automated tests can act as a safety harness to give you confidence when changing code
+
+^ Well written unit tests provide robust protection, and early feedback, against regressions
+
+^ Poor code is often synonymous with poor architecture, and poor testability
+
+^ Not my goal to convince you to write tests...
+
+---
+
+[.footer: Photos by Daniel Romero, Taylor Vick on Unsplash]
+[.footer-style: #CCC]
+
+![](android-smartphone.jpeg)
+
+![](cable-network.jpeg)
+
+^ Testing approaches come in many forms, chiefly manual or automatic
+
+^ Manual tests by QA engineers, developers verify or reproduce errors
+
+^ Automated tests run on a CI, take the form of unit or integrated tests
+
+---
+
+[.build-lists: true]
+
+# Testing
+
+![right 100%](test-pyramid.png)
+
+^ Best to complement test setup with a comprehensive test suite for robust regression protection
+
+^ Unit tests provide most fine-grained coverage
 
 ---
 
 # Anti-Patterns and Code Smell
-## Refactoring: Seams 🧵
 
-^ Large clusters hard to break into testable units.
+^ It's not until we start writing tests that we realise how difficult it is to test our code.
 
-^ Seams used to separate behaviour, without editing.
+^ This is often a sign that our code is not structured well.
 
----
+^ Most established code bases have a long and colourful history with changing requirements
 
-# Refactoring: Seams 🧵
-## Preprocessing
-
-- Kotlin Symbol Processing
-- Kotlin Compiler Plugins
-
-^ Supported in Kotlin with KSP and Compiler Plugins, it is rarely used for this purpose.
-
-^ Poor code clarity, but allows for sensing without modifying code.
+^ Accumulated tech debt composed of anti-patterns, code smells, poor decisions
 
 ---
 
-# Refactoring: Seams 🧵
-## Linking: Classpath
+# Refactoring
 
-```kotlin
-import fit.Parser
+^ Because of this it is necessary to refactor to make the code testable in the first place
 
-internal class FitFilter {
-  private val parser: Parser =
-  Parser.newInstance()
-}
-```
+^ In a dead lock between our requirement on automated tests to refactor with confidence
 
-^ JVM takes classpath as an argument to load classes.
-
-^ Can override with custom implementations.
+^ Find a compromise by refactoring without changing behaviour
 
 ---
 
-# Refactoring: Seams 🧵
-## Linking: Classpath
+[.footer: Photo by Jackson David on Unsplash]
+[.footer-style: #CCC]
 
-```kotlin
-buildscript {
-  dependencies {
-    val googleServicesVersion = libs.versions.google.services.get()
-    classpath("com.google.gms:google-services:$googleServicesVersion")
-  }
-}
-```
+# Seams
 
-^ You will have already configured the classpath in your project using plugins
+![right](white-textile.jpeg)
+
+^ A seam is the place where two pieces of fabric meet
+
+^ This translates similarly in programming
+
+^ Logical separation point between two units of code
+
+^ The separation allows you to adjust the behaviour without changing the code
 
 ---
 
-# Refactoring: Seams 🧵
-## Objects
+# Refactoring: Seams
 
 ```kotlin
 internal class FitFilter {
-  private val parser: Parser =
-  Parser.newInstance()
+  private val parser: Parser = Parser.newInstance()
 }
 ```
 
@@ -394,18 +374,16 @@ internal class FitFilter {
 
 ---
 
-# Refactoring: Seams 🧵
-## Objects: Refactoring
+# Refactoring: Seams
 
-[.code-highlight: 9-15]
+[.code-highlight: 8-15]
 
 ```diff
 ===================================================================
 diff --git a/FitFilter.kt b/FitFilter.kt
 
 - internal class FitFilter {
--   private val parser: Parser =
--     Parser.newInstance()
+-   private val parser: Parser = Parser.newInstance()
 - }
 -
 + internal fun interface FitFilter {
@@ -413,7 +391,7 @@ diff --git a/FitFilter.kt b/FitFilter.kt
 + }
 +
 + internal fun FitFilter(parser: Parser) = FitFilter { input ->
-  +   parser.parse(input)
++   parser.parse(input)
 + }
 ```
 
@@ -421,8 +399,7 @@ diff --git a/FitFilter.kt b/FitFilter.kt
 
 ---
 
-# Refactoring: Seams 🧵
-## Objects: Refactoring
+# Refactoring: Seams
 
 ![right](intellij-refactor-overlay.png)
 
@@ -589,25 +566,16 @@ assertTrue(maker.brew())
 
 ---
 
-# Testing: Dependencies
+# Test Doubles
 ## Mocks
 
 ^ Mocks are a type of test double that allow you to specify expectations.
 
-^ Often used to verify interactions with dependencies.
+^ Often used to verify interactions with dependencies
 
 ---
 
-# Testing: Dependencies
-## Mockito
-
-### "Tasty mocking framework for unit tests in Java".
-
-^ Mockito is a popular mocking framework for Java.
-
----
-
-# Testing: Mocks
+# Test Doubles: Mocks
 
 ```kotlin
 val heater = mock<Heater>()
@@ -627,7 +595,7 @@ assertTrue(maker.brew())
 
 ---
 
-# Testing: Mocks
+# Test Doubles: Mocks
 
 ```kotlin
 val heater = mock<Heater>()
@@ -645,7 +613,7 @@ assertTrue(maker.brew()) // ⚠ Fails!
 
 ---
 
-# Testing: Mocks
+# Test Doubles: Mocks
 
 [.code-highlight: 1-7]
 
@@ -666,47 +634,22 @@ val maker = CoffeeMaker(
 assertTrue(maker.brew())
 ```
 
-^ Configuring the mocks with an implementation.
+^ Configuring the mocks with an implementation
 
-^ Mockito provides an extensive DSL for building mocks.
-
----
-
-# Testing: Mocks
-
-javadoc.io/doc/
-  org.mockito/mockito-core/latest/
-  org/mockito/Mockito.html
-
-^ Mockito DSL is extensive, and can be used to build complex mocks.
+^ Mocking libraries provide extensive DSLs for building mocks
 
 ---
 
-# Testing: Mocks
+# Test Doubles: Mocks
 ## Footguns 🦶🔫
 
-^ Mockito is a powerful tool, easy to shoot yourself in the foot.
+^ Mocks are a powerful tool, easy to shoot yourself in the foot
 
-^ Declaring a mock implementation at runtime is complicated.
-
----
-
-# Testing: Mocks
-## Accidental Invocation
-
-```kotlin
-val heater = mock<Heater> {
-  on { isHeating } doAnswer { true } // Actual invocation!
-}
-```
-
-^ When constructing mocks, and spying objects, Mockito will actually invoke the method.
-
-^ Goes unnoticed if method has no implementation, returns null.
+^ Declaring a mock implementation at runtime is complicated
 
 ---
 
-# Testing: Mocks
+# Test Doubles: Mocks
 ## Accidental Invocation
 
 ```kotlin
@@ -715,11 +658,15 @@ spy(emptyList<String>()) {
 }
 ```
 
-^ Actually documented as an important gotcha
+^ When constructing mocks, and spying objects, mocks will actually invoke the method
+
+^ Goes unnoticed if method has no implementation, returns null
+
+^ When spying actual implementations will throw
 
 ---
 
-# Testing: Mocks
+# Test Doubles: Mocks
 ## API Sensitivity
 
 ```kotlin
@@ -738,7 +685,7 @@ val heater = mock<Heater> {
 
 ---
 
-# Testing: Mocks
+# Test Doubles: Mocks
 ## API Sensitivity
 
 [.code-highlight: 2]
@@ -760,39 +707,14 @@ val heater = mock<Heater> {
 
 ---
 
-# Testing: Mocks
-## API Sensitivity
-
-```kotlin
-internal interface CoffeeDistributor {
-  fun announce(vararg name: String): Boolean
-}
-
-val mockDistributor = mock<CoffeeDistributor> {
-  on { announce(any(), any()) } doReturn true
-}
-
-val announced = mockDistributor.announce(
-  "Steve", "Roger", "Stan",
-)
-
-assertTrue(announced) // False: We only stubbed two names!
-```
-
-^ Mocks will only match exact method signatures configured.
-
-^ No fault of the library, but can be a source of bugs.
-
----
-
-# Testing: Mocks
+# Test Doubles: Mocks
 ## Data Classes
 
 ^ Some might be tempted to mock data classes
 
 ---
 
-# Testing: Mocks
+# Test Doubles: Mocks
 ## ~~Data Classes~~
 ### Just Don't.
 
@@ -800,66 +722,32 @@ assertTrue(announced) // False: We only stubbed two names!
 
 ---
 
-# Testing: Mocks
+# Test Doubles: Mocks
 ## Default Answers
 
-```kotlin
-val heater: Heater = mock() // No default answer
-val isHeating: Boolean = heater.isHeating // Null
+[.code-highlight: 5-8]
+
+```diff
+===================================================================
+diff --git a/PumpTest.kt b/PumpTest.kt
+
+- val heater: Heater = mock()
++ val heater: Heater = mock(defaultAnswer = RETURNS_SMART_NULLS)
++
++ val isHeating: Boolean = heater.isHeating // false
 ```
 
-^ By default Mockito returns null for all methods without stubbing.
+^ By default mocks returns null for all methods without stubbing
 
-^ Unexpected nulls throw deep in the execution stack.
+^ Unexpected nulls throw deep in the execution stack
 
----
+^ Default answers adjust this behaviour
 
-# Testing: Mocks
-## Default Answers
-
-```kotlin
-val heater: Heater = mock(defaultAnswer = RETURNS_SMART_NULLS)
-val isHeating: Boolean = heater.isHeating // false
-```
-
-^ By default Mockito returns null for all methods without stubbing.
-
-^ Unexpected nulls throw deep in the execution stack.
+^ Seek help
 
 ---
 
-# Testing: Mocks
-## Default Answers
-
-- CALLS\_REAL\_METHODS
-- RETURNS\_DEEP\_STUBS
-- RETURNS\_DEFAULTS
-- RETURNS\_MOCKS
-- RETURNS\_SELF
-- RETURNS\_SMART\_NULLS
-
-^ Mockito provides a number of default answers.
-
-^ Seek help.
-
----
-
-# Testing: Mocks
-## Type Safety
-
-```java
-public interface OngoingStubbing<T> {
-  OngoingStubbing<T> thenAnswer(Answer<?> answer);
-}
-```
-
-^ Mockito Kotlin provides reified type safety.
-
-^ Underlying API much more dangerous.
-
----
-
-# Testing: Mocks
+# Test Doubles: Mocks
 ## Performance
 
 Expensive real implementations replaced by expensive mocks.
@@ -870,38 +758,13 @@ Expensive real implementations replaced by expensive mocks.
 
 ^ Ironically, mocks are expensive to create, and expensive to execute.
 
-^ Mockito stores every interaction with mocks, small aggregations accumulate quickly.
+^ Mocks stores every interaction with mocks, small aggregations accumulate quickly.
 
 ^ Authors have optimized well, but expensive due to nature of operation.
 
 ---
 
-# Testing: Mocks
-## Performance
-
-```kotlin
-internal class CoffeeMakerTest {
-  
-  private lateinit var heater: Heater
-  
-  @Before
-  fun setUp() {
-    heater = mock {
-      on { isHeating } doAnswer { true }
-    }
-  }
-}
-```
-
-^ Oft seen practice of creating mocks in `@Before` methods.
-
-^ Anecdotal, reports of improved performance.
-
-^ Mutable state between tests
-
----
-
-# Testing: Mocks
+# Test Doubles: Mocks
 ## Dynamic Mutability
 
 [.code-highlight: 12-15]
@@ -931,7 +794,7 @@ internal class CoffeeMakerTest {
 
 ---
 
-# Testing: Mocks
+# Test Doubles: Mocks
 ## Dynamic Mutability
 
 ![right](cat-kotti-judgemental.jpeg)
@@ -1012,7 +875,7 @@ Framework generated mocks introduce a shared, mutable, dynamic, runtime declarat
 
 ---
 
-# Testing: Mocks
+# Test Doubles: Mocks
 
 ## Don't Mock Classes You Don't Own
 
@@ -1040,31 +903,20 @@ Framework generated mocks introduce a shared, mutable, dynamic, runtime declarat
 
 ---
 
-# Testing: Mocks
-## Considerations
-
-^ Not shitting on Mockito, it's a great tool.
-
-^ Extensive features, powerful DSL.
-
-^ Overused.
-
----
-
-# Testing: Mocks
+# Test Doubles: Mocks
 ## Interaction Verification 👎
 
-^ Biggest problem with mocks, they verify the interaction, not the outcome.
+^ Biggest problem with mocks, they verify the interaction, not the outcome
 
-^ Doesn't matter if invocation is correct, if the outcome is wrong.
+^ Doesn't matter if invocation is correct, if the outcome is wrong
 
-^ At some point, you're testing the language.
+^ At some point, you're testing the language
 
-^ This point deserves its own talk.
+^ This point deserves its own talk
 
 ---
 
-# Testing: Mocks
+# Test Doubles: Mocks
 ## What Now?
 
 ![right](pedro-monkey-puppet.gif)
@@ -1075,7 +927,7 @@ Framework generated mocks introduce a shared, mutable, dynamic, runtime declarat
 
 ---
 
-# Testing: Stubs
+# Test Doubles: Stubs
 
 ^ You may have already encountered stubs.
 
@@ -1083,7 +935,7 @@ Framework generated mocks introduce a shared, mutable, dynamic, runtime declarat
 
 ---
 
-# Testing: Stubs
+# Test Doubles: Stubs
 ## Simple
 
 ```kotlin
@@ -1102,7 +954,7 @@ internal object StubPump : Pump {
 
 ---
 
-# Testing: Stubs
+# Test Doubles: Stubs
 ## Idiomatic
 
 ```kotlin
@@ -1242,19 +1094,7 @@ Those who wrote the code are the most uniquely qualified to write the tests.
 
 ^ At the time of authoring, you had the most context.
 
----
-
-# Testing: Libraries
-
-- `androidx.compose.ui:ui-test-junit4`
-- `com.slack.circuit:circuit-test`
-- `io.ktor:ktor-server-test-host`
-- `io.ktor:ktor-client-mock`
-- `kotlinx-coroutines-test`
-
-^ Fortunately many SDK developers provide test artifacts.
-
-^ If you're an author, please consider doing so.
+^ Goes for library authors too
 
 ---
 
@@ -1300,46 +1140,27 @@ internal class InMemoryCoffeeStore : CoffeeStore {
 
 ---
 
-# Testing: In Memory
-## Bonus!
+# Be Better
 
-In-memory implementations for local or network overrides.
+^ Like Kotlin encourages us to use better practices by making poor practices uncomfortable
 
-^ Because we designed the code well, safe for production.
-
----
-
-[.background-color: #fff]
-
-# Reality
-
-![35% right](monkeyuser-production-ready.png)
-
-^ Don't always have luxury of working with good code.
+^ Better practices encourage us to write smaller interfaces
 
 ---
 
 [.background-color: #64b6a8]
+[.text: #fff]
 [.footer: Image: dribbble.com/shots/3251806-Interface-Segregation-Principle]
 
-# Interface Segregation Principle
+# Interface Segregation
 
-![80% right](interface-segration-principle.webp)
+![80% right](interface-segration-principle.jpg)
 
 No code should be forced to depend on methods it does not use.
 
----
+^ Solid design principles are a tired trope but this remains true
 
-# Everything is an API
-## [fit]ashdavies.dev/talks/everything-is-an-api-berlin-droidcon/
-
-Build versatile and scalable applications with careful API decisions.
-
-![right](everything-is-an-api.jpeg)
-
-^ Everything is an API, and APIs are everywhere.
-
-^ Talk at Berlin, London, and Chicago.
+^ Keep your interfaces lean, without assigning too much responsibility
 
 ---
 
@@ -1362,23 +1183,9 @@ Build versatile and scalable applications with careful API decisions.
 
 ^ The Android context is considered by many to be a "god object"
 
----
-
-# God Objects 🪽
-
 ^ God objects often reference a large number of distinct types, and/or unrelated methods.
 
 ^ Since they command so much, it's difficult to provide alternative implementations.
-
----
-
-# Ravioli Code 🥟 🤌
-
-^ The antithesis of the god principle is apparently referred to as Ravioli code.
-
-^ Either the Italians have a high opinion of themselves, or they've got it figured out.
-
-^ Ravioli code is not considers a good thing, but it's better than the alternative.
 
 ---
 
@@ -1394,34 +1201,24 @@ Build versatile and scalable applications with careful API decisions.
 ---
 
 # Recap
+## Shared Mutable State
 
-- Mocks
-- Stubs
-- Fakes
+^ Avoid like the plague, shared mutable state, rely upon immutability
+
+^ Your goal is to achieve an immutable unidirectonal data flow
+
+---
+
+# Recap
+## Test Doubles
 
 ^ Mocks are designed with APIs to verify interactions, black magic voodoo, Java reflection
+
+^ Spies are mocks on a real object
 
 ^ Stubs perform bare minimum to allow your tests to pass
 
 ^ Fakes are hand coded implementations use for testing
-
----
-
-# Conclusion
-
-- Don’t mock classes you don’t own.
-- Don’t mock classes you do own.
-- Don’t mock classes.
-- **Except `Context`.**
-
----
-
-> Every existing thing is born without reason, prolongs itself out of weakness, and dies by chance.
--- Jean-Paul Sartre
-
-^ Popularised in programming with the mis-attribution of the paraphrased quote.
-
-^ Every line of code is written without reason, maintained out of weakness, and deleted by chance
 
 ---
 
