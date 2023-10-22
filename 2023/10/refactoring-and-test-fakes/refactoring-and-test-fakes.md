@@ -232,7 +232,8 @@ fun Set<T>.toMutableSet(): MutableSet<T>
 
 ---
 
-# [fit] org.jetbrains.kotlinx:kotlinx-collections-immutable
+# Kotlin: Immutability
+## [fit] `org.jetbrains.kotlinx:kotlinx-collections-immutable`
 
 ```kotlin
 fun Iterable<T>.toPersistentList(): PersistentList<T>
@@ -263,17 +264,6 @@ fun Iterable<T>.toPersistentSet(): PersistentSet<T>
 By default, Kotlin classes are final – they can't be inherited
 
 ^ Finally, classes final by default; encourages composition over inheritance.
-
----
-
-# Kotlin: Immutability
-## Final Concretions 🧱
-
-```kotlin
-open class Base // Class is open for inheritance
-```
-
-^ Kotlin classes can be made open, but this is a conscious decision.
 
 ---
 
@@ -916,14 +906,16 @@ Framework generated mocks introduce a shared, mutable, dynamic, runtime declarat
 
 ---
 
-# Test Doubles: Mocks
-## What Now?
+# Test Doubles
+## Mocks
 
 ![right](pedro-monkey-puppet.gif)
 
-^ Mockito has an extensive DSL for building runtime declarations.
+^ So if mocks are so bad, what should be the used instead
 
-^ What also has an extensive DSL for building classes? Kotlin.
+^ Mocking libraries include extensive DSLs for building runtime declarations
+
+^ What also has an extensive DSL for building classes? Kotlin
 
 ---
 
@@ -1042,9 +1034,7 @@ public class FakePump(private val onPump: (Boolean) -> Boolean) : Pump {
 ## Additional Behaviour
 
 ```kotlin
-private class DelegatingHeater(
-  private val delegate: Heater,
-) : Heater by delegate {
+class DelegatingHeater(private val delegate: Heater) : Heater by delegate {
 
   private val _drinks = mutableListOf<Any>()
   val drinks: List<Any> by ::_drinks
@@ -1067,17 +1057,6 @@ private class DelegatingHeater(
 ^ Fakes ideal because you define the behaviour.
 
 ^ Who is responsible for writing fakes?
-
----
-
-[.background-color: #fff]
-
-# Testing: Fakes
-## Responsibility
-
-![fit right](uncle-sam-wants-you.jpeg)
-
-^ Yep, you.
 
 ---
 
