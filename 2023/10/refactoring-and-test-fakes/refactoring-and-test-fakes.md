@@ -53,6 +53,10 @@ Denoting or relating to software or hardware that has been superseded but is dif
 
 ^ How to proceed with an existing project with certainty
 
+^ Krux of the problem, uncertainty means behaviour is undeterministic, difficult to test, difficult to predict
+
+^ Easy to judge, but what causes this?
+
 ---
 
 # Coupling 🔌
@@ -64,6 +68,8 @@ Denoting or relating to software or hardware that has been superseded but is dif
 ^ Highly coupled code is difficult to separate, makes it hard to find a seam
 
 ^ Loosely coupled code is easier to structure
+
+^ Loose cohesion means a limited API surface, less exposure, less risk
 
 ---
 
@@ -100,9 +106,9 @@ Denoting or relating to software or hardware that has been superseded but is dif
 
 ^ Unpredictable code is by definition difficult to predict, difficult to assert expectations
 
-^ Uncertainty caused by polymorphism, behaves differently
+^ Uncertainty caused by polymorphism, different execution paths behave differently
 
-^ Backup code, unnecessary checks
+^ Backup code, unnecessary checks, often considered as resilience, actually creates noise
 
 ---
 
@@ -150,7 +156,7 @@ Denoting or relating to software or hardware that has been superseded but is dif
 
 ^ Another approach embraces errors as a behaviour to disprove developer assumptions
 
-^ Removes unnecessary checks, polymorphisms, and fallback behaviour sometimes
+^ Removes unnecessary checks, polymorphisms, and fallback behaviour
 
 ^ Source of errors are no longer obscured, can be resolved much easier
 
@@ -159,6 +165,8 @@ Denoting or relating to software or hardware that has been superseded but is dif
 ![10%](kotlin-logo.png)
 
 ^ Guiding principle of Kotlin is to make it easy to write good code.
+
+^ Encouraging developers by making poor code uncomfortable.
 
 ^ Primary tenet of that is the concept of mutability.
 
@@ -204,7 +212,9 @@ partyDate.month = partyDate.month + 1
 
 ^ Shared mutable state, causes race conditions, non-deterministic behaviour.
 
-^ Thread-safe confinement, mutex, semaphores, help mitigate this risk.
+^ Risks can be mitigated with thread-safe confinement, mutex, semaphores.
+
+^ Ultimately, better architecture will prevent these issues.
 
 ---
 
@@ -212,6 +222,8 @@ partyDate.month = partyDate.month + 1
 ## Unidirectional Data Flow 🏆
 
 ^ Ensures predictable state, easier to find bugs, replay events, predict application state.
+
+^ Many architectures, MVI, MVVM, etc, not important so long as you ensure a unidirectonal data flow.
 
 ---
 
@@ -265,6 +277,8 @@ By default, Kotlin classes are final – they can't be inherited
 
 ^ Finally, classes final by default; encourages composition over inheritance.
 
+^ Ultimately the best tool in our arsenal is...
+
 ---
 
 [.footer: Photo by DiEGO MüLLER on Unsplash]
@@ -280,7 +294,7 @@ By default, Kotlin classes are final – they can't be inherited
 
 ^ Poor code is often synonymous with poor architecture, and poor testability
 
-^ Not my goal to convince you to write tests...
+^ Not my goal to convince you to write tests, you probably already know this
 
 ---
 
@@ -344,9 +358,11 @@ By default, Kotlin classes are final – they can't be inherited
 
 ^ This translates similarly in programming
 
-^ Logical separation point between two units of code
+^ Logical separation point between two pieces of code
 
 ^ The separation allows you to adjust the behaviour without changing the code
+
+^ Many different language dependent techniques for doing so
 
 ---
 
@@ -358,7 +374,9 @@ internal class FitFilter {
 }
 ```
 
-^ Objects most useful, allow for replacement of behaviour without modifying implementation.
+^ In this talk I'll focus on object oriented refactoring
+
+^ Allows for replacement of behaviour without modifying implementation.
 
 ^ Most common type of refactoring, utilises existing compiler configuration.
 
@@ -386,6 +404,12 @@ diff --git a/FitFilter.kt b/FitFilter.kt
 ```
 
 ^ Requires modern refactoring techniques, good understanding of idiomatic code.
+
+^ Code adjusted here creates a functional interface with corresponding factory function.
+
+^ Most importantly takes the parser as an argument instead of creating it itself.
+
+^ Dependency inversion, relying upon dependency injection.
 
 ---
 
@@ -475,7 +499,7 @@ internal class CoffeeMaker(
 
 ^ With a seam we can start testing.
 
-^ Why do we replace depenendices?
+^ For some tests we may want to use different dependencies, why is that?
 
 ---
 
@@ -543,7 +567,7 @@ assertTrue(maker.brew())
 
 ^ Further, may want to isolate error prone dependencies.
 
-^ Test single unit in isolation.
+^ Testing our implementation in isolation
 
 ---
 
@@ -552,7 +576,7 @@ assertTrue(maker.brew())
 
 ^ Test doubles are a common technique to replace dependencies.
 
-^ Offer isolation, simplicity, isolation, and control.
+^ Offer simplicity, isolation, and control.
 
 ---
 
@@ -733,8 +757,6 @@ diff --git a/PumpTest.kt b/PumpTest.kt
 
 ^ Default answers adjust this behaviour
 
-^ Seek help
-
 ---
 
 # Test Doubles: Mocks
@@ -806,7 +828,7 @@ Framework generated mocks introduce a shared, mutable, dynamic, runtime declarat
 
 ^ Predictability is a underrated metric.
 
-^ Although hard to quantify.
+^ Much like tech debt, hard to quantify.
 
 ---
 
@@ -877,6 +899,8 @@ Framework generated mocks introduce a shared, mutable, dynamic, runtime declarat
 
 ^ Not exclusive to classes you don't own.
 
+^ Because here's the thing...
+
 ---
 
 # You Don't Own Your Code!
@@ -885,7 +909,7 @@ Framework generated mocks introduce a shared, mutable, dynamic, runtime declarat
 
 ### Be considerate.
 
-^ Naive developers may assume because they understand it, others will too.
+^ A naive developer may assume because they understand it, others will too.
 
 ^ If your code introduces cognitive complexity, it's not good code.
 
@@ -1152,7 +1176,7 @@ No code should be forced to depend on methods it does not use.
 
 ^ Advances in Jetpack, AndroidX, and Project Mainline have improved this.
 
-^ Still framework code to deal with.
+^ Many people ask me, but what about Context?
 
 ---
 
@@ -1165,6 +1189,8 @@ No code should be forced to depend on methods it does not use.
 ^ God objects often reference a large number of distinct types, and/or unrelated methods.
 
 ^ Since they command so much, it's difficult to provide alternative implementations.
+
+^ Can of course encapsulate usage of Context into individual responsibilities.
 
 ---
 
@@ -1205,9 +1231,9 @@ No code should be forced to depend on methods it does not use.
 
 ^ Slides available on my website ashdavies.dev
 
-^ This Year in Android tomorrow same room at 11:40
-
 ---
+
+[.build-lists: false]
 
 # Further Reading
 
