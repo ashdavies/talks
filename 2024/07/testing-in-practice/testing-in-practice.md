@@ -1249,11 +1249,143 @@ fun MenuStateProperties(
 
 ---
 
+# Testing
+
+### Assertions
+
+```kotlin
+data class WaterState(
+  val temperature: Int,
+)
+
+fun interface Heater {
+  fun heat(water: WaterState): WaterState
+}
+
+@Test
+fun `should produce water for English Breakfast Tea`() {
+  val heater = Heater { it.copy(temperature = 95 }
+  val thermosiphon = Thermosiphon(heater)
+  val state = thermosiphon.pump()
+
+  assertTrue(state.temperature > 95)
+}
+```
+
+^ It may be tempting to test class properties
+
+^ Tests may pass but they are brittle
+
+---
+
+# Testing
+
+### Assertions
+
+```kotlin
+ data class WaterState(
++  val filtered: Boolean,
+   val temperature: Int,
+ )
+
+fun interface Heater {
+  fun heat(water: WaterState): WaterState
+}
+
+@Test
+fun `should produce water for English Breakfast Tea`() {
+  val heater = Heater { it.copy(temperature = 95 }
+  val thermosiphon = Thermosiphon(heater)
+  val state = thermosiphon.pump()
+
+  assertTrue(state.temperature > 95)
+}
+```
+
+^ Our water can now be filtered
+
+^ Test no longer verifies good tea
+
+^ Tea without filtered water?!
+
+---
+
+# Testing
+
+### Assertions
+
+```kotlin
+data class WaterState(
+  val filtered: Boolean,
+  val temperature: Int,
+)
+
+fun interface Heater {
+  fun heat(water: WaterState): WaterState
+}
+
+@Test
+fun `should produce water for English Breakfast Tea`() {
+  val heater = Heater { it.copy(temperature = 95 }
+  val thermosiphon = Thermosiphon(heater)
+
+  val expected = WaterState(
+    filtered = true,
+    temperature = 95,
+  )
+
+  assertEquals(expected, thermosiphon.pump())
+}
+```
+
+^ Asserting equality against an expected state is more complete
+
+^ assertEquals provides a more informative failure message
+
+^ Sensitive to API changes, ensures tests stay up-to-date
+
+---
+
+# Testing
+
+### Assertions
+
+```kotlin
+data class WaterState(
+  val filtered: Boolean,
+  val temperature: Int,
+)
+
+fun interface Heater {
+  fun heat(water: WaterState): WaterState
+}
+
+@Test
+fun `should produce water for English Breakfast Tea`() { // Water can be unfiltered!
+  val heater = Heater { it.copy(temperature = 95 }
+  val thermosiphon = Thermosiphon(heater)
+  val state = thermosiphon.pump()
+
+  assertTrue(state.temperature > 95)
+}
+```
+
+---
+
 # Conclusion
+
+## Testing
+
+- Avoid using mocks unless absolutely necessary
+- Restrict test behaviour to function body
+- Keep individual tests idempotent
+- It's ok to repeat yourself
+
+## General
 
 - Prefer function interfaces wherever possible
 - Utilise factory functions to isolate behaviour
-- Avoid using mocks unless absolutely necessary
+- Break up dependencies to singular interfaces
 
 ^ But wait, there's more!
 
@@ -1304,6 +1436,7 @@ private fun isEven(number: Int): Boolean {
 ---
 
 [.text: line-height(2), text-scale(0.5)]
+[.footer: ]
 
 # Thank You!
 
@@ -1320,27 +1453,9 @@ ashdavies.dev
 - testing.googleblog.com/2024/02/increase-test-fidelity-by-avoiding-mocks.html
 - handstandsam.com/2020/06/08/wrapping-mockito-mocks-for-reusability/
 
-^ Keeping individual tests idempotent
+^ Simplifying factory function with parameter mapping
+^ Create function aliases for delegating behaviour
 
-^ Restrict test behaviour to function body
-
-^ Breaking up interface dependencies to testable SAM functions
-
-^ Avoiding archaic naming conventions (Impl)
-^ - Default companion object
-^ - Factory functions
-
-^ How to use factory functions to reduce test boilerplate
-
-^ Injecting test doubles using factory functions
-^ - Refactoring factory function as you add tests
-^ - Simplifying factory function with parameter mapping
-^ - Create function aliases for delegating behaviour
-
-^ Avoiding DRY in test scenarios
-
-^ Interface isolation of Context
-
-^ Use assert equals against expected objects
+^ DAMP vs DRY
 
 ^ Avoid testing object properties
