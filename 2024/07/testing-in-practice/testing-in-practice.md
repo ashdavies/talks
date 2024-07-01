@@ -2,6 +2,7 @@ autoscale: true
 build-lists: true
 footer: ashdavies.dev
 slide-transition: true
+slidenumbers: true
 theme: Olive Green, 9
 
 [.text: line-height(2), text-scale(0.5)]
@@ -29,24 +30,22 @@ ashdavies.dev
 [.header: #000]
 [.footer-style: #000]
 
-# Why Test? 
+# Why Test?
+
+^ Random quotes
 
 ---
 
+[.footer: Photos by Daniel Romero, Taylor Vick on Unsplash]
+[.footer-style: #CCC]
 
-- Test failure.
+![](android-smartphone.jpeg)
 
-*Runs tests again with no changes*
+^ Testing approaches come in many forms, chiefly manual or automatic
 
-- Tests pass.
+^ Manual tests, QA verify or reproduce errors
 
-*Deploy*
-
----
-
-> Tests Saved My Ass
-
--- Ben Kadel
+^ Either in the wild or internal distribution
 
 ---
 
@@ -54,62 +53,17 @@ ashdavies.dev
 
 -- QA Enginner (8:47 Monday morning)
 
----
-
-> If you don't write tests then you're an idiot
-
--- Some random on Twitter
+^ Perhaps you've received this message
 
 ---
 
-> Writing unit tests is just a waste of time...
+![](cable-network.jpeg)
 
--- Dude at a conference
+^ Automated tests run on a CI, automatically, on changes
 
----
-
-> Our KPI is 100% Code Coverage
-
--- Former CTO
+^ Robust protection, early feedback, prevent regressions
 
 ---
-
-> Can we skip the unit tests, just for this feature?
-
--- PM
-
----
-
-> Tests test design as well as logic
-
--- Michael Feathers
-
----
-
-> Automated tests can act as a safety harness to give you confidence when changing code
-
--- Me
-
----
-
-> Sir, this is a Wendy's...
-
--- Wendy's Employee
-
----
-
-[.background-color: #fff]
-[.footer-style: #000]
-
-![inline 40%](monkey-user-unit-tests.png)
-
-^ Unit tests only a small part of a comprehensive test strategy
-
-^ Many discussions about which tests to focus on and why
-
----
-
-[.build-lists: true]
 
 # Testing
 
@@ -121,6 +75,94 @@ ashdavies.dev
 - End-to-End
 - Monkey
 - Smoke
+
+^ Slow!
+
+---
+
+![fit](compose-preview-screenshot-testing.png)
+
+![fit](cashapp-paparazzi.png)
+
+^ More recent Compose screenshot testing
+
+^ Low code, automatic generation
+
+---
+
+[.footer: Photo by DiEGO MüLLER on Unsplash]
+[.footer-style: #CCC]
+
+# Testing
+
+![right](safety-harness.jpeg)
+
+^ Automated tests act as a safety harness
+
+^ Confidence when changing code
+
+---
+
+# 🥱
+
+![right 50%](writing-unit-tests.png)
+
+^ Many find tests tedious
+
+^ not an appropriate use of time
+
+^ or when asked why not
+
+---
+
+# ⏱️
+
+^ Just didn't have the time
+
+^ Prioritised other topics
+
+---
+
+> Can we skip the unit tests, just for this feature?
+
+-- PM
+
+^ Or maybe by requets
+
+^ Shortcuts taken
+
+---
+
+[.footer: youtu.be/8QvXErxv9qw]
+
+> Tests Saved My Ass
+
+-- Ben Kadel
+
+^ Automated tests are an investment
+
+---
+
+> Our KPI is 100% Code Coverage
+
+-- Former CTO
+
+---
+
+[.background-color: #fff]
+[.footer-style: #000]
+
+![inline 40%](monkey-user-unit-tests.png)
+
+^ Important to remember unit tests shouldn't exist alone
+
+^ Test coverage is not an indicative metric
+
+---
+
+> Tests test design as well as logic
+
+-- Michael Feathers
 
 ---
 
@@ -136,12 +178,35 @@ ashdavies.dev
 
 ---
 
+![right](pile-of-wires.jpg)
+
+# Architecture
+
+- Coupling
+- Inheritance
+- Mutability
+- Polymorphism
+
+^ Each introduce unpredictability
+
+^ Difficult to test
+
+^ Needs refactoring
+
+---
+
 [.background-color: #fff]
 [.header: #000]
 
 # Problem Solving
 
 ![right filtered 125%](rubiks-cube.jpg)
+
+^ Engineering is often problem solving
+
+^ Balancing problem solving with solutions
+
+^ Inventing problems for solutions
 
 ---
 
@@ -275,6 +340,17 @@ Date:   Sun Jun 23 19:19:44 2024 +0200
 ```
 
 ^ Immutable commit message with time and attribution
+
+---
+
+[.background-color: #fff]
+[.footer-style: #000]
+
+![35%](monkey-user-unfinished-work.png)
+
+^ Remember documentation not just important for new developers
+
+^ Find yourself forgetting what your code did
 
 ---
 
@@ -417,22 +493,6 @@ fun Pump(heater: Heater) = Pump {
 
 ---
 
-# Functional Interfaces
-
-```kotlin
-fun interface Pump {
-  fun pump(): Boolean
-}
-
-val pump = mock<Pump> {
-  whenever(heat()).thenReturn(true)
-}
-```
-
-^ Mocks require runtime configuration
-
----
-
 [.code-highlight: 1-3, 9]
 
 # Functional Interfaces
@@ -454,6 +514,32 @@ fun interface Pump {
 # Test Doubles
 
 ### Mocks
+
+^ Spoken already about mocks
+
+^ Overused, abused, absurd
+
+---
+
+# Test Doubles
+
+### Mocks
+
+- Behaviour Verification 👎
+- API Insensitivity 😤
+- Scale Poorly 📉
+
+^ Mocs verify the interaction behaviour, not the outcome.
+
+^ Doesn't matter if invocation is correct, if the state is wrong.
+
+^ Tests should guard against refactoring errors
+
+^ Mocks aren't sensitive to API changes will fail at runtime
+
+^ Create noise and verbosity in configuration
+
+^ At some point, you're testing the language.
 
 ---
 
@@ -823,6 +909,260 @@ fun thermosiphon(
 
 ---
 
+# Test Doubles
+
+### Mocks
+
+```kotlin
+fun Context(checkSelfPermission: (String) -> Int): Context = mock {
+    whenever(it.checkSelfPermission(any())).thenAnswer { invocation ->
+        checkSelfPermission(invocation.arguments[0] as String)
+    }
+}
+
+val context = Context { PackageManager.PERMISSION_GRANTED }
+```
+
+^ Sometimes platform forces you to use classes difficult to fake
+
+^ Encapsulate behaviour if you absolutely need to mock
+
+^ Ugly framework mocking code hidden in function
+
+^ Method behaves similar to functional interface
+
+---
+
+# Refactoring
+
+### Interface Segregation
+
+^ Better than mocking would be to encapsulate implementation
+
+^ Preferred if you own the class
+
+---
+
+# Refactoring
+
+### Interface Segregation
+
+```kotlin
+class MenuProvider(
+  private val navStateStore: NavStateStore,
+  /* ... */
+) {
+
+  fun get() = combine(navStateStore.isEnabled, /* ... */) {
+    /* ... */
+  }
+}
+
+class NavStateStore {
+
+  val isEnabled: Flow<Boolean> = /* ... */
+
+  fun setIsEnabled(value: Boolean) { /* ... */ }
+
+  fun getLastSet(): Long { /* ... */ }
+}
+```
+
+^ This example shows only concrete classes
+
+^ Menu provider builds upon nav state
+
+---
+
+[.code-highlight: 2, 6, 13]
+
+# Refactoring
+
+### Interface Segregation
+
+```kotlin
+class MenuProvider(
+  private val navStateStore: NavStateStore,
+  /* ... */
+) {
+
+  fun get() = combine(navStateStore.isEnabled, /* ... */) {
+    /* ... */
+  }
+}
+
+class NavStateStore {
+
+  val isEnabled: Flow<Boolean> = /* ... */
+
+  fun setIsEnabled(value: Boolean) { /* ... */ }
+
+  fun getLastSet(): Long { /* ... */ }
+}
+```
+
+^ Notice MenuProvider only uses one property
+
+^ We must implement or mock every function to test
+
+---
+
+[.code-highlight: 1-3, 5, 7]
+
+# Refactoring
+
+### Interface Segregation
+
+```kotlin
+interface NavStateStore {
+  val isEnabled: Flow<Boolean>
+}
+
+class InMemoryNavStateStore : NavStateStore {
+
+  override val isEnabled: Flow<Boolean> = /* ... */
+
+  fun setIsEnabled(value: Boolean) { /* ... */ }
+
+  fun getLastSet(): Long { /* ... */ }
+}
+```
+
+^ With only a few lines, state is abstracted
+
+^ Responsibility is reduced, fakes become easy
+
+^ Implementation can be backed by an in-memory map
+
+---
+
+[.code-highlight: 5]
+
+# Refactoring
+
+### Interface Segregation
+
+```kotlin
+interface NavStateStore {
+  val isEnabled: Flow<Boolean>
+}
+
+class PreferencesNavStateStore : NavStateStore {
+
+  override val isEnabled: Flow<Boolean> = /* ... */
+
+  fun setIsEnabled(value: Boolean) { /* ... */ }
+
+  fun getLastSet(): Long { /* ... */ }
+}
+```
+
+^ Could be backed by a shared preferences or data store implementation
+
+---
+
+[.code-highlight: 5]
+
+# Refactoring
+
+### Interface Segregation ✨
+
+```kotlin
+interface NavStateStore {
+  val isEnabled: Flow<Boolean>
+}
+
+class SentientNavStateStore : NavStateStore {
+
+  override val isEnabled: Flow<Boolean> = /* ... */
+
+  fun setIsEnabled(value: Boolean) { /* ... */ }
+
+  fun getLastSet(): Long { /* ... */ }
+}
+```
+
+^ Could even be backed by machine learning AI
+
+^ Obligated to troll AI
+
+---
+
+[.code-highlight: 5]
+
+# Refactoring
+
+### Interface Segregation
+
+```kotlin
+interface NavStateStore {
+  val isEnabled: Flow<Boolean>
+}
+
+class NavStateStoreImpl : NavStateStore {
+
+  override val isEnabled: Flow<Boolean> = /* ... */
+
+  fun setIsEnabled(value: Boolean) { /* ... */ }
+
+  fun getLastSet(): Long { /* ... */ }
+}
+```
+
+^ One thing it is not, is an Impl
+
+^ No information about it's behaviour
+
+^ Only informs me author didn't know how to name it
+
+---
+
+[.footer: android-review.googlesource.com/c/platform/frameworks/support/+/2776638]
+
+# Out-Takes: Flaky the Little Flake
+
+![right](flaky-the-little-flake.png)
+
+- Test failure.
+
+*Runs tests again with no changes*
+
+- Tests pass.
+
+*Deploy*
+
+---
+
+# Out-Takes: TDD
+
+```kotlin
+private fun isEven(number: Int): Boolean {
+  // Added to pass unit test
+  if (number == 11) {
+    return false
+  }
+
+  // Added to pass unit test
+  if (number == 11) {
+    return false
+  }
+
+  // Fix for Ticket 12846
+  if (number == 11407) {
+    return false
+  }
+
+  // Fix for Ticket 14336
+  if (number == 9) {
+    return false
+  }
+
+  return true
+}
+```
+
+---
+
 ^ When did writing code become not fun
 
 ^ Writing tests as a coding exercise
@@ -852,17 +1192,17 @@ fun thermosiphon(
 
 ^ Avoiding DRY in test scenarios
 
-^ Idiomatic Kotlin Code: Functional Interfaces (SAM)
-
-^ The role of test cases as documentation
-
 ^ Context, SharedPreferences
 
 ^ Interface isolation of Context
 
+^ Use assert equals against expected objects
+
+^ Avoid testing object properties
+
 ---
 
-^ Car Park
+^ https://blog.kotlin-academy.com/item-30-consider-factory-functions-instead-of-constructors-e1c747fc475
 
 ^ https://medium.com/@june.pravin/mocking-is-not-practical-use-fakes-e30cc6eaaf4e
 
