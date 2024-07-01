@@ -14,7 +14,7 @@ theme: Olive Green, 9
 
 ### Droidcon Berlin - July '24 🇩🇪
 
-Ash Davies - SumUp Services GmbH
+Ash Davies - SumUp
 Android / Kotlin GDE Berlin
 ashdavies.dev
 
@@ -207,6 +207,31 @@ ashdavies.dev
 ^ Balancing problem solving with solutions
 
 ^ Inventing problems for solutions
+
+---
+
+[.background-color: #0D0E21]
+
+# Problem Solving
+
+![25% original](advent-of-code.webp)
+
+^ Perhaps why we see coding exercises like Advent of Code
+
+^ Coding should be fun
+
+---
+
+[.background-color: #fff]
+[.footer-style: #000]
+
+![75%](monkey-user-pair-programming.webp)
+
+^ Programming exercises help us be better engineers
+
+^ Think of new ways to solve problems
+
+---
 
 ---
 
@@ -949,8 +974,7 @@ val context = Context { PackageManager.PERMISSION_GRANTED }
 
 ```kotlin
 class MenuProvider(
-  private val navStateStore: NavStateStore,
-  /* ... */
+  private val navStateStore: NavStateStore = NavStateStore(),
 ) {
 
   fun get() = combine(navStateStore.isEnabled, /* ... */) {
@@ -982,8 +1006,7 @@ class NavStateStore {
 
 ```kotlin
 class MenuProvider(
-  private val navStateStore: NavStateStore,
-  /* ... */
+  private val navStateStore: NavStateStore = NavStateStore(),
 ) {
 
   fun get() = combine(navStateStore.isEnabled, /* ... */) {
@@ -1117,19 +1140,136 @@ class NavStateStoreImpl : NavStateStore {
 
 ---
 
-[.footer: android-review.googlesource.com/c/platform/frameworks/support/+/2776638]
+# Refactoring
+
+### Objects
+
+```kotlin
+class MenuProvider(
+  private val menuDefaults: MenuStateDefaults = MenuStateDefaults,
+) {
+  /* ... */
+}
+
+object MenuStateDefaults {
+  val iconWidth = 24
+}
+```
+
+^ What if your dependency is a Kotlin object?
+
+^ Might seem more difficult to refactor
+
+---
+
+# Refactoring
+
+### Objects
+
+```kotlin
+class MenuProvider(
+  private val menuProperties: MenuStateProperties = MenuStateProperties.Default,
+) {
+  /* ... */
+}
+
+interface MenuStateProperties {
+
+  val iconWidth: Int
+
+  companion object Default : MenuStateProperties {
+    override val iconWidth = 24
+  }
+}
+```
+
+^ Utilise a companion object to provide a default implementation
+
+---
+
+# Refactoring
+
+### Objects 🔥
+
+```kotlin
+class MenuProvider(
+  private val menuProperties: MenuStateProperties =
+      MenuStateProperties(),
+) {
+  /* ... */
+}
+
+interface MenuStateProperties {
+
+  val iconWidth: Int
+
+  companion object {
+
+    operator fun invoke(): MenuStateProperties {
+      /* ... */
+    }
+  }
+}
+```
+
+^ Often extended into the operator invoke function
+
+^ Bordering on language abuse, playing with fire
+
+---
+
+# Refactoring
+
+### Factory Function
+
+```kotlin
+private const val DEFAULT_ICON_WIDTH = 24
+
+class MenuProvider(
+  private val menuProperties: MenuStateProperties =
+      MenuStateProperties(),
+) {
+  /* ... */
+}
+
+fun interface MenuStateProperties {
+  val iconWidth: Int
+}
+
+fun MenuStateProperties(
+  iconWidth: Int = DEFAULT_ICON_WIDTH,
+) = object : MenuStateProperties {
+  override val iconWidth = iconWidth
+}
+```
+
+^ Top level factory functions are better
+
+^ Simple easy to read
+
+---
+
+# Conclusion
+
+- Prefer function interfaces wherever possible
+- Utilise factory functions to isolate behaviour
+- Avoid using mocks unless absolutely necessary
+
+^ But wait, there's more!
+
+^ Preparing a talk, usually extra out-takes
+
+---
 
 # Out-Takes: Flaky the Little Flake
 
+android-review.googlesource.com/c/platform/frameworks/support/+/2776638
+
 ![right](flaky-the-little-flake.png)
 
-- Test failure.
+^ Commit message from Romain Guy
 
-*Runs tests again with no changes*
-
-- Tests pass.
-
-*Deploy*
+^ Story of flaky the little flake
 
 ---
 
@@ -1163,15 +1303,22 @@ private fun isEven(number: Int): Boolean {
 
 ---
 
-^ When did writing code become not fun
+[.text: line-height(2), text-scale(0.5)]
 
-^ Writing tests as a coding exercise
+# Thank You!
 
-^ LeetCode besides toxic mentality
+Ash Davies - SumUp
+Android / Kotlin GDE Berlin
+ashdavies.dev
 
-^ AdventOfCode - Writing code for fun
+---
 
-^ Encapsulating mocks inside fakes if you really need them
+# Additional
+
+- blog.kotlin-academy.com/item-30-consider-factory-functions-instead-of-constructors-e1c747fc475
+- medium.com/@june.pravin/mocking-is-not-practical-use-fakes-e30cc6eaaf4e
+- testing.googleblog.com/2024/02/increase-test-fidelity-by-avoiding-mocks.html
+- handstandsam.com/2020/06/08/wrapping-mockito-mocks-for-reusability/
 
 ^ Keeping individual tests idempotent
 
@@ -1192,20 +1339,8 @@ private fun isEven(number: Int): Boolean {
 
 ^ Avoiding DRY in test scenarios
 
-^ Context, SharedPreferences
-
 ^ Interface isolation of Context
 
 ^ Use assert equals against expected objects
 
 ^ Avoid testing object properties
-
----
-
-^ https://blog.kotlin-academy.com/item-30-consider-factory-functions-instead-of-constructors-e1c747fc475
-
-^ https://medium.com/@june.pravin/mocking-is-not-practical-use-fakes-e30cc6eaaf4e
-
-^ https://testing.googleblog.com/2024/02/increase-test-fidelity-by-avoiding-mocks.html
-
-^ https://handstandsam.com/2020/06/08/wrapping-mockito-mocks-for-reusability/
