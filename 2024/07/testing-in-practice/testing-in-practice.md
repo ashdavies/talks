@@ -32,7 +32,11 @@ ashdavies.dev
 
 # Why Test?
 
-^ Random quotes
+^ Why test in the first place?
+
+^ Everybody says you should
+
+^ Is it even beneficial?
 
 ---
 
@@ -41,40 +45,55 @@ ashdavies.dev
 
 ![](android-smartphone.jpeg)
 
-^ Testing approaches come in many forms, chiefly manual or automatic
+^ Many different test approaches
 
-^ Manual tests, QA verify or reproduce errors
+^ Manual or otherwise
+
+^ QA tests to find unexpected behaviour
 
 ^ Either in the wild or internal distribution
+
+^ Gathered quotes from people...
 
 ---
 
 > "Hey, I hope you had a relaxing weekend..."
 
--- QA Enginner (8:47 Monday morning)
+> -- QA Enginner (8:47 Monday morning)
 
-^ Perhaps you've received this message
+^ Nothing fills you with more dread
+
+^ Thanks Ronaldo
+
+^ How to avoid this...
 
 ---
 
 ![](cable-network.jpeg)
 
-^ Automated tests run on a CI, automatically, on changes
+^ Automated tests run on a CI
 
-^ Robust protection, early feedback, prevent regressions
+^ Automatically, on commit, PR, per configuration
+
+^ Robust protection, early feedback
+
+^ Help prevent regressions
 
 ---
 
 # Testing
 
-- Unit
-- Regression
+- Monkey
+- End-to-End
 - Acceptance
 - Instrumentation
 - Integration
-- End-to-End
-- Monkey
-- Smoke
+- Regression
+- Unit
+
+^ === LIST ===
+
+^ Many different types of testing
 
 ^ Slow!
 
@@ -84,7 +103,7 @@ ashdavies.dev
 
 ![fit](cashapp-paparazzi.png)
 
-^ More recent Compose screenshot testing
+^ Compose screenshot testing
 
 ^ Low code, automatic generation
 
@@ -97,9 +116,11 @@ ashdavies.dev
 
 ![right](safety-harness.jpeg)
 
-^ Automated tests act as a safety harness
+^ Act as a safety harness
 
 ^ Confidence when changing code
+
+^ Useful for refactoring...
 
 ---
 
@@ -107,11 +128,11 @@ ashdavies.dev
 
 ![right 50%](writing-unit-tests.png)
 
+^ Despite this
+
 ^ Many find tests tedious
 
-^ not an appropriate use of time
-
-^ or when asked why not
+^ Not an appropriate use of time
 
 ---
 
@@ -119,33 +140,51 @@ ashdavies.dev
 
 ^ Just didn't have the time
 
-^ Prioritised other topics
+^ Under pressure to meet deadlines
+
+^ Not prioritised
 
 ---
 
-> Can we skip the unit tests, just for this feature?
+> "Can we skip the unit tests, just for this feature?"
 
--- PM
+> -- PM
 
-^ Or maybe by requets
+^ Maybe by request
 
 ^ Shortcuts taken
 
 ---
 
-[.footer: youtu.be/8QvXErxv9qw]
+Developer: "I'll get back to it later..."
 
-> Tests Saved My Ass
+Narrator: "They never got back to it."
 
--- Ben Kadel
+^ I'll get back to it later...
 
-^ Automated tests are an investment
+^ Situation changed
 
 ---
 
-> Our KPI is 100% Code Coverage
+[.footer: youtu.be/8QvXErxv9qw]
 
--- Former CTO
+> "Tests Saved My Ass"
+
+> -- Ben Kadel
+
+^ Automated tests are an investment
+
+^ May or may not save your ass
+
+---
+
+> "Our OKR is 100% Code Coverage"
+
+> -- Former CTO
+
+^ Not useful if not respected
+
+^ Need to be used properly
 
 ---
 
@@ -156,13 +195,21 @@ ashdavies.dev
 
 ^ Important to remember unit tests shouldn't exist alone
 
-^ Test coverage is not an indicative metric
+^ Not only is test coverage is not an indicative metric
+
+^ Unit tests alone will not give you needed certainty
+
+^ Units may function independently
 
 ---
 
 > Tests test design as well as logic
 
--- Michael Feathers
+> -- Michael Feathers
+
+^ Favourite thing about unit tests
+
+^ They are testing code architecture
 
 ---
 
@@ -187,15 +234,20 @@ ashdavies.dev
 - Mutability
 - Polymorphism
 
+^ === LIST ===
+
 ^ Each introduce unpredictability
 
 ^ Difficult to test
 
 ^ Needs refactoring
 
+^ Might seem difficult
+
 ---
 
 [.background-color: #fff]
+[.footer-style: #000]
 [.header: #000]
 
 # Problem Solving
@@ -204,9 +256,21 @@ ashdavies.dev
 
 ^ Engineering is often problem solving
 
-^ Balancing problem solving with solutions
+^ Balancing problems with solutions
 
-^ Inventing problems for solutions
+---
+
+[.background-color: #fff]
+[.footer-style: #000]
+[.header: #000]
+
+# Solutions Looking for a Problem
+
+![inline](self-operating-napkin.gif)
+
+^ Be ware of solutions looking for a problem
+
+^ Not relevant to Gen AI, neither solution, nor problem
 
 ---
 
@@ -231,153 +295,138 @@ ashdavies.dev
 
 ^ Think of new ways to solve problems
 
----
-
-// TODO: segue
+^ To progress, consider different perspectives
 
 ---
 
-# Documentation
+// Let's Code
 
-Gotchas 🤬
+^ Some of this code might not compile...
 
-^ Programming is hard, sometimes weird errors occur
+^ It may look hastily strung together only minutes before this talk...
 
-^ Your code may not always behave as expected
-
-^ May spend hours, or days debugging
-
-^ Document to prevent the same mistake
+^ But let me assure you, it was
 
 ---
-
-# Documentation
 
 ```kotlin
-/**
- * Make sure not to change this thing back to the previous implementation,
- * because it breaks on that one specific device in production,
- * when opening the user profile in France using a German locale.
- **/
-fun doMyThing() {
-  /* ... */
-}
-```
+class ThermosiphonTest {
 
-^ Documentation is fragile
+  @Mock
+  var heater: Heater
 
-^ Expires faster than the code it documents
+  @Mock
+  var logger: Logger
 
----
+  @InjectMocks
+  lateinit var sut: Thermosiphon
 
-# Documentation
+  @SetUp
+  fun setup() {
+    MockAnnotations.init(this)
+  }
 
-```kotlin
-/**
- * Make sure not to change this thing back to the previous implementation,
- * because it breaks on that one specific device in production,
- * when opening the user profile in France using a German locale.
- *
- * Update: We changed this to be a remote resolution, this shouldn't happen?
- * We haven't seen it happen in production anymore, but just leave this
- * comment here, incase it occurs again...
- **/
-fun doMyThingRefactoredV63() {
-  /* ... */
-}
-```
+  @Test
+  fun `should heat water`() {
+    thermosiphon.pump()
 
-^ You may end up with conflicting stories
-
-^ Misleading or innappropriate information
-
----
-
-# Documentation
-
-```kotlin
-/**
- * Make sure not to change this thing back to the previous implementation,
- * because it breaks on that one specific device in production,
- * when opening the user profile in France using a German locale.
- *
- * Update: We changed this to be a remote resolution, this shouldn't happen?
- * We haven't seen it happen in production anymore, but just leave this
- * comment here, incase it occurs again...
- *
- * Update: It's happening again, but for Italian uses in Australia,
- * I really hope our Italian QA enginner doesn't go on vacation to Melbourne again...
- **/
-fun doMyThingRefactoredToBeMoreSafeIHopeV91() {
-  if (user.locale == Locale.ITALY) {
-    /* Hacky hack McHackFace */
+    assertTrue(heater.isHot())
   }
 }
 ```
 
-^ Best outcome is it can be ignored
+^ Random test from previous codebase
 
-^ Mostly is misleading can hide issues
+^ Indicative of many test cases
+
+^ Unnecessary annotations
+
+^ Noise obfuscates behaviour
+
+^ Unnecessary immutability
+
+^ Stuck in Java land
 
 ---
 
-# Documentation
+# Test Doubles
 
-^ Code should serve as it's own documentation
+### Mocks
 
-^ Sometimes needs more context
+#### (╯°□°)╯︵ ┻━┻
+
+^ Spoken already about mocks
+
+^ Overused, abused, absurd
 
 ---
 
-# Documentation: Tests
+# Test Doubles
+
+### Mocks
+
+- Behaviour Verification 👎
+- API Insensitivity 😤
+- Scale Poorly 📉
+
+^ === List ===
+
+^ Verify interaction, not outcome.
+
+^ Irrelevant if correct behaviour correct if state is wrong
+
+^ Not sensitive to API changes, prone to runtime failures
+
+^ Create noise and verbosity in configuration
+
+^ At some point, you're testing the language.
+
+---
 
 ```kotlin
-fun `should store in user specific locale when device is in another country()
-```
+class ThermosiphonTest {
 
-^ Method names can be written in human readable language
+  @Mock
+  var heater: Heater
 
-^ Provide additional context
+  @Mock
+  var logger: Logger
 
----
+  @InjectMocks
+  lateinit var sut: Thermosiphon
 
-# Documentation: Tests
+  @SetUp
+  fun setup() {
+    MockAnnotations.init(this)
 
-```kotlin
-fun `should store in user specific locale when device is in another country() {
-  val intendedTarget = ...
-  val expectedLocale = ...
+    whenever(heater.heat(any())).thenReturn(/* ... */
 
-  val actualLocale = doMyThing()
+    whenever(logger.log(any())).thenAnswer {
+      /* ... */
+  }
 
-  assertEquals(expectedLocale, actualLocal)
+  @Test
+  fun `should heat water`() {
+    thermosiphon.pump()
+
+    val argumentCaptor = argumentCaptor()
+
+    verify(heater).heat(argumentCapture.capture())
+
+    assertTrue(argumentCaptor.values[0])
+  }
 }
 ```
 
-^ Simple uses of naming builds a narrative
+^ Mutability on mock configuration
 
-^ Tells a story in code
+^ Exponential noise to setup
 
----
+^ Vendor API misleading in code
 
-```bash
-commit d4c2d156e78cd579662ac7a658b00ca5aa17fd5d (HEAD -> main, origin/main, origin/HEAD)
-Author: Ash Davies <1892070+ashdavies@users.noreply.github.com>
-Date:   Sun Jun 23 19:19:44 2024 +0200
-```
+^ Different mocking frameworks
 
-^ Immutable commit message with time and attribution
-
----
-
-[.background-color: #fff]
-[.footer-style: #000]
-
-![35%](monkey-user-unfinished-work.png)
-
-^ Remember documentation not just important for new developers
-
-^ Find yourself forgetting what your code did
+^ There is a better way...
 
 ---
 
@@ -466,19 +515,11 @@ public actual fun <T> lazy(mode: LazyThreadSafetyMode, initializer: () -> T): La
 
 # Functional Interfaces
 
-```kotlin
-interface Pump {
-  fun pump()
-}
+^ Another favourite feature
 
-fun Pump(heater: Heater): Pump {
-  return Thermosiphon(heater)
-}
+^ Originally used for Java interop
 
-private class Thermosiphon(
-  private val heater: Heater,
-)
-```
+^ Added SAM behaviour to Kotlin
 
 ---
 
@@ -516,11 +557,11 @@ fun Pump(heater: Heater) = Pump {
 }
 ```
 
-^ Simple implementation easy to use in tests
+^ Simple easy-to-use implementation
+
+^ Can be created easily in test
 
 ---
-
-[.code-highlight: 1-3, 9]
 
 # Functional Interfaces
 
@@ -536,71 +577,7 @@ fun interface Pump {
 + val pump = Pump { true }
 ```
 
----
-
-# Test Doubles
-
-### Mocks
-
-^ Spoken already about mocks
-
-^ Overused, abused, absurd
-
----
-
-# Test Doubles
-
-### Mocks
-
-- Behaviour Verification 👎
-- API Insensitivity 😤
-- Scale Poorly 📉
-
-^ Mocs verify the interaction behaviour, not the outcome.
-
-^ Doesn't matter if invocation is correct, if the state is wrong.
-
-^ Tests should guard against refactoring errors
-
-^ Mocks aren't sensitive to API changes will fail at runtime
-
-^ Create noise and verbosity in configuration
-
-^ At some point, you're testing the language.
-
----
-
-```kotlin
-class ThermosiphonTest {
-
-  @Mock
-  var heater: Heater
-
-  @Mock
-  var logger: Logger
-
-  @InjectMocks
-  lateinit var sut: Thermosiphon
-
-  @SetUp
-  fun setup() {
-    MockAnnotations.init(this)
-  }
-
-  @Test
-  fun `should heat water`() {
-    thermosiphon.pump()
-
-    assertTrue(heater.isHot()) 
-  }
-}
-```
-
-^ Unnecessary obsession with annotations
-
-^ Noise obfuscates behaviour and purpose
-
-^ Unnecessary immutability
+^ Replacing even the most well written mock with a simple lambda
 
 ---
 
@@ -651,7 +628,7 @@ class ThermosiphonTest {
 }
 ```
 
-^ Likely to have more than one test
+^ But you're likely to have more than one test...
 
 ---
 
@@ -796,7 +773,7 @@ class ThermosiphonTest {
 }
 ```
 
-^ Makes sense if your system gets more complex
+^ May seem like it makes sense as your system gets more complex
 
 ^ Requires more configuration
 
@@ -889,9 +866,9 @@ class ThermosiphonTest {
 
 ^ Misleading state
 
----
+^ Entire configuration prepared for each test
 
-[.code-highlight: 3-13, 31-38]
+---
 
 ```kotlin
 class ThermosiphonTest {
@@ -919,6 +896,8 @@ fun thermosiphon(
 )
 ```
 
+^ Simplify behaviour with factory functions
+
 ^ Member variables are avoided
 
 ^ Isolated behaviour
@@ -933,13 +912,15 @@ fun thermosiphon(
 - High code reusability
 - Isolating change
 
-^ First examples demonstrate DRY principle
+^ === LIST ===
+
+^ Demonstrate DRY principle
 
 ^ Remove duplication
 
 ^ High code reusability
 
-^ Often means it must cater to many scenarios
+^ Must cater to many scenarios
 
 ---
 
@@ -950,6 +931,8 @@ fun thermosiphon(
 - Some duplication permitted
 - Declarative syntax
 - Meaningful naming
+
+^ === LIST ===
 
 ^ Because developers seemingly love acronyms
 
@@ -965,13 +948,153 @@ fun thermosiphon(
 
 ^ Not mutually exclusive
 
-^ Balance between duplication and descriptiveness
+^ Balance duplication / descriptiveness
 
-^ Tests likely to test multiple scenarios
+^ Tests test multiple scenarios
 
-^ Helpful to be more readable, duplication is permitted
+^ Helpful to be more readable
 
 ^ DRY in production, DAMP in test
+
+^ Speaking of descriptiveness...
+
+---
+
+# Documentation
+
+^ Programming is hard, sometimes weird errors occur
+
+^ Your code may not always behave as expected
+
+^ May spend hours, or days debugging
+
+^ Document to prevent the same mistake
+
+---
+
+# Documentation
+
+```kotlin
+/**
+ * Make sure not to change this thing back to the previous implementation,
+ * because it breaks on that one specific device in production,
+ * when opening the user profile in France using a German locale.
+ **/
+fun doMyThing() {
+  /* ... */
+}
+```
+
+^ Documentation is fragile
+
+^ Expires faster than the code it documents
+
+---
+
+# Documentation
+
+```kotlin
+/**
+ * Make sure not to change this thing back to the previous implementation,
+ * because it breaks on that one specific device in production,
+ * when opening the user profile in France using a German locale.
+ *
+ * Update: We changed this to be a remote resolution, this shouldn't happen?
+ * We haven't seen it happen in production anymore, but just leave this
+ * comment here, incase it occurs again...
+ **/
+fun doMyThingRefactoredV63() {
+  /* ... */
+}
+```
+
+^ You may end up with conflicting stories
+
+^ Misleading or innappropriate information
+
+---
+
+# Documentation
+
+```kotlin
+/**
+ * Make sure not to change this thing back to the previous implementation,
+ * because it breaks on that one specific device in production,
+ * when opening the user profile in France using a German locale.
+ *
+ * Update: We changed this to be a remote resolution, this shouldn't happen?
+ * We haven't seen it happen in production anymore, but just leave this
+ * comment here, incase it occurs again...
+ *
+ * Update: It's happening again, but for Italian uses in Australia,
+ * I really hope our Italian QA enginner doesn't go on vacation to Melbourne again...
+ **/
+fun doMyThingRefactoredToBeMoreSafeIHopeV91() {
+  if (user.locale == Locale.ITALY) {
+    /* Hacky hack McHackFace */
+  }
+}
+```
+
+^ Best outcome is it can be ignored
+
+^ Mostly is misleading can hide issues
+
+---
+
+# Documentation
+
+^ Ideally code should serve as it's own documentation
+
+^ Sometimes needs more context
+
+---
+
+# Documentation: Tests
+
+```kotlin
+fun `should store in user specific locale when device is in another country()
+```
+
+^ Test names can be written in human readable language
+
+---
+
+# Documentation: Tests
+
+```kotlin
+fun `should store in user specific locale when device is in another country() {
+  val intendedTarget = ...
+  val expectedLocale = ...
+
+  val actualLocale = doMyThing()
+
+  assertEquals(expectedLocale, actualLocal)
+}
+```
+
+^ Simple uses of naming builds a narrative, tells a story in code
+
+---
+
+```bash
+commit d4c2d156e78cd579662ac7a658b00ca5aa17fd5d (HEAD -> main, origin/main, origin/HEAD)
+Author: Ash Davies <1892070+ashdavies@users.noreply.github.com>
+Date:   Sun Jun 23 19:19:44 2024 +0200
+```
+
+^ Immutable commit message with time and attribution
+
+---
+
+[.background-color: #fff]
+[.footer-style: #000]
+
+![35%](monkey-user-unfinished-work.png)
+
+^ Remember documentation not just important for new developers
+
+^ Find yourself forgetting what your code did
 
 ---
 
@@ -1003,11 +1126,15 @@ fun thermosiphon(
 )
 ```
 
-^ Previous example demonstrates
-
-^ Achieving descriptiveness with minimal duplication
+^ Trying to demonstrate how to achieve maximum descriptiveness with minimal duplication
 
 ^ Making use of idiomatic Kotlin features
+
+---
+
+> What about `Context`?!
+
+^ Many discussions about test fakes
 
 ---
 
@@ -1025,13 +1152,13 @@ fun Context(checkSelfPermission: (String) -> Int): Context = mock {
 val context = Context { PackageManager.PERMISSION_GRANTED }
 ```
 
-^ Sometimes platform forces you to use classes difficult to fake
+^ Some platform classes are difficult to fake
 
 ^ Encapsulate behaviour if you absolutely need to mock
 
 ^ Ugly framework mocking code hidden in function
 
-^ Method behaves similar to functional interface
+^ Same appearance as functional interface
 
 ---
 
@@ -1075,7 +1202,7 @@ class NavStateStore {
 
 ---
 
-[.code-highlight: 2, 6, 13]
+[.code-highlight: 2, 5, 13]
 
 # Refactoring
 
@@ -1270,8 +1397,7 @@ interface MenuStateProperties {
 
 ```kotlin
 class MenuProvider(
-  private val menuProperties: MenuStateProperties =
-      MenuStateProperties(),
+  private val menuProperties: MenuStateProperties = MenuStateProperties(),
 ) {
   /* ... */
 }
@@ -1300,11 +1426,12 @@ interface MenuStateProperties {
 ### Factory Function
 
 ```kotlin
-private const val DEFAULT_ICON_WIDTH = 24
+private object MenuStateDefaults {
+  val iconWidth = 24
+}
 
 class MenuProvider(
-  private val menuProperties: MenuStateProperties =
-      MenuStateProperties(),
+  private val menuProperties: MenuStateProperties = MenuStateProperties(),
 ) {
   /* ... */
 }
@@ -1314,7 +1441,7 @@ fun interface MenuStateProperties {
 }
 
 fun MenuStateProperties(
-  iconWidth: Int = DEFAULT_ICON_WIDTH,
+  iconWidth: Int = MenuStateDefaults.iconWidth,
 ) = object : MenuStateProperties {
   override val iconWidth = iconWidth
 }
@@ -1465,22 +1592,34 @@ fun `should produce water for English Breakfast Tea`() {
 
 # Conclusion
 
+## General
+
+- Prefer functional interfaces wherever possible
+- Utilise factory functions to isolate behaviour
+- Segregate behaviour into smaller interfaces
+
+^ === LIST ===
+
+---
+
+# Conclusion
+
 ## Testing
 
 - Avoid using mocks unless absolutely necessary
 - Restrict test behaviour to function body
 - Keep individual tests idempotent
-- It's ok to repeat yourself
+- It's OK to repeat yourself
 
-## General
+^ === LIST ===
 
-- Prefer function interfaces wherever possible
-- Utilise factory functions to isolate behaviour
-- Break up dependencies to singular interfaces
+---
 
-^ But wait, there's more!
+# But wait, there's more!
 
-^ Preparing a talk, usually extra out-takes
+### Out-Takes
+
+^ Usually extra content
 
 ---
 
@@ -1497,6 +1636,8 @@ android-review.googlesource.com/c/platform/frameworks/support/+/2776638
 ---
 
 # Out-Takes: TDD
+
+![right 25%](monkey-user-applied-tdd.png)
 
 ```kotlin
 private fun isEven(number: Int): Boolean {
