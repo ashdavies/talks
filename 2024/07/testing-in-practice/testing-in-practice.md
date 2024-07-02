@@ -233,6 +233,8 @@ ashdavies.dev
 
 ---
 
+// TODO: segue
+
 ---
 
 # Documentation
@@ -905,20 +907,89 @@ class ThermosiphonTest {
 
     assertTrue(isHot)
   }
+}
+
+fun thermosiphon(
+  onHeat: () -> Unit
+) = Thermosiphon(
+  overflow = SmallOverflowTank(),
+  aiEngine = GeminiEngine(),
+  heater = Heater(onHeat),
+  launchCodes = emptyList(),
+)
+```
+
+^ Member variables are avoided
+
+^ Isolated behaviour
+
+---
+
+# DRY
+
+### Don't Repeat Yourself
+
+- Remove duplication
+- High code reusability
+- Isolating change
+
+^ First examples demonstrate DRY principle
+
+^ Remove duplication
+
+^ High code reusability
+
+^ Often means it must cater to many scenarios
+
+---
+
+# DAMP
+
+### Descriptive AND Meaningful Phrases
+
+- Some duplication permitted
+- Declarative syntax
+- Meaningful naming
+
+^ Because developers seemingly love acronyms
+
+^ Duplication permitted to help readability
+
+^ DAMP prefers a more forgiving syntax
+
+^ Emphasis on meaningul naming
+
+---
+
+# DRY vs DAMP
+
+^ Not mutually exclusive
+
+^ Balance between duplication and descriptiveness
+
+^ Tests likely to test multiple scenarios
+
+^ Helpful to be more readable, duplication is permitted
+
+^ DRY in production, DAMP in test
+
+---
+
+![](kotlin-logo.png)
+
+```kotlin
+class ThermosiphonTest {
 
   @Test
-  fun `should cool down after heating`() {
-    /** ... */
-  }
+  fun `should heat water`() {
+    var isHot = false
+    val thermosiphon = thermosiphon(
+      onHeat = { isHot = true },
+    )
 
-  @Test
-  fun `should not catch fire when flying`() {
-    /** ... */
-  }
+    thermosiphon.pump()
 
-  @Test
-  fun `should not become sentient`() {
-    /** ... */
+    assertTrue(isHot)
   }
 }
 
@@ -931,6 +1002,12 @@ fun thermosiphon(
   launchCodes = emptyList(),
 )
 ```
+
+^ Previous example demonstrates
+
+^ Achieving descriptiveness with minimal duplication
+
+^ Making use of idiomatic Kotlin features
 
 ---
 
@@ -1264,11 +1341,13 @@ fun interface Heater {
 
 @Test
 fun `should produce water for English Breakfast Tea`() {
-  val heater = Heater { it.copy(temperature = 95 }
+  val heater = Heater { it.copy(temperature = 95) }
   val thermosiphon = Thermosiphon(heater)
-  val state = thermosiphon.pump()
+  val initial = WaterState(21)
 
-  assertTrue(state.temperature > 95)
+  val state = thermosiphon.pump(initial)
+
+  assertTrue(state.temperature >= 95)
 }
 ```
 
@@ -1284,8 +1363,8 @@ fun `should produce water for English Breakfast Tea`() {
 
 ```kotlin
  data class WaterState(
-+  val filtered: Boolean,
    val temperature: Int,
++  val filtered: Boolean,
  )
 
 fun interface Heater {
@@ -1294,19 +1373,19 @@ fun interface Heater {
 
 @Test
 fun `should produce water for English Breakfast Tea`() {
-  val heater = Heater { it.copy(temperature = 95 }
+  val heater = Heater { it.copy(temperature = 95) }
   val thermosiphon = Thermosiphon(heater)
-  val state = thermosiphon.pump()
+  val initial = WaterState(21, false)
 
-  assertTrue(state.temperature > 95)
+  val state = thermosiphon.pump(initial)
+
+  assertTrue(state.temperature >= 95)
 }
 ```
 
 ^ Our water can now be filtered
 
 ^ Test no longer verifies good tea
-
-^ Tea without filtered water?!
 
 ---
 
@@ -1326,15 +1405,16 @@ fun interface Heater {
 
 @Test
 fun `should produce water for English Breakfast Tea`() {
-  val heater = Heater { it.copy(temperature = 95 }
+  val heater = Heater { it.copy(temperature = 95) }
   val thermosiphon = Thermosiphon(heater)
+  val initial = WaterState(21, true)
 
   val expected = WaterState(
     filtered = true,
     temperature = 95,
   )
 
-  assertEquals(expected, thermosiphon.pump())
+  assertEquals(expected, thermosiphon.pump(initial))
 }
 ```
 
@@ -1350,6 +1430,8 @@ fun `should produce water for English Breakfast Tea`() {
 
 ### Assertions
 
+![right fit](thermosiphon-error-message.png)
+
 ```kotlin
 data class WaterState(
   val filtered: Boolean,
@@ -1361,14 +1443,23 @@ fun interface Heater {
 }
 
 @Test
-fun `should produce water for English Breakfast Tea`() { // Water can be unfiltered!
-  val heater = Heater { it.copy(temperature = 95 }
+fun `should produce water for English Breakfast Tea`() {
+  val heater = Heater { it.copy(temperature = 95) }
   val thermosiphon = Thermosiphon(heater)
-  val state = thermosiphon.pump()
+  val initial = WaterState(21, true)
 
-  assertTrue(state.temperature > 95)
+  val expected = WaterState(
+    filtered = true,
+    temperature = 95,
+  )
+
+  assertEquals(expected, thermosiphon.pump(initial))
 }
 ```
+
+^ Most importantly complete failure messages
+
+^ Helpful information about what is wrong
 
 ---
 
@@ -1435,6 +1526,12 @@ private fun isEven(number: Int): Boolean {
 
 ---
 
+# Out-Takes: Unreachable State
+
+![right 50%](xkcd-unreachable-state.png)
+
+---
+
 [.text: line-height(2), text-scale(0.5)]
 [.footer: ]
 
@@ -1455,7 +1552,3 @@ ashdavies.dev
 
 ^ Simplifying factory function with parameter mapping
 ^ Create function aliases for delegating behaviour
-
-^ DAMP vs DRY
-
-^ Avoid testing object properties
