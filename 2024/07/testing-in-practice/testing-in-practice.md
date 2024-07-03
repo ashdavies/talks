@@ -16,6 +16,8 @@ theme: Olive Green, 9
 
 Ash Davies - SumUp
 Android / Kotlin GDE Berlin
+Cat Person
+
 ashdavies.dev
 
 ^ Testing isn't always everybody's favourite task, but that doesn't need to be the case! Writing tests can be an enjoyable way to practice your coding techniques!
@@ -29,6 +31,8 @@ ashdavies.dev
 [.background-color: #fff]
 [.header: #000]
 [.footer-style: #000]
+
+![right](kotti-question.jpg)
 
 # Why Test?
 
@@ -124,15 +128,30 @@ ashdavies.dev
 
 ---
 
-# 🥱
+# Writing Unit Tests
 
-![right 50%](writing-unit-tests.png)
+| | |
+| --- | --- |
+| **Pros** | **Cons** |
+| They'll improve the quality of my code | I don't want to |
+| It'll take like 10 mins max | |
+| Literally everyone says that I should | |
 
 ^ Despite this
 
 ^ Many find tests tedious
 
 ^ Not an appropriate use of time
+
+---
+
+![right](sleepy-cat.jpg)
+
+# Writing Unit Tests
+
+## Conclusion
+
+> I will not write unit tests
 
 ---
 
@@ -1132,6 +1151,8 @@ fun thermosiphon(
 
 ---
 
+![right](why-test.jpg)
+
 > What about `Context`?!
 
 ^ Many discussions about test fakes
@@ -1614,6 +1635,8 @@ fun `should produce water for English Breakfast Tea`() {
 ^ === LIST ===
 
 ---
+
+![right](pypy-profit.jpg)
 
 # But wait, there's more!
 
