@@ -65,23 +65,90 @@ history.removeLast()
 
 ---
 
+[.footer: m3.material.io/components/navigation-bar/overview]
+
+![left](side-navigation-rail.png)
+
+![right](bottom-navigation-bar.png)
+
+^ Navigation concepts like the rail or bottom bar introduce parallel navigation
+
+^ Horizontal in addition to vertical
+
+---
+
+[.footer: satukyrolainen.com/affordances/]
+
+![](faucet-with-false-affrodance.jpg)
+
+^ Affordance is how a user expects to interact with something
+
+---
+
+# 🤖 🍏 🖥️
+
+^ Behaviour should be consistent with platform expectation
+
+---
+
+[.footer: android-developers.googleblog.com/2022/05/form-factors-google-io-22.html]
+
+![](android-form-factors.png)
+
+^ Different form factors on the same platform will change how the user expects to navigate
+
+---
+
+[.footer-style: #666]
+
+[.footer: learn.microsoft.com/en-us/windows/apps/design/basics/navigation-history-and-backwards-navigation]
+
+![](windows-back-enabled.png)
+
+^ Even something as simple as back navigation differs significantly
+
+^ Desktop apps might not even show a back button relying upon shortcuts
+
+^ What is the expected behaviour?
+
+---
+
+# ↑ ←
+
+^ Android has both up and back which are not the same
+
+---
+
+#  ⃕ 🔥
+
+^ Maintaining a stack through configuration change
+
+---
+
+[.background-color: #fff]
+[.footer-style: #999]
+
+[.footer: medium.com/androiddevelopers/the-deep-links-crash-course-part2-deep-links-from-zero-to-hero-37f94cc8fb88]
+
+![50%](deep-links-sample.webp)
+
+^ Handling deep links requires specific navigation behaviour
+
+---
+
+![](developing-hard.png)
+
+^ Navigation is hard. Often a topic of confusion, difficult for new developers
+
+^ Navigating from screen to screen being fundamental to your app
+
+---
+
+![align(top)](droidcon-berlin-navigation-and-the-single-activity.jpeg)
+
+---
+
 # WiP
-
----
-
-Necessary to handle backwards navigation
-
----
-
-Differences between horizontal and vertical navigation
-
----
-
-Maintaining a stack through configuration change
-
----
-
-Deep links adding to the complexity
 
 ---
 
@@ -149,6 +216,18 @@ Google recently made multiplatform a priority with moving a lot of dependencies 
 
 ---
 
+As of the time of writing, Jetpack Navigation is not yet multiplatform however it is offered as a JetBrains Compose Multiplatform artifact
+
+---
+
+Compose Multiplatform is usually quite delayed, JetBrains works hard on maintaining compatibility, but does not yet offer serialized destinations
+
+---
+
+Multiplatform documentation is difficult as it's out-of-date
+
+---
+
 For better or for worse, ViewModel is now multiplatform.
 
 ---
@@ -165,6 +244,7 @@ Early adopters employed third party solutions, late adopters can migrate android
 - speakerdeck.com/ashdavies/droidcon-berlin-navigation-and-the-single-activity-learnings-from-a-skeptic
 - jetbrains.com/help/kotlin-multiplatform-dev/whats-new-compose-170.html
 - x.com/AndroidDev/status/1833539541673586968
+- jetbrains.com/help/kotlin-multiplatform-dev/compose-navigation-routing.html
 
 ---
 
