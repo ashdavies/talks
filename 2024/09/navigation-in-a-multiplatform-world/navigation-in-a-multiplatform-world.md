@@ -146,13 +146,58 @@ history.removeLast()
 
 ![align(top)](droidcon-berlin-navigation-and-the-single-activity.jpeg)
 
+^ We've actually been there, 2019 Berlin talk on navigation
+
+---
+
+> ### "Once we have gotten in to this entry-point to your UI, we really don't care how you organise the flow inside."
+-- Dianne Hackborn, Android Framework team, 2016
+
+^ Controversial, framework not opinionated, does not care about app structure
+
+---
+
+# Jetpack Navigation
+
+^ Google introduced Jetpack navigation
+
+^ Tools for easy implementation of type safe navigation
+
+^ Android only, XML based navigation graph
+
+---
+
+# Fragments 💩
+
+^ Before then Fragments had been considered the worst thing ever
+
+^ Plagued by lifecycle issues and weird back stack management
+
+---
+
+[.footer: developer.squareup.com/blog/simpler-android-apps-with-flow-and-mortar/]
+
+# Mortar / Flow
+
+^ The idea of a more molecular UI structure had been entertained before
+
+^ The folks at Square at created Mortar and Flow back in 2014
+
+---
+
+# 2019
+
+^ That was over five years ago, a lot of changed since then
+
+^ Billy Joel song worth of things have happened since then
+
+---
+
+^ Even then people were experimenting with
+
 ---
 
 # WiP
-
----
-
-Navigation talk from 2019 highlights lack of historical support for Android navigation, implementation left agnostic, up to developer implementation.
 
 ---
 
@@ -200,7 +245,7 @@ Decompose - Excellent option, based upon Essenty, Multiplatform first, Compose s
 
 ---
 
-Circuit - Zacs brainchild, Compose first, builds idiomatic structure, app entirely in Compose. Big fan. Check out projects ChrisBanes/Tivi, ZacSweers/CatchUp/FieldSpottr, AshDavies/Playground
+Circuit - More than excellant option, Zacs brainchild, Compose first, builds idiomatic structure, app entirely in Compose. Big fan. Check out projects ChrisBanes/Tivi, ZacSweers/CatchUp/FieldSpottr, AshDavies/Playground
 
 ---
 
@@ -243,9 +288,10 @@ Early adopters employed third party solutions, late adopters can migrate android
 - zacsweers.dev/writing-a-kotlin-multiplatform-app-from-start-to-store
 - speakerdeck.com/ashdavies/droidcon-berlin-navigation-and-the-single-activity-learnings-from-a-skeptic
 - jetbrains.com/help/kotlin-multiplatform-dev/whats-new-compose-170.html
-- x.com/AndroidDev/status/1833539541673586968
+- medium.com/androiddevelopers/type-safe-navigation-for-compose-105325a97657
 - jetbrains.com/help/kotlin-multiplatform-dev/compose-navigation-routing.html
-
+- developer.squareup.com/blog/simpler-android-apps-with-flow-and-mortar/
+-
 ---
 
 [.text: line-height(2), text-scale(0.5)]
