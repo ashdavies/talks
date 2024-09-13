@@ -23,7 +23,7 @@ ashdavies.dev
 [.background-color: #fff]
 [.footer-style: #000]
 
-[.footer: blog.google/products/chrome/help-me-out-how-to-organize-chrome-tabs/]
+[.footer: blog.google/products/chrome/help-me-out-how-to-organize-chrome-tabs]
 
 ![](chrome-browser-tips-series-hero.gif)
 
@@ -77,7 +77,7 @@ history.removeLast()
 
 ---
 
-[.footer: satukyrolainen.com/affordances/]
+[.footer: satukyrolainen.com/affordances]
 
 ![](faucet-with-false-affrodance.jpg)
 
@@ -167,24 +167,6 @@ history.removeLast()
 
 ---
 
-# Fragments 💩
-
-^ Before then Fragments had been considered the worst thing ever
-
-^ Plagued by lifecycle issues and weird back stack management
-
----
-
-[.footer: developer.squareup.com/blog/simpler-android-apps-with-flow-and-mortar/]
-
-# Mortar / Flow
-
-^ The idea of a more molecular UI structure had been entertained before
-
-^ The folks at Square at created Mortar and Flow back in 2014
-
----
-
 # 2019
 
 ^ That was over five years ago, a lot of changed since then
@@ -193,19 +175,79 @@ history.removeLast()
 
 ---
 
-^ Even then people were experimenting with
+# Fragments
+
+^ Before then Fragments had been considered the worst thing ever
+
+^ Plagued by lifecycle issues and weird back stack management
+
+^ Despite alternative usage activities remained the most popular choice
 
 ---
 
-# WiP
+[.footer: developer.squareup.com/blog/simpler-android-apps-with-flow-and-mortar]
+
+## mortar & flow
+### 2014
+
+^ The idea of a more molecular UI structure had been entertained before
+
+^ The folks at Square at created Mortar and Flow back in 2014
+
+^ Mortar implemented screens with view layouts handling presenter detachment
+
+^ Flow handled the navigation with a backstack model
 
 ---
 
-Various libraries developed on the landscape, square/mortar, concepts like single activity design were rarely employed.
+[.footer: uber.com/en-GB/blog/new-rider-app-architecture]
+
+## uber/ribs
+### 2016
+
+^ Continues in that vein of using view groups and presenters (VIPER)
+
+^ Still under active development, mostly Kotlin (Java tests & tutorials)
+
+^ Shared code between Android & iOS
 
 ---
 
-Android team introduces navigation component, bringing back fragments to be used with a single activity, much scepticism, but having the support seemed to be popular.
+## square: reactive workflows
+### 2017
+
+^ Square continued development of flow to it's
+
+---
+
+![right 15%](jetpack-navigation.png)
+
+# Jetpack Navigation
+### 2019
+
+^ Android introduces Jetpack navigation
+
+^ Fragments with a single activity
+
+^ Skeptical, but gained popularity
+
+---
+
+[.footer: square.github.io/workflow]
+
+## square/workflow
+### 2019
+
+---
+
+# Compose UI
+### 2021
+
+![right 40%](wild-ui-framework.jpg)
+
+^ Though Compose UI was announced at Google IO 2019
+
+^ Didn't reach stable release until 2021
 
 ---
 
@@ -221,10 +263,6 @@ The great abstraction of framework components continues…
 
 ---
 
-Compose UI enters the scene (a wild UI framework appears)
-
----
-
 Jetpack Navigation includes support for Compose destinations.
 
 ---
@@ -237,19 +275,60 @@ Moving priorities towards Kotlin Multiplatform, rise and trends, increased deman
 
 ---
 
+Compose Multiplatform
+
+---
+
 Introduction of third party libraries with Compose or Multiplatform first ideology, inherit idiomatic style.
 
 ---
 
-Decompose - Excellent option, based upon Essenty, Multiplatform first, Compose second, builds facade against Android elements, managed lifecycle and view model aspects.
+## Role of Architecture
+
+^ Something I asked myself when working with Compose and Molecule:
+
+^ Given the movement of domain behaviour and state modelling to a Compose world;
+
+^ What remains of the role of architecture components familiar to Android?
 
 ---
 
-Circuit - More than excellant option, Zacs brainchild, Compose first, builds idiomatic structure, app entirely in Compose. Big fan. Check out projects ChrisBanes/Tivi, ZacSweers/CatchUp/FieldSpottr, AshDavies/Playground
+[.footer: github.com/slackhq/circuit]
+
+## slackhq/circuit
+### 2022
+
+^ Circuit is a new Compose driven architecture for Android apps written by Zac and the folks at Slack
+
+^ It’s a mechanism for handling navigation with @Parcelizable screens
 
 ---
 
-Voyager - Investigate
+- support for most KMP platforms now
+- circuit-retained has become really powerful and sort of it's secret sauce. Works as a wormhole for managing state across the back stack and can even layer in with saveable
+- https://chrisbanes.me/posts/retaining-beyond-viewmodels/
+- CB has contributed a lot of clever features
+- Lots of padded out functionality and features like multiple back stacks, navigation with results, expanded code gen support, circuitx artifacts
+
+---
+
+[.footer: arkivanov.github.io/Decompose]
+
+## arkivanov/Decompose
+### 2021
+
+^ Similar to Circuit, included navigation stack behaviour, but encompassing support for multiplatform
+
+^ Decompose is a Kotlin multiplatform library for sectioning your application into components
+
+^ Providing abstraction of platform lifecycle configuration changes and navigation
+
+---
+
+[.footer: voyager.adriel.cafe/]
+
+## adriel/voyager
+### 2021
 
 ---
 
@@ -281,17 +360,29 @@ Early adopters employed third party solutions, late adopters can migrate android
 
 ---
 
+| | Circuit | Decompose | Compose* | Voyager |
+| --- | --- | --- | --- | --- |
+| Multiplatform | ✅ | ? | ✅ | ? |
+| Compose | ✅ | ? |  ? | ? |
+
+```
+* JetBrains Compose Multiplatform
+```
+
+---
+
 # Resources
 
 - jetbrains.com/help/kotlin-multiplatform-dev/compose-navigation-routing.html
 - johnbuhanan.dev/android-at-scale-with-circuit
 - zacsweers.dev/writing-a-kotlin-multiplatform-app-from-start-to-store
-- speakerdeck.com/ashdavies/droidcon-berlin-navigation-and-the-single-activity-learnings-from-a-skeptic
+- ashdavies.dev/talks/navigation-and-the-single-activity-berlin/
 - jetbrains.com/help/kotlin-multiplatform-dev/whats-new-compose-170.html
 - medium.com/androiddevelopers/type-safe-navigation-for-compose-105325a97657
 - jetbrains.com/help/kotlin-multiplatform-dev/compose-navigation-routing.html
 - developer.squareup.com/blog/simpler-android-apps-with-flow-and-mortar/
--
+- chrisbanes.me/posts/retaining-beyond-viewmodels/
+
 ---
 
 [.text: line-height(2), text-scale(0.5)]
