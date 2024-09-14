@@ -1,7 +1,7 @@
 autoscale: true
 build-lists: true
 footer: ashdavies.dev
-slide-transition: true
+slide-transition: fade(0.5)
 slidenumbers: true
 theme: Next, 8
 
@@ -157,6 +157,8 @@ history.removeLast()
 
 ---
 
+![right 15%](jetpack-navigation.png)
+
 # Jetpack Navigation
 
 ^ Google introduced Jetpack navigation
@@ -167,13 +169,7 @@ history.removeLast()
 
 ---
 
-# 2019
-
-^ That was over five years ago, a lot of changed since then
-
-^ Billy Joel song worth of things have happened since then
-
----
+![right](navigation-graph-fragments.png)
 
 # Fragments
 
@@ -185,8 +181,19 @@ history.removeLast()
 
 ---
 
+[.footer: en.wikipedia.org/wiki/2019]
+
+![right](2019_collage_v1.png)
+
+# 2019
+
+^ Five years ago, almost a whole Billy Joel song of things have happened since
+
+---
+
 [.footer: developer.squareup.com/blog/simpler-android-apps-with-flow-and-mortar]
 
+# Square
 ## mortar & flow
 ### 2014
 
@@ -213,23 +220,11 @@ history.removeLast()
 
 ---
 
-## square: reactive workflows
-### 2017
+![](droidcon-nyc-workflow-pattern.png)
 
-^ Square continued development of flow to it's
+^ Square continued development of flow to it's development of workflows
 
----
-
-![right 15%](jetpack-navigation.png)
-
-# Jetpack Navigation
-### 2019
-
-^ Android introduces Jetpack navigation
-
-^ Fragments with a single activity
-
-^ Skeptical, but gained popularity
+^ Entertained reactive ideas, like immutability, separation of UI and state
 
 ---
 
@@ -237,6 +232,34 @@ history.removeLast()
 
 ## square/workflow
 ### 2019
+
+^ Went on to develop Workflow, open source, released to production
+
+^ Employs unidirection data flow, encouraging declarative syntax
+
+^ Quite comprehensive as an architectural paradigm
+
+^ Doesn't handle navigation in the traditional sense
+
+^ Hierarchy of parent/child workflows react to state changes
+
+^ Still under active development, docs currently stale
+
+^ Elaborate
+
+---
+
+[.footer: square.github.io/workflow/historical/]
+
+![](why-should-workflow.jpg)
+
+---
+
+## ![inline 5%](jetpack-navigation.png) Moving On...
+
+^ Besides a few outlyers, Jetpack Navigation was enough for most projects
+
+^ Given the recommendation from Google, gave confidence
 
 ---
 
@@ -251,31 +274,193 @@ history.removeLast()
 
 ---
 
-Introduces static “lock and key” parameter mechanism with XML and “safe-args” code generation.
+## Obligatory Notice ⚠️
+### Compose != Compose UI
+
+^ Important to know the difference between Compose and Compose UI
+
+^ Compose runtime and compiler for tree and property manipulation
+
+^ Part of androidx repo managed by Google
+
+^ This will be important later
 
 ---
 
-Development continued with custom navigation destination support, allowing for more options, possible to go back to activity based navigation in navigation graph, some animation support couldn’t be backported however due to Framework Activity vs Support Fragment.
+## Jetpack Navigation Compose
+### v2.4.0 (2021)
+
+- Build a navigation graph with a `@Composable` Kotlin DSL
+- Compose `viewModel()` scoped to navigation destination
+- Desintation level scope for `rememberSaveable()`
+- Automatic back handling support
+
+^ Development continued with Jetpack Navigation in 2021 v1
+
+^ Adding preliminary Compose support
 
 ---
 
-The great abstraction of framework components continues…
+### Jetpack Navigation Compose < v2.8.0
+
+```kotlin
+private const val HOME_ROUTE = "home"
+
+NavHost(
+    navController = navController,
+    startDestination = ,
+) {
+    composable(route = HOME_ROUTE) {
+        HomeScreen(
+            onBackClick = navController::popBackStack,
+            /* ... */
+        )
+    }
+}
+```
+
+^ NavHost Composable DSL with creation of screens
+
+^ Simple hierarchy, no separation of concerns
+
+^ Fine for simple apps, does not scale
 
 ---
 
-Jetpack Navigation includes support for Compose destinations.
+### Jetpack Navigation Compose < v2.8.0
+
+```kotlin
+private const val DETAIL_ID_KEY = "detailId"
+private const val DETAIL_ROUTE = "detail"
+
+NavHost(
+    navController = navController,
+    startDestination = DETAIL_ROUTE",
+) {
+    composable(
+        route = DETAIL_ROUTE",
+        arguments = listOf(
+            navArgument(DETAIL_ID_KEY) {
+                type = NavType.StringType
+                defaultValue = null
+                nullable = true
+            }
+        )
+    ) {
+        DetailScreen(/* ... */)
+    }
+}
+```
+
+^ Arguments would need to be registered into the declaration
+
+^ With type information explicitly typed
 
 ---
 
-Jetpack Navigation includes support for type safe parameters in Kotlin 🎉
+### Jetpack Navigation Compose < v2.8.0
+
+```kotlin
+private const val DETAIL_ID_KEY = "detailId"
+
+fun NavController.navigateToDetail(detailId: String) {
+  navigate("detail?$DETAIL_ID_KEY=$detailId")
+}
+
+savedStateHandle.getStateFlow(DETAIL_ID_KEY, null)
+```
+
+^ Parameters would need to be encoded as strings
+
+^ Retrieved from navController back stack or saved state handle
+
+^ Implemented tightly with platform `SavedInstanceState`
 
 ---
 
-Moving priorities towards Kotlin Multiplatform, rise and trends, increased demand.
+### Jetpack Navigation Compose v2.8.0 (04.09.2024)
+
+```kotlin
+@Serializable
+data class DetailRoute(val id: String)
+
+NavHost(
+    navController = navController,
+    startDestination = "detail",
+) {
+    composable<DetailRoute> {
+        DetailScreen(/* ... */)
+    }
+}
+
+val route = savedStateHandle.toRoute<DetailRoute>()
+```
+
+^ That was until earlier this month when type safety was added
+
+^ Using KotlinX serialization, the type is encoded into the route
+
+---
+
+# [fit] Navigation in a Multiplatform World
+
+## [fit] Choosing the Right Framework for your App
+
+**~~Basic Navigation on Android Only~~**
+~~by Some Dude~~
+
+^ That's all well and good, but this talk is on multiplatform
+
+---
+
+![right 100%](kodee-waving.png)
+
+# Kotlin Multiplatform
+## Stable (1.9.20)
+
+^ Kotlin Multiplatform, relatively new kid on the block
+
+^ Stable from release 1.9.20 released on 1st Nov last year
+
+^ But multiplatform isn’t a new concept…
+
+---
+
+![75%](multiplatform-framework-logos.png)
+
+^ There have been many attempts at multiplatform frameworks
+
+^ Each demonstrating advantages and disadvantages
+
+^ Some with limited success, some with even less
+
+^ Some integrating the underlying OS some not
+
+---
+
+![75%](multiplatform-languages.png)
+
+^ Each framework specifying its own language and development / build environment
+
+^ Whilst each of these languages have their own ecosystem of libraries etc
+
+^ Not languages typically familiar to Android or mobile developers
+
+^ Unless life has been particularly cruel to you
+
+---
+
+^ Moving priorities towards Kotlin Multiplatform, rise and trends, increased demand.
 
 ---
 
 Compose Multiplatform
+
+^ Used to think Compose Multiplatform was doing some very clever repackaging of androidx releases
+
+^ Actually a forked repo with the JetBrains team adapting libraries
+
+^ Constant huge amount of work, incredible effort
 
 ---
 
@@ -393,3 +578,11 @@ Early adopters employed third party solutions, late adopters can migrate android
 Ash Davies - SumUp
 Android / Kotlin GDE Berlin
 ashdavies.dev
+
+^ Jetpack Navigation: Introduces static “lock and key” parameter mechanism with XML and “safe-args” code generation.
+
+^ Coroutines: Prefer suspend fun over event emission
+
+---
+
+## Don't Forget to Vote! 🇺🇸 🫏
