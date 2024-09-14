@@ -406,10 +406,12 @@ val route = savedStateHandle.toRoute<DetailRoute>()
 
 ## [fit] Choosing the Right Framework for your App
 
-**~~Basic Navigation on Android Only~~**
+**~~Android Only Basic Navigation~~**
 ~~by Some Dude~~
 
 ^ That's all well and good, but this talk is on multiplatform
+
+^ Other talk was declined
 
 ---
 
@@ -450,7 +452,15 @@ val route = savedStateHandle.toRoute<DetailRoute>()
 
 ---
 
-^ Moving priorities towards Kotlin Multiplatform, rise and trends, increased demand.
+![80%](kotlin-multiplatform.jpg)
+
+^ KMP starts small, doesn’t require sharing everything
+
+^ Build components in a way that makes sense for you
+
+^ Language already familiar to Android and backend developers
+
+^ Strong community, public backing (JetBrains, Google)
 
 ---
 
