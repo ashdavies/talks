@@ -274,16 +274,30 @@ history.removeLast()
 
 ---
 
+# Compose UI
+
+- Declarative UI Framework
+- Open Source Kotlin
+
+---
+
 ## Obligatory Notice ⚠️
 ### Compose != Compose UI
 
 ^ Important to know the difference between Compose and Compose UI
 
+---
+
+[.footer: jakewharton.com/a-jetpack-compose-by-any-other-name]
+
+> Compose is, at its core, a general-purpose tool for managing a tree of nodes of any type ... a “tree of nodes” describes just about anything, and as a result Compose can target just about anything.
+-- Jake Wharton
+
 ^ Compose runtime and compiler for tree and property manipulation
 
 ^ Part of androidx repo managed by Google
 
-^ This will be important later
+^ Compose UI toolkit built upon that, projects need not include
 
 ---
 
@@ -464,6 +478,145 @@ val route = savedStateHandle.toRoute<DetailRoute>()
 
 ---
 
+[.background-color: #000]
+[.footer-style: #fff]
+
+[.footer: blog.jetbrains.com/kotlin/2023/04/kotlinconf-2023-opening-keynote/]
+
+![45%](multiplatform-libraries-by-year.webp)
+
+^ KotlinConf 2023 Multiplatform libraries available for Kotlin increase to 1200
+
+---
+
+[.background-color: #537ff0]
+
+![100%](android-kotlin-multiplatform.webp)
+
+^ Google announced Kotlin Multiplatform support at IO this year
+
+---
+
+[.footer: developer.android.com/kotlin/multiplatform | As of 15.09.2024]
+
+| Maven Group ID |	Latest Update |	Stable Release | Alpha Release |
+| --- | --- | --- | --- | --- |
+| annotation (*) | 04.09.2024 | 1.8.2 | 1.9.0-alpha03 |
+| collection | 04.09.2024 | 1.4.3 | 1.5.0-alpha01 |
+| datastore | 01.05.2024 | 1.1.1 | - |
+| lifecycle (*) | 04.09.2024 | 2.8.5 | 2.9.0-alpha02 |
+| paging (*) | 07.08.2024 | 3.3.2 | - |
+| room | 21.08.2024 | 2.6.1 | 2.7.0-alpha07 |
+| sqlite | 21.08.2024 | 2.4.0 | 2.5.0-alpha07 |
+
+^ Current multiplatform support time of writing 15.09.2024
+
+---
+
+[.footer: cs.android.com/androidx/platform/frameworks/support/+/androidx-main:lifecycle/lifecycle-viewmodel/src/commonMain/kotlin/androidx/lifecycle/ViewModel.kt]
+
+```kotlin
+kotlin {
+  sourceSets.commonMain.dependencies {
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.5")
+  }
+}
+
+// Backed by ViewModelImpl
+public expect abstract class ViewModel
+```
+
+# 🤷‍♂️
+
+^ For better or for worse, ViewModel is now multiplatform.
+
+---
+
+# Multiplatform Architecture
+
+^ Whilst there are some components from androidx becoming available
+
+^ We may not want to use them, or may want something fully fledged
+
+---
+
+[.footer: arkivanov.github.io/Decompose]
+
+## Decompose & Essenty
+### 2021
+
+^ Decompose focusses on the lifecycle awareness aspect with navigation included
+
+^ Providing abstraction of platform lifecycle configuration changes and navigation
+
+^ In the absence of ViewModel or LifecycleOwner did a good job of management
+
+---
+
+```kotlin
+import com.arkivanov.decompose.ComponentContext
+
+class DefaultRootComponent(
+    componentContext: ComponentContext,
+) : RootComponent, ComponentContext by componentContext {
+
+    init {
+        lifecycle... // Access the Lifecycle
+        stateKeeper... // Access the StateKeeper
+        instanceKeeper... // Access the InstanceKeeper
+        backHandler... // Access the BackHandler
+    }
+}
+```
+
+^ Core principle of decompose is to provide multiplatform functionality through ComponentContext
+
+^ Many functions here should be familiar to platfroms
+
+^ Provides observability and value storage with lifecycle persistance
+
+---
+
+```kotlin
+class RootComponent(context: ComponentContext) : Root, ComponentContext {
+  private val navigation = StackNavigation<Config>()
+  override val childStack = childStack(/* ... */)
+
+  fun createChild(config: Config, context: ComponentContext): Child = when (config) {
+    is Config.List -> Child.List(itemList(context))
+    is Config.Details -> /* ... */
+  }
+
+  private fun itemList(context: ComponentContext): ItemList =
+    ItemListComponent(context) { navigation.push(Config.Details(itemId = it)) }
+}
+
+private sealed class Config : Parcelable {
+  @Parcelize object List : Config()
+  @Parcelize data class Details(val itemId: Long) : Config()
+}
+```
+
+^ For navigation it employs the concept of child stacks
+
+^ Screen is created from the provided config
+
+^ Not inherently compose, compose provided through extensions
+
+---
+
+# Decompose
+
+- `com.arkivanov.decompose:extensions-compose`
+- `com.arkivanov.decompose:extensions-android`
+- `com.arkivanov.essenty:state-keeper`
+
+^ Platform hosting capability exist in compose and android extensions
+
+^ State keeper on darwin
+
+---
+
 Compose Multiplatform
 
 ^ Used to think Compose Multiplatform was doing some very clever repackaging of androidx releases
@@ -480,11 +633,9 @@ Introduction of third party libraries with Compose or Multiplatform first ideolo
 
 ## Role of Architecture
 
-^ Something I asked myself when working with Compose and Molecule:
+^ Knowing that Compose runtime is capable of managing a tree of nodes
 
-^ Given the movement of domain behaviour and state modelling to a Compose world;
-
-^ What remains of the role of architecture components familiar to Android?
+^ Means we can exploit this as an architecture
 
 ---
 
@@ -504,19 +655,6 @@ Introduction of third party libraries with Compose or Multiplatform first ideolo
 - https://chrisbanes.me/posts/retaining-beyond-viewmodels/
 - CB has contributed a lot of clever features
 - Lots of padded out functionality and features like multiple back stacks, navigation with results, expanded code gen support, circuitx artifacts
-
----
-
-[.footer: arkivanov.github.io/Decompose]
-
-## arkivanov/Decompose
-### 2021
-
-^ Similar to Circuit, included navigation stack behaviour, but encompassing support for multiplatform
-
-^ Decompose is a Kotlin multiplatform library for sectioning your application into components
-
-^ Providing abstraction of platform lifecycle configuration changes and navigation
 
 ---
 
@@ -547,18 +685,9 @@ Multiplatform documentation is difficult as it's out-of-date
 
 ---
 
-For better or for worse, ViewModel is now multiplatform.
-
----
-
 Early adopters employed third party solutions, late adopters can migrate android navigation to multiplatform. The early bird got the worm, but the second mouse got the cheese.
 
 ---
-
-| | Circuit | Decompose | Compose* | Voyager |
-| --- | --- | --- | --- | --- |
-| Multiplatform | ✅ | ? | ✅ | ? |
-| Compose | ✅ | ? |  ? | ? |
 
 ```
 * JetBrains Compose Multiplatform
