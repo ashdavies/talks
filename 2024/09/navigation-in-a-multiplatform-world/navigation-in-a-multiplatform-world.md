@@ -997,6 +997,18 @@ CircuitCompositionLocals(circuit) {
 
 ---
 
+[.footer: youtube.com/watch?v=ZIr_uuN8FEw]
+
+![fit](modern-compose-architecture.jpg)
+
+^ Zac and Kieran go into much more depth
+
+---
+
+## Molecule
+
+---
+
 [.footer: voyager.adriel.cafe/]
 
 ## adriel/voyager
