@@ -617,9 +617,58 @@ private sealed class Config : Parcelable {
 
 ---
 
-Compose Multiplatform
+![right](multiplatform-compose.svg)
 
-^ Used to think Compose Multiplatform was doing some very clever repackaging of androidx releases
+# Compose Multiplatform
+### v1.0 | 2021
+
+^ Compose Multiplatform builds upon Kotlin multiplatform
+
+^ Became ready for production with v1.0 at the end of 2021 (December)
+
+^ Has since recategorised stability declarations
+
+---
+
+| Platform | Stability level |
+| --- | --- |
+| Android | Stable |
+| iOS | Stable |
+| Desktop (JVM) | Stable |
+| Server-side (JVM) | Stable |
+| Web based on Kotlin/Wasm | Alpha |
+| Web based on Kotlin/JS | Stable |
+| watchOS | Best effort |
+| tvOS | Best effort |
+
+^ Android by nature of being backed by JetPack is stable
+
+^ Alpha under active development
+
+^ Most platforms stable
+
+---
+
+| Compose Multiplatform | Jetpack Compose |
+| --- | --- |
+| 1.6.11 | 1.6.7 |
+| 1.6.10 | 1.6.7 |
+| 1.6.2 | 1.6.4 |
+...
+
+^ The downside to this is that development is staggered
+
+^ Features can take some time to appear in multiplatform
+
+^ Documentation often out-dated or hard to find since tracked on older version
+
+---
+
+[.footer: github.com/JetBrains/compose-multiplatform-core]
+
+![75%](multiplatform-compose-core.png)
+
+^ Imaged some very clever repackaging of androidx releases
 
 ^ Actually a forked repo with the JetBrains team adapting libraries
 
@@ -627,7 +676,181 @@ Compose Multiplatform
 
 ---
 
-Introduction of third party libraries with Compose or Multiplatform first ideology, inherit idiomatic style.
+```kotlin
+kotlin {
+    sourceSets.commonMain.dependencies {
+        implementation("org.jetbrains.androidx.navigation:navigation-compose:2.8.0-alpha10")
+    }
+}
+
+@Serializable
+data object HomeRoute
+
+NavHost(navController, HomeRoute) {
+    composable<HomeRoute> {
+        HomeScreen()
+    }
+}
+
+val route = savedStateHandle.toRoute<HomeRoute>()
+```
+
+^ Navigation is currently available as an alpha artifact
+
+^ Should you wish to migrate to multiplatform
+
+---
+
+# Compose Multiplatform Migration
+
+- Change artifact coordinates
+- Do nothing
+- Profit
+
+^ If you're migrating from androidx navigation project
+
+^ You've waited long enough to have androidx available
+
+^ Congrats
+
+---
+
+> The early bird gets the worm ... but the second mouse gets the cheese
+
+---
+
+## Reactive Architecture
+
+- Push (not pull)
+- Unidirectional Data Flow
+- Declarative
+- Idempotent
+
+^ Consider our architecture goals and how we can use tooling to achieve them
+
+---
+
+## Architecture
+### Callbacks
+
+```kotlin
+downloadManager.downloadFile("https://.../") { result ->
+  fileManager.saveFile("storage/file", result) { success ->
+    if (success) println("Downloaded file successfully")
+  }
+}
+```
+
+^ Back in the day, we had callbacks, to execute code "after"
+
+^ We still have this in a lot of places, which can be ok
+
+^ Can quickly end up in callback hell
+
+---
+
+## Architecture
+### Observables
+
+```kotlin
+downloadManager.downloadFile("https://.../")
+  .flatMap { result -> fileManager.saveFile("storage/file", result) }
+  .observe { success -> if (success) println("Downloaded file successfully") }
+```
+
+^ Which then evolved into an observable chain
+
+^ Everything is a stream, and it's observable
+
+^ Can quickly become unmanagable with Rx operators
+
+---
+
+## Architecture
+### Coroutines
+
+```kotlin
+val file = downloadFile("https://.../")
+val success = fileManager.saveFile("storage/file", file)
+if (success) println("Downloaded file successfully")
+```
+
+^ Coroutines turned this into an imperative style
+
+^ Get to enjoy Kotlin and structured concurrency
+
+---
+
+## Architecture
+### Coroutines (Again)
+
+```kotlin
+downloadManager.downloadFile("https://.../")
+  .flatMapLatest { state ->
+    when (state) {
+      is State.Loaded -> stateFileManager.saveFile("storage/file", state.value)
+      else -> state
+    }
+  }
+  .collect { state ->
+    when (state) {
+      is State.Loading -> /* ... */
+      is State.Saved -> println("Downloaded file successfully")
+    }
+  }
+```
+
+^ Consider though that we wish to model our state through a reactive flow
+
+^ Which through Coroutines looks similar to observables
+
+---
+
+## Architecture
+### Compose
+
+```mermaid
+%%{ init: { 'flowchart': { 'curve': 'stepBefore' } } }%%
+flowchart TD
+    RN1[RootNode] --> CN1[ChildNode]
+    RN1[RootNode] --> CN2[ChildNode]
+    RN1[RootNode] --> CN3[ChildNode]
+    RN1[RootNode] --> CN4[ChildNode]
+    RN1[RootNode] --> CN5[ChildNode]
+    CN1[ChildNode] --> CN6[ChildNode]
+    CN1[ChildNode] --> CN7[ChildNode]
+    CN5[ChildNode] --> CN8[ChildNode]
+    CN5[ChildNode] --> CN10[ChildNode]
+    CN10[ChildNode] --> CN11[ChildNode]
+    CN10[ChildNode] --> CN12[ChildNode]
+```
+
+^ Remembering that Compose is a tree of nodes means we can restructure our architecture
+
+---
+
+## Architecture
+### Compose
+
+```kotlin
+val downloadState = downloadManager
+    .downloadFile("https://.../")
+    .collectAsState(State.Loading)
+
+val fileState = when(downloadState) {
+  is State.Loaded -> stateFileManager.saveFile("storage/file", state.value)
+  else -> state
+}
+
+when (fileState) {
+  is State.Loading -> /* ... */
+  is State.Saved -> LaunchedEffect(fileState) {
+    println("Downloaded file successfully")
+  }
+}
+```
+
+^ Means we've moved changed the react operators into a more readable sequence of declarations
 
 ---
 
@@ -639,22 +862,138 @@ Introduction of third party libraries with Compose or Multiplatform first ideolo
 
 ---
 
+## Pre-Compose Era
+
+^ Taking frameworks and applying them to compose works fine
+
+^ But if it seems a little un-idiomatic
+
+^ Consider Compose first architectures
+
+---
+
 [.footer: github.com/slackhq/circuit]
 
 ## slackhq/circuit
 ### 2022
 
-^ Circuit is a new Compose driven architecture for Android apps written by Zac and the folks at Slack
+^ Circuit is a community contributed library for multiplatform
 
-^ It’s a mechanism for handling navigation with @Parcelizable screens
+^ Takes inspiration from existing approaches, cashapp broadway, workflow etc
+
+^ Driven by Zac, Kieran and the rest of the folks at Slack
 
 ---
 
-- support for most KMP platforms now
-- circuit-retained has become really powerful and sort of it's secret sauce. Works as a wormhole for managing state across the back stack and can even layer in with saveable
-- https://chrisbanes.me/posts/retaining-beyond-viewmodels/
-- CB has contributed a lot of clever features
-- Lots of padded out functionality and features like multiple back stacks, navigation with results, expanded code gen support, circuitx artifacts
+## Circuit
+
+- Compose first architecture
+- Presenter & UI separation
+- Unidirectional Data Flow
+
+^ Designed with Compose in mind, powered with the compose runtime
+
+^ Same principal tenet, separation of presenter and ui
+
+^ UDF all the way through, no mutability
+
+---
+
+## Circuit
+### State
+
+```kotlin
+@Parcelize
+data object HomeScreen : Screen {
+  data class State(
+    val title: String,
+  ): CircuitUiState
+}
+```
+
+^ Screens are keyed by an appropriately named screen class
+
+^ UDP Concept revolves around your state
+
+^ Needs to be Parcelable so that it can be saved to the back stack on Android
+
+^ If you see Zac, ask him if we can make it Serializable instead
+
+---
+
+## Circuit
+### Presenter
+
+```kotlin
+@Composable
+fun HomePresenter(): HomeScreen.State {
+  return HomeScreen.State("Hello World")
+}
+```
+
+^ Presenters, separated from UI, responsible for creation of state
+
+---
+
+## Circuit
+### UI
+
+```kotlin
+@Composable
+fun HomeScreen(
+  state: HomeScreen.State,
+  modifier: Modifier = Modifier,
+) {
+  Text(
+    text = state.title,
+    modifier = modifier,
+  )
+}
+```
+
+^ Basic UI to receive and render the provided state
+
+^ Take a modifier as a good citizen
+
+---
+
+## Circuit
+### No DI
+
+```kotlin
+val circuit = Circuit.Builder()
+  .addPresenter<HomeScreen, HomeScreen.State> { _, _, _ -> presenterOf { HomePresenter() } }
+  .addUi<LauncherScreen, LauncherScreen.State> { _, _ -> HomeScreen(state, modifier) }
+  .build()
+
+CircuitCompositionLocals(circuit) {
+    val backStack = rememberSaveableBackStack(HomeScreen)
+
+    NavigableCircuitContent(
+        navigator = rememberCircuitNavigator(backStack),
+        backStack = backStack,
+    )
+}
+```
+
+^ Not using a DI framework here, prefer to start simple
+
+^ Wire up circuit with the presenter and UI
+
+^ Provide composition locals
+
+^ Create a back stack with an initial screen
+
+---
+
+## Circuit
+### DI
+
+^ support for most KMP platforms now
+^ circuit-retained has become really powerful and sort of it's secret sauce. Works as a wormhole for managing state across the back stack and can even layer in with saveable
+^ https://chrisbanes.me/posts/retaining-beyond-viewmodels/
+^ CB has contributed a lot of clever features
+^ Lots of padded out functionality and features like multiple back stacks, navigation with results, expanded code gen support, circuitx artifacts
 
 ---
 
@@ -666,32 +1005,6 @@ Introduction of third party libraries with Compose or Multiplatform first ideolo
 ---
 
 Multiplatform issues with Android state management, parcelization/bundling of state parameters needs to be handled. Modern approaches should use Kotlin serialization.
-
----
-
-Google recently made multiplatform a priority with moving a lot of dependencies to common, navigation included.
-
----
-
-As of the time of writing, Jetpack Navigation is not yet multiplatform however it is offered as a JetBrains Compose Multiplatform artifact
-
----
-
-Compose Multiplatform is usually quite delayed, JetBrains works hard on maintaining compatibility, but does not yet offer serialized destinations
-
----
-
-Multiplatform documentation is difficult as it's out-of-date
-
----
-
-Early adopters employed third party solutions, late adopters can migrate android navigation to multiplatform. The early bird got the worm, but the second mouse got the cheese.
-
----
-
-```
-* JetBrains Compose Multiplatform
-```
 
 ---
 
