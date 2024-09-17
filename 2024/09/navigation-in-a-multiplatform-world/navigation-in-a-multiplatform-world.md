@@ -854,6 +854,46 @@ when (fileState) {
 
 ---
 
+## cashapp/molecule
+
+^ Molecule built by the folks at Square explores this further
+
+^ Being able to use Compose runtime to build a state
+
+---
+
+## Molecule
+
+```kotlin
+fun CoroutineScope.launchCounter(): StateFlow<Int> {
+  return launchMolecule(mode = ContextClock) {
+    var count by remember { mutableStateOf(0) }
+
+    LaunchedEffect(Unit) {
+      while (true) {
+        delay(1_000)
+        count++
+      }
+    }
+
+    count
+  }
+}
+```
+
+^ Utilising Compose Runtime to build state flow
+
+---
+
+[.footer: ashdavies.dev/talks/demystifying-molecule-nyc]
+
+![](droidcon-nyc-demystifying-molecule.webp)
+
+## Demystifying Molecule
+### Droidcon NYC 2022
+
+---
+
 ## Role of Architecture
 
 ^ Knowing that Compose runtime is capable of managing a tree of nodes
@@ -887,6 +927,7 @@ when (fileState) {
 
 ## Circuit
 
+- Supports most supported KMP platforms
 - Compose first architecture
 - Presenter & UI separation
 - Unidirectional Data Flow
@@ -925,9 +966,11 @@ data object HomeScreen : Screen {
 ### Presenter
 
 ```kotlin
-@Composable
-fun HomePresenter(): HomeScreen.State {
-  return HomeScreen.State("Hello World")
+class HomePresenter : Presenter<HomeScreen.State> {
+  @Composable
+  override fun present(): HomeScreen.State {
+    return HomeScreen.State("Hello World")
+  }
 }
 ```
 
@@ -958,11 +1001,10 @@ fun HomeScreen(
 ---
 
 ## Circuit
-### No DI
 
 ```kotlin
 val circuit = Circuit.Builder()
-  .addPresenter<HomeScreen, HomeScreen.State> { _, _, _ -> presenterOf { HomePresenter() } }
+  .addPresenter<HomeScreen, HomeScreen.State>(HomePresenter())
   .addUi<LauncherScreen, LauncherScreen.State> { _, _ -> HomeScreen(state, modifier) }
   .build()
 
@@ -976,8 +1018,6 @@ CircuitCompositionLocals(circuit) {
 }
 ```
 
-^ Not using a DI framework here, prefer to start simple
-
 ^ Wire up circuit with the presenter and UI
 
 ^ Provide composition locals
@@ -986,14 +1026,48 @@ CircuitCompositionLocals(circuit) {
 
 ---
 
-## Circuit
-### DI
+[.code-highlight: 5, 8-11]
 
-^ support for most KMP platforms now
-^ circuit-retained has become really powerful and sort of it's secret sauce. Works as a wormhole for managing state across the back stack and can even layer in with saveable
-^ https://chrisbanes.me/posts/retaining-beyond-viewmodels/
-^ CB has contributed a lot of clever features
-^ Lots of padded out functionality and features like multiple back stacks, navigation with results, expanded code gen support, circuitx artifacts
+## Circuit
+### Navigation
+
+```kotlin
+@Parcelize
+data object HomeScreen : Screen {
+  data class State(
+    val title: String,
+    val eventSink: (Event) -> Unit
+  ): CircuitUiState
+
+  sealed interface Event {
+    data class DetailClicked(
+      val id: String,
+    ): Event
+}
+```
+
+^ Interestingly navigation is handled through simply event propagation through the screen state
+
+^ Which can be invoked from the UI then handled by the presenter
+
+---
+
+## Circuit
+### Navigation
+
+```kotlin
+class HomePresenter(private val navigator: Navigator) : Presenter<HomeScreen.State> {
+
+@Composable
+  override fun present(): HomeScreen.State {
+    return HomeScreen.State("Hello World") { event ->
+      when (event) {
+        is HomeScreen.Event.DetailClicked -> navigator.goTo(DetailScreen(event.id))
+      }
+    }
+  }
+}
+```
 
 ---
 
@@ -1005,32 +1079,78 @@ CircuitCompositionLocals(circuit) {
 
 ---
 
-## Molecule
+## CircuitX
+
+- com.slack.circuit:circuitx-android
+- com.slack.circuit:circuitx-effects
+- com.slack.circuit:circuitx-gesture-navigation
+- com.slack.circuit:circuitx-overlays
+
+^ Android extensions for other activities or custom tabs
+
+^ Effects for logging and analytics
+
+^ Gesture navigation with support for predictive back
+
+^ Overlay support for bottom sheet navigation
 
 ---
 
-[.footer: voyager.adriel.cafe/]
+![](retaining-beyond-viewmodels-background.jpg)
 
-## adriel/voyager
-### 2021
+[.footer: chrisbanes.me/posts/retaining-beyond-viewmodels]
+
+## `rememberRetained()`
+
+^ Circuit is mainly refreshing because it moves away from the mess of lifecycles
+
+^ Presenters live as long as the UI is being composed
+
+^ Remember retained stores value in memory after composition
+
+^ Similar to rememberSaveable but isn't parcelized
 
 ---
 
-Multiplatform issues with Android state management, parcelization/bundling of state parameters needs to be handled. Modern approaches should use Kotlin serialization.
+## Full Disclosure
+### Bias
+
+^ Full disclosure, I've covered circuit here a lot because I really enyjoy using it
+
+^ That doesn't mean it'll be a perfect fit for you
+
+---
+
+# Comparison
+
+| | androidx | circuit | decompose | voyager | workflow |
+| --- | --- | --- | --- | --- | --- |
+| Compose First | ❌ | ✅ | ❌ | ✅ | ❌ |
+| Documentation* | ❌ | ✅ | ✅ | ✅ | ❌ |
+
+```
+* Documentation exists, but is outdated or hard to find
+```
 
 ---
 
 # Resources
 
+- github.com/chrisbanes/tivi
+- github.com/zacSweers/CatchUp
+- github.com/ashdavies/playground.ashdavies.dev
 - jetbrains.com/help/kotlin-multiplatform-dev/compose-navigation-routing.html
 - johnbuhanan.dev/android-at-scale-with-circuit
 - zacsweers.dev/writing-a-kotlin-multiplatform-app-from-start-to-store
-- ashdavies.dev/talks/navigation-and-the-single-activity-berlin/
+- ashdavies.dev/talks/navigation-and-the-single-activity-berlin
 - jetbrains.com/help/kotlin-multiplatform-dev/whats-new-compose-170.html
 - medium.com/androiddevelopers/type-safe-navigation-for-compose-105325a97657
-- jetbrains.com/help/kotlin-multiplatform-dev/compose-navigation-routing.html
-- developer.squareup.com/blog/simpler-android-apps-with-flow-and-mortar/
-- chrisbanes.me/posts/retaining-beyond-viewmodels/
+- speakerdeck.com/oldergod/architecture-at-scale-droidconnyc-2022
+- bumble-tech.github.io/appyx
+- tlaster.github.io/PreCompose
+- voyager.adriel.cafe
+
+^ TODO: Turn each of these into a slide
 
 ---
 
@@ -1042,8 +1162,6 @@ Multiplatform issues with Android state management, parcelization/bundling of st
 Ash Davies - SumUp
 Android / Kotlin GDE Berlin
 ashdavies.dev
-
-^ Jetpack Navigation: Introduces static “lock and key” parameter mechanism with XML and “safe-args” code generation.
 
 ^ Coroutines: Prefer suspend fun over event emission
 
