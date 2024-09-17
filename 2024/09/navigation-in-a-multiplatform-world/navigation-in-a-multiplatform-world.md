@@ -193,9 +193,8 @@ history.removeLast()
 
 [.footer: developer.squareup.com/blog/simpler-android-apps-with-flow-and-mortar]
 
-# Square
 ## mortar & flow
-### 2014
+### github.com/square/mortar
 
 ^ The idea of a more molecular UI structure had been entertained before
 
@@ -210,7 +209,7 @@ history.removeLast()
 [.footer: uber.com/en-GB/blog/new-rider-app-architecture]
 
 ## uber/ribs
-### 2016
+### github.com/uber/RIBs
 
 ^ Continues in that vein of using view groups and presenters (VIPER)
 
@@ -228,10 +227,8 @@ history.removeLast()
 
 ---
 
-[.footer: square.github.io/workflow]
-
 ## square/workflow
-### 2019
+### square.github.io/workflow
 
 ^ Went on to develop Workflow, open source, released to production
 
@@ -264,7 +261,7 @@ history.removeLast()
 ---
 
 # Compose UI
-### 2021
+### github.com/androidx/androidx/tree/androidx-main/compose/ui
 
 ![right 40%](wild-ui-framework.jpg)
 
@@ -540,10 +537,8 @@ public expect abstract class ViewModel
 
 ---
 
-[.footer: arkivanov.github.io/Decompose]
-
 ## Decompose & Essenty
-### 2021
+### arkivanov.github.io/Decompose
 
 ^ Decompose focusses on the lifecycle awareness aspect with navigation included
 
@@ -912,10 +907,8 @@ fun CoroutineScope.launchCounter(): StateFlow<Int> {
 
 ---
 
-[.footer: github.com/slackhq/circuit]
-
 ## slackhq/circuit
-### 2022
+### github.com/slackhq/circuit
 
 ^ Circuit is a community contributed library for multiplatform
 
@@ -1119,6 +1112,91 @@ class HomePresenter(private val navigator: Navigator) : Presenter<HomeScreen.Sta
 
 ^ That doesn't mean it'll be a perfect fit for you
 
+^ Other libraries I didn't have time to cover properly
+
+---
+
+![500%](voyager-icon.png)
+
+## adrielcafe/voyager
+### voyager.adriel.cafe
+
+---
+
+# Voyager ![](voyager-icon.png)
+
+```kotlin
+class PostListScreen : Screen {
+
+    @Composable
+    override fun Content() {
+        // ...
+    }
+
+    @Composable
+    private fun PostCard(post: Post) {
+        val navigator = LocalNavigator.currentOrThrow
+
+        Card(
+            modifier = Modifier.clickable {
+                navigator.push(PostDetailsScreen(post.id))
+            }
+        ) {
+            // ...
+        }
+    }
+}
+```
+
+^ Voyager takes a more simpler approach with Navigator provided as a CompositionLocal
+
+^ Keys again keyed by a Screen class, simply added or removed from the back stack
+
+---
+
+# Voyager ![](voyager-icon.png)
+
+```kotlin
+interface ParcelableScreen : Screen, Parcelable
+
+// Compile
+@Parcelize
+data class Post(/*...*/) : Parcelable
+
+@Parcelize
+data class ValidScreen(
+    val post: Post
+) : ParcelableScreen {
+    // ...
+}
+
+// Not compile
+data class Post(/*...*/)
+
+@Parcelize
+data class ValidScreen(
+    val post: Post
+) : ParcelableScreen {
+    // ...
+}
+```
+
+^ Still expects Parcelable for Android, but allows consumer to enforce this
+
+---
+
+## appyx
+### bumble-tech.github.io/appyx
+
+^ Another compose first navigation library more focussed on gesture control
+
+---
+
+## PreCompose
+### github.com/Tlaster/PreCompose
+
+^ Similar to Jetpack Navigation with some tweaks
+
 ---
 
 # Comparison
@@ -1146,9 +1224,6 @@ class HomePresenter(private val navigator: Navigator) : Presenter<HomeScreen.Sta
 - jetbrains.com/help/kotlin-multiplatform-dev/whats-new-compose-170.html
 - medium.com/androiddevelopers/type-safe-navigation-for-compose-105325a97657
 - speakerdeck.com/oldergod/architecture-at-scale-droidconnyc-2022
-- bumble-tech.github.io/appyx
-- tlaster.github.io/PreCompose
-- voyager.adriel.cafe
 
 ^ TODO: Turn each of these into a slide
 
