@@ -12,7 +12,7 @@ theme: Next, 8
 
 ## [fit] Choosing the Right Framework for your App
 
-### Droidcon NYC - September '24 🇺🇸
+#### Droidcon NYC - September '24 🇺🇸
 
 Ash Davies - SumUp
 Android & Kotlin GDE Berlin
@@ -144,6 +144,8 @@ history.removeLast()
 
 ---
 
+[.footer: ashdavies.dev/talks/navigation-and-the-single-activity-berlin]
+
 ![align(top)](droidcon-berlin-navigation-and-the-single-activity.jpeg)
 
 ^ We've actually been there, 2019 Berlin talk on navigation
@@ -206,19 +208,6 @@ history.removeLast()
 
 ---
 
-[.footer: uber.com/en-GB/blog/new-rider-app-architecture]
-
-## uber/ribs
-### github.com/uber/RIBs
-
-^ Continues in that vein of using view groups and presenters (VIPER)
-
-^ Still under active development, mostly Kotlin (Java tests & tutorials)
-
-^ Shared code between Android & iOS
-
----
-
 ![](droidcon-nyc-workflow-pattern.png)
 
 ^ Square continued development of flow to it's development of workflows
@@ -252,6 +241,22 @@ history.removeLast()
 
 ---
 
+[.footer: uber.com/en-GB/blog/new-rider-app-architecture]
+
+## uber/ribs
+### github.com/uber/RIBs
+
+^ Continues in that vein of using view groups and presenters (VIPER)
+
+^ Still under active development, mostly Kotlin (Java tests & tutorials)
+
+^ Shared code between Android & iOS
+
+^ TODO Check date
+^ TODO Add screenshot
+
+---
+
 ## ![inline 5%](jetpack-navigation.png) Moving On...
 
 ^ Besides a few outlyers, Jetpack Navigation was enough for most projects
@@ -275,6 +280,8 @@ history.removeLast()
 
 - Declarative UI Framework
 - Open Source Kotlin
+
+^ TODO Add more points here
 
 ---
 
@@ -319,7 +326,7 @@ private const val HOME_ROUTE = "home"
 
 NavHost(
     navController = navController,
-    startDestination = ,
+    startDestination = HOME_ROUTE,
 ) {
     composable(route = HOME_ROUTE) {
         HomeScreen(
@@ -346,10 +353,10 @@ private const val DETAIL_ROUTE = "detail"
 
 NavHost(
     navController = navController,
-    startDestination = DETAIL_ROUTE",
+    startDestination = DETAIL_ROUTE,
 ) {
     composable(
-        route = DETAIL_ROUTE",
+        route = DETAIL_ROUTE,
         arguments = listOf(
             navArgument(DETAIL_ID_KEY) {
                 type = NavType.StringType
@@ -410,6 +417,16 @@ val route = savedStateHandle.toRoute<DetailRoute>()
 ^ That was until earlier this month when type safety was added
 
 ^ Using KotlinX serialization, the type is encoded into the route
+
+---
+
+[.background-color: #4ca854]
+
+[.footer: medium.com/androiddevelopers/type-safe-navigation-for-compose-105325a97657]
+
+![fit](type-safe-navigation.webp)
+
+^ More information about type save navigation on the androiddevelopers blog
 
 ---
 
@@ -498,11 +515,11 @@ val route = savedStateHandle.toRoute<DetailRoute>()
 
 | Maven Group ID |	Latest Update |	Stable Release | Alpha Release |
 | --- | --- | --- | --- | --- |
-| annotation (*) | 04.09.2024 | 1.8.2 | 1.9.0-alpha03 |
+| annotation | 04.09.2024 | 1.8.2 | 1.9.0-alpha03 |
 | collection | 04.09.2024 | 1.4.3 | 1.5.0-alpha01 |
 | datastore | 01.05.2024 | 1.1.1 | - |
-| lifecycle (*) | 04.09.2024 | 2.8.5 | 2.9.0-alpha02 |
-| paging (*) | 07.08.2024 | 3.3.2 | - |
+| lifecycle | 04.09.2024 | 2.8.5 | 2.9.0-alpha02 |
+| paging | 07.08.2024 | 3.3.2 | - |
 | room | 21.08.2024 | 2.6.1 | 2.7.0-alpha07 |
 | sqlite | 21.08.2024 | 2.4.0 | 2.5.0-alpha07 |
 
@@ -526,6 +543,8 @@ public expect abstract class ViewModel
 # 🤷‍♂️
 
 ^ For better or for worse, ViewModel is now multiplatform.
+
+^ TODO Kotti unhappy face
 
 ---
 
@@ -693,6 +712,14 @@ val route = savedStateHandle.toRoute<HomeRoute>()
 ^ Navigation is currently available as an alpha artifact
 
 ^ Should you wish to migrate to multiplatform
+
+---
+
+[.footer: jetbrains.com/help/kotlin-multiplatform-dev/compose-navigation-routing.html]
+
+![50%](compose-navigation-routing.png)
+
+^ More details on JetBrains Compose site
 
 ---
 
@@ -1105,6 +1132,20 @@ class HomePresenter(private val navigator: Navigator) : Presenter<HomeScreen.Sta
 
 ---
 
+## Circuit
+### Examples
+
+- **Chris Banes: Tivi**
+    github.com/chrisbanes/tivi
+- **Zac Sweers: CatchUp**
+    github.com/ZacSweers/CatchUp
+- **Zac Sweers: FieldSpottr**
+    github.com/zacsweers/fieldspottr
+- **Ash Davies: Playground**
+    github.com/ashdavies/playground.ashdavies.dev
+
+---
+
 ## Full Disclosure
 ### Bias
 
@@ -1203,29 +1244,16 @@ data class ValidScreen(
 
 | | androidx | circuit | decompose | voyager | workflow |
 | --- | --- | --- | --- | --- | --- |
-| Compose First | ❌ | ✅ | ❌ | ✅ | ❌ |
-| Documentation* | ❌ | ✅ | ✅ | ✅ | ❌ |
+| Compose 1st | ❌ | ✅ | ❌ | ✅ | ❌ |
+| Documented* | ❌ | ✅ | ✅ | ✅ | ❌ |
+| Easy-To-Use** | ✅ | ✅ | ❌ | ✅ | ❌ |
+| Awesome** | ❌ | ✅ | ❌ | ❌ | ❌ |
+| Built by Square | ❌ | ❌ | ❌ | ❌ | ✅ |
 
 ```
 * Documentation exists, but is outdated or hard to find
+** From my perspective
 ```
-
----
-
-# Resources
-
-- github.com/chrisbanes/tivi
-- github.com/zacSweers/CatchUp
-- github.com/ashdavies/playground.ashdavies.dev
-- jetbrains.com/help/kotlin-multiplatform-dev/compose-navigation-routing.html
-- johnbuhanan.dev/android-at-scale-with-circuit
-- zacsweers.dev/writing-a-kotlin-multiplatform-app-from-start-to-store
-- ashdavies.dev/talks/navigation-and-the-single-activity-berlin
-- jetbrains.com/help/kotlin-multiplatform-dev/whats-new-compose-170.html
-- medium.com/androiddevelopers/type-safe-navigation-for-compose-105325a97657
-- speakerdeck.com/oldergod/architecture-at-scale-droidconnyc-2022
-
-^ TODO: Turn each of these into a slide
 
 ---
 
