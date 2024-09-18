@@ -241,19 +241,18 @@ history.removeLast()
 
 ---
 
+![](uber-rider-app.avif)
+
 [.footer: uber.com/en-GB/blog/new-rider-app-architecture]
 
 ## uber/ribs
 ### github.com/uber/RIBs
 
-^ Continues in that vein of using view groups and presenters (VIPER)
+^ Uber completely rebuilt their app in 2016 using "VIPER"
 
 ^ Still under active development, mostly Kotlin (Java tests & tutorials)
 
 ^ Shared code between Android & iOS
-
-^ TODO Check date
-^ TODO Add screenshot
 
 ---
 
@@ -1244,16 +1243,27 @@ data class ValidScreen(
 
 | | androidx | circuit | decompose | voyager | workflow |
 | --- | --- | --- | --- | --- | --- |
+| Multiplatform | ✅ | ✅ | ✅ | ✅ | ✅ |
 | Compose 1st | ❌ | ✅ | ❌ | ✅ | ❌ |
 | Documented* | ❌ | ✅ | ✅ | ✅ | ❌ |
-| Easy-To-Use** | ✅ | ✅ | ❌ | ✅ | ❌ |
-| Awesome** | ❌ | ✅ | ❌ | ❌ | ❌ |
-| Built by Square | ❌ | ❌ | ❌ | ❌ | ✅ |
+| Ease-of-Use** | ❌ | ✅ | / | ✅ | ❌ |
+| Opinionated*** | ❌ | ✅ | ❌ | ❌ | ✅ |
 
 ```
 * Documentation exists, but is outdated or hard to find
-** From my perspective
+** Subjective, how quick to get started
+*** Additional API surface
 ```
+
+---
+
+## Y Tho?
+
+^ What are the features we look for in libraries?
+
+^ Pass off between configuration and ease-of-use
+
+^ No need to migrate if you have a solution
 
 ---
 
