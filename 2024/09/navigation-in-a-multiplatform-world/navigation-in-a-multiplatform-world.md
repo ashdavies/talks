@@ -113,9 +113,13 @@ history.removeLast()
 
 ---
 
+![](navigation_up_vs_back_gmail.png)
+
 # ↑ ←
 
 ^ Android has both up and back which are not the same
+
+^ Screenshot blast from the past
 
 ---
 
@@ -279,8 +283,8 @@ history.removeLast()
 
 - Declarative UI Framework
 - Open Source Kotlin
-
-^ TODO Add more points here
+- Accelerate UI development
+- Intuitive Idiomatic API
 
 ---
 
