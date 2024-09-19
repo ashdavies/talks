@@ -86,7 +86,9 @@ history.removeLast()
 
 ---
 
-# 🤖 🍏 🖥️
+[.background-color:#fff]
+
+![100%](platform-logos.png)
 
 ^ Behaviour should be consistent with platform expectation
 
@@ -445,7 +447,7 @@ val route = savedStateHandle.toRoute<DetailRoute>()
 ## [fit] Choosing the Right Framework for your App
 
 **~~Android Navigation für N00bs~~**
-~~by Ash Ketchum-those-Burgers~~
+~~by Some Dude~~
 
 ^ That's all well and good, but this talk is on multiplatform
 
@@ -538,14 +540,24 @@ val route = savedStateHandle.toRoute<DetailRoute>()
 
 ^ Current multiplatform support time of writing 15.09.2024
 
+^ Navigation is noticeable absent
+
+^ But ...
+
 ---
+
+![right](wtf.jpeg)
 
 [.footer: cs.android.com/androidx/platform/frameworks/support/+/androidx-main:lifecycle/lifecycle-viewmodel/src/commonMain/kotlin/androidx/lifecycle/ViewModel.kt]
 
 ```kotlin
 kotlin {
   sourceSets.commonMain.dependencies {
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.5")
+    implementation(
+        "androidx.lifecycle:" +
+          "lifecycle-viewmodel-ktx:" +
+          "2.8.5"
+    )
   }
 }
 
@@ -640,9 +652,9 @@ private sealed class Config : Parcelable {
 
 ---
 
-# Enter Compose Multiplatform 🎉
+# Compose Multiplatform 🎉
 
-^ Better Entrance
+^ Enter Compose Multiplatform
 
 ---
 
@@ -697,7 +709,7 @@ private sealed class Config : Parcelable {
 
 ![75%](multiplatform-compose-core.png)
 
-^ Imaged some very clever repackaging of androidx releases
+^ Imagined some very clever repackaging of androidx releases
 
 ^ Actually a forked repo with the JetBrains team adapting libraries
 
@@ -890,6 +902,8 @@ when (fileState) {
 ^ Means we've moved changed the react operators into a more readable sequence of declarations
 
 ---
+
+![](cashapp-molecule.png)
 
 ## cashapp/molecule
 
@@ -1273,9 +1287,7 @@ data class ValidScreen(
 
 ^ I tried to make a comparison to evaluate these libraries against each other
 
-^ Truth be told, it's subjective
-
-^ Performance is a good metric, but not one I've measured
+^ Truth be told, it's subjective, performance is a good metric, but not one I've measured
 
 ^ Idiomatic features, fun-to-use, enjoyable developer experience
 
@@ -1293,8 +1305,6 @@ data class ValidScreen(
 
 ## [fit] Good Code == Removable Code
 ### Code your own obscolescance
-
-^ Code should be fun to write, but shouldn't exist for long
 
 ^ Code should be fun to write, and even more fun to delete
 
