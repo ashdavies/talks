@@ -2,7 +2,6 @@ autoscale: true
 build-lists: true
 footer: ashdavies.dev
 slide-transition: fade(0.5)
-slidenumbers: true
 theme: Next, 8
 
 [.text: line-height(2), text-scale(0.5)]
@@ -51,7 +50,7 @@ history.removeLast()
 
 ---
 
-# 🤦
+## It's Complicated
 
 ^ Complications come in many forms, mostly human
 
@@ -59,7 +58,7 @@ history.removeLast()
 
 # ↔
 
-^ More than just forward/backward navigation
+^ More than just horizontal navigation
 
 ^ More than just a history
 
@@ -71,7 +70,7 @@ history.removeLast()
 
 ![right](bottom-navigation-bar.png)
 
-^ Navigation concepts like the rail or bottom bar introduce parallel navigation
+^ UI concepts like the rail or bottom bar introduce parallel navigation
 
 ^ Horizontal in addition to vertical
 
@@ -82,6 +81,8 @@ history.removeLast()
 ![](faucet-with-false-affrodance.jpg)
 
 ^ Affordance is how a user expects to interact with something
+
+^ Push / pull doors, shouldn't need an explanation
 
 ---
 
@@ -95,7 +96,7 @@ history.removeLast()
 
 ![](android-form-factors.png)
 
-^ Different form factors on the same platform will change how the user expects to navigate
+^ Even different form factors on the same platform will change how the user expects to navigate
 
 ---
 
@@ -125,7 +126,9 @@ history.removeLast()
 
 #  ⃕ 🔥
 
-^ Maintaining a stack through configuration change
+^ Android activity is destroyed on configuration change
+
+^ Configuration change includes any change to screen size
 
 ---
 
@@ -137,6 +140,8 @@ history.removeLast()
 ![50%](deep-links-sample.webp)
 
 ^ Handling deep links requires specific navigation behaviour
+
+^ Deep links should replicate navigation
 
 ---
 
@@ -199,7 +204,7 @@ history.removeLast()
 
 [.footer: developer.squareup.com/blog/simpler-android-apps-with-flow-and-mortar]
 
-## mortar & flow
+## 2014: mortar & flow
 ### github.com/square/mortar
 
 ^ The idea of a more molecular UI structure had been entertained before
@@ -223,19 +228,13 @@ history.removeLast()
 ## square/workflow
 ### square.github.io/workflow
 
-^ Went on to develop Workflow, open source, released to production
+^ Went on to develop Workflow, comprehensive, opinionated, open source, released to production
 
 ^ Employs unidirection data flow, encouraging declarative syntax
 
-^ Quite comprehensive as an architectural paradigm
-
-^ Doesn't handle navigation in the traditional sense
-
 ^ Hierarchy of parent/child workflows react to state changes
 
-^ Still under active development, docs currently stale
-
-^ Elaborate
+^ Actively maintained, docs currently stale
 
 ---
 
@@ -249,12 +248,12 @@ history.removeLast()
 
 [.footer: uber.com/en-GB/blog/new-rider-app-architecture]
 
-## uber/ribs
+## 2016: uber/ribs
 ### github.com/uber/RIBs
 
 ^ Uber completely rebuilt their app in 2016 using "VIPER"
 
-^ Still under active development, mostly Kotlin (Java tests & tutorials)
+^ Actively maintained, mostly Kotlin (Java tests & tutorials)
 
 ^ Shared code between Android & iOS
 
@@ -305,6 +304,14 @@ history.removeLast()
 ^ Part of androidx repo managed by Google
 
 ^ Compose UI toolkit built upon that, projects need not include
+
+---
+
+[.footer: ]
+
+![](deep-dive-into-compose-compiler.jpeg)
+
+^ Check out Mohits talk tomorrow morning on the Compose Compiler
 
 ---
 
@@ -429,7 +436,7 @@ val route = savedStateHandle.toRoute<DetailRoute>()
 
 ![fit](type-safe-navigation.webp)
 
-^ More information about type save navigation on the androiddevelopers blog
+^ More information about type safe navigation on the androiddevelopers blog
 
 ---
 
@@ -437,8 +444,8 @@ val route = savedStateHandle.toRoute<DetailRoute>()
 
 ## [fit] Choosing the Right Framework for your App
 
-**~~Android Only Basic Navigation~~**
-~~by Some Dude~~
+**~~Android Navigation für N00bs~~**
+~~by Ash Ketchum-those-Burgers~~
 
 ^ That's all well and good, but this talk is on multiplatform
 
@@ -459,6 +466,8 @@ val route = savedStateHandle.toRoute<DetailRoute>()
 
 ---
 
+# The Before-Times
+
 ![75%](multiplatform-framework-logos.png)
 
 ^ There have been many attempts at multiplatform frameworks
@@ -471,6 +480,7 @@ val route = savedStateHandle.toRoute<DetailRoute>()
 
 ---
 
+# The Before Times
 ![75%](multiplatform-languages.png)
 
 ^ Each framework specifying its own language and development / build environment
@@ -543,11 +553,7 @@ kotlin {
 public expect abstract class ViewModel
 ```
 
-# 🤷‍♂️
-
 ^ For better or for worse, ViewModel is now multiplatform.
-
-^ TODO Kotti unhappy face
 
 ---
 
@@ -600,12 +606,12 @@ class RootComponent(context: ComponentContext) : Root, ComponentContext {
   override val childStack = childStack(/* ... */)
 
   fun createChild(config: Config, context: ComponentContext): Child = when (config) {
-    is Config.List -> Child.List(itemList(context))
+    is Config.List -> Child.List(ItemListComponent(context) {
+      navigation.push(Config.Details(itemId = it)) }
+    )
+
     is Config.Details -> /* ... */
   }
-
-  private fun itemList(context: ComponentContext): ItemList =
-    ItemListComponent(context) { navigation.push(Config.Details(itemId = it)) }
 }
 
 private sealed class Config : Parcelable {
@@ -631,6 +637,12 @@ private sealed class Config : Parcelable {
 ^ Platform hosting capability exist in compose and android extensions
 
 ^ State keeper on darwin
+
+---
+
+# Enter Compose Multiplatform 🎉
+
+^ Better Entrance
 
 ---
 
@@ -1259,6 +1271,14 @@ data class ValidScreen(
 *** Additional API surface
 ```
 
+^ I tried to make a comparison to evaluate these libraries against each other
+
+^ Truth be told, it's subjective
+
+^ Performance is a good metric, but not one I've measured
+
+^ Idiomatic features, fun-to-use, enjoyable developer experience
+
 ---
 
 ## Y Tho?
@@ -1268,6 +1288,19 @@ data class ValidScreen(
 ^ Pass off between configuration and ease-of-use
 
 ^ No need to migrate if you have a solution
+
+---
+
+## [fit] Good Code == Removable Code
+### Code your own obscolescance
+
+^ Code should be fun to write, but shouldn't exist for long
+
+^ Code should be fun to write, and even more fun to delete
+
+^ Ease in writing a new feature is the same as ease in deleting one
+
+^ If a framework allows you to write less code
 
 ---
 
