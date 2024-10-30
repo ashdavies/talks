@@ -16,7 +16,6 @@ theme: Simple, 1
 
 ^ 2nd Revision DC BER/NYC Beyond the mockery
 
-^ 
 ---
 
 [.footer: Photo by Nubelson Fernandes on Unsplash]
@@ -24,11 +23,9 @@ theme: Simple, 1
 
 ![](black-and-white-ceramic.jpeg)
 
-^ You've just landed a new job, new computer, swag, fancy coffee maker
+^ New job, computer, swag, fancy coffee maker
 
-^ Sit down with your new team, ready to start working
-
-^ Thats when you see your new project...
+^ Ready to start, you see your new project...
 
 ---
 
@@ -36,17 +33,17 @@ theme: Simple, 1
 
 ![35%](monkeyuser-production-ready.png)
 
-^ The reality is, we don't always have luxury of working in green fields
+^ Don't have luxury of working in green fields
 
-^ Production projects are complicated, often with a backlog of tech debt
+^ Production projects are complicated
+
+^ often with a backlog of tech debt
 
 ---
 
 ![](experts-template-legacy.jpeg)
 
-^ Can be tough to know where to start with legacy projects.
-
-^ Legacy code, topic most common to developers.
+^ Tough to know where to start
 
 ---
 
@@ -54,11 +51,13 @@ theme: Simple, 1
 
 ![right](unstable-bridge.webp)
 
-^ How to proceed with an existing project with certainty
+^ Want to proceed with certainty
 
-^ Krux of the problem, uncertainty means behaviour is undeterministic, difficult to test, difficult to predict
+^ Uncertainty caused by undeterministic behaviour
 
-^ Easy to judge, but what causes this?
+^ Difficult to test, difficult to predict
+
+^ Easy to judge, but what causes this?...
 
 ---
 
@@ -66,13 +65,13 @@ theme: Simple, 1
 
 ![right fit](coupling-cohesion.png)
 
-^ Coupling describes how inter-connected modules are, often compared with cohesion
+^ Describes inter-connected modules, often compared with cohesion
 
-^ Highly coupled code is difficult to separate, makes it hard to find a seam
+^ Highly coupled code is difficult to separate
 
 ^ Loosely coupled code is easier to structure
 
-^ Loose cohesion means a limited API surface, less exposure, less risk
+^ Limited API surface, less exposure, less risk
 
 ---
 
@@ -80,9 +79,9 @@ theme: Simple, 1
 
 ![right fit](cpp-inheritance.webp)
 
-^ Complex hierarchy of inheritance with unclear responsibilities, invisible behaviour
+^ Complex hierarchy of inheritance and invisible behaviour
 
-^ Often from an attempt to reuse code, shared code is moved to an abstract class
+^ Attempt to reuse code, code is moved to an abstract class
 
 ^ Further adds to the unpredictable nature of our system
 
@@ -129,7 +128,7 @@ theme: Simple, 1
 
 ^ Extreme coding practices intentionally takes best practices to an extreme level
 
-^ Some consider it to be a poor use of time, need to go quick and fix later (shortsighted)
+^ Some consider it to be a poor use of time, instead need to go quick and fix later (shortsighted)
 
 ^ Even if not used all the time, very helpful to practice and improve your ability as an engineer
 
@@ -145,6 +144,8 @@ theme: Simple, 1
 
 ^ Intense scrutiny useful for difficult tasks
 
+^ Second set of eyes...
+
 ---
 
 # Test Driven Development
@@ -155,6 +156,8 @@ theme: Simple, 1
 
 ^ Helps reframe your understanding of requirements, often leading to leaner solutions
 
+^ Coding only what needs to be written
+
 ---
 
 # Offensive Programming <🖕>
@@ -164,6 +167,8 @@ theme: Simple, 1
 ^ Removes unnecessary checks, polymorphisms, and fallback behaviour
 
 ^ Source of errors are no longer obscured, can be resolved much easier
+
+^ Personal favourite, errors are a priority
 
 ---
 
@@ -205,7 +210,7 @@ fun startOfSpring(): java.util.Date = GROUNDHOG_DAY
 val partyDate = startOfSpring()
 partyDate.month = partyDate.month + 1
 
-// Date is mutable 🤦‍♂️
+// Date is mutable ⚠️
 ```
 
 ^ Date class returned by function is mutable, consumers can modify upstream value.
@@ -293,11 +298,11 @@ By default, Kotlin classes are final – they can't be inherited
 
 ![right](safety-harness.jpeg)
 
-^ Automated tests can act as a safety harness to give you confidence when changing code
+^ Automated tests act as a safety harness to give you confidence
 
-^ Well written unit tests provide robust protection, and early feedback, against regressions
+^ Well written, provide robust protection, early regression feedback
 
-^ Poor code is often synonymous with poor architecture, and poor testability
+^ Poor code synonymous with poor architecture, poor testability
 
 ^ Not my goal to convince you to write tests, you probably already know this
 
