@@ -11,25 +11,11 @@ theme: Next, 8
 
 ## [fit] Choosing the Right Framework for your App
 
-#### Droidcon NYC - September '24 🇺🇸
+#### Droidcon London - November '24 🇬🇧
 
 Ash Davies - SumUp
 Android & Kotlin GDE Berlin
 ashdavies.dev
-
-^ They say a pirates preferred programming language is R, but their true love will always be the C
-
----
-
-![](pirate-guys-portrait.jpg)
-
-# 🏴‍☠️
-
-### Always be yourself.
-### Unless you can be a pirate.
-### Then always be a pirate.
-
-^ Happy international pirate day
 
 ---
 
@@ -1333,13 +1319,7 @@ data class ValidScreen(
 
 # Thank You!
 
-## [fit] ashdavies.dev/talks/navigation-in-a-multiplatform-world-new-york-droidcon/
-
 Ash Davies - SumUp
 Android / Kotlin GDE Berlin
 
 ^ Coroutines: Prefer suspend fun over event emission
-
----
-
-## Don't Forget to Vote! 🇺🇸 🫏
