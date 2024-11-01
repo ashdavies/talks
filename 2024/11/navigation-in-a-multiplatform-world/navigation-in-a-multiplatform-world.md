@@ -526,19 +526,19 @@ val route = savedStateHandle.toRoute<DetailRoute>()
 
 ---
 
-[.footer: developer.android.com/kotlin/multiplatform | As of 15.09.2024]
+[.footer: developer.android.com/kotlin/multiplatform | As of 01.11.2024]
 
 | Maven Group ID |	Latest Update |	Stable Release | Alpha Release |
 | --- | --- | --- | --- | --- |
-| annotation | 04.09.2024 | 1.8.2 | 1.9.0-alpha03 |
-| collection | 04.09.2024 | 1.4.3 | 1.5.0-alpha01 |
+| annotation | 30.10.2024 | 1.9.1 | - |
+| collection | 30.10.2024 | 1.4.5 | 1.5.0-alpha05 |
 | datastore | 01.05.2024 | 1.1.1 | - |
-| lifecycle | 04.09.2024 | 2.8.5 | 2.9.0-alpha02 |
+| lifecycle | 30.10.2024 | 2.8.7 | 2.9.0-alpha06 |
 | paging | 07.08.2024 | 3.3.2 | - |
-| room | 21.08.2024 | 2.6.1 | 2.7.0-alpha07 |
-| sqlite | 21.08.2024 | 2.4.0 | 2.5.0-alpha07 |
+| room | 30.10.2024 | 2.6.1 | 2.7.0-alpha11 |
+| sqlite | 30.10.2024 | 2.4.0 | 2.5.0-alpha11 |
 
-^ Current multiplatform support time of writing 15.09.2024
+^ Current multiplatform support time of writing 01.11.2024
 
 ^ Navigation is noticeable absent
 
@@ -690,11 +690,14 @@ private sealed class Config : Parcelable {
 
 ---
 
+[.footer: jetbrains.com/help/kotlin-multiplatform-dev/compose-compatibility-and-versioning.html]
+
 | Compose Multiplatform | Jetpack Compose |
 | --- | --- |
 | 1.6.11 | 1.6.7 |
 | 1.6.10 | 1.6.7 |
 | 1.6.2 | 1.6.4 |
+| 1.6.1 | 1.6.3 |
 ...
 
 ^ The downside to this is that development is staggered
@@ -1145,19 +1148,97 @@ class HomePresenter(private val navigator: Navigator) : Presenter<HomeScreen.Sta
 
 ---
 
-![](retaining-beyond-viewmodels-background.jpg)
-
-[.footer: chrisbanes.me/posts/retaining-beyond-viewmodels]
-
 ## `rememberRetained()`
 
 ^ Circuit is mainly refreshing because it moves away from the mess of lifecycles
 
-^ Presenters live as long as the UI is being composed
+^ Introduces the concept of rememberRetained
 
-^ Remember retained stores value in memory after composition
+---
 
-^ Similar to rememberSaveable but isn't parcelized
+### ~~repeatOnLifecycle()~~
+
+^ Avoid messiness of lifecycle aware scopes
+
+---
+
+### ~~collectAsStateWithLifecycle()~~
+
+^ State collection in Compose
+
+^ Why might this be interesting
+
+---
+
+[.background-color: #fff]
+[.text: #000]
+[.footer-style: #000]
+
+# `ViewModel()`
+
+![right](viewmodel-lifecycle.png)
+
+^ Remember the ViewModel
+
+^ Great to persist data through lifecycle changes
+
+---
+
+[.background-color: #fff]
+[.text: #000]
+[.footer-style: #000]
+
+## ~~`ViewModel()`~~
+# 🔥🔥🔥
+
+^ With Circuit presenters are scoped to the UI
+
+^ State is created in a composable function
+
+---
+
+[.footer: slackhq.github.io/circuit/api/0.x/circuit-retained/com.slack.circuit.retained/produce-retained-state.html]
+
+```kotlin
+presenterOf {
+  val isFeatureEnabled by produceRetainedState(false) {
+    value = TODO("Expensive Operation...")
+  }
+
+  // or rememberRetained { }
+
+  ScreenState(isFeatureEnabled)
+}
+```
+
+^ Presenter is scoped to UI, value is retained
+
+^ Next presenter retrieves initial value
+
+^ Works like Compose remember except value stored in memory
+
+---
+
+## `rememberRetained()` vs `rememberSaveable()`
+
+^ Saveable must implement Parcelable for Android host
+
+^ Saveable should still be used to persist navigation state
+
+^ Retained can provide a better UX by caching data
+
+---
+
+[.footer: chrisbanes.me/posts/retaining-beyond-viewmodels]
+
+![](retaining-beyond-viewmodels-background.jpg)
+
+## `rememberRetainedCoroutineScope()`
+### Retaining Beyond ViewModels
+
+^ Chris covers this in detail with retaining a CoroutineScope
+
+^ Perform long running operations
 
 ---
 
