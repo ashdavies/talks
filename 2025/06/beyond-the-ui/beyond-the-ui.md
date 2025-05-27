@@ -147,6 +147,35 @@ fun Counter($composer: Composer) {
 }
 ```
 
+^ How does this look similar to Coroutines?
+
+---
+
+```kotlin
+fun counter($completion: Continuation) {
+    /* ... */
+}
+```
+
+^ How does coroutines also manipulate a method signature?
+
+---
+
+- Reactive pipelines
+- Explicit thread handling
+- Inline error-handling
+- Lifecycle awareness
+
+^ Remember the problems coroutines were meant to solve?
+
+---
+
+- Native library
+- Imperative syntax
+- `suspend fun`
+
+^ What did Coroutines bring to the table?
+
 ---
 
 [.text: line-height(2), text-scale(0.5)]
