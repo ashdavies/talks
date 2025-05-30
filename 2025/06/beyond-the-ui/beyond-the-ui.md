@@ -25,11 +25,11 @@ ashdavies.dev
 
 ---
 
-^ What is Jetpack Compose UI
+# What is Jetpack Compose UI
 
 ---
 
-^ When was Compose UI introduced?
+# When was Compose UI introduced?
 
 ---
 
@@ -40,34 +40,39 @@ ashdavies.dev
 
 ---
 
+# What projects suggested a problem with the status quo?
+
 - DataBinding & ViewBinding
 - Community libraries (Anko, Splitties)
 
-^ What projects suggested a problem with the status quo?
+---
+
+# What prompted a rethink of Android UI tooling?
+
+- Widespread adoption of Kotlin on Android
+- Kotlin language features
+
+^ Kotlin language features, lambdas, immutability, extension functions
 
 ---
 
-Widespread adoption of Kotlin on Android
-
-^ What prompted a rethink of Android UI tooling?
-
----
+# What are the principles of Compose?
 
 - Declarative
 - Open Source
 - Idiomatic
 
-^ What are the principles of Compose?
-
 ---
+
+# How does it work?
 
 - Kotlin compiler plugin
 - Cooperation with Jetbrains
 - Manipulates method signatures
 
-^ How does it work?
-
 ---
+
+# What does it look like?
 
 ```kotlin
 @Composable
@@ -80,11 +85,11 @@ fun Counter() {
 }
 ```
 
-^ What does it look like?
-
 ---
 
 [.code-highlight: 1]
+
+# What does this code remind us of?
 
 ```kotlin
 fun Counter($composer: Composer) { 
@@ -96,9 +101,9 @@ fun Counter($composer: Composer) {
 }
 ```
 
-^ What does this code remind us of?
-
 ---
+
+# How is the KotlinX Coroutine code manipulation similar?
 
 ```kotlin
 fun counter($completion: Continuation) {
@@ -106,16 +111,14 @@ fun counter($completion: Continuation) {
 }
 ```
 
-^ How is the KotlinX Coroutine code manipulation similar?
-
 ---
 
 [.background-color: #fff]
 [.footer-style: #000]
 
-![100%](compose-ui-tree.png)
+# What tree structure does the Compose runtime output?
 
-^ What tree structure does the Compose runtime output?
+![100% original](compose-ui-tree.png)
 
 ---
 
@@ -130,8 +133,6 @@ fun counter($completion: Continuation) {
 ---
 
 # [fit] ⚠️ Compose != Compose UI
-
-^ What is Compose, not?
 
 ---
 
@@ -161,12 +162,12 @@ fun counter($completion: Continuation) {
 
 ---
 
+# Remember the problems coroutines were meant to solve?
+
 - Reactive pipelines
 - Explicit thread handling
 - Inline error-handling
 - Lifecycle awareness
-
-^ Remember the problems coroutines were meant to solve?
 
 ---
 
@@ -247,6 +248,8 @@ downloadManager.downloadFile("https://.../")
   }
 ```
 
+^ TODO Expand on these code segments link each better
+
 ^ Consider though that we wish to model our state through a reactive flow
 
 ^ Which through Coroutines looks similar to observables
@@ -292,6 +295,158 @@ when (fileState) {
 ```
 
 ^ Means we've moved changed the react operators into a more readable sequence of declarations
+
+---
+
+# Molecule
+### github.com/cashapp/molecule
+
+^ Molecule built by the folks at Square explores this further
+
+^ Being able to use Compose runtime to build a state
+
+---
+
+## Molecule
+
+```kotlin
+fun CoroutineScope.launchCounter(): StateFlow<Int> {
+  return launchMolecule(mode = ContextClock) {
+    var count by remember { mutableStateOf(0) }
+
+    LaunchedEffect(Unit) {
+      while (true) {
+        delay(1_000)
+        count++
+      }
+    }
+
+    count
+  }
+}
+```
+
+^ Utilising Compose Runtime to build state flow
+
+---
+
+## Testing
+
+^ TODO Testing Molecule
+
+---
+
+## Role of Architecture
+
+^ Knowing that Compose runtime is capable of managing a tree of nodes
+
+^ Means we can exploit this as an architecture
+
+^ TODO: Importance of navigation and architecture
+
+---
+
+## Pre-Compose Era
+
+^ Taking frameworks and applying them to compose works fine
+
+^ But if it seems a little un-idiomatic
+
+^ Consider Compose first architectures
+
+---
+
+# Tooling in Compose MPP
+
+- 🔧 Decompose (Navigation, Lifecycle)
+- 🧬 Molecule (State modeling)
+- 🪞Voyager / Appyx (Navigation alternatives)
+- 🔄 Reaktive / Flow / StateFlow (State Streams)
+- 🌈 Kamel (Image loading)
+- 🧪 Paparazzi / Snapshot testing (UI validation)
+
+---
+
+# Navigation with Decompose
+
+- Declarative component hierarchy
+- State hoisting via ViewModels (multiplatform-friendly)
+- Back stack management without fragments
+- Integration with Compose UI and Compose for Web/Desktop
+
+^ Example Diagram or snippet optional
+
+---
+
+# Circuit
+### github.com/slackhq/circuit
+
+^ Circuit is a community contributed library for multiplatform
+
+^ Takes inspiration from existing approaches, cashapp broadway, workflow etc
+
+^ Driven by Zac, Kieran and the rest of the folks at Slack
+
+---
+
+## Circuit
+
+- Supports most supported KMP platforms
+- Compose first architecture
+- Presenter & UI separation
+- Unidirectional Data Flow
+
+^ Designed with Compose in mind, powered with the compose runtime
+
+^ Same principal tenet, separation of presenter and ui
+
+^ UDF all the way through, no mutability
+
+---
+
+# History of Multiplatform
+
+^ TODO Include failed multiplatform libs
+
+---
+
+# Why Compose Multiplatform?
+
+- Shared UI logic across Android, Desktop, iOS, Web
+- Unified state handling with shared ViewModels or Presenters
+- Faster prototyping across form factors
+- Composable tooling beyond visual UI (state, business logic)
+
+---
+
+# Compose MPP Enables
+
+- Consistent state handling across platforms
+- Shared design system (e.g., Material)
+- Deep JetBrains IDE integration
+- Integration with Kotlin Multiplatform (KMP) libraries:
+    - `Ktor`, `Kotlinx.serialization`, `Decompose`, `Essenty`
+
+---
+
+# Compose Runtime beyond UI
+
+- Composables as reactive functions
+- Ideal for:
+  - Finite State Machines
+  - Orchestration Logic
+  - Testing state changes deterministically
+  
+---
+
+# Wrap-Up: Why This Matters
+
+✅ Compose is more than a UI toolkit  
+✅ Enables scalable, shared architecture  
+✅ Designed for Kotlin-first developers  
+✅ Multiplatform is no longer just business logic
+
+→ Start rethinking how you architect apps, not just how you render them.
 
 ---
 
