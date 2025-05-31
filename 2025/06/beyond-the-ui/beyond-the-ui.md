@@ -87,32 +87,6 @@ fun Counter() {
 
 ---
 
-[.code-highlight: 1]
-
-# What does this code remind us of?
-
-```kotlin
-fun Counter($composer: Composer) { 
-    $composer.startRestartGroup(-1913267612)
-    
-    /* ... */
-    
-    $composer.endRestartGroup()
-}
-```
-
----
-
-# How is the KotlinX Coroutine code manipulation similar?
-
-```kotlin
-fun counter($completion: Continuation) {
-    /* ... */
-}
-```
-
----
-
 [.background-color: #fff]
 [.footer-style: #000]
 
@@ -136,9 +110,106 @@ fun counter($completion: Continuation) {
 
 ---
 
-[.code-highlight: 1]
+# Kotlin Multiplatform
+## Stable (1.9.20)
+
+^ Kotlin Multiplatform, relatively new kid on the block
+
+^ Stable from release 1.9.20 released on 1st Nov last year
+
+^ But multiplatform isn’t a new concept…
+
+---
+
+# The Before Times
+
+![75%](multiplatform-framework-logos.png)
+
+^ There have been many attempts at multiplatform frameworks
+
+^ Each demonstrating advantages and disadvantages
+
+^ Some with limited success, some with even less
+
+^ Some integrating the underlying OS some not
+
+---
+
+# The Before Times
+![75%](multiplatform-languages.png)
+
+^ Each framework specifying its own language and development / build environment
+
+^ Whilst each of these languages have their own ecosystem of libraries etc
+
+^ Not languages typically familiar to Android or mobile developers
+
+^ Unless life has been particularly cruel to you
+
+---
+
+![80%](kotlin-multiplatform.jpg)
+
+^ KMP starts small, doesn’t require sharing everything
+
+^ Build components in a way that makes sense for you
+
+^ Language already familiar to Android and backend developers
+
+^ Strong community, public backing (JetBrains, Google)
+
+---
+
+# Compose Multiplatform 🎉
+
+^ Enter Compose Multiplatform
+
+---
+
+![right](multiplatform-compose.svg)
+
+# Compose Multiplatform
+### v1.0 | 2021
+
+^ Compose Multiplatform builds upon Kotlin multiplatform
+
+^ Became ready for production with v1.0 at the end of 2021 (December)
+
+^ Has since recategorised stability declarations
+
+---
+
+[.footer: github.com/JetBrains/compose-multiplatform-core]
+
+![75%](multiplatform-compose-core.png)
+
+^ Imagined some very clever repackaging of androidx releases
+
+^ Actually a forked repo with the JetBrains team adapting libraries
+
+^ Constant huge amount of work, incredible effort
+
+---
+
+# Compose Multiplatform Migration
+
+- Change artifact coordinates
+- Do nothing
+- Profit
+
+^ If you're migrating from androidx navigation project
+
+^ You've waited long enough to have androidx available
+
+^ Congrats
+
+---
+
+[.code-highlight: 1, 11]
 
 ```kotlin
+// Compiled Compose code
+
 fun Counter($composer: Composer) { 
     $composer.startRestartGroup(-1913267612)
     
@@ -146,19 +217,17 @@ fun Counter($composer: Composer) {
     
     $composer.endRestartGroup()
 }
-```
 
-^ How does this look similar to Coroutines?
+// Compiled Coroutines code
 
----
-
-```kotlin
 fun counter($completion: Continuation) {
     /* ... */
 }
 ```
 
-^ How does coroutines also manipulate a method signature?
+^ Similarities between code manipulation
+
+^ Consider how this can be used architecturally
 
 ---
 
@@ -330,9 +399,40 @@ fun CoroutineScope.launchCounter(): StateFlow<Int> {
 
 ---
 
-## Testing
+# Testing
 
-^ TODO Testing Molecule
+```kotlin
+@Test 
+fun counter() = runTest {
+  moleculeFlow(RecompositionMode.Immediate) {
+    Counter()
+  }.test {
+    assertEquals(0, awaitItem())
+    assertEquals(1, awaitItem())
+    assertEquals(2, awaitItem())
+    cancel()
+  }
+}
+```
+
+^ Combine molecule with Turbine to test a composable as a flow
+
+---
+
+# Turbine
+## `app.cash.turbine:turbine:1.2.0`
+
+---
+
+# Turbine
+
+```kotlin
+flowOf("one", "two").test {
+  assertEquals("one", awaitItem())
+  assertEquals("two", awaitItem())
+  awaitComplete()
+}
+```
 
 ---
 
@@ -360,8 +460,8 @@ fun CoroutineScope.launchCounter(): StateFlow<Int> {
 
 - 🔧 Decompose (Navigation, Lifecycle)
 - 🧬 Molecule (State modeling)
-- 🪞Voyager / Appyx (Navigation alternatives)
-- 🔄 Reaktive / Flow / StateFlow (State Streams)
+- ⚡️ Circuit (Navigation, State management)
+- 🪞 Voyager / Appyx (Navigation alternatives)
 - 🌈 Kamel (Image loading)
 - 🧪 Paparazzi / Snapshot testing (UI validation)
 
@@ -374,18 +474,16 @@ fun CoroutineScope.launchCounter(): StateFlow<Int> {
 - Back stack management without fragments
 - Integration with Compose UI and Compose for Web/Desktop
 
-^ Example Diagram or snippet optional
+^ TODO Example Diagram or snippet optional
 
 ---
 
 # Circuit
-### github.com/slackhq/circuit
+## github.com/slackhq/circuit
 
 ^ Circuit is a community contributed library for multiplatform
 
 ^ Takes inspiration from existing approaches, cashapp broadway, workflow etc
-
-^ Driven by Zac, Kieran and the rest of the folks at Slack
 
 ---
 
@@ -404,38 +502,114 @@ fun CoroutineScope.launchCounter(): StateFlow<Int> {
 
 ---
 
-# History of Multiplatform
-
-^ TODO Include failed multiplatform libs
-
----
-
 # Why Compose Multiplatform?
 
-- Shared UI logic across Android, Desktop, iOS, Web
-- Unified state handling with shared ViewModels or Presenters
-- Faster prototyping across form factors
-- Composable tooling beyond visual UI (state, business logic)
+^ Let’s explore what makes Compose Multiplatform a compelling option.
 
 ---
 
-# Compose MPP Enables
+## Shared UI Logic
 
-- Consistent state handling across platforms
-- Shared design system (e.g., Material)
-- Deep JetBrains IDE integration
-- Integration with Kotlin Multiplatform (KMP) libraries:
-    - `Ktor`, `Kotlinx.serialization`, `Decompose`, `Essenty`
+- Write once, run on Android, Desktop, iOS, Web
+- Avoid duplicating presentation logic
+
+^ Compose MPP lets you reuse your UI structure and state logic across platforms — not just styles or themes.
 
 ---
 
-# Compose Runtime beyond UI
+## Unified State Handling
 
-- Composables as reactive functions
-- Ideal for:
-  - Finite State Machines
-  - Orchestration Logic
-  - Testing state changes deterministically
+- Share ViewModels or Presenters across platforms
+- Keep logic and state in sync across UIs
+
+^ This makes platform-specific behaviour easier to isolate, and core app logic easier to test.
+
+---
+
+## Fast Prototyping
+
+- Quickly ship UI to multiple form factors
+- Desktop becomes a testbed for mobile UIs
+
+^ You can validate ideas on desktop or Android before touching iOS — great for iteration and feedback.
+
+---
+
+## Compose Beyond Visual UI
+
+- Not just visual layout
+- Great for business logic and reactive workflows
+
+^ Composables can manage more than what’s on screen — think domain state, user flows, or FSMs.
+
+---
+
+# What Compose MPP Enables
+
+^ Let’s go one level deeper — what Compose Multiplatform *unlocks* for your architecture.
+
+---
+
+## Consistent State Patterns
+
+- Hoisting, unidirectional data flow
+- Shared reactive state handling
+
+^ Patterns like UDF become even more powerful when applied the same way across every platform.
+
+---
+
+## Shared Design System
+
+- Material components
+- Typography, spacing, theming — once
+
+^ You can maintain a consistent design language across all platforms without custom wrappers.
+
+---
+
+## IDE-First Experience
+
+- JetBrains tools tightly integrated
+- Live previews and navigation supported
+
+^ With JetBrains behind Compose for Desktop and IntelliJ, tooling is first-class.
+
+---
+
+## Kotlin Multiplatform Ecosystem
+
+- Compose integrates easily with:
+  - `Ktor` for networking
+  - `Kotlinx.serialization` for models
+  - `Decompose`, `Essenty` for navigation/state
+
+^ Compose fits naturally into the Kotlin Multiplatform world — no hacks or bridges needed.
+
+---
+
+# Compose Runtime Beyond UI
+
+^ The power of Compose isn’t limited to visuals — it’s a reactive runtime at heart.
+
+---
+
+## Composables Are Reactive Functions
+
+- Input = State
+- Output = UI + Side-effects
+
+^ This pure functional approach makes Composables ideal for modeling any stateful behaviour.
+
+---
+
+## Ideal Use Cases
+
+- Finite State Machines
+- Flow Orchestration
+- Deterministic State Testing
+
+^ If you’ve got a flow or state machine, Compose can represent and drive it — testably and predictably.
   
 ---
 
