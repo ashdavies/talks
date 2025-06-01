@@ -25,11 +25,46 @@ ashdavies.dev
 
 ---
 
-# What is Jetpack Compose UI
+# Jetpack Compose UI
+### [fit] github.com/androidx/androidx/tree/androidx-main/compose/ui
+
+^ What is Jetpack Compose UI, if unfamiliar to Android
 
 ---
 
-# When was Compose UI introduced?
+[.background-color: ##2b2b2b]
+[.footer-style: #333]
+
+```kotlin
+@Composable
+fun JetpackCompose() {
+    Card {
+        var expanded by remember { mutableStateOf(false) }
+        Column(Modifier.clickable { expanded = !expanded }) {
+            Image(painterResource(R.drawable.jetpack_compose))
+            AnimatedVisibility(expanded) {
+                Text(
+                    text = "Jetpack Compose",
+                    style = MaterialTheme.typography.bodyLarge,
+                )
+            }
+        }
+    }
+}
+```
+
+^ Though Compose UI was announced at Google IO 2019
+
+^ Didn't reach stable release until 2021
+
+---
+
+# Compose UI
+
+- Declarative UI Framework
+- Open Source Kotlin
+- Accelerate UI development
+- Intuitive Idiomatic API
 
 ---
 
@@ -505,6 +540,12 @@ flowOf("one", "two").test {
 # Why Compose Multiplatform?
 
 ^ Let’s explore what makes Compose Multiplatform a compelling option.
+
+^ TODO Recomposition, strong skipping, automatic invalidation
+
+^ TODO Downsides: remember not default, must consider expensive computations
+
+^ TODO rememberSaveable()
 
 ---
 
