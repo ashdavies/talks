@@ -1,6 +1,7 @@
 autoscale: true
 build-lists: true
 footer: ashdavies.dev
+slidenumbers: true
 slide-transition: fade(0.5)
 theme: Work, 8
 
@@ -157,6 +158,8 @@ android:orientation="vertical" >
 - Declarative Syntax
 - Immutable State
 - Recomposition
+
+^ More on recomposition later
 
 ---
 
@@ -332,20 +335,99 @@ fun counter($completion: Continuation) {
 
 ---
 
-# Remember the problems coroutines were meant to solve?
+# KotlinX Coroutines
 
-- Reactive pipelines
-- Explicit thread handling
-- Inline error-handling
-- Lifecycle awareness
+^ Remember the problems coroutines were meant to solve?
 
 ---
+
+[.footer: speakerdeck.com/ashdavies/droidcon-nyc-demystifying-molecule?slide=27]
+
+```kotlin
+@Suppress("DEPRECATION")
+class CallbackLoginPresenter(
+  private val service: SessionService,
+  private val goTo: (Screen) -> Unit,
+) {
+  /* ... */
+
+  inner class LoginAsyncTask : AsyncTask<Submit,Void,LoginResult>() {
+    private var username: String = ""
+
+    override fun doInBackground(vararg events: Submit?): LoginResult {
+      val event = events[0]!!
+      username = event.username
+      return runBlocking { service.login(event.username, event.password) }
+    }
+
+    override fun onPostExecute(result: LoginResult?) {
+      when (result) {
+        is Success -> goTo(LoggedInScreen(username))
+        is Failure -> goTo(ErrorScreen(result.throwable?.message ?: ""))
+        else -> {}
+      }
+    }
+  }
+}
+```
+
+^ Much like layouts, Android has a troubled past with asynchronous operations
+
+---
+
+[.footer: proandroiddev.com/how-rxjava-chain-actually-works-2800692f7e13]
+
+```kotlin
+Observable.just("Hey")
+    .subscribeOn(Schedulers.io())
+    .map(String::length)
+    .subscribeOn(Schedulers.computation())
+    .observeOn(AndroidSchedulers.mainThread())
+    .doOnSubscribe { doAction() }
+    .flatMap {
+        doAction()
+
+        Observable.timer(1, TimeUnit.SECONDS)
+            .subscribeOn(Schedulers.single())
+            .doOnSubscribe { doAction() }
+    }
+    .subscribe { doAction() }
+```
+
+^ Over-utilisation of mapping operations increases cognitive load
+
+^ Requiring intimate knowledge of the framework to be productive
+
+---
+
+# KotlinX Coroutines
+
+- Lightweight memory usage
+- Structured concurrency
+- Cancellation propagation
+- Lifecycle aware
+
+^ A single thread can support many Coroutines
+
+^ Structured concurrency scopes resources and helps prevent leaks
+
+^ Built in cancellation support propagates through the hierarchy
+
+^ Lifecycle aware operation through JetPack extensions
+
+^ TODO Break up slides
+
+---
+
+# KotlinX Coroutines
 
 - Native library
 - Imperative syntax
 - `suspend fun`
 
-^ What did Coroutines bring to the table?
+^ Furthermore being a native library was able to exploit Kotlin langauge functions
+
+^ Write imperative code that behaves as reactive
 
 ---
 
@@ -361,10 +443,17 @@ fun counter($completion: Continuation) {
 ---
 
 ```kotlin
-downloadManager.downloadFile("https://.../") { result ->
-  fileManager.saveFile("storage/file", result) { success ->
-    if (success) println("Downloaded file successfully")
-  }
+downloadManager
+    .downloadFile("https://.../")
+    .addOnCompletionListener { result ->
+        fileManager
+            .saveFile("storage/file", result)
+            .addOnCompletionListener { success ->
+                if (success) {
+                    println("Downloaded file successfully")
+                }
+            }
+    }
 }
 ```
 
@@ -376,10 +465,19 @@ downloadManager.downloadFile("https://.../") { result ->
 
 ---
 
+[.code-highlight: 3-10]
+
 ```kotlin
-downloadManager.downloadFile("https://.../")
-  .flatMap { result -> fileManager.saveFile("storage/file", result) }
-  .observe { success -> if (success) println("Downloaded file successfully") }
+downloadManager
+    .downloadFile("https://.../")
+    .flatMap { result -> 
+        fileManager.saveFile("storage/file", result)
+    }
+    .observe { success ->
+        if (success) {
+            println("Downloaded file successfully")
+        }
+    }
 ```
 
 ^ Which then evolved into an observable chain
@@ -393,36 +491,60 @@ downloadManager.downloadFile("https://.../")
 ```kotlin
 val file = downloadFile("https://.../")
 val success = fileManager.saveFile("storage/file", file)
-if (success) println("Downloaded file successfully")
+
+if (success) {
+    println("Downloaded file successfully")
+}
 ```
 
 ^ Coroutines turned this into an imperative style
 
 ^ Get to enjoy Kotlin and structured concurrency
 
+^ Reduces complexity to top level
+
 ---
 
+[.code-highlight: 12-31]
+![left](kotti-question.jpg)
+
 ```kotlin
-downloadManager.downloadFile("https://.../")
-  .flatMapLatest { state ->
-    when (state) {
-      is State.Loaded -> stateFileManager.saveFile("storage/file", state.value)
-      else -> state
-    }
-  }
-  .collect { state ->
-    when (state) {
-      is State.Loading -> /* ... */
-      is State.Saved -> println("Downloaded file successfully")
-    }
-  }
+- downloadManager
+-   .downloadFile("https://.../")
+-   .flatMap { result ->
+-     fileManager.saveFile("storage/file", result)
+-   }
+-   .observe { success ->
+-     if (success) {
+-       println("Downloaded file successfully")
+-     }
+-   }
+
++ downloadManager.
++     downloadFile("https://.../")
++     .flatMapLatest { state ->
++         when (state) {
++             is State.Loaded -> 
++                 stateFileManager
++                     .saveFile("storage/file", state.value)
++             
++           else -> state
++         }
++     }
++     .collect { state ->
++         when (state) {
++           is State.Saved -> 
++               println("Downloaded file successfully")
++           
++           is State.Loading ->
++               /* ... */
++         }
++     }
 ```
 
-^ TODO Expand on these code segments link each better
+^ Suspended functions are one shot operations, sometimes you need a reactive flow
 
-^ Consider though that we wish to model our state through a reactive flow
-
-^ Which through Coroutines looks similar to observables
+^ Besides an improved sealed class event structure, pretty much the same as Rx
 
 ---
 
@@ -449,22 +571,29 @@ flowchart TD
 ```kotlin
 val downloadState = downloadManager
     .downloadFile("https://.../")
-    .collectAsState(State.Loading)
+    .collectAsState(State.Downloading)
 
 val fileState = when(downloadState) {
-  is State.Loaded -> stateFileManager.saveFile("storage/file", state.value)
-  else -> state
+    is State.Loaded -> 
+        stateFileManager
+            .saveFile("storage/file", downloadState.value)
+    else -> downloadState
 }
 
 when (fileState) {
-  is State.Loading -> /* ... */
-  is State.Saved -> LaunchedEffect(fileState) {
-    println("Downloaded file successfully")
-  }
+    is State.Loading -> /* ... */
+        
+    is State.Saved -> LaunchedEffect(fileState) {
+        println("Downloaded file successfully")
+    }
 }
 ```
 
-^ Means we've moved changed the react operators into a more readable sequence of declarations
+![right](py-py-perfect.jpg)
+
+^ Now we've done the same as with coroutines one shot operators
+
+^ Operations are idiomatic, readable, low cognitive load
 
 ---
 
@@ -477,7 +606,7 @@ when (fileState) {
 
 ---
 
-## Molecule
+# Molecule
 
 ```kotlin
 fun CoroutineScope.launchCounter(): StateFlow<Int> {
@@ -520,8 +649,7 @@ fun counter() = runTest {
 
 ---
 
-# Turbine
-## `app.cash.turbine:turbine:1.2.0`
+![75% corner-radius(16)](cashapp-turbine.png)
 
 ---
 
@@ -537,17 +665,40 @@ flowOf("one", "two").test {
 
 ---
 
-## Role of Architecture
+# [fit] Architecture 🏗️
 
 ^ Knowing that Compose runtime is capable of managing a tree of nodes
 
 ^ Means we can exploit this as an architecture
 
-^ TODO: Importance of navigation and architecture
+---
+
+# [fit] Navigation 🗺️
+
+![35% corner-radius(16)](slackhq-circuit.png)
+![75%](decompose-logo.png)
+
+^ Worth noting how similar navigation and architecture is
+
+^ Navigation is such an essential part of the structure
 
 ---
 
-## Pre-Compose Era
+[.footer: android-developers.googleblog.com/2025/05/announcing-jetpack-navigation-3-for-compose.html]
+
+# [fit] Jetpack Navigation 3
+
+![](jetpack-navigation-compose.png)
+
+^ Earlier this month Google announced Jetpack Navigation 3
+
+^ Promising to solve problems with canonical layouts
+
+^ Compose first design, let's see...
+
+---
+
+# [fit] Pre-Compose Era 🪨
 
 ^ Taking frameworks and applying them to compose works fine
 
@@ -574,8 +725,6 @@ flowOf("one", "two").test {
 - State hoisting via ViewModels (multiplatform-friendly)
 - Back stack management without fragments
 - Integration with Compose UI and Compose for Web/Desktop
-
-^ TODO Example Diagram or snippet optional
 
 ---
 
@@ -616,30 +765,27 @@ flowOf("one", "two").test {
 
 ---
 
-## Shared UI Logic
+[.background-color:#fff]
 
-- Write once, run on Android, Desktop, iOS, Web
-- Avoid duplicating presentation logic
+![100%](platform-logos.png)
 
-^ Compose MPP lets you reuse your UI structure and state logic across platforms — not just styles or themes.
+^ Write once, run on Android, Desktop, iOS, Web
 
----
+^ Avoid duplicating presentation logic
 
-## Unified State Handling
+^ Keep logic and state in sync across UIs
 
-- Share ViewModels or Presenters across platforms
-- Keep logic and state in sync across UIs
-
-^ This makes platform-specific behaviour easier to isolate, and core app logic easier to test.
+^ Compiles natively
 
 ---
 
-## Fast Prototyping
+# Prototyping 
 
-- Quickly ship UI to multiple form factors
-- Desktop becomes a testbed for mobile UIs
+## 🚀
 
-^ You can validate ideas on desktop or Android before touching iOS — great for iteration and feedback.
+^ Quickly ship UI to multiple form factors
+
+^ Desktop becomes a testbed for mobile UIs
 
 ---
 
