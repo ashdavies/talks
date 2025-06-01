@@ -712,12 +712,38 @@ flowOf("one", "two").test {
 
 ---
 
-# Navigation with Decompose
+## Decompose & Essenty
+### arkivanov.github.io/Decompose
 
-- Declarative component hierarchy
-- State hoisting via ViewModels (multiplatform-friendly)
-- Back stack management without fragments
-- Integration with Compose UI and Compose for Web/Desktop
+^ Decompose focusses on the lifecycle awareness aspect with navigation included
+
+^ Providing abstraction of platform lifecycle configuration changes and navigation
+
+^ In the absence of ViewModel or LifecycleOwner did a good job of management
+
+---
+
+```kotlin
+import com.arkivanov.decompose.ComponentContext
+
+class DefaultRootComponent(
+    componentContext: ComponentContext,
+) : RootComponent, ComponentContext by componentContext {
+
+    init {
+        lifecycle... // Access the Lifecycle
+        stateKeeper... // Access the StateKeeper
+        instanceKeeper... // Access the InstanceKeeper
+        backHandler... // Access the BackHandler
+    }
+}
+```
+
+^ Core principle of decompose is to provide multiplatform functionality through ComponentContext
+
+^ Many functions here should be familiar to platforms
+
+^ Provides observability and value storage with lifecycle persistence
 
 ---
 
@@ -743,6 +769,44 @@ flowOf("one", "two").test {
 ^ Same principal tenet, separation of presenter and ui
 
 ^ UDF all the way through, no mutability
+
+---
+
+```kotlin
+@Parcelize
+data object CounterScreen : Screen { 
+    data class CounterState(
+        val count: Int, 
+        val eventSink: (CounterEvent) -> Unit,
+    ) : CircuitUiState
+  
+    sealed interface CounterEvent : CircuitUiEvent {
+        data object Increment : CounterEvent
+    }
+}
+
+@Composable
+fun CounterPresenter(): CounterState {
+    var count by rememberSaveable { mutableStateOf(0) }
+
+    return CounterState(count) { event ->
+        when (event) {
+            CounterEvent.Increment -> count++
+        }
+    }
+}
+
+@Composable
+fun Counter(state: CounterState) {
+    Column(Modifier.align(Alignment.Center)) {
+        Text(text = "Count: ${state.count}")
+      
+        Button(onClick = { state.eventSink(CounterEvent.Increment) }) {
+            Icon(rememberVectorPainter(Icons.Filled.Add), "Increment")
+        }
+    }
+}
+```
 
 ---
 
@@ -862,21 +926,6 @@ val file = rememberSaveable(path) {
 
 ---
 
-## Compose Beyond Visual UI
-
-- Not just visual layout
-- Great for business logic and reactive workflows
-
-^ Composables can manage more than what’s on screen — think domain state, user flows, or FSMs.
-
----
-
-# What Compose MPP Enables
-
-^ Let’s go one level deeper — what Compose Multiplatform *unlocks* for your architecture.
-
----
-
 ## Consistent State Patterns
 
 - Hoisting, unidirectional data flow
@@ -904,42 +953,6 @@ val file = rememberSaveable(path) {
 
 ---
 
-## Kotlin Multiplatform Ecosystem
-
-- Compose integrates easily with:
-  - `Ktor` for networking
-  - `Kotlinx.serialization` for models
-  - `Decompose`, `Essenty` for navigation/state
-
-^ Compose fits naturally into the Kotlin Multiplatform world — no hacks or bridges needed.
-
----
-
-# Compose Runtime Beyond UI
-
-^ The power of Compose isn’t limited to visuals — it’s a reactive runtime at heart.
-
----
-
-## Composables Are Reactive Functions
-
-- Input = State
-- Output = UI + Side-effects
-
-^ This pure functional approach makes Composables ideal for modeling any stateful behaviour.
-
----
-
-## Ideal Use Cases
-
-- Finite State Machines
-- Flow Orchestration
-- Deterministic State Testing
-
-^ If you’ve got a flow or state machine, Compose can represent and drive it — testably and predictably.
-  
----
-
 # Wrap-Up: Why This Matters
 
 ✅ Compose is more than a UI toolkit  
@@ -954,7 +967,11 @@ val file = rememberSaveable(path) {
 [.text: line-height(2), text-scale(0.5)]
 [.footer: ]
 
+![right](kotti-py-sleepy.jpeg)
+
 # Thank You!
 
 Ash Davies
 Android GDE Berlin
+
+^ Ask me for cat stickers!
