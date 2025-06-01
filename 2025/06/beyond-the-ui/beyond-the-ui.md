@@ -15,6 +15,8 @@ theme: Work, 8
 
 Ash Davies
 Android GDE Berlin
+Cat Person 😸
+
 ashdavies.dev
 
 ^ Much in the same way that Coroutines revolutionized reactive architecture, Compose challenges us to rethink how we design applications. 
@@ -26,7 +28,9 @@ ashdavies.dev
 ---
 
 # Jetpack Compose UI
-### [fit] github.com/androidx/androidx/tree/androidx-main/compose/ui
+### github.com/androidx/androidx/tree/androidx-main/compose/ui
+
+![right 25%](jetpack-compose-logo.png)
 
 ^ What is Jetpack Compose UI, if unfamiliar to Android
 
@@ -66,48 +70,116 @@ fun JetpackCompose() {
 - Accelerate UI development
 - Intuitive Idiomatic API
 
----
-
-- History of XML layouts in Android
-- Android developers unhappy with XML
-
-^ What problem was it trying to solve?
+^ Exploit Kotlin DSL language idioms
 
 ---
 
-# What projects suggested a problem with the status quo?
+# Android Layouts
 
-- DataBinding & ViewBinding
-- Community libraries (Anko, Splitties)
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android=
+"http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+android:orientation="vertical" >
+
+  <TextView android:id="@+id/text"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content"
+  android:text="Hello, I am a TextView" />
+  
+<Button android:id="@+id/button"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content"
+  android:text="Hello, I am a Button" />
+
+</LinearLayout>
+```
+
+![right fill 75%](layout-params.png)
+
+^ Android has a rich a colourful history with layouts
+
+^ Views written in XML, painful to structure
+
+^ Inflated at runtime, poor attribute attestation
+
+^ Years of optimisations, performance acceptable
 
 ---
 
-# What prompted a rethink of Android UI tooling?
+# Android Layouts
+### Lifecycle
+
+![right](viewmodel-lifecycle.png)
+
+^ Also introduced the problem of lifecycle management
+
+^ The bane of every Android developers existence
+
+---
+
+# Tooling
+
+![inline fill](android-databinding.png)![inline fill](kotlin-anko.png)
+![inline fill](android-view-binding.png)![inline fill](splitties.png)
+
+^ Additional tooling developed by Google and OS community
+
+^ Made some aspects bearable
+
+---
+
+# XML?!
+
+![right](kotti-cat-wut.jpeg)
+
+^ Kotlin has spoilt us, nobody wants to use XML anymore
+
+---
+
+# Android Layouts and Compose
 
 - Widespread adoption of Kotlin on Android
-- Kotlin language features
+- Idiomatic Kotlin language features
 
 ^ Kotlin language features, lambdas, immutability, extension functions
 
----
-
-# What are the principles of Compose?
-
-- Declarative
-- Open Source
-- Idiomatic
+^ Kotlin DSLs apply naturally to the view hierarchy
 
 ---
 
-# How does it work?
+# Jetpack Compose UI 
+## Principles
+
+- Composition > Inheritance
+- Declarative Syntax
+- Immutable State
+- Recomposition
+
+---
+
+[.footer: medium.com/androiddevelopers/under-the-hood-of-jetpack-compose-part-2-of-2-37b2c20c6cdd]
+
+# Jetpack Compose UI
+## Under-the-hood
+
+![right](gap-buffer-structure.webp)
 
 - Kotlin compiler plugin
-- Cooperation with Jetbrains
-- Manipulates method signatures
+- Gap buffer data structure
+
+^ Collaborating with JetBrains to exploit the Kotlin Compiler Plugin API
+
+^ Transforms method signatures to inject a composer
+
+^ Composer uses gap buffer to build a node structure
 
 ---
 
-# What does it look like?
+# Jetpack Compose UI
+## Talk is Cheap
 
 ```kotlin
 @Composable
@@ -195,12 +267,6 @@ fun Counter() {
 
 ---
 
-# Compose Multiplatform 🎉
-
-^ Enter Compose Multiplatform
-
----
-
 ![right](multiplatform-compose.svg)
 
 # Compose Multiplatform
@@ -216,7 +282,7 @@ fun Counter() {
 
 [.footer: github.com/JetBrains/compose-multiplatform-core]
 
-![75%](multiplatform-compose-core.png)
+![75% corner-radius(16)](compose-multiplatform-core.png)
 
 ^ Imagined some very clever repackaging of androidx releases
 
@@ -240,7 +306,7 @@ fun Counter() {
 
 ---
 
-[.code-highlight: 1, 11]
+[.code-highlight: 3, 13]
 
 ```kotlin
 // Compiled Compose code
@@ -402,8 +468,8 @@ when (fileState) {
 
 ---
 
-# Molecule
-### github.com/cashapp/molecule
+[.footer: github.com/cashapp/molecule]
+![75% corner-radius(16)](cashapp-molecule.png)
 
 ^ Molecule built by the folks at Square explores this further
 
@@ -513,8 +579,9 @@ flowOf("one", "two").test {
 
 ---
 
-# Circuit
-## github.com/slackhq/circuit
+[.footer: github.com/slackhq/circuit]
+
+![75% corner-radius(16)](slackhq-circuit.png)
 
 ^ Circuit is a community contributed library for multiplatform
 
