@@ -810,15 +810,13 @@ fun Counter(state: CounterState) {
 
 ---
 
-# Why Compose Multiplatform?
+# But Why?
 
-^ Let’s explore what makes Compose Multiplatform a compelling option.
+^ As engineers it's our job to know what tools are available
 
-^ TODO Recomposition, strong skipping, automatic invalidation
+^ Benefits and drawbacks to each solution
 
-^ TODO Downsides: remember not default, must consider expensive computations
-
-^ TODO rememberSaveable()
+^ What may or may not fit with our existing landscape
 
 ---
 
@@ -859,6 +857,8 @@ fun Counter(state: CounterState) {
 ^ Compose skips execution where it's not necessary
 
 ^ Performance is improved when state is unchanged
+
+^ TODO Strong skipping, stability management
 
 ---
 
