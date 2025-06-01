@@ -10,21 +10,14 @@ theme: Work, 8
 
 # [fit] Beyond the UI
 
-## [fit]Compose as a Foundation for Multiplatform Apps
+## [fit] Compose as a Foundation for Multiplatform Apps
 
 #### mDevCamp - June '25 🇨🇿
 
 Ash Davies
 Android GDE Berlin
-Cat Person 😸
 
 ashdavies.dev
-
-^ Much in the same way that Coroutines revolutionized reactive architecture, Compose challenges us to rethink how we design applications. 
-
-^ While traditionally seen as a UI toolkit, Compose — and specifically Compose Multiplatform — can play a much larger role in our applications.
-
-^ By leveraging its declarative and state-driven nature, we can build, model, and manage application state in a way that is consistent, scalable, and platform-agnostic.
 
 ---
 
@@ -779,13 +772,93 @@ flowOf("one", "two").test {
 
 ---
 
-# Prototyping 
-
-## 🚀
+# Prototyping 🚀
 
 ^ Quickly ship UI to multiple form factors
 
 ^ Desktop becomes a testbed for mobile UIs
+
+---
+
+[.footer: github.com/JetBrains/compose-hot-reload]
+
+![inline](compose-hot-reload.png)
+
+^ With minimal setup you can use Compose Hot Reload
+
+^ Near instantaneous UI feedback
+
+---
+
+# Recomposition 🔄
+
+^ Compose skips execution where it's not necessary
+
+^ Performance is improved when state is unchanged
+
+---
+
+# Remember 🧠
+
+^ Compose remember introduced as a concept
+
+^ Whilst allowing fine grained control
+
+^ Requires some forethought
+
+---
+
+# Remember 🧠
+
+```kotlin
+var path by remember { mutableStateOf("https://.../") }
+val file = remember(path) {
+    downloadManager.downloadFile(path)
+}
+```
+
+^ When the value of path changes, the file will be downloaded
+
+^ This won't be retained through configuration change or process death
+
+^ Not a novel problem, we have this problem already
+
+---
+
+# Remember 🧠
+
+```kotlin
+var path by remember { mutableStateOf("https://.../") }
+val file = rememberSaveable(path) {
+    // Must be Parcelable on Android!
+    downloadManager.downloadFile(path)
+}
+```
+
+^ Value must be primitive or Parcelable
+
+---
+
+# Circuit
+
+# `rememberRetained()`
+
+^ Circuit introduces the concept of retained state
+
+^ Retained stored in memory, persists configuration change
+
+---
+
+[.footer: chrisbanes.me/posts/retaining-beyond-viewmodels]
+
+![](retaining-beyond-viewmodels-background.jpg)
+
+## `rememberRetainedCoroutineScope()`
+### Retaining Beyond ViewModels
+
+^ Chris covers this in detail with retaining a CoroutineScope
+
+^ Perform long running operations
 
 ---
 
