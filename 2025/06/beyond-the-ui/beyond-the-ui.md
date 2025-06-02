@@ -10,14 +10,12 @@ theme: Work, 8
 
 # [fit] Beyond the UI
 
-## [fit] Compose as a Foundation for Multiplatform Apps
+### [fit] Compose as a Foundation for Multiplatform Apps
 
 #### mDevCamp - June '25 🇨🇿
 
-Ash Davies
+Ash Davies | ashdavies.dev
 Android GDE Berlin
-
-ashdavies.dev
 
 ---
 
@@ -57,14 +55,12 @@ fun JetpackCompose() {
 
 ---
 
-# Compose UI
+# Jetpack Compose UI
+### github.com/androidx/androidx/tree/androidx-main/compose/ui
 
-- Declarative UI Framework
-- Open Source Kotlin
-- Accelerate UI development
-- Intuitive Idiomatic API
+![right 25%](jetpack-compose-logo.png)
 
-^ Exploit Kotlin DSL language idioms
+^ What prompted Google and JetBrains to build this?
 
 ---
 
@@ -97,7 +93,7 @@ android:orientation="vertical" >
 
 ^ Views written in XML, painful to structure
 
-^ Inflated at runtime, poor attribute attestation
+^ Whilst technically declarative, required mutable configuration in code
 
 ^ Years of optimisations, performance acceptable
 
@@ -114,14 +110,45 @@ android:orientation="vertical" >
 
 ---
 
-# Tooling
+# Android Layouts
+### Lifecycle Abstraction
+
+![inline 45% corner-radius(16)](square-mortar.png)![inline 45% corner-radius(16)](square-flow.png)
+
+^ The idea of a more molecular UI structure had been entertained before
+
+^ The folks at Square at created Mortar and Flow back in 2014
+
+^ Mortar implemented screens with view layouts handling presenter detachment
+
+^ Flow handled the navigation with a backstack model
+
+---
+
+# Android Layouts
+### Lifecycle Abstraction
+
+![inline 45% corner-radius(16)](square-workflow-kotlin.png)![inline 45% corner-radius(16)](uber-ribs.png)
+
+^ Went on to develop Workflow, comprehensive, opinionated, open source, released to production
+
+^ Uber completely rebuilt their app in 2016 using "VIPER"
+
+^ Employs unidirection data flow, encouraging declarative syntax
+
+---
+
+# Android Layouts
+### Kotlin Interop
 
 ![inline fill](android-databinding.png)![inline fill](kotlin-anko.png)
 ![inline fill](android-view-binding.png)![inline fill](splitties.png)
 
 ^ Additional tooling developed by Google and OS community
 
-^ Made some aspects bearable
+^ Mostly served as a approachable API for Kotlin
+
+^ Since layout inflation is still very Java-esque
 
 ---
 
@@ -133,33 +160,76 @@ android:orientation="vertical" >
 
 ---
 
-# Android Layouts and Compose
+# Jetpack Compose UI 🚀
+### 1.0 (July 2021)
 
-- Widespread adoption of Kotlin on Android
-- Idiomatic Kotlin language features
+![right 25%](jetpack-compose-logo.png)
 
-^ Kotlin language features, lambdas, immutability, extension functions
+^ Google already announced first-class support in 2017
 
-^ Kotlin DSLs apply naturally to the view hierarchy
+^ Kotlin the fastest growing language on GitHub in 2018
+
+^ Google later announced Kotlin as preferred in 2019
+
+^ So it was time for Kotlin-based UI toolkit
+
+^ Jetpack Compose preview released October 2019
+
+^ Hitting 1.0 production ready in July 2021
 
 ---
 
-# Jetpack Compose UI 
-## Principles
+# Declarative UI Framework
+### Compose UI
 
-- Composition > Inheritance
-- Declarative Syntax
-- Immutable State
-- Recomposition
+^ Focuses more on the what than the how, layout is a stateful declaration
 
-^ More on recomposition later
+^ Antithesis of imperative usage, listeners and adding or removing views
+
+^ Better representation of state in UI
+
+---
+
+# Intelligent Recomposition 🧠
+### Compose UI
+
+```kotlin
+@Composable
+fun ClickCounter(clicks: Int, onClick: () -> Unit) {
+    Button(onClick = onClick) {
+        Text("I've been clicked $clicks times")
+    }
+}
+```
+
+^ Where previously the entire button hierarchy would been to be redrawn
+
+^ When clicks changed, only the text is redrawn by recomposition
+
+---
+
+# Kotlin Language Features 💪
+### Compose UI
+
+- Default parameters
+- Higher order functions
+- Trailing lambdas
+- Scopes / Receivers
+- Delegated properties
+- ...
+
+^ Kotlin langauge features allow developers to write declarative code
+
+^ DSLs apply naturally to the view hierarchy
+
+^ Promoting immutability
 
 ---
 
 [.footer: medium.com/androiddevelopers/under-the-hood-of-jetpack-compose-part-2-of-2-37b2c20c6cdd]
 
 # Jetpack Compose UI
-## Under-the-hood
+### Under-the-hood
 
 ![right](gap-buffer-structure.webp)
 
@@ -175,7 +245,7 @@ android:orientation="vertical" >
 ---
 
 # Jetpack Compose UI
-## Talk is Cheap
+### Talk is Cheap
 
 ```kotlin
 @Composable
@@ -214,7 +284,7 @@ fun Counter() {
 ---
 
 # Kotlin Multiplatform
-## Stable (1.9.20)
+### Stable (1.9.20)
 
 ^ Kotlin Multiplatform, relatively new kid on the block
 
@@ -712,7 +782,7 @@ flowOf("one", "two").test {
 
 ---
 
-## Decompose & Essenty
+# Decompose & Essenty
 ### arkivanov.github.io/Decompose
 
 ^ Decompose focusses on the lifecycle awareness aspect with navigation included
@@ -757,7 +827,7 @@ class DefaultRootComponent(
 
 ---
 
-## Circuit
+# Circuit
 
 - Supports most supported KMP platforms
 - Compose first architecture
@@ -917,7 +987,7 @@ val file = rememberSaveable(path) {
 
 ![](retaining-beyond-viewmodels-background.jpg)
 
-## `rememberRetainedCoroutineScope()`
+# `rememberRetainedCoroutineScope()`
 ### Retaining Beyond ViewModels
 
 ^ Chris covers this in detail with retaining a CoroutineScope
@@ -926,7 +996,7 @@ val file = rememberSaveable(path) {
 
 ---
 
-## Consistent State Patterns
+# Consistent State Patterns
 
 - Hoisting, unidirectional data flow
 - Shared reactive state handling
@@ -935,7 +1005,7 @@ val file = rememberSaveable(path) {
 
 ---
 
-## Shared Design System
+# Shared Design System
 
 - Material components
 - Typography, spacing, theming — once
@@ -944,7 +1014,7 @@ val file = rememberSaveable(path) {
 
 ---
 
-## IDE-First Experience
+# IDE-First Experience
 
 - JetBrains tools tightly integrated
 - Live previews and navigation supported
@@ -969,9 +1039,9 @@ val file = rememberSaveable(path) {
 
 ![right](kotti-py-sleepy.jpeg)
 
-# Thank You!
+# [fit] Thank You!
 
-Ash Davies
+Ash Davies | ashdavies.dev
 Android GDE Berlin
 
 ^ Ask me for cat stickers!
