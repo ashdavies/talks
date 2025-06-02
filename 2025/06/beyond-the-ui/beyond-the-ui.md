@@ -771,14 +771,11 @@ flowOf("one", "two").test {
 
 ---
 
-# Tooling in Compose MPP
+# [fit] Tooling in Compose Multiplatform
 
-- 🔧 Decompose (Navigation, Lifecycle)
-- 🧬 Molecule (State modeling)
-- ⚡️ Circuit (Navigation, State management)
-- 🪞 Voyager / Appyx (Navigation alternatives)
-- 🌈 Kamel (Image loading)
-- 🧪 Paparazzi / Snapshot testing (UI validation)
+^ Again being a good engineer is knowing what tools you have available
+
+^ How to utilise those tools appropriately
 
 ---
 
@@ -817,22 +814,72 @@ class DefaultRootComponent(
 
 ---
 
+![500%](voyager-icon.png)
+
+## adrielcafe/voyager
+### voyager.adriel.cafe
+
+---
+
+# Voyager ![](voyager-icon.png)
+
+```kotlin
+class PostListScreen : Screen {
+
+    @Composable
+    override fun Content() {
+        // ...
+    }
+
+    @Composable
+    private fun PostCard(post: Post) {
+        val navigator = LocalNavigator.currentOrThrow
+
+        Card(
+            modifier = Modifier.clickable {
+                navigator.push(PostDetailsScreen(post.id))
+            }
+        ) {
+            // ...
+        }
+    }
+}
+```
+
+^ Voyager takes a more simpler approach with Navigator provided as a CompositionLocal
+
+^ Keys again keyed by a Screen class, simply added or removed from the back stack
+
+---
+
+## appyx
+### bumble-tech.github.io/appyx
+
+^ Another compose first navigation library more focussed on gesture control
+
+---
+
+## PreCompose
+### github.com/Tlaster/PreCompose
+
+^ Similar to Jetpack Navigation with some tweaks
+
+---
+
+[.footer: github.com/cashapp/molecule]
+![75% corner-radius(16)](cashapp-molecule.png)
+
+^ Already briefly covered molecule
+
+---
+
 [.footer: github.com/slackhq/circuit]
 
 ![75% corner-radius(16)](slackhq-circuit.png)
 
-^ Circuit is a community contributed library for multiplatform
+^ Circuit is a community-contributed library for multiplatform
 
 ^ Takes inspiration from existing approaches, cashapp broadway, workflow etc
-
----
-
-# Circuit
-
-- Supports most supported KMP platforms
-- Compose first architecture
-- Presenter & UI separation
-- Unidirectional Data Flow
 
 ^ Designed with Compose in mind, powered with the compose runtime
 
@@ -1005,12 +1052,55 @@ val file = rememberSaveable(path) {
 
 ---
 
-# Shared Design System
+# Compose Multiplatform
+### Material Theming
 
-- Material components
-- Typography, spacing, theming — once
+```kotlin
+MaterialTheme(
+    colorScheme = /* ... */,
+    typography = /* ... */,
+    shapes = /* ... */,
+) {
+    // M3 app content
+}
+```
 
-^ You can maintain a consistent design language across all platforms without custom wrappers.
+^ You can maintain typography, spacing, and theming with a consistent design language across all platforms
+
+---
+
+![inline 75% corner-radius(16)](compose-cupertino.png)
+
+^ If iOS design is more your cup of tea
+
+^ iOS style components can be applied with compose cupertino
+
+---
+
+```kotlin
+@Composable
+fun AppTheme(
+    theme: Theme,
+    content: @Composable () -> Unit
+) {
+    AdaptiveTheme(
+        material = {
+            // Tweak this for your Material design
+            MaterialTheme(content = it)
+        },
+        cupertino = {
+            // Tweak this for your iOS design
+            CupertinoTheme(content = it)
+
+        },
+        target = theme,
+        content = content
+    )
+}
+```
+
+![right](cupertino-screenshot.png)
+
 
 ---
 
@@ -1023,14 +1113,15 @@ val file = rememberSaveable(path) {
 
 ---
 
-# Wrap-Up: Why This Matters
+# Beyond the UI
+### Wrap-Up
 
 ✅ Compose is more than a UI toolkit  
 ✅ Enables scalable, shared architecture  
 ✅ Designed for Kotlin-first developers  
-✅ Multiplatform is no longer just business logic
+✅ Multiplatform not just business logic
 
-→ Start rethinking how you architect apps, not just how you render them.
+^ Start rethinking how you architect apps, not just how you render them.
 
 ---
 
