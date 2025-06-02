@@ -888,42 +888,142 @@ class PostListScreen : Screen {
 ^ UDF all the way through, no mutability
 
 ---
+## Circuit
+### State
 
 ```kotlin
 @Parcelize
-data object CounterScreen : Screen { 
-    data class CounterState(
-        val count: Int, 
-        val eventSink: (CounterEvent) -> Unit,
-    ) : CircuitUiState
-  
-    sealed interface CounterEvent : CircuitUiEvent {
-        data object Increment : CounterEvent
-    }
-}
-
-@Composable
-fun CounterPresenter(): CounterState {
-    var count by rememberSaveable { mutableStateOf(0) }
-
-    return CounterState(count) { event ->
-        when (event) {
-            CounterEvent.Increment -> count++
-        }
-    }
-}
-
-@Composable
-fun Counter(state: CounterState) {
-    Column(Modifier.align(Alignment.Center)) {
-        Text(text = "Count: ${state.count}")
-      
-        Button(onClick = { state.eventSink(CounterEvent.Increment) }) {
-            Icon(rememberVectorPainter(Icons.Filled.Add), "Increment")
-        }
-    }
+data object HomeScreen : Screen {
+  data class State(
+    val title: String,
+  ): CircuitUiState
 }
 ```
+
+^ Screens are keyed by an appropriately named screen class
+
+^ UDP Concept revolves around your state
+
+^ Needs to be Parcelable so that it can be saved to the back stack on Android
+
+^ If you see Zac, ask him if we can make it Serializable instead
+
+---
+
+## Circuit
+### Presenter
+
+```kotlin
+class HomePresenter : Presenter<HomeScreen.State> {
+  @Composable
+  override fun present(): HomeScreen.State {
+    return HomeScreen.State("Hello World")
+  }
+}
+```
+
+^ Presenters, separated from UI, responsible for creation of state
+
+---
+
+## Circuit
+### UI
+
+```kotlin
+@Composable
+fun HomeScreen(
+  state: HomeScreen.State,
+  modifier: Modifier = Modifier,
+) {
+  Text(
+    text = state.title,
+    modifier = modifier,
+  )
+}
+```
+
+^ Basic UI to receive and render the provided state
+
+^ Take a modifier as a good citizen
+
+---
+
+## Circuit
+
+```kotlin
+val circuit = Circuit.Builder()
+  .addPresenter<HomeScreen, HomeScreen.State>(HomePresenter())
+  .addUi<LauncherScreen, LauncherScreen.State> { _, _ -> HomeScreen(state, modifier) }
+  .build()
+
+CircuitCompositionLocals(circuit) {
+    val backStack = rememberSaveableBackStack(HomeScreen)
+
+    NavigableCircuitContent(
+        navigator = rememberCircuitNavigator(backStack),
+        backStack = backStack,
+    )
+}
+```
+
+^ Wire up circuit with the presenter and UI
+
+^ Provide composition locals
+
+^ Create a back stack with an initial screen
+
+---
+
+[.code-highlight: 5, 8-11]
+
+## Circuit
+### Navigation
+
+```kotlin
+@Parcelize
+data object HomeScreen : Screen {
+  data class State(
+    val title: String,
+    val eventSink: (Event) -> Unit
+  ): CircuitUiState
+
+  sealed interface Event {
+    data class DetailClicked(
+      val id: String,
+    ): Event
+}
+```
+
+^ Interestingly navigation is handled through simply event propagation through the screen state
+
+^ Which can be invoked from the UI then handled by the presenter
+
+---
+
+## Circuit
+### Navigation
+
+```kotlin
+class HomePresenter(private val navigator: Navigator) : Presenter<HomeScreen.State> {
+
+@Composable
+  override fun present(): HomeScreen.State {
+    return HomeScreen.State("Hello World") { event ->
+      when (event) {
+        is HomeScreen.Event.DetailClicked -> navigator.goTo(DetailScreen(event.id))
+      }
+    }
+  }
+}
+```
+
+---
+
+[.footer: youtube.com/watch?v=ZIr_uuN8FEw]
+
+![fit corner-radius(16)](modern-compose-architecture.jpg)
+
+^ Zac and Kieran go into much more depth
 
 ---
 
