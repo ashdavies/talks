@@ -1,7 +1,6 @@
 autoscale: true
 build-lists: true
 footer: ashdavies.dev
-slidenumbers: true
 slide-transition: fade(0.5)
 theme: Work, 8
 
@@ -17,6 +16,12 @@ theme: Work, 8
 Ash Davies | ashdavies.dev
 Android GDE Berlin
 
+![inline right](kotti-sticker.webp)
+
+^ Talk background, Compose in unconventional places
+
+^ Started with Compose in a GCP function
+
 ---
 
 # Jetpack Compose UI
@@ -24,7 +29,9 @@ Android GDE Berlin
 
 ![right 25%](jetpack-compose-logo.png)
 
-^ What is Jetpack Compose UI, if unfamiliar to Android
+^ What is Jetpack Compose UI, if unfamiliar with Android
+
+^ Recommended modern toolkit for UI development
 
 ---
 
@@ -36,8 +43,10 @@ Android GDE Berlin
 fun JetpackCompose() {
     Card {
         var expanded by remember { mutableStateOf(false) }
+        
         Column(Modifier.clickable { expanded = !expanded }) {
             Image(painterResource(R.drawable.jetpack_compose))
+            
             AnimatedVisibility(expanded) {
                 Text(
                     text = "Jetpack Compose",
@@ -49,9 +58,9 @@ fun JetpackCompose() {
 }
 ```
 
-^ Though Compose UI was announced at Google IO 2019
+^ Designed for Kotlin langauge features
 
-^ Didn't reach stable release until 2021
+^ Build intuitive, declarative UI
 
 ---
 
@@ -60,7 +69,11 @@ fun JetpackCompose() {
 
 ![right 25%](jetpack-compose-logo.png)
 
-^ What prompted Google and JetBrains to build this?
+^ Years of collaboration with Google and JetBrains
+
+^ Overhaul of Kotlin compiler for plugins
+
+^ What prompted this?
 
 ---
 
@@ -71,8 +84,8 @@ fun JetpackCompose() {
 <LinearLayout xmlns:android=
 "http://schemas.android.com/apk/res/android"
   android:layout_width="match_parent"
-  android:layout_height="match_parent"
-android:orientation="vertical" >
+  android:layout_height="match_parent" 
+  android:orientation="vertical">
 
   <TextView android:id="@+id/text"
   android:layout_width="wrap_content"
@@ -89,11 +102,7 @@ android:orientation="vertical" >
 
 ![right fill 75%](layout-params.png)
 
-^ Android has a rich a colourful history with layouts
-
-^ Views written in XML, painful to structure
-
-^ Whilst technically declarative, required mutable configuration in code
+^ Technically declarative, requires mutable configuration in code
 
 ^ Years of optimisations, performance acceptable
 
@@ -104,9 +113,9 @@ android:orientation="vertical" >
 
 ![right](viewmodel-lifecycle.png)
 
-^ Also introduced the problem of lifecycle management
+^ Introduced lifecycle management
 
-^ The bane of every Android developers existence
+^ Bane of existence
 
 ---
 
@@ -115,13 +124,11 @@ android:orientation="vertical" >
 
 ![inline 45% corner-radius(16)](square-mortar.png)![inline 45% corner-radius(16)](square-flow.png)
 
-^ The idea of a more molecular UI structure had been entertained before
+^ Idea of a more granular UI not new
 
-^ The folks at Square at created Mortar and Flow back in 2014
+^ Mortar for screens with view presentation
 
-^ Mortar implemented screens with view layouts handling presenter detachment
-
-^ Flow handled the navigation with a backstack model
+^ Flow handled the navigation and backstack
 
 ---
 
@@ -130,11 +137,11 @@ android:orientation="vertical" >
 
 ![inline 45% corner-radius(16)](square-workflow-kotlin.png)![inline 45% corner-radius(16)](uber-ribs.png)
 
-^ Went on to develop Workflow, comprehensive, opinionated, open source, released to production
+^ Evolved into Workflow, comprehensive, opinionated, open source, production ready
 
 ^ Uber completely rebuilt their app in 2016 using "VIPER"
 
-^ Employs unidirection data flow, encouraging declarative syntax
+^ Both use UDP, declarative syntax
 
 ---
 
@@ -182,7 +189,9 @@ android:orientation="vertical" >
 # Declarative UI Framework
 ### Compose UI
 
-^ Focuses more on the what than the how, layout is a stateful declaration
+^ Focuses more on the "what" than the "how"
+
+^ Layout is a stateful declaration
 
 ^ Antithesis of imperative usage, listeners and adding or removing views
 
@@ -233,30 +242,9 @@ fun ClickCounter(clicks: Int, onClick: () -> Unit) {
 
 ![right](gap-buffer-structure.webp)
 
-- Kotlin compiler plugin
-- Gap buffer data structure
-
-^ Collaborating with JetBrains to exploit the Kotlin Compiler Plugin API
-
-^ Transforms method signatures to inject a composer
-
 ^ Composer uses gap buffer to build a node structure
 
----
-
-# Jetpack Compose UI
-### Talk is Cheap
-
-```kotlin
-@Composable
-fun Counter() {
-    var count by remember { mutableStateOf(0) }
-
-    Button(onClick = { count += 1 }) {
-        Text("Count: $count")
-    }
-}
-```
+^ Flat array to store group objects
 
 ---
 
@@ -266,6 +254,8 @@ fun Counter() {
 # What tree structure does the Compose runtime output?
 
 ![100% original](compose-ui-tree.png)
+
+^ Node structure as UI tree
 
 ---
 
@@ -288,7 +278,7 @@ fun Counter() {
 
 ^ Kotlin Multiplatform, relatively new kid on the block
 
-^ Stable from release 1.9.20 released on 1st Nov last year
+^ Stable from release 1.9.20 released on Nov 2023
 
 ^ But multiplatform isn’t a new concept…
 
@@ -364,11 +354,39 @@ fun Counter() {
 - Do nothing
 - Profit
 
-^ If you're migrating from androidx navigation project
+^ If you're migrating from an android only project
 
 ^ You've waited long enough to have androidx available
 
 ^ Congrats
+
+---
+
+![50% corner-radius(16)](compose-multiplatform-header.png)
+
+---
+
+[.footer: ashdavies.dev/talks/hype-driven-development-berlin-devfest/]
+
+# Hype Driven Development
+
+![](devfest-berlin-hype-driven-development.jpeg)
+
+^ Started from putting Compose into a cloud function
+
+^ Prime example of solutions looking for problems
+
+---
+
+> “I suppose it is tempting, if the only tool you have is a hammer, to treat everything as if it were a nail.”
+
+> -- Abraham Maslow
+
+![inline right 100% corner-radius(16)](law-of-the-instrument.jpeg)
+
+^ Also known as the law of the instrument, or "Birmingham screwdriver"
+
+^ Playing with tech in ways unintended, may result in new insights
 
 ---
 
@@ -457,7 +475,11 @@ Observable.just("Hey")
     .subscribe { doAction() }
 ```
 
+^ Introduction of reactive libraries
+
 ^ Over-utilisation of mapping operations increases cognitive load
+
+^ Much like Maslows Hammer, employed in areas that don't need it
 
 ^ Requiring intimate knowledge of the framework to be productive
 
@@ -470,13 +492,13 @@ Observable.just("Hey")
 - Cancellation propagation
 - Lifecycle aware
 
-^ A single thread can support many Coroutines
+^ - A single thread can support many Coroutines
 
-^ Structured concurrency scopes resources and helps prevent leaks
+^ - Structured concurrency scopes resources and helps prevent leaks
 
-^ Built in cancellation support propagates through the hierarchy
+^ - Built in cancellation support propagates through the hierarchy
 
-^ Lifecycle aware operation through JetPack extensions
+^ - Lifecycle aware operation through JetPack extensions
 
 ^ TODO Break up slides
 
@@ -1079,6 +1101,21 @@ class HomePresenter(private val navigator: Navigator) : Presenter<HomeScreen.Sta
 
 ---
 
+[.footer: developer.android.com/develop/ui/compose/performance/stability]
+
+# Stability ⚖️
+
+- `org.jetbrains.kotlinx:kotlinx-collections-immutable`
+- `composeCompiler.stabilityConfigurationFile`
+- `@Immutable`
+- `@Stable`
+
+^ Consider Compose parameter stability
+
+^ Must be immutable, val, concretion
+
+---
+
 # Remember 🧠
 
 ^ Compose remember introduced as a concept
@@ -1134,7 +1171,8 @@ val file = rememberSaveable(path) {
 
 ![](retaining-beyond-viewmodels-background.jpg)
 
-# `rememberRetainedCoroutineScope()`
+# [fit] `rememberRetainedCoroutineScope()`
+
 ### Retaining Beyond ViewModels
 
 ^ Chris covers this in detail with retaining a CoroutineScope
