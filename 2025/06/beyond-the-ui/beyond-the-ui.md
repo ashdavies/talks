@@ -11,7 +11,7 @@ theme: Work, 8
 
 ### [fit] Compose as a Foundation for Multiplatform Apps
 
-#### mDevCamp - June '25 🇨🇿
+#### Berlindroid - July '25 🇩🇪
 
 Ash Davies | ashdavies.dev
 Android GDE Berlin
@@ -1046,6 +1046,16 @@ class HomePresenter(private val navigator: Navigator) : Presenter<HomeScreen.Sta
 ![fit corner-radius(16)](modern-compose-architecture.jpg)
 
 ^ Zac and Kieran go into much more depth
+
+---
+
+[.footer: github.com/zacsweers/metro]
+
+![fit 75% corner-radius(16)](zac-sweers-metro.png)
+
+---
+
+# RIP Anvil
 
 ---
 
