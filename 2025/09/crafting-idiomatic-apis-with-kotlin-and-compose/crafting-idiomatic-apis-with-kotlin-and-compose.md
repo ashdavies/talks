@@ -148,12 +148,44 @@ curl --request GET \
 
 ---
 
+```kotlin
+fun showCancelBookingAndBackToVerbindungsuebersichtDialog()
+
+fun handleLoadBuchungskundenDatenOrOpenRechnungFailure()
+
+fun getAngebotsKonditionIconAndContentDescription()
+```
+
+^ Not uncommon for code to include words from other languages
+
+^ eg. "Bahnhof", "Betriebstelle", "Zug storniert wegen Signalstörung"
+
+---
+
+[.footer: fiber-space.de/EasyExtend/doc/teuton/teuton.htm]
+
+# Teuton: Eine Deutsche Programmiersprache
+
+```python
+# -*- coding: iso-8859-1 -*-
+
+schön = Wahr
+häßlich = Falsch
+
+für bäh in [schön, häßlich]:
+    drucke bäh
+
+def sovielwiemöglich():
+    "gib"
+    zurück "was mir gehört"
+```
+
+^ Not to say that all programming languages should be English
+
+---
+
 [.text: line-height(2), text-scale(0.5)]
-[.hide-footer]
 
 ![right](kotti-py-sleepy.jpeg)
 
-# [fit] Thank You!
-
-Ash Davies | ashdavies.dev
-Android GDE Berlin
+# Thank You!
