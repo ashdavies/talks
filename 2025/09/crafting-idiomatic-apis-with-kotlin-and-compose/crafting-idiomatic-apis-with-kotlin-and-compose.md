@@ -5,7 +5,6 @@ slide-transition: fade(0.5)
 theme: Work, 8
 
 [.text: line-height(2)]
-[.footer: ashdavies.dev]
 
 # [fit] Crafting Idiomatic APIs with Kotlin and Compose
 
@@ -114,8 +113,43 @@ curl --request GET \
 
 ---
 
+# Language 🗣️
+
+^ Over 7k languages being spoken today, with dialects, hundreds of thousands
+
+^ Countless languages to program with, kindly the Americans have offered theirs...
+
+---
+
+# 🇺🇸
+
+![right](grace-hopper.jpg)
+
+^ Worlds first programming languages written by American mathematicians and scientists, in English.
+
+^ Grace Hopper, arguably the mother of modern programming languages.
+
+---
+
+# colo~~u~~r
+
+^ To this day programming is written in Simplified English, much to my chagrin
+
+---
+
+[.background-color: #fff]
+[.footer-style: #000]
+
+![right scale(50%)](eu-language-proficiency.png)
+
+^ Average European speaks two or more languages
+
+^ Not to mention business-specific terminology
+
+---
+
 [.text: line-height(2), text-scale(0.5)]
-[.footer: ]
+[.hide-footer]
 
 ![right](kotti-py-sleepy.jpeg)
 
