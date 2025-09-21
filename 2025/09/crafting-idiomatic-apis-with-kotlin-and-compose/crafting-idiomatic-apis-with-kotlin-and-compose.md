@@ -1,8 +1,6 @@
-autoscale: true
-build-lists: true
 footer: ashdavies.dev
 slide-transition: fade(0.5)
-theme: Work, 8
+theme: Simple, 2
 
 [.text: line-height(2)]
 
@@ -29,32 +27,38 @@ curl --request GET \
 
 ---
 
-# Protocols?
+## Protocols
 
-- SOAP
-- Rest
-- GraphQL
-- gRPC
+### SOAP / Rest / GraphQL / gRPC
 
 ^ Protocols define a mechanism for communication, are they APIs?
 
 ---
 
-# SDKs?
+## SDKs
 
-^ SDKs often built upon public APIs to assist developers
+^ SDKs often built upon existing public APIs to aid developers
 
-^ Are they considered APIs?
+^ Help introduce language features across protocols
+
+^ Firebase, Google Services, etc
 
 ---
 
-# "Ordinary" Code?
+## "Ordinary" Code
 
 ^ Code that you might produce in your day job
 
 ---
 
-# Unit Tests?
+![](everything-is-an-api.jpeg)
+
+# Everything is an API
+### Droidcon Berlin - Oct 21'
+
+---
+
+## Unit Tests
 
 ^ Unit tests are production code that doesn't ship
 
@@ -62,7 +66,7 @@ curl --request GET \
 
 ---
 
-# Temporary Code?
+## Temporary Code
 
 ^ Under pressure, time constraints, should temporary code by considered an API?
 
@@ -74,20 +78,13 @@ curl --request GET \
 
 ---
 
-![](everything-is-an-api.jpeg)
-
-# Everything is an API
-### Droidcon Berlin - Oct 21'
-
----
-
 # Who is your API for?
 
 ^ API design is fundamentally a consideration to the consumer
 
 ---
 
-# Consumers?
+## Consumers
 
 ^ Maybe you're an SDK or framework developer
 
@@ -97,7 +94,7 @@ curl --request GET \
 
 ---
 
-# Colleagues?
+## Colleagues
 
 ^ Your code will likely be peer-reviewed
 
@@ -105,11 +102,88 @@ curl --request GET \
 
 ---
 
-# Future Self?
+## Future Self
 
 ^ No scenario where your code will not be used by someone else
 
 ^ Even if that somebody else is you
+
+---
+
+## Consequences
+
+^ Consequences of poorly designed APIs
+
+---
+
+![right](oh-wait-meme.jpg)
+
+## Consequences
+
+### Job security
+
+---
+
+## Consequences
+
+### Increased learning curve 🤔
+
+^ Revisiting your code might take longer to understand requirements
+
+^ Takes longer for new developers to understand, can be misleading
+
+---
+
+![right](sad-pablo-escobar.jpg)
+
+## Consequences
+
+### Longer peer review
+
+---
+
+## Consequences
+
+### Slowed feature delivery 💰
+
+^ Slow feature delivery increases your time to market
+
+^ Actual fiscal effect on running a business
+
+---
+
+> Every existing thing is born without reason, prolongs itself out of weakness, and dies by chance
+> -- Jean-Paul Sartre
+
+---
+
+[.footer: programmingisterrible.com/post/139222674273/write-code-that-is-easy-to-delete-not-easy-to]
+
+> Every line of code is written without reason, maintained out of weakness, and deleted by chance
+> -- Jean-Paul Sartre’s Programming in ANSI C.
+
+^ Code has a continued maintenance cost
+
+---
+
+# Idiomatic
+
+^ What does it mean to be idiomatic?
+
+---
+
+## Idioms
+### kotlinlang.org/docs/idioms.html
+
+^ Might be familiar with idioms in spoken language
+
+^ Break a leg, bite the bullet, have your cake and eat it too
+
+^ Carry meaning not obvious from the use of words
+
+^ Scope functions, immutability, destructuring, when statements
+
+^ Really just about using language features appropriately
 
 ---
 
@@ -181,6 +255,10 @@ def sovielwiemöglich():
 ```
 
 ^ Not to say that all programming languages should be English
+
+^ Best to reduce the number of languages
+
+^ TODO Number of native German speaking programmers in Germany
 
 ---
 
