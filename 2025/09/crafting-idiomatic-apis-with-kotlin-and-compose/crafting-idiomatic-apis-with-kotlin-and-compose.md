@@ -21,9 +21,9 @@ curl --request GET \
   --header "X-GitHub-Api-Version: 2022-11-28"
 ```
 
-^ May think API is exclusively retrieving data
+^ May think API are exclusively about retrieving data from rest services online
 
-^ Familiar to most developers
+^ Anything that uses a programming language to interface with another application
 
 ---
 
@@ -31,11 +31,13 @@ curl --request GET \
 
 ### SOAP / Rest / GraphQL / gRPC
 
-^ Protocols define a mechanism for communication, are they APIs?
+^ Protocols define a mechanism for communication, wire protocols
+
+^ Slightly nuanced, still include specification for APIs
 
 ---
 
-## SDKs
+## SDKs 📦
 
 ^ SDKs often built upon existing public APIs to aid developers
 
@@ -48,6 +50,8 @@ curl --request GET \
 ## "Ordinary" Code
 
 ^ Code that you might produce in your day job
+
+^ That mundane feature, bug fix, etc
 
 ---
 
@@ -81,6 +85,8 @@ curl --request GET \
 # Who is your API for?
 
 ^ API design is fundamentally a consideration to the consumer
+
+^ What tools do they have at their disposal?
 
 ---
 
@@ -214,13 +220,20 @@ curl --request GET \
 [.background-color: #fff]
 [.footer-style: #000]
 
-![right scale(50%)](eu-language-proficiency.png)
+```mermaid
+xychart-beta horizontal
+    x-axis [Luxemburg, Netherlands, Denmark, Belgium, Austria, Germany, Poland, UK]
+    y-axis "Average number of languages spoken per person in Europe" 0 --> 4
+    bar [3.6, 3.2, 2.8, 2.6, 2.2, 2, 1.8, 0.6]
+
+```
 
 ^ Average European speaks two or more languages
 
 ^ Not to mention business-specific terminology
 
 ---
+
 
 ```kotlin
 fun showCancelBookingAndBackToVerbindungsuebersichtDialog()
@@ -259,6 +272,22 @@ def sovielwiemöglich():
 ^ Best to reduce the number of languages
 
 ^ TODO Number of native German speaking programmers in Germany
+
+---
+
+## Business Specific Terminology
+
+^ You might find business specific terminology in your code
+
+^ Because this relates to the domain, inherent to business
+
+---
+
+## Stornierung, Ersatzverkehr, Signalstörung...
+
+### Business Specific Terminology
+
+^ AKA I've been living here too long
 
 ---
 
