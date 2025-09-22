@@ -1,5 +1,6 @@
 footer: ashdavies.dev
 slide-transition: fade(0.5)
+slidenumber: true
 theme: Simple, 2
 
 [.text: line-height(2)]
@@ -55,10 +56,13 @@ curl --request GET \
 
 ---
 
+[.footer: ashdavies.dev/talks/everything-is-an-api-berlin-droidcon/]
+
 ![](everything-is-an-api.jpeg)
 
 # Everything is an API
-### Droidcon Berlin - Oct 21'
+
+### Droidcon Berlin - Oct '21
 
 ---
 
@@ -442,7 +446,9 @@ Observable.just("Hey")
 
 ## Declarative Architecture
 
-### Idempotency
+### Idempotency / Determinism
+
+^ AKA pure functions, or deterministic, replayable event sequencing
 
 ^ Operations can be repeated without side effects
 
@@ -460,11 +466,280 @@ Observable.just("Hey")
 
 ---
 
-# `explicitApiMode()`
+# Jetpack, Compose, & Multiplatform
 
-^ Kotlin is public by default, easy to leak internal implementation
+![inline 50%](androidx-repository.png)![inline 15%](jetpack-compose.png)![inline 90%](compose-multiplatform.png)
 
-^ Forces explicit use of `public` and `internal` declarations
+^ Compose, mostly falling under the androidx umbrella
+
+^ Collaborated with Jetbrains on Kotlin compiler plugin APIs
+
+^ Many parts later adopted into the Kotlin repository
+
+---
+
+[.background-color: #fff]
+[.footer-style: #000]
+
+![100% original](compose-ui-tree.png)
+
+^ Compose leans into the hierarchical tree node structure
+
+^ Allows for structured scope manipulation
+
+---
+
+```kotlin
+fun Counter($composer: Composer) { 
+    $composer.startRestartGroup(-1913267612)
+    
+    /* ... */
+    
+    $composer.endRestartGroup()
+}
+```
+
+^ Compose achieves this through a Kotlin compiler plugin
+
+^ Method signatures are rewritten to provide a composer
+
+^ Node groups are created to represent the composition tree
+
+^ Nodes can then be recomposed when they become dirty
+
+---
+
+[.footer: chrisbanes.me/posts/slotting-in-with-compose-ui]
+
+# Compose
+
+## Higher-Order Functions
+
+```kotlin
+@Composable
+fun TopAppBar(
+    navigationIcon: @Composable (() -> Unit)? = null,
+    title: @Composable () -> Unit,
+    actions: @Composable (RowScope.() -> Unit)? = null,
+    // ...
+)
+
+TopAppBar(
+    navigationIcon = {
+        Image(/* ... */)
+    },
+    // ...
+)
+```
+
+^ Compose uses higher-order functions to provide slot APIs
+
+^ Allowing for composition of arbitrary content
+
+^ Avoiding rigid method signatures
+
+---
+
+[.footer: android.googlesource.com/platform/frameworks/support/+/androidx-main/compose/docs/compose-api-guidelines.md#layout_scoped-modifiers]
+
+# Compose
+
+## Scopes
+
+```kotlin
+@Stable
+interface WeightScope {
+    fun Modifier.weight(weight: Float): Modifier
+}
+
+@Composable
+fun WeightedRow(
+    modifier: Modifier = Modifier,
+    content: @Composable WeightScope.() -> Unit
+) {
+// ...
+
+// Usage:
+WeightedRow {
+    Text("Hello", Modifier.weight(1f))
+    Text("World", Modifier.weight(2f))
+}
+```
+
+^ Compose makes use of scope interfaces to provide functionality within a lambda
+
+^ Can also be used to restrict components to a specific parent
+
+---
+
+# Compose
+
+## Scopes
+
+[.code-highlight: 1-5]
+[.code-highlight: 9-11]
+[.code-highlight: 13-15]
+
+```kotlin
+@Composable
+fun TopAppBar(
+    actions: @Composable (RowScope.() -> Unit)? = null,
+    // ...
+)
+
+TopAppBar(
+    actions = {
+        ImageButton(onClick = { /* ... */ }) {
+            Image(/* ... */)
+        }
+        
+        ImageButton(onClick = { /* ... */ }) {
+            Image(/* ... */)
+        }
+    },
+)
+```
+
+^ TopAppBar also uses scopes on function parameters
+
+^ Tells us that these items will be composed in a row
+
+---
+
+# Compose
+
+## Property Delegates
+
+```kotlin
+inline operator fun <T> State<T>.getValue(thisObj: Any?, property: KProperty<*>): T = value
+
+val conference by remember { mutableStateOf("Droidcon Berlin") }
+```
+
+^ Modification of state will cause recomposition
+
+^ More complex implementation is required
+
+^ Property delegates can be used to provide a simpler API
+
+---
+
+# Compose
+
+## Architecture
+
+![left](kotti-question.jpg)
+
+```kotlin
+downloadManager
+    .downloadFile("https://.../")
+    .flatMapLatest { state ->
+        when (state) {
+            is State.Loaded -> stateFileManager.saveFile(
+                name = "storage/file", 
+                value = state.value,
+            )
+            
+          else -> state
+        }
+    }
+    .onEach { state ->
+        when (state) {
+          is State.Saved -> println("Downloaded file successfully")
+          is State.Loading -> /* ... */
+        }
+    }
+    .launchIn(coroutineScope)
+```
+
+^ Traditionally coroutine one shot operations can make nice inline code
+
+^ But often we'll need the UI to update as a result of an ongoing operation
+
+---
+
+```mermaid
+%%{ init: { 'flowchart': { 'curve': 'stepBefore' } } }%%
+flowchart TD
+    RN1[RootNode] --> CN1[ChildNode]
+    RN1[RootNode] --> CN2[ChildNode]
+    RN1[RootNode] --> CN3[ChildNode]
+    RN1[RootNode] --> CN4[ChildNode]
+    RN1[RootNode] --> CN5[ChildNode]
+    CN1[ChildNode] --> CN6[ChildNode]
+    CN1[ChildNode] --> CN7[ChildNode]
+    CN5[ChildNode] --> CN8[ChildNode]
+    CN5[ChildNode] --> CN10[ChildNode]
+    CN10[ChildNode] --> CN11[ChildNode]
+    CN10[ChildNode] --> CN12[ChildNode]
+```
+
+^ Remembering that Compose is a tree of nodes means we can restructure our architecture
+
+---
+
+```kotlin
+val downloadState = downloadManager
+    .downloadFile("https://.../")
+    .collectAsState(State.Downloading)
+
+val fileState = when(downloadState) {
+    is State.Loaded -> 
+        stateFileManager
+            .saveFile("storage/file", downloadState.value)
+    else -> downloadState
+}
+
+when (fileState) {
+    is State.Loading -> /* ... */
+        
+    is State.Saved -> LaunchedEffect(fileState) {
+        println("Downloaded file successfully")
+    }
+}
+```
+
+![right](py-py-perfect.jpg)
+
+^ Now we've done the same as with coroutines one shot operators
+
+^ Operations are idiomatic, readable, low cognitive load
+
+---
+
+![35% corner-radius(16) right](cashapp-molecule.png)
+
+```kotlin
+fun CoroutineScope.launchCounter(): StateFlow<Int> {
+  return launchMolecule(mode = ContextClock) {
+    var count by remember { mutableStateOf(0) }
+
+    LaunchedEffect(Unit) {
+      while (true) {
+        delay(1_000)
+        count++
+      }
+    }
+
+    count
+  }
+}
+```
+
+^ Molecule built by the folks at Square explores this further
+
+^ Being able to use Compose runtime to build a state
+
+^ Utilising Compose Runtime to build state flow
+
+---
+
+[.footer: ashdavies.dev/talks/beyond-the-ui-prague/]
+![](beyond-the-ui.jpg)
+
+# Beyond the UI
+
+### mDevCamp Prague - Jun '25
 
 ---
 
@@ -581,6 +856,50 @@ def sovielwiemöglich():
 ^ At the same time, API design allows you to reflect business requirements
 
 ^ Strong typing, clear class declarations, etc
+
+---
+
+# Tooling
+
+^ Tooling is a huge part of the developer experience
+
+^ Many bike-shedding arguments rendered moot by linters
+
+^ Tooling can be used to encourage idiomatic code
+
+---
+
+[.footer: kotlinlang.org/docs/whatsnew14.html#explicit-api-mode-for-library-authors]
+
+# Tooling
+
+## `explicitApiMode()`
+
+^ Kotlin is public by default, easy to leak internal implementation
+
+^ Forces explicit use of `public` and `internal` declarations
+
+---
+
+[.footer: slackhq.github.io/compose-lints/]
+
+# Tooling
+
+### `com.slack.lint.compose:compose-lint-checks`
+
+^ Lint rules for Compose to enforce idiomatic code
+
+^ Originally from twitter, now maintained by Slack
+
+---
+
+[.footer: mrmans0n.github.io/compose-rules/ktlint/]
+
+# Tooling
+
+### `io.nlopez.compose.rules:ktlint`
+
+^ Same rulesets for ktlint and detekt
 
 ---
 
