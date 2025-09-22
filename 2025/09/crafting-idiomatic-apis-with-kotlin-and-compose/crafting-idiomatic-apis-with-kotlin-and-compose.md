@@ -172,14 +172,9 @@ curl --request GET \
 
 ---
 
-# Idiomatic
-
-^ What does it mean to be idiomatic?
-
----
+[.footer: kotlinlang.org/docs/idioms.html]
 
 ## Idioms
-### kotlinlang.org/docs/idioms.html
 
 ^ Might be familiar with idioms in spoken language
 
@@ -190,6 +185,286 @@ curl --request GET \
 ^ Scope functions, immutability, destructuring, when statements
 
 ^ Really just about using language features appropriately
+
+---
+
+## Idioms
+
+### Default Parameters
+
+```kotlin
+fun foo(a: Int = 0, b: String = "") { /* ... */ }
+```
+
+^ Some idioms are well-known and widely used
+
+^ Like allowing the caller to omit parameters
+
+^ Reduces complexity of method overloads
+
+---
+
+## Idioms
+
+### Lazy Properties
+
+```kotlin
+val property: String by lazy { /* ... */ }
+```
+
+^ Defer computation until first access for expensive instances
+
+^ Lazy calculation not so simple, threading complications
+
+---
+
+## Idioms
+
+### Null Coalescing
+
+```kotlin
+val fileSize = files?.size ?: run {
+    val someSize = getSomeSize()
+    someSize * 2
+}
+```
+
+^ Elvis operator, everybody's favourite null coalescing operator
+
+^ Reduces null checking boilerplate, value expressions
+
+---
+
+[.footer: kotlinlang.org/docs/whatsnew2220.html]
+
+## Idioms
+
+### Expression `return` statements
+
+```kotlin
+fun getDisplayNameOrDefault(userId: String?): String = getDisplayName(userId ?: return "default")
+```
+
+^ Fairly new convention, permitted to call return in the expression body
+
+^ Only compiles if the function has a declared return type
+
+---
+
+[.code-highlight: 4]
+
+## Idioms
+
+### Guard Conditions
+
+```kotlin
+fun feedAnimal(animal: Animal) {
+    when (animal) {
+        is Animal.Dog -> feedDog()
+        is Animal.Cat if !animal.mouseHunter -> feedCat()
+        else -> println("Unknown animal")
+    }
+}
+```
+
+^ Guard conditions can be applied to when condition
+
+^ Subtle improvement for concise control flows
+
+---
+
+[.footer: kotlinlang.org/docs/coding-conventions.html]
+
+## Kotlin
+
+### Coding Conventions
+
+^ Kotlin has a number of conventions to help you write idiomatic code
+
+---
+
+## ![inline](kotlin-logo.png)
+
+^ Idioms revolve around the language features
+
+---
+
+```mermaid
+timeline
+    title Kotlin
+    Feb 2016 : Kotlin 1.1
+             : Type Aliases, Bound References, Lambda destructuring
+    Nov 2017 : Kotlin 1.2
+             : Array Literals, lateinit properties
+    Oct 2018 : Kotlin 1.3
+             : Coroutines, Multiplatform projects, Contracts, when subject
+    Aug 2020 : Kotlin 1.4
+             : Sam conversions, explicit API mode, trailing comma
+    May 2021 : Kotlin 1.5.0
+             : Sealed interfaces, improved inline classes
+    Nov 2021 : Kotlin 1.6.0
+             : Exhaustive when, suspending functions as supertypes
+    Jun 2022 : Kotlin 1.7.0
+             : K2 compiler alpha, underscore operator
+    Apr 2023 : Kotlin 1.8.20
+             : Wasm target, data objects, secondary constructor bodies
+    May 2024 : Kotlin 2.0.0
+             : Compose compiler Gradle plugin
+    Jun 2025 : Kotlin 2.2.0
+             : Context parameters, guard conditions, non-local break and continue, multi-dollar interpolation 
+```
+
+^ Can be challenging to keep up with the latest language features
+
+^ Some smaller changes can go by unnoticed
+
+---
+
+# Coroutines
+
+^ Coroutines introduced a significant overhaul to the language
+
+---
+
+## Reactive / Imperative
+
+^ Early on, apps conuld be considered imperative
+
+^ Sequential operations, configuring UI, setting listeners
+
+---
+
+[.footer: jakewharton.com/the-state-of-managing-state-with-rxjava/]
+
+![inline 50% corner-radius(16)](why-reactive.jpg)
+
+^ With multiple input sources, data can become asynchronous
+
+^ Data asynchronicity required reactive programming
+
+---
+
+```kotlin
+@Suppress("DEPRECATION")
+class CallbackLoginPresenter(val service: SessionService, val goTo: (Screen) -> Unit) {
+
+  var onModel: (LoginUiModel) -> Unit = {}
+  var task: AsyncTask<Submit,Void,LoginResult>? = null
+
+  fun start() = onModel(Content)
+
+  fun stop() = task?.cancel(true)
+
+  fun onEvent(event: LoginUiEvent) = when (event) {
+    is Submit -> task = LoginAsyncTask().also {
+      it.execute(event)
+    }
+  }
+
+  inner class LoginAsyncTask : AsyncTask<Submit, Void, LoginResult>() {
+    private var username: String = ""
+
+    override fun doInBackground(vararg events: Submit?): LoginResult {
+      val event = events[0]!!
+      username = event.username
+      return runBlocking { service.login(event.username, event.password) }
+    }
+
+    override fun onPostExecute(result: LoginResult?) = when (result) {
+        is Success -> goTo(LoggedInScreen(username))
+        is Failure -> goTo(ErrorScreen(result.throwable?.message ?: ""))
+        else -> Unit
+    }
+  }
+}
+```
+
+^ We went from some hideous callback-based code...
+
+---
+
+[.footer: proandroiddev.com/how-rxjava-chain-actually-works-2800692f7e13]
+
+```kotlin
+Observable.just("Hey")
+    .subscribeOn(Schedulers.io())
+    .map(String::length)
+    .subscribeOn(Schedulers.computation())
+    .observeOn(AndroidSchedulers.mainThread())
+    .doOnSubscribe { doAction() }
+    .flatMap {
+        doAction()
+
+        Observable.timer(1, TimeUnit.SECONDS)
+            .subscribeOn(Schedulers.single())
+            .doOnSubscribe { doAction() }
+    }
+    .subscribe { doAction() }
+```
+
+^ To some pretty hideous reactive java code
+
+^ Mapping operations increases cognitive load
+
+^ Requires intimate knowledge of the framework
+
+---
+
+## Coroutines
+
+### Structured Concurrency
+
+^ Involving idiomatic DSL language features
+
+^ Introduced structured scope through compiler behaviour
+
+---
+
+## Declarative Architecture
+
+^ Slowly introduced declarative architecture patterns
+
+^ Thinking about the "what" instead of the "how"
+
+---
+
+## Declarative Architecture
+
+### Immutability
+
+^ Principle tenet of functional programming
+
+^ Assigned objects cannot be changed
+
+^ Easier and more predictable testing
+
+---
+
+## Declarative Architecture
+
+### Idempotency
+
+^ Operations can be repeated without side effects
+
+^ Resulting in a reliable and predictable system
+
+---
+
+## Declarative Architecture
+
+### Unidirectional Data Flow
+
+^ Ensuring the flow of data is always in one direction
+
+^ Easier to find the source of truth
+
+---
+
+# `explicitApiMode()`
+
+^ Kotlin is public by default, easy to leak internal implementation
+
+^ Forces explicit use of `public` and `internal` declarations
 
 ---
 
@@ -288,6 +563,24 @@ def sovielwiemöglich():
 ### Business Specific Terminology
 
 ^ AKA I've been living here too long
+
+---
+
+### Business Specific Terminology
+
+^ Cross language domain terminology is actually a real problem
+
+^ Translating terms into English can lose context
+
+^ Writing code bases in German is not a great idea
+
+---
+
+### Business Specific Terminology
+
+^ At the same time, API design allows you to reflect business requirements
+
+^ Strong typing, clear class declarations, etc
 
 ---
 
