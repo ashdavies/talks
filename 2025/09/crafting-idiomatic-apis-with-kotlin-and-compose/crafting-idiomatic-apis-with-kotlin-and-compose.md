@@ -176,6 +176,22 @@ curl --request GET \
 
 ---
 
+[.footer: Photo by jessica rigollot]
+
+![](badly-painted-wall.jpg)
+
+## Code Maintenance
+
+^ Once deployed, maintenance begins, this is where poor-quality code can become a recurring expense
+
+^ Code that is not well-written often requires more frequent updates and fixes
+
+^ If I paint a wall, without care for preparation or foundation, I get a shitty wall
+
+^ Not just Tech Debt, all code has a maintenance cost
+
+---
+
 [.footer: kotlinlang.org/docs/idioms.html]
 
 ## Idioms
@@ -784,7 +800,6 @@ xychart-beta horizontal
 
 ---
 
-
 ```kotlin
 fun showCancelBookingAndBackToVerbindungsuebersichtDialog()
 
@@ -849,13 +864,90 @@ def sovielwiemöglich():
 
 ^ Writing code bases in German is not a great idea
 
----
-
-### Business Specific Terminology
-
 ^ At the same time, API design allows you to reflect business requirements
 
-^ Strong typing, clear class declarations, etc
+---
+
+# What makes a "good" API?
+
+^ API design is a complex topic
+
+^ Often get a different opinion
+
+---
+
+## There is no such thing as perfect code
+
+^ Code is often an expression of intent or communication
+
+^ What I might understand as obvious might not be clear
+
+---
+
+## Perfect Solution Fallacy
+
+^ It's easy to fall into the trap of thinking that a perfect solution exists
+
+^ Especially as an API maintainer, you're cursed with maintaining especially after its flaws become apparent
+
+---
+
+## Documentation
+
+```kotlin
+/**
+ * A group of *members*.
+ *
+ * This class has no useful logic; it's just a documentation example.
+ *
+ * @param T the type of a member in this group.
+ * @property name the name of this group.
+ * @constructor Creates an empty group.
+ */
+class Group<T>(val name: String) {
+    /**
+     * Adds a [member] to this group.
+     * @return the new size of the group.
+     */
+    fun add(member: T): Int { ... }
+}
+```
+
+^ Many seek to provide documentation when things aren't clear
+
+^ Documentation will expire much quicker than your code
+
+^ Noise heavy, often out-of-date, easily misleading
+
+^ None of this documentation tells me anything more about this class
+
+---
+
+[.footer: programmingisterrible.com/post/139222674273/write-code-that-is-easy-to-delete-not-easy-to]
+
+# Good code is easy to delete
+
+^ Started to come to this conclusion when I found this article
+
+---
+
+# High Cohesion - Loose Coupling
+
+^ Elements that are said to be cohesive work well as a whole
+
+^ Coupling is the degree to which two elements are dependent on each other
+
+---
+
+# Dependency Control
+
+^ Concretions are hidden behind fine-grained interfaces
+
+^ Third-party APIs are kept at an arms distance (remember Rx in the view?)
+
+^ Implementations are injected with only the dependencies they need
+
+^ If design principles are what works for you...
 
 ---
 
@@ -902,6 +994,37 @@ def sovielwiemöglich():
 ^ Same rulesets for ktlint and detekt
 
 ---
+
+# Tooling
+
+### `@Suppress`
+
+^ It may be tempting to use `@Suppress` to suppress warnings
+
+^ Warnings are given for a reason, heed the advice
+
+---
+
+# Multiline expression wrapping 👎
+
+### `standard:multiline-expression-wrapping`
+
+```kotlin
+val foo =
+    foo(
+        parameterName =
+            "The quick brown fox "
+                .plus("jumps ")
+                .plus("over the lazy dog"),
+    )
+```
+
+^ Unless its this rule
+
+^ Just dont enable it
+
+---
+
 
 [.text: line-height(2), text-scale(0.5)]
 
