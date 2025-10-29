@@ -810,8 +810,6 @@ fun getAngebotsKonditionIconAndContentDescription()
 
 ^ Not uncommon for code to include words from other languages
 
-^ eg. "Bahnhof", "Betriebstelle", "Zug storniert wegen Signalstörung"
-
 ---
 
 [.footer: fiber-space.de/EasyExtend/doc/teuton/teuton.htm]
@@ -835,8 +833,6 @@ def sovielwiemöglich():
 ^ Not to say that all programming languages should be English
 
 ^ Best to reduce the number of languages
-
-^ TODO Number of native German speaking programmers in Germany
 
 ---
 
@@ -1025,6 +1021,9 @@ val foo =
 
 ---
 
+# What makes a bad API? 😈
+
+---
 
 [.text: line-height(2), text-scale(0.5)]
 
