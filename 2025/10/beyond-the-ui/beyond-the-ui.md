@@ -1,7 +1,7 @@
 autoscale: true
 build-lists: true
 footer: ashdavies.dev
-Slide-numbers: true
+slidenumbers: true
 slide-transition: fade(0.5)
 theme: Work, 8
 
