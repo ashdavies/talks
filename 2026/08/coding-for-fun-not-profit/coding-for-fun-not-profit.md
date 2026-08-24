@@ -89,7 +89,55 @@ time-budget: 40
 
 ---
 
-# Intermission
+# [fit] Developmental Development
+
+- Novel solutions require creativity
+
+- Training through experimentation
+
+^ Finding novel solutions allows us to keep our reflexes sharp
+
+^ There was a point to that
+
+---
+
+# Knowledge Sharing
+
+^ Just one case study of a clusterfuck of difficulties with very unusual attempted solutions
+
+^ Provides numerous opportunities for knowledge sharing with talks or blog articles
+
+^ Story telling is a universally useful skill
+
+---
+
+# Berlindroid ![](fernsehturm.png)
+
+-
+
+## ![inline 5%](c-base.webp)
+
+-
+
+## ![inline](berlindroid.jpg)
+
+^ The very community that has been built here today stands on the shoulders of nerds
+
+^ The hacking, code diving, experimentation, and discovery
+
+^ Driven by the people who seek knowledge
+
+---
+
+# BEGIN AI RANT
+
+---
+
+![fit 50%](gitHub-actions-uptime.png)
+
+---
+
+# END AI RANT
 
 ---
 
