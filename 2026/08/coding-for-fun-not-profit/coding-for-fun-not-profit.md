@@ -132,13 +132,18 @@ time-budget: 40
 
 ---
 
-# Understanding the Journey 
+[.background-color: #000000]
+[.header: #4285f4]
+[.footer-style: #ffffff]
+[.footer: jamescullimore.dev/5-minute-bedtime-stories-for-android-devs.html]
 
-^ Sometimes our best revelations don't just come to us in an instant
+·
 
-^ They take time to think about
+·
 
-^ It's a journey of discovery and fuck ups
+### Story Time
+
+# "Terraform"
 
 ---
 
@@ -149,6 +154,16 @@ time-budget: 40
 ^ We are all fallible, and understanding that it's ok to make mistakes allows you to grow
 
 ^ Just be sure to learn from those mistakes
+
+---
+
+# Understanding the Journey 
+
+^ Sometimes our best revelations don't just come to us in an instant
+
+^ They take time to think about
+
+^ It's a journey of discovery and fuck ups
 
 ---
 
@@ -296,21 +311,6 @@ time-budget: 40
 ^ Not everybody can, or should build in their free time
 
 ^ We all have other obligations, or hobbies
-
----
-
-[.background-color: #000000]
-[.header: #4285f4]
-[.footer-style: #ffffff]
-[.footer: jamescullimore.dev/5-minute-bedtime-stories-for-android-devs.html]
-
-·
-
-·
-
-### Story Time
-
-# "Terraform"
 
 ---
 
