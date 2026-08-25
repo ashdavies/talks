@@ -152,6 +152,40 @@ time-budget: 40
 
 ---
 
+# Understanding the Process
+
+^ The reason I bring this up is because understanding is fundamental to the process
+
+^ We reason about things in a human way, a way we view as logical
+
+---
+
+# 🤬
+
+^ But it's much harder to understand your code, if you didn't fucking write it.
+
+---
+
+# AI "Reasoning"
+
+^ LLMs have become incredibly large and complicated and have found new and terrifying ways to reason about things
+
+^ But ultimately, they don't reason, and we can rarely follow the pattern of thoughts that end up in the solution
+
+---
+
+[.background-color: #000]
+
+![inline 75%](tetris-paused.png)
+
+^ Remember when an AI paused a game of Tetris so that it would never lose?
+
+^ Any human demonstrating this behaviour would have their sanity questioned
+
+^ Because this is not normal behaviour
+
+---
+
 ![](old-man-yells-at-cloud.jpg)
 
 ^ If you think I'm just an aging developer angry and technology
@@ -168,13 +202,23 @@ time-budget: 40
 
 ---
 
-# Idiomacy / Predictability
+# Idempotency / Predictability
 
-^ Why did we start substituting idiomacy for idiocy?
+^ Why did we start substituting predictability for hallucinations?
 
 ^ Predictability used to be a core foundation of our systems
 
 ^ Now we're lucky if it compiles
+
+---
+
+# Hallucination Testing 🤯
+
+^ So many projects now have additional guard rails, separated agents, and the like
+
+^ Just to prove that their tooling didn't lie to them
+
+^ How did this even become a thing?
 
 ---
 
@@ -197,6 +241,16 @@ time-budget: 40
 ^ AI is not your friend, doctor, colleague or anything anthropomorphised
 
 ^ LLMs are just the successors to NLPs
+
+---
+
+# Anthropomorphism 🚶
+
+^ Anthropomorphism is the act of giving human traits to non human things.
+
+^ One of the weirdest things is that this tech is being used with English (or human language) as it's primary communication
+
+^ I like computers because I don't use English, it's predictable, unlike humans.
 
 ---
 
