@@ -1,5 +1,5 @@
 footer: ashdavies.dev
-build-lists: notFirst
+build-lists: true
 code-language: Kotlin
 slide-transition: fade(0.5)
 theme: Libre, 6
@@ -23,11 +23,13 @@ time-budget: 40
 
 ^ The idea was a celebration of playing with technology
 
+^ After having spent countless hours playing on project
+
+^ Putting compose in places it wasn't introduced to yet
+
 ---
 
 # Solutions Looking for a Problem
-
-^ Specific to your sector, some solutions do actually fit
 
 - Augmented / Virtual Reality
 
@@ -37,9 +39,11 @@ time-budget: 40
 
 - Wear OS Companion Apps
 
+^ Specific to your sector, some solutions do actually fit
+
 ^ The idea was by diving into gratuitous development
 
-^ Something we've all at some point
+^ Something we've all done at some point
 
 ---
 
@@ -73,7 +77,7 @@ time-budget: 40
 
 # Decision Fatigue 😫
 
-^ Sometimes without even knowing it we make hundreds of decisions a day
+^ Sometimes without even realising it we make hundreds of decisions a day
 
 ^ It can be easy to become overwhelmed with making the right one
 
@@ -285,6 +289,16 @@ time-budget: 40
 
 ---
 
+# Agentur für Arbeit 🇩🇪
+
+## Bildungsgutschein / Umschulung
+
+^ The German job centre will often assist with the cost of retraining and perhaps living costs
+
+^ Skilled trade workers are in severely short supply, jobs like electricians are less likely to be threatened by AI
+
+---
+
 # Open Source / Playground Projects
 
 ^ Say you don't feel you can remain competitive on professional life
@@ -376,6 +390,38 @@ time-budget: 40
 
 ---
 
+# 🫧
+
+^ Its hard to say for certain if this is a bubble, and what will happen when it pops
+
+^ But if the 2008 financial crisis, or the .com bubble are anything to go by
+
+---
+
+![inline 50% corner-radius(20)](think-of-the-shareholders.png)
+
+^ It won't be the shareholders who pay the price
+
+^ But in the meantime...
+
+---
+
+# IKEA 🪑
+
+^ What's certainly observable is that despite IKEA offering low cost furniture whose quality can be best described as "good enough"
+
+^ There still exists a demand for hand built wood-working craftsmanship, albeit on a much smaller scale
+
+---
+
+# Data Sovereignty 🇪🇺
+
+^ There's also the argument for data sovereignty, where the data must be trained upon locally
+
+^ This excludes the use of hosted frontier models that shares data with hostile governments
+
+---
+
 [.footer: jonas.do/writing/2026-08-01-stop-lending-your-credibility-to-ai/]
 
 # [fit] Stop trading away your personal credibility
@@ -423,3 +469,19 @@ time-budget: 40
 ### next.app · Berlin '26
 
 #### Thu - 14:50 · droidCon Stage 3
+
+---
+
+[.footer: ]
+
+![inline](the-state-of-ai.png)
+
+^ Less sweary, more nuance
+
+---
+
+[.footer: wetdry.world/@astra_underscore/117156819178619206]
+
+[.background-color: #181820]
+
+![inline 75%](code-cucked.png)
