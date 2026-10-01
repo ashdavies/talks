@@ -2,14 +2,74 @@ footer: ashdavies.dev
 build-lists: true
 code-language: Kotlin
 slide-transition: fade(0.5)
-theme: Simple, 1
+theme: Plex, 2
 time-budget: 40
 
 [.text: line-height(2)]
 
-# Coding for Fun - Not Profit
+![](terminator-t2.webp)
 
-## Berlindroid - August '26 🇩🇪
+# We are all F*cked
+
+## [fit] An Android Developer’s Guide to the Post-AI Apocalypse
+
+### Droidcon Berlin - October '26 🇩🇪
+
+---
+
+![75% corner-radius(24)](end-is-near-simpsons.avif)
+
+^ Is the apolocypse near?
+
+---
+
+![250% corner-radius(24)](end-is-near-50th-anniversary.png)
+
+^ Or maybe not?
+
+---
+
+![50% corner-radius(24)](droidcon-berlin-cfp.png)
+
+^ I thought about this talk back in April
+
+^ LLMs and machine learning have accelerated the pace of an already accelerated environment
+
+^ Much has changed since April
+
+---
+
+```mermaid
+timeline
+    February 2026  : Anthropic - Claude Sonnet 4.6
+                   : Google - Gemini 3.1 Pro
+                   : OpenAI - GPT-5.3-Codex
+    March 2026     : Google - Gemini 3.1 Flash-Lite
+                   : OpenAI - GPT-5.4 & GPT-5.4 Pro
+                   : Mistral - Mistral Small 4
+    April 2026     : Google - Gemma 4
+                   : Anthropic - Claude Opus 4.7
+                   : OpenAI - GPT-5.5 & GPT-5.5 Pro
+                   : Meta - Llama 4 Scout / Maverick
+    May 2026       : OpenAI - GPT-5.5 Instant
+                   : Google - Gemini 3.5 Flash
+                   : Anthropic - Claude Opus 4.8
+    June 2026      : Anthropic - Claude Sonnet 5
+                   : Anthropic - Claude Mythos 5 Preview
+    July 2026      : OpenAI - GPT-5.6 Series (Sol, Terra, Luna)
+                   : Google - Gemini 3.6 Flash
+                   : Anthropic - Claude Opus 5
+                   : DeepSeek - DeepSeek V4-Flash
+    August 2026    : Google - Gemini 3.7 Flash
+                   : xAI - Grok 4.6
+    September 2026 : Anthropic - Claude Fable 5.1 & Mythos 5.1
+                   : Google - Gemini 3.8 Flash & Gemini 3.8 Live
+                   : OpenAI - GPT-6 Astra, GPT-6 Sol & Luna
+                   : Anthropic - Claude Opus 5.5 & Sonnet 5.5
+                   : OpenAI - GPT-6.1 Sol
+    October 2026   : Anthropic - Claude Haiku 5.5 (Upcoming)
+                   : Google - Gemini 3.5 Pro (Scheduled)
+```
 
 ---
 
@@ -87,7 +147,7 @@ time-budget: 40
 
 # Law of the Instrument
 
-![right 100%](law-of-the-instrument.jpeg)
+![right 100% corner-radius(24)](law-of-the-instrument.jpeg)
 
 > “I suppose it is tempting, if the only tool you have is a hammer, to treat everything as if it were a nail.”
 
@@ -398,7 +458,7 @@ time-budget: 40
 
 ---
 
-![inline 50% corner-radius(20)](think-of-the-shareholders.png)
+![inline 50% corner-radius(24)](think-of-the-shareholders.png)
 
 ^ It won't be the shareholders who pay the price
 
@@ -440,7 +500,6 @@ time-budget: 40
 
 ---
 
-
 [.text: line-height(2), text-scale(0.5)]
 
 ![right](kotti-py-sleepy.jpeg)
@@ -449,31 +508,51 @@ time-budget: 40
 
 ---
 
-[.text: line-height(2), text-scale(0.5)]
+# References
 
-![right](kotti-py-sleepy.jpeg)
-
-# [fit] Thank You!
-
--
-
--
-
-## - We are all Fucked
-### An Android Developer’s Guide to the Post-AI Apocalypse
-
--
-
--
-
-### next.app · Berlin '26
-
-#### Thu - 14:50 · droidCon Stage 3
-
----
-
-[.footer: ]
-
-![inline](the-state-of-ai.png)
-
-^ Less sweary, more nuance
+- addyosmani.com/blog/comprehension-debt/
+- aleckazakova.com/posts/please-stop-authoring-with-ai/
+- androiddev.social/@ff3@fosstodon.org/116992366377372995
+- androiddev.social/@foone@digipres.club/116964826484032703
+- androiddev.social/@foone@digipres.club/117038826695537081
+- youtube.com/watch?v=iitq4Zrphdk
+- youtube.com/watch?v=j4P8fXcKiHM
+- youtube.com/watch?v=CirtZBfLVRc
+- theverge.com/ai-artificial-intelligence/984923/bill-gates-is-deeply-worried-about-ai-and-hes-no-longer-staying-quiet
+- androidessence.com/leave-me-behind/
+- autonomousapps.com/blog/cowards-silicon-valley/post/
+- blog.jim-nielsen.com/2026/intelligence-isnt-enough/
+- brettcodes.com/im-done-using-ai/
+- bsky.app/profile/dandouglas.bsky.social/post/3mn3wzr7r7s2x
+- functional.computer/blog/llms-cant-program
+- futurism.com/future-society/college-critical-thinking-ai
+- jonas.do/writing/2026-06-06-your-tech-job/
+- jonas.do/writing/2026-08-01-stop-lending-your-credibility-to-ai/
+- ky.fyi/posts/ai-burnout
+- lifehacker.com/tech/vibe-coding-apps-dont-have-to-be-a-security-nightmare
+- lockwood.dev/ai/2026/07/27/how-is-the-bun-rewrite-in-rust-going.html
+- ludic.mataroa.blog/blog/ai-mania-is-eviscerating-global-decision-making/
+- procreate.com/ai
+- sophiebits.com/2026/06/25/there-are-no-lossless-transformations-of-natural-language-text
+- surfingcomplexity.blog/2026/08/22/wild-ai-related-reliability-incidents-are-coming/
+- timdettmers.com/2025/12/10/why-agi-will-not-happen/
+- 404media.co/luddite-events-nyc-off-tech-summer-of-ludd/?ref=daily-stories-newsletter
+- bbc.com/news/articles/c235n47g8g8o
+- geeksaresexy.net/2026/08/05/openais-answer-to-ai-cheating-more-ai-for-schools/
+- hardresetmedia.com/p/the-ai-productivity-illusion
+- smashingmagazine.com/2026/07/people-dont-want-more-ai/
+- theguardian.com/technology/2026/jul/25/ai-jobs-apocalypse-human-labor
+- zuzai.org/
+- youtube.com/watch?v=JvTJTTUK8cg
+- pluralistic.net/2026/09/03/broken-arrows/#things-get-worse
+- en.wikipedia.org/wiki/Chinese_room
+- 8thlight.com/insights/harness-engineering-in-practice
+- lucumr.pocoo.org/2026/9/7/astra-why/
+- youtube.com/watch?v=9WjPdgOK-68
+- theverge.com/ai-artificial-intelligence/996923/ai-safety-slow-openai-anthropic
+- theverge.com/podcast/996412/microsoft-ai-ceo-mustafa-suleyman-regulation-safety-anthropic-claude
+- bsky.app/profile/brettcodes.bsky.social/post/3mvsuyyg2r22f
+- youtube.com/watch?v=F91uY7QiZUs&t=2s
+- androiddev.social/@martincrownover@mastodon.gamedev.place/117358923826556621
+- theverge.com/ai-artificial-intelligence/1002584/trump-us-ai-safety-deal-self-regulation-tech-execs
+- theverge.com/ai-artificial-intelligence/1001838/anthropic-ipo-prospectus-ai-safety-threat
