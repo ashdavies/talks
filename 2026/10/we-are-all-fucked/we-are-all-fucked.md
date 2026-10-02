@@ -1,6 +1,7 @@
 footer: ashdavies.dev
 build-lists: true
 code-language: Kotlin
+slidenumbers: true
 slide-transition: fade(0.5)
 theme: Plex, 2
 time-budget: 40
@@ -9,19 +10,27 @@ time-budget: 40
 
 ![](terminator-t2.webp)
 
-# We are all F*cked
+# We are all Fucked
 
 ## [fit] An Android Developer’s Guide to the Post-AI Apocalypse
 
 ### Droidcon Berlin - October '26 🇩🇪
 
+^ I didn't expect this talk to be accepted
+
 ---
+
+[.footer-style: #ffffff, Avenir Next Bold]
+[.footer: 20th Television Animation]
 
 ![75% corner-radius(24)](end-is-near-simpsons.avif)
 
-^ Is the apolocypse near?
+^ Is the apocalypse near?
 
 ---
+
+[.footer-style: #ffffff, Avenir Next Bold]
+[.footer: 20th Television Animation]
 
 ![250% corner-radius(24)](end-is-near-50th-anniversary.png)
 
@@ -70,6 +79,25 @@ timeline
     October 2026   : Anthropic - Claude Haiku 5.5 (Upcoming)
                    : Google - Gemini 3.5 Pro (Scheduled)
 ```
+
+---
+
+![original 10%](hugging-face.webp)
+
+^ The supposed hugging face hack
+
+---
+
+[.footer-style: #ffffff, Avenir Next Bold]
+[.footer: Anthropic]
+
+![](anthropic-fable-five.webp)
+
+---
+
+# Google Earth 🍌
+
+![50% original corner-radius(24)](google-earth-fake-imagery.webp)
 
 ---
 
@@ -239,6 +267,22 @@ timeline
 
 ---
 
+
+[.footer-style: #ffffff, Avenir Next Bold]
+[.footer: anthropic.com/research/AI-assistance-coding-skills | addyosmani.com/blog/comprehension-debt]
+
+# Comprehension Debt
+
+![original 15% corner-radius(24)](anthropic-chart-comprehension.webp)
+
+^ Technical debt is actually easier to measure through mounting friction, slower builds, and tangled dependencies
+
+^ Comprehension debt breeds false confidence, but no human genuinely understands
+
+^ Over reliance of AI assistance inhibits follow-up comprehension skills
+
+---
+
 # 🤬
 
 ^ But it's much harder to understand your code, if you didn't fucking write it.
@@ -262,6 +306,40 @@ timeline
 ^ Any human demonstrating this behaviour would have their sanity questioned
 
 ^ Because this is not normal behaviour
+
+---
+
+
+[.footer-style: #ffffff, Avenir Next Bold]
+[.footer: Terminator Genisys]
+
+![](terminator-genisys.webp)
+
+# How fucked are we?
+
+^ I'm often questioned by friends or family if AI will destroy us all
+
+---
+
+# Paperclip Maximiser 🖇️
+
+^ We're closer to the paperclip maximiser than we are to SkyNet, an example of instrumental convergence theory
+
+^ Given a seemingly straightforward task, the machine would exhaust all of Earths natural resources to meet its goal
+
+---
+
+[.footer-style: #ffffff, Avenir Next Bold]
+[.footer: Getty Images]
+
+![](ai-generated-virus.jpg)
+
+---
+
+[.footer-style: #ffffff, Avenir Next Bold]
+[.footer: x.com/DavidRBellamy/status/2099187370407112758]
+
+![50% corner-radius(24)](david-bellamy.png)
 
 ---
 
@@ -349,13 +427,39 @@ timeline
 
 ---
 
-# Agentur für Arbeit 🇩🇪
+# Agentur für Arbeit 🇩🇪📚
 
 ## Bildungsgutschein / Umschulung
+
+- Elektrofachkraft
+
+- Sanitärfachkraft
+
+- Bauwerkfachkraft
+
+- Malerfachkraft
 
 ^ The German job centre will often assist with the cost of retraining and perhaps living costs
 
 ^ Skilled trade workers are in severely short supply, jobs like electricians are less likely to be threatened by AI
+
+---
+
+[.footer-style: #ffffff, Avenir Next Bold]
+[.footer: © Thünen-Institut/Johan Schütte]
+
+![](sheep-farming-in-germany.jpg)
+
+^ Alternatively there is always livestock farming
+
+---
+
+[.footer-style: #ffffff, Avenir Next Bold]
+[.footer: Getty Images]
+
+![](german-farmers-blockade-berlin.webp)
+
+^ and once a year you get to drive your tractor around the Berlin city centre
 
 ---
 
@@ -494,6 +598,21 @@ timeline
 
 ---
 
+[.footer-style: #ffffff, Avenir Next Bold]
+[.footer: aleckazakova.com/posts/please-stop-authoring-with-ai/]
+
+![](campfire.avif)
+
+# Stop Authoring With Ai
+
+^ Alec Kazakova compares technical documentation to story telling around a campfire
+
+^ Somebody felt it, so that's why it exists
+
+^ To read words is to understand what was felt when they were written
+
+---
+
 # Stay Curious, Stay Creative
 
 ^ Keep the spark of imagination, keep your own creative ability sharp
@@ -510,8 +629,6 @@ timeline
 
 # References
 
-- addyosmani.com/blog/comprehension-debt/
-- aleckazakova.com/posts/please-stop-authoring-with-ai/
 - androiddev.social/@ff3@fosstodon.org/116992366377372995
 - androiddev.social/@foone@digipres.club/116964826484032703
 - androiddev.social/@foone@digipres.club/117038826695537081
@@ -556,3 +673,9 @@ timeline
 - androiddev.social/@martincrownover@mastodon.gamedev.place/117358923826556621
 - theverge.com/ai-artificial-intelligence/1002584/trump-us-ai-safety-deal-self-regulation-tech-execs
 - theverge.com/ai-artificial-intelligence/1001838/anthropic-ipo-prospectus-ai-safety-threat
+- pluralistic.net/2026/09/12/god-in-the-box/
+- techcrunch.com/2026/09/08/openai-fought-dirty-on-career-making-math-problem-says-nyu-mathematician/
+- openai.com/index/navier-stokes-solution/
+- x.com/DavidRBellamy/status/2099187370407112758
+- darioamodei.com/post/we-must-pace-the-frontier
+- time.com/article/2026/09/09/ai-anthropic-openai-jacob-coxon/
