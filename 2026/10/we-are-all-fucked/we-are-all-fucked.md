@@ -527,11 +527,21 @@ timeline
 
 ---
 
-# [fit] "Claude wrote it, so it should be fine right?"
+![right](cat-meeting.jpg)
+
+# "Claude wrote it, so it should be fine right?"
+
+- No
 
 ^ Don't be that person, using AI so prolifically in the workplace is dangerous
 
 ^ Reducing the amount of input humans have on the product
+
+---
+
+# "I'm out of tokens!"
+
+^ If you cant work without AI then you shouldn't be using AI
 
 ---
 
@@ -630,6 +640,8 @@ timeline
 ^ But in the meantime...
 
 ---
+
+![right](ellie-tunnel.jpg)
 
 # What Can We Do?
 
@@ -784,7 +796,7 @@ timeline
 
 ---
 
-# References
+# References #1
 
 - autonomousapps.com/blog/cowards-silicon-valley/post/
 - blog.jim-nielsen.com/2026/intelligence-isnt-enough/
@@ -793,12 +805,22 @@ timeline
 - futurism.com/future-society/college-critical-thinking-ai
 - lifehacker.com/tech/vibe-coding-apps-dont-have-to-be-a-security-nightmare
 - lockwood.dev/ai/2026/07/27/how-is-the-bun-rewrite-in-rust-going.html
+
+---
+
+# References #2
+
 - ludic.mataroa.blog/blog/ai-mania-is-eviscerating-global-decision-making/
 - sophiebits.com/2026/06/25/there-are-no-lossless-transformations-of-natural-language-text
 - surfingcomplexity.blog/2026/08/22/wild-ai-related-reliability-incidents-are-coming/
 - timdettmers.com/2025/12/10/why-agi-will-not-happen/
 - 404media.co/luddite-events-nyc-off-tech-summer-of-ludd/?ref=daily-stories-newsletter
 - bbc.com/news/articles/c235n47g8g8o
+
+---
+
+# References #3
+
 - geeksaresexy.net/2026/08/05/openais-answer-to-ai-cheating-more-ai-for-schools/
 - hardresetmedia.com/p/the-ai-productivity-illusion
 - smashingmagazine.com/2026/07/people-dont-want-more-ai/
@@ -806,6 +828,11 @@ timeline
 - pluralistic.net/2026/09/03/broken-arrows/#things-get-worse
 - en.wikipedia.org/wiki/Chinese_room
 - 8thlight.com/insights/harness-engineering-in-practice
+
+---
+
+# References #4
+
 - lucumr.pocoo.org/2026/9/7/astra-why/
 - pluralistic.net/2026/09/12/god-in-the-box/
 - techcrunch.com/2026/09/08/openai-fought-dirty-on-career-making-math-problem-says-nyu-mathematician/
@@ -814,31 +841,53 @@ timeline
 - darioamodei.com/post/we-must-pace-the-frontier
 - time.com/article/2026/09/09/ai-anthropic-openai-jacob-coxon/
 
+---
+
+# References #5
+
 - theverge.com/ai-artificial-intelligence/984923/bill-gates-is-deeply-worried-about-ai-and-hes-no-longer-staying-quiet
 - theverge.com/ai-artificial-intelligence/996923/ai-safety-slow-openai-anthropic
 - theverge.com/podcast/996412/microsoft-ai-ceo-mustafa-suleyman-regulation-safety-anthropic-claude
 - theverge.com/ai-artificial-intelligence/1002584/trump-us-ai-safety-deal-self-regulation-tech-execs
 - theverge.com/ai-artificial-intelligence/1001838/anthropic-ipo-prospectus-ai-safety-threat
 
+---
+
+# References #6
+
 - youtube.com/watch?v=j4P8fXcKiHM
 - youtube.com/watch?v=JvTJTTUK8cg
 - youtube.com/watch?v=9WjPdgOK-68
-
 - codebridge.tech/articles/the-hidden-costs-of-ai-generated-software-why-it-works-isnt-enough
 - valueaddvc.com/blog/ai-generated-code-quality-security-risks-testing-overhead-and-what-ctos-are-doing
 - techradar.com/pro/nearly-half-of-all-code-generated-by-ai-found-to-contain-security-flaws-even-big-llms-affected
+
+---
+
+# References #7
+
 - hiringlab.indeed.com/2026/07/23/the-labor-market-is-tilting-toward-seniority/
 - blog.theinterviewguys.com/how-29-fewer-starting-positions-are-forcing-gen-z-into-career-workarounds/
 - blog.theinterviewguys.com/tech-jobs-have-plummeted-50/
 - layoffs.fyi/
 - bivashvlog.com/hidden-ai-debt-1-65-trillion-big-tech-off-balance/
 - asia.nikkei.com/business/technology/five-us-tech-giants-hidden-debts-soar-to-1.65tn-on-opaque-ai-funding
+
+---
+
+# References #8
+
 - forbes.com/sites/jonathanponciano/2023/01/23/spotify-alphabet-and-meta-lead-tech-stock-surge-after-massive-layoff-announcements/?streamIndex=0
 - claritx.ai/blog/sp-500-concentration-magnificent-7-risk-2026
 - rezi.ai/posts/ai-mentions-and-layoffs-correlation
 - techbuzz.ai/articles/tech-giants-cite-ai-as-layoff-driver-in-2026-wave
 - fxleaders.com/news/2026/06/10/salesforce-erases-30-billion-in-value-as-ai-fears-and-layoffs-pressure-shares-despite-1-billion-agentforce-run-rate/
 - levelfields.ai/news/tech-sector-mass-layoffs-in-may-2026
+
+---
+
+# References #9
+
 - thenextweb.com/news/meta-layoffs-may-2026-ai-restructuring-thousands
 - thenextweb.com/news/oracle-21000-layoffs-ai-data-centres
 - apnews.com/article/amazon-jassy-ai-alexa-workforce-7eea6387e97b84f1f239af2538de5ee9
@@ -846,5 +895,10 @@ timeline
 - businessinsider.com/challenger-ai-layoffs-economy-jobs-2026-6
 - serrarigroup.com/goldman-sachs-ais-hidden-trillion-dollar-spending-wave/
 - euronews.com/business/2026/06/29/the-ai-boom-propping-up-markets-could-trigger-the-next-crash-central-banks-warn
+
+---
+
+# References #10
+
 - softwareseni.com/why-95-percent-of-enterprise-ai-projects-fail-mit-research-breakdown-and-implementation-reality-check/
 - deadsimpletech.com/blog/no-such-thing-as-just-a-tool
