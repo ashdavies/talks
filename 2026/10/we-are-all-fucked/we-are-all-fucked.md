@@ -1,7 +1,6 @@
 footer: ashdavies.dev
 build-lists: true
 code-language: Kotlin
-slidenumbers: true
 slide-transition: fade(0.5)
 theme: Plex, 2
 time-budget: 40
@@ -30,15 +29,6 @@ time-budget: 40
 ![75% corner-radius(24)](end-is-near-simpsons.avif)
 
 ^ Is the apocalypse near?
-
----
-
-[.footer-style: #ffffff, Avenir Next Bold]
-[.footer: 20th Television Animation]
-
-![250% corner-radius(24)](end-is-near-50th-anniversary.png)
-
-^ Or maybe not?
 
 ---
 
@@ -99,15 +89,45 @@ timeline
 
 ---
 
-# Google Earth 🍌
+## Google Earth 🍌
 
 ![50% original corner-radius(24)](google-earth-fake-imagery.webp)
 
 ---
 
-# [fit] Hype Driven Development
+[.footer-style: #ffffff, Avenir Next Bold]
+[.footer: reuters.com/business/retail-consumer/anthropic-tells-investors-it-will-be-profitable-second-straight-quarter-ft-2026-09-13/]
 
-## "How I learned to stop worrying and love the failures"
+![fit 10%](anthropic.png)
+
+^ Last month Anthropic told its investors it will have been profitable for the second straight quarter
+
+^ Which works very well in their favour for their $2 trillion IPO valuation aim
+
+---
+
+[.footer-style: #ffffff, Avenir Next Bold]
+[.footer: wheresyoured.at/anthropics-profitability-swindle/]
+
+> WeWork claimed to be profitable ... and it turned out that it was only “profitable” if you removed things like “some of the costs of doing business.”
+
+^ Which comes with a very big asterisk given the extremely creative accounting
+
+---
+
+![25% inline](enron.webp)
+
+^ We've seen this level of creative accounting before...
+
+---
+
+# Why are we fucked?
+
+---
+
+## [fit] Hype Driven Development
+
+### "How I learned to stop worrying and love the failures"
 
 ![inline 25%](hype-driven-development.png)
 
@@ -133,7 +153,7 @@ timeline
 
 ---
 
-# CEO Driven Development 💡
+## CEO Driven Development 💡
 
 ^ Many have experienced the pure terror of a CEO rushing into the room
 
@@ -145,7 +165,7 @@ timeline
 
 ---
 
-# Familiarity / Risk Aversion
+## Familiarity / Risk Aversion
 
 - Dependency discomfort
 
@@ -161,7 +181,7 @@ timeline
 
 ---
 
-# Decision Fatigue 😫
+## Decision Fatigue 😫
 
 ^ Sometimes without even realising it we make hundreds of decisions a day
 
@@ -171,7 +191,7 @@ timeline
 
 ---
 
-# Law of the Instrument
+## Law of the Instrument
 
 ![right 100% corner-radius(24)](law-of-the-instrument.jpeg)
 
@@ -185,7 +205,7 @@ timeline
 
 ---
 
-# Developmental Development
+## Developmental Development
 
 - Novel solutions require creativity
 
@@ -197,7 +217,7 @@ timeline
 
 ---
 
-# Knowledge Sharing
+## Knowledge Sharing
 
 ^ Just one case study of a clusterfuck of difficulties with very unusual attempted solutions
 
@@ -207,15 +227,15 @@ timeline
 
 ---
 
-# ![](droidcon.avif) ![](next-app.avif)
+## ![](droidcon.avif) ![](next-app.avif)
 
-## Berlindroid @ c-base
+### 🇩🇪 Berlindroid @ c-base
 
-### Londroid
+#### 🇬🇧 Londroid
 
-### DevFest
+#### DevFest
 
-### GDG
+#### GDG
 
 
 ^ The very community that has been built here today stands on the shoulders of nerds
@@ -235,11 +255,11 @@ timeline
 
 ### Story Time
 
-# "Terraform"
+## "Terraform"
 
 ---
 
-# "Today I Fucked Up" 🤦
+## "Today I Fucked Up" 🤦
 
 ^ "Today I Fucked Up" is a wonderful celebration of mistake making
 
@@ -249,7 +269,7 @@ timeline
 
 ---
 
-# Understanding the Journey 
+## Understanding the Journey 
 
 ^ Sometimes our best revelations don't just come to us in an instant
 
@@ -259,7 +279,7 @@ timeline
 
 ---
 
-# Understanding the Process
+## Understanding the Process
 
 ^ The reason I bring this up is because understanding is fundamental to the process
 
@@ -267,17 +287,16 @@ timeline
 
 ---
 
-# 🤬
+## 🤬
 
 ^ But it's much harder to understand your code, if you didn't fucking write it.
 
 ---
 
-
 [.footer-style: #ffffff, Avenir Next Bold]
 [.footer: anthropic.com/research/AI-assistance-coding-skills | addyosmani.com/blog/comprehension-debt]
 
-# Comprehension Debt
+## Comprehension Debt
 
 ![original 15% corner-radius(24)](anthropic-chart-comprehension.webp)
 
@@ -293,7 +312,7 @@ timeline
 
 ---
 
-# AI "Reasoning"
+## AI "Reasoning"
 
 ^ LLMs have become incredibly large and complicated and have found new and terrifying ways to reason about things
 
@@ -313,7 +332,6 @@ timeline
 
 ---
 
-
 [.footer-style: #ffffff, Avenir Next Bold]
 [.footer: Terminator Genisys]
 
@@ -325,7 +343,7 @@ timeline
 
 ---
 
-# Paperclip Maximiser 🖇️
+## Paperclip Maximiser 🖇️
 
 ^ We're closer to the paperclip maximiser than we are to SkyNet, an example of instrumental convergence theory
 
@@ -368,9 +386,9 @@ timeline
 
 ---
 
-# "Good Enough"
+## "Good Enough"
 
-## 🤷‍♂️
+### 🤷‍♂️
 
 ^ This means that the acceptable level of code quality for production code is decreasing
 
@@ -378,9 +396,9 @@ timeline
 
 ---
 
-# Idempotency
+## Idempotency
 
-## Predictability
+### Predictability
 
 ^ Why did we start substituting predictability for hallucinations?
 
@@ -390,7 +408,7 @@ timeline
 
 ---
 
-# Hallucination Testing 🤯
+## Hallucination Testing 🤯
 
 ^ So many projects now have additional guard rails, separated agents, and the like
 
@@ -403,15 +421,26 @@ timeline
 [.footer-style: #ffffff, Avenir Next Bold]
 [.footer: getdx.com/blog/ai-productivity-gains-more-modest-than-expected/]
 
-# AI productivity gains: More modest than expected
+> AI productivity gains: More modest than expected
 
 ^ AI intelligence agencies themselves report that AI productivity is exaggerated
 
 ---
 
-# We have been sold a lie
+[.footer-style: #ffffff, Avenir Next Bold]
+[.footer: veracode.com/blog/genai-code-security-report/]
 
-## again...
+> 45% of code samples failed security tests and introduced OWASP Top 10 security vulnerabilities into the code
+
+^ Not only does AI generated code barely good enough to compile, but often introduces security vulnerabilities
+
+^ With Java having the biggest difference between "it compiles" and "its secure" of the measured languages
+
+---
+
+## We have been sold a lie
+
+### again...
 
 ^ The very same systems promised to make our lives easier
 
@@ -445,14 +474,34 @@ timeline
 
 ---
 
-![25% inline](enron.webp)
+[.footer-style: #000, Avenir Next Bold]
+[.footer: ipc2u.com/articles/knowledge-base/ram-prices-2026/]
+
+[.background-color: #f3f3ee]
+
+![fit 50%](ram-preisindex-2025.png)
+
+^ We've seen insane increases in ram costs
+
+---
+
+[.footer-style: #ffffff, Avenir Next Bold]
+[.footer: android-developers.googleblog.com/2026/08/app-broader-memory-limits.html]
+
+## ![inline 250%](android.svg) 
+
+> Across the ecosystem, new devices are maintaining or even decreasing their physical memory capacity in response to memory price increases
+
+^ Which has led to Google applying restrictions to Android apps on their RAM usage
+
+^ Though I can't help but feel they may have had a part in causing it
 
 ---
 
 [.footer-style: #fff, Avenir Next Bold]
 [.footer: futurism.com/future-society/college-critical-thinking-ai]
 
-# Bosses Horrified as “AI Native” College Graduates Hit the Workplace
+> Bosses Horrified as “AI Native” College Graduates Hit the Workplace
 
 ^ The problem isn't just in tech, massive numbers of college graduates considered as "AI Natives" entering the workforce
 
@@ -462,7 +511,7 @@ timeline
 
 ---
 
-# "AI" isn't intelligent
+## "AI" isn't intelligent
 
 ^ Remember that AI is just a prediction engine, giving the most probable word after word
 
@@ -472,7 +521,7 @@ timeline
 
 ---
 
-# Anthropomorphism 🚶
+## Anthropomorphism 🚶
 
 ^ Anthropomorphism is the act of giving human traits to non human things.
 
@@ -495,9 +544,9 @@ timeline
 [.footer-style: #ffffff, Avenir Next Bold]
 [.footer: pluralistic.net/2023/01/21/potemkin-ai/#hey-guysti]
 
-# Enshittification
+## Enshittification
 
-## aka Platform Decay
+### aka Platform Decay
 
 ![](tiktok-enshittification.webp)
 
@@ -529,7 +578,7 @@ timeline
 
 ![right](cat-meeting.jpg)
 
-# "Claude wrote it, so it should be fine right?"
+## "Claude wrote it, so it should be fine right?"
 
 - No
 
@@ -539,13 +588,13 @@ timeline
 
 ---
 
-# "I'm out of tokens!"
+## "I'm out of tokens!"
 
 ^ If you cant work without AI then you shouldn't be using AI
 
 ---
 
-# AI Burnout 🔥
+## AI Burnout 🔥
 
 ^ Increasing number of people becoming exasperated with AI in the workplace
 
@@ -556,9 +605,9 @@ timeline
 [.footer-style: #ffffff, Avenir Next Bold]
 [.footer: ky.fyi/posts/ai-burnout]
 
-# Do I belong in tech anymore?
+> Do I belong in tech anymore?
 
-## - Ky Decker
+> -- Ky Decker
 
 ^ Tech workers are quitting their roles, despite numerous benefits, good salaries, healthcare
 
@@ -571,9 +620,9 @@ timeline
 [.footer-style: #ffffff, Avenir Next Bold]
 [.footer: androidessence.com/leave-me-behind/]
 
-# Leave Me Behind
+> Leave Me Behind
 
-## - Adam McNeilly
+> -- Adam McNeilly
 
 ^ People not wanting to be part of this dramatic shift
 
@@ -583,22 +632,7 @@ timeline
 
 ---
 
-[.footer-style: #ffffff, Avenir Next Bold]
-[.footer: jonas.do/writing/2026-06-06-your-tech-job/]
-
-# It's hard to be good at your tech job right now
-
-## - Jonas Downey
-
-^ When not quitting outright, people are distancing themselves
-
-^ Acknowledging the hardship and difficult environment we currently face
-
-^ Jonas pitches optimism in that we may be able to push through
-
----
-
-# Guardrails
+## Guardrails
 
 ^ I've seen it suggested that we need to pull the guard rails, be it PR reviews, required checks to allow AI to become more "productive"
 
@@ -616,7 +650,7 @@ timeline
 
 ---
 
-# 🇺🇸
+## 🇺🇸
 
 ^ Because I can guarantee, the people making the decision on where this technology goes, do not have your best interests in mind
 
@@ -632,6 +666,9 @@ timeline
 ^ But if the 2008 financial crisis, or the .com bubble are anything to go by
 
 ---
+
+[.footer-style: #ffffff, Avenir Next Bold]
+[.footer: 20th Television Animation]
 
 ![inline 50% corner-radius(24)](think-of-the-shareholders.png)
 
@@ -649,9 +686,9 @@ timeline
 
 ---
 
-# Agentur für Arbeit 🇩🇪📚
+## Agentur für Arbeit 🇩🇪📚
 
-## Bildungsgutschein / Umschulung
+### Bildungsgutschein / Umschulung
 
 - Elektrofachkraft
 
@@ -685,7 +722,7 @@ timeline
 
 ---
 
-# OSS to the rescue!
+## OSS to the rescue!
 
 ^ Say you don't feel you can remain competitive on professional life
 
@@ -707,10 +744,7 @@ timeline
 
 ---
 
-# Work / Life Balance
-
-- Build for disposability
-- Open Source contribution
+## Work / Life Balance
 
 ^ Not everybody can, or should build in their free time
 
@@ -718,7 +752,15 @@ timeline
 
 ---
 
-# Understanding the Machine
+## Build for disposability 🗑️
+
+^ Highly coupled AI influenced code will increase your dependence
+
+^ Good code is code that is most easily deleted
+
+---
+
+## Understanding the Machine
 
 ^ But if you're in the pro AI camp that's OK too
 
@@ -728,7 +770,7 @@ timeline
 
 ---
 
-# Owning Your Code
+## Owning Your Code
 
 ^ There's never been a more important time to have an increased level of scrutiny
 
@@ -738,7 +780,11 @@ timeline
 
 ---
 
-# IKEA 🪑
+[.footer: Photo by benjamin lehman on Unsplash]
+
+![](woodworking.avif)
+
+## IKEA 🪑
 
 ^ What's certainly observable is that despite IKEA offering low cost furniture whose quality can be best described as "good enough"
 
@@ -746,7 +792,18 @@ timeline
 
 ---
 
-# Data Sovereignty 🇪🇺
+## Vendor Lock-In 🔒
+
+^ One hopeful aspect we can keep our minds on is that we've yet to experience vendor lock-in
+
+^ Much like the early phases of enshittification, we can expect this to happen
+
+---
+
+[.footer-style: #ffffff, Avenir Next Bold]
+[.footer: Photo by Ash Davies]
+
+![](berlaymont.jpg)
 
 ^ There's also the argument for data sovereignty, where the data must be trained upon locally
 
@@ -754,16 +811,17 @@ timeline
 
 ---
 
-[.footer-style: #ffffff, Avenir Next Bold]
-[.footer: jonas.do/writing/2026-08-01-stop-lending-your-credibility-to-ai/]
+[.footer: digital-strategy.ec.europa.eu/en/policies/cloud-and-ai-development-act]
 
-# [fit] Stop trading away your personal credibility
+## Cloud and AI Development Act
 
-^ It can be tempting to let a robot do all your work for you
+### EU AI Act (Regulation (EU) 2024/1689)
 
-^ and if you're completely disillusioned I understand it
+#### General Data Protection Regulation
 
-^ If you must use AI as a research tool, do the legwork to be able to stand behind the output
+^ Acts introduced by the European Commission put safeguards in place for sensitive data
+
+^ Quality controls, bias monitoring, data transparency, fines up to €35 million or 6% of global annual turnover.
 
 ---
 
@@ -772,133 +830,131 @@ timeline
 
 ![](campfire.avif)
 
-# Stop Authoring With Ai
+> Please Stop Authoring With Ai
 
-^ Alec Kazakova compares technical documentation to story telling around a campfire
+> -- Alec Kazakova
 
-^ Somebody felt it, so that's why it exists
+^ Technical documentation is like story telling around a campfire, somebody felt it, so that's why it exists
 
 ^ To read words is to understand what was felt when they were written
 
+^ If you must use AI as a research tool, do the legwork to be able to stand behind the output
+
 ---
 
-# Stay Curious, Stay Creative
+## Stay Curious, Stay Creative
 
 ^ Keep the spark of imagination, keep your own creative ability sharp
 
+^ Because...
+
 ---
 
-[.text: line-height(2), text-scale(0.5)]
+[.footer-style: #ffffff, Avenir Next Bold]
+[.footer: 20th Television Animation]
+
+![250% corner-radius(24)](end-is-near-50th-anniversary.png)
+
+^ I might be wrong, much is speculative, local models may prove useful
+
+^ The damage may not come to pass, we may be at the start of an economic boom
+
+^ I'd like to be wrong, I still have a mortgage and three ungrateful cats to support
+
+---
+
+[.footer-style: #ffffff, Avenir Next Bold]
+[.footer: jonas.do/writing/2026-06-06-your-tech-job/]
+
+> It's hard to be good at your tech job right now
+
+> -- Jonas Downey
+
+^ Another article closed with something a bit more optimistic
+
+^ Like the Metaverse, or NFTs, tech movements are not inevitable because some hype bros said so
+
+^ The only way out is through, we pushed for health and safety in social platforms, we figured out the mobile revolution
+
+^ We made progress by speaking up and doing the work
+
+---
+
+[.footer: ]
 
 ![right](kotti-py-sleepy.jpeg)
 
 # [fit] Thank You!
 
----
+## ashdavies.dev
 
-# References #1
+^ --- Should Include as New ---
+^ theverge.com/ai-artificial-intelligence/1002584/trump-us-ai-safety-deal-self-regulation-tech-execs
+^ darioamodei.com/post/we-must-pace-the-frontier
+^ asia.nikkei.com/business/technology/five-us-tech-giants-hidden-debts-soar-to-1.65tn-on-opaque-ai-funding
+^ lifehacker.com/tech/vibe-coding-apps-dont-have-to-be-a-security-nightmare
+^ lockwood.dev/ai/2026/07/27/how-is-the-bun-rewrite-in-rust-going.html
+^ euronews.com/business/2026/06/29/the-ai-boom-propping-up-markets-could-trigger-the-next-crash-central-banks-warn
 
-- autonomousapps.com/blog/cowards-silicon-valley/post/
-- blog.jim-nielsen.com/2026/intelligence-isnt-enough/
-- brettcodes.com/im-done-using-ai/
-- functional.computer/blog/llms-cant-program
-- futurism.com/future-society/college-critical-thinking-ai
-- lifehacker.com/tech/vibe-coding-apps-dont-have-to-be-a-security-nightmare
-- lockwood.dev/ai/2026/07/27/how-is-the-bun-rewrite-in-rust-going.html
+^ --- Might Include ---
+^ hiringlab.indeed.com/2026/07/23/the-labor-market-is-tilting-toward-seniority/
+^ sophiebits.com/2026/06/25/there-are-no-lossless-transformations-of-natural-language-text
+^ pluralistic.net/2026/09/12/god-in-the-box/
+^ en.wikipedia.org/wiki/Chinese_room
 
----
+^ --- Related to Existing Points ---
+^ codebridge.tech/articles/the-hidden-costs-of-ai-generated-software-why-it-works-isnt-enough
+^ timdettmers.com/2025/12/10/why-agi-will-not-happen/
+^ surfingcomplexity.blog/2026/08/22/wild-ai-related-reliability-incidents-are-coming/
+^ smashingmagazine.com/2026/07/people-dont-want-more-ai/
 
-# References #2
+^ --- Social ---
+^ bsky.app/profile/dryad.technology/post/3mx3fssnies2m
+^ androiddev.social/@felipeB@hachyderm.io/117384183999453266
 
-- ludic.mataroa.blog/blog/ai-mania-is-eviscerating-global-decision-making/
-- sophiebits.com/2026/06/25/there-are-no-lossless-transformations-of-natural-language-text
-- surfingcomplexity.blog/2026/08/22/wild-ai-related-reliability-incidents-are-coming/
-- timdettmers.com/2025/12/10/why-agi-will-not-happen/
-- 404media.co/luddite-events-nyc-off-tech-summer-of-ludd/?ref=daily-stories-newsletter
-- bbc.com/news/articles/c235n47g8g8o
+^ autonomousapps.com/blog/cowards-silicon-valley/post/
+^ blog.jim-nielsen.com/2026/intelligence-isnt-enough/
+^ brettcodes.com/im-done-using-ai/
+^ functional.computer/blog/llms-cant-program
+^ ludic.mataroa.blog/blog/ai-mania-is-eviscerating-global-decision-making/
+^ 404media.co/luddite-events-nyc-off-tech-summer-of-ludd/?ref=daily-stories-newsletter
+^ bbc.com/news/articles/c235n47g8g8o
+^ geeksaresexy.net/2026/08/05/openais-answer-to-ai-cheating-more-ai-for-schools/
+^ hardresetmedia.com/p/the-ai-productivity-illusion
+^ theguardian.com/technology/2026/jul/25/ai-jobs-apocalypse-human-labor
+^ pluralistic.net/2026/09/03/broken-arrows/#things-get-worse
+^ 8thlight.com/insights/harness-engineering-in-practice
+^ lucumr.pocoo.org/2026/9/7/astra-why/
+^ techcrunch.com/2026/09/08/openai-fought-dirty-on-career-making-math-problem-says-nyu-mathematician/
+^ openai.com/index/navier-stokes-solution/
+^ time.com/article/2026/09/09/ai-anthropic-openai-jacob-coxon/
+^ theverge.com/ai-artificial-intelligence/984923/bill-gates-is-deeply-worried-about-ai-and-hes-no-longer-staying-quiet
+^ theverge.com/ai-artificial-intelligence/996923/ai-safety-slow-openai-anthropic
+^ theverge.com/podcast/996412/microsoft-ai-ceo-mustafa-suleyman-regulation-safety-anthropic-claude
+^ theverge.com/ai-artificial-intelligence/1001838/anthropic-ipo-prospectus-ai-safety-threat
+^ youtube.com/watch?v=j4P8fXcKiHM
+^ youtube.com/watch?v=JvTJTTUK8cg
+^ youtube.com/watch?v=9WjPdgOK-68
+^ techradar.com/pro/nearly-half-of-all-code-generated-by-ai-found-to-contain-security-flaws-even-big-llms-affected
+^ blog.theinterviewguys.com/how-29-fewer-starting-positions-are-forcing-gen-z-into-career-workarounds/
+^ blog.theinterviewguys.com/tech-jobs-have-plummeted-50/
+^ bivashvlog.com/hidden-ai-debt-1-65-trillion-big-tech-off-balance/
+^ claritx.ai/blog/sp-500-concentration-magnificent-7-risk-2026
+^ apnews.com/article/amazon-jassy-ai-alexa-workforce-7eea6387e97b84f1f239af2538de5ee9
+^ finance.yahoo.com/markets/article/ai-disruption-is-the-hot-topic-of-earnings-calls-130609913.html
+^ serrarigroup.com/goldman-sachs-ais-hidden-trillion-dollar-spending-wave/
+^ softwareseni.com/why-95-percent-of-enterprise-ai-projects-fail-mit-research-breakdown-and-implementation-reality-check/
+^ deadsimpletech.com/blog/no-such-thing-as-just-a-tool
+^ theverge.com/ai-artificial-intelligence/1004655/openai-chatgpt-visual-ads
+^ tomshardware.com/tech-industry/artificial-intelligence/google-suspends-part-of-the-oss-vrp-bug-bounty-program-due-to-an-influx-of-invalid-ai-submissions-product-vulnerability-submissions-ended-october-1
+^ theverge.com/ai-artificial-intelligence/1004655/openai-chatgpt-visual-ads
+^ bbc.com/news/articles/cm4gjy9lr551o
 
----
-
-# References #3
-
-- geeksaresexy.net/2026/08/05/openais-answer-to-ai-cheating-more-ai-for-schools/
-- hardresetmedia.com/p/the-ai-productivity-illusion
-- smashingmagazine.com/2026/07/people-dont-want-more-ai/
-- theguardian.com/technology/2026/jul/25/ai-jobs-apocalypse-human-labor
-- pluralistic.net/2026/09/03/broken-arrows/#things-get-worse
-- en.wikipedia.org/wiki/Chinese_room
-- 8thlight.com/insights/harness-engineering-in-practice
-
----
-
-# References #4
-
-- lucumr.pocoo.org/2026/9/7/astra-why/
-- pluralistic.net/2026/09/12/god-in-the-box/
-- techcrunch.com/2026/09/08/openai-fought-dirty-on-career-making-math-problem-says-nyu-mathematician/
-- openai.com/index/navier-stokes-solution/
-- x.com/DavidRBellamy/status/2099187370407112758
-- darioamodei.com/post/we-must-pace-the-frontier
-- time.com/article/2026/09/09/ai-anthropic-openai-jacob-coxon/
-
----
-
-# References #5
-
-- theverge.com/ai-artificial-intelligence/984923/bill-gates-is-deeply-worried-about-ai-and-hes-no-longer-staying-quiet
-- theverge.com/ai-artificial-intelligence/996923/ai-safety-slow-openai-anthropic
-- theverge.com/podcast/996412/microsoft-ai-ceo-mustafa-suleyman-regulation-safety-anthropic-claude
-- theverge.com/ai-artificial-intelligence/1002584/trump-us-ai-safety-deal-self-regulation-tech-execs
-- theverge.com/ai-artificial-intelligence/1001838/anthropic-ipo-prospectus-ai-safety-threat
-
----
-
-# References #6
-
-- youtube.com/watch?v=j4P8fXcKiHM
-- youtube.com/watch?v=JvTJTTUK8cg
-- youtube.com/watch?v=9WjPdgOK-68
-- codebridge.tech/articles/the-hidden-costs-of-ai-generated-software-why-it-works-isnt-enough
-- valueaddvc.com/blog/ai-generated-code-quality-security-risks-testing-overhead-and-what-ctos-are-doing
-- techradar.com/pro/nearly-half-of-all-code-generated-by-ai-found-to-contain-security-flaws-even-big-llms-affected
-
----
-
-# References #7
-
-- hiringlab.indeed.com/2026/07/23/the-labor-market-is-tilting-toward-seniority/
-- blog.theinterviewguys.com/how-29-fewer-starting-positions-are-forcing-gen-z-into-career-workarounds/
-- blog.theinterviewguys.com/tech-jobs-have-plummeted-50/
-- layoffs.fyi/
-- bivashvlog.com/hidden-ai-debt-1-65-trillion-big-tech-off-balance/
-- asia.nikkei.com/business/technology/five-us-tech-giants-hidden-debts-soar-to-1.65tn-on-opaque-ai-funding
-
----
-
-# References #8
-
-- forbes.com/sites/jonathanponciano/2023/01/23/spotify-alphabet-and-meta-lead-tech-stock-surge-after-massive-layoff-announcements/?streamIndex=0
-- claritx.ai/blog/sp-500-concentration-magnificent-7-risk-2026
-- rezi.ai/posts/ai-mentions-and-layoffs-correlation
-- techbuzz.ai/articles/tech-giants-cite-ai-as-layoff-driver-in-2026-wave
-- fxleaders.com/news/2026/06/10/salesforce-erases-30-billion-in-value-as-ai-fears-and-layoffs-pressure-shares-despite-1-billion-agentforce-run-rate/
-- levelfields.ai/news/tech-sector-mass-layoffs-in-may-2026
-
----
-
-# References #9
-
-- thenextweb.com/news/meta-layoffs-may-2026-ai-restructuring-thousands
-- thenextweb.com/news/oracle-21000-layoffs-ai-data-centres
-- apnews.com/article/amazon-jassy-ai-alexa-workforce-7eea6387e97b84f1f239af2538de5ee9
-- finance.yahoo.com/markets/article/ai-disruption-is-the-hot-topic-of-earnings-calls-130609913.html
-- businessinsider.com/challenger-ai-layoffs-economy-jobs-2026-6
-- serrarigroup.com/goldman-sachs-ais-hidden-trillion-dollar-spending-wave/
-- euronews.com/business/2026/06/29/the-ai-boom-propping-up-markets-could-trigger-the-next-crash-central-banks-warn
-
----
-
-# References #10
-
-- softwareseni.com/why-95-percent-of-enterprise-ai-projects-fail-mit-research-breakdown-and-implementation-reality-check/
-- deadsimpletech.com/blog/no-such-thing-as-just-a-tool
+^ forbes.com/sites/jonathanponciano/2023/01/23/spotify-alphabet-and-meta-lead-tech-stock-surge-after-massive-layoff-announcements/?streamIndex=0
+^ rezi.ai/posts/ai-mentions-and-layoffs-correlation
+^ techbuzz.ai/articles/tech-giants-cite-ai-as-layoff-driver-in-2026-wave
+^ fxleaders.com/news/2026/06/10/salesforce-erases-30-billion-in-value-as-ai-fears-and-layoffs-pressure-shares-despite-1-billion-agentforce-run-rate/
+^ levelfields.ai/news/tech-sector-mass-layoffs-in-may-2026
+^ thenextweb.com/news/meta-layoffs-may-2026-ai-restructuring-thousands
+^ thenextweb.com/news/oracle-21000-layoffs-ai-data-centres
+^ businessinsider.com/challenger-ai-layoffs-economy-jobs-2026-6
