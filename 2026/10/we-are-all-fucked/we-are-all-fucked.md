@@ -479,6 +479,13 @@ timeline
 ---
 
 [.footer-style: #000, Avenir Next Bold]
+[.footer: euronews.com/2026/06/29/the-ai-boom-propping-up-markets-could-trigger-the-next-crash-central-banks-warn]
+
+^ Bank of international settlements has warning that the enormous spending on AI is accumulating financial vulnerabilities
+
+---
+
+[.footer-style: #000, Avenir Next Bold]
 [.footer: ipc2u.com/articles/knowledge-base/ram-prices-2026/]
 
 [.background-color: #f3f3ee]
@@ -654,9 +661,46 @@ timeline
 
 ---
 
-## 🇺🇸
+[.footer-style: #ffffff, Avenir Next Bold]
+[.footer: darioamodei.com/post/we-must-pace-the-frontier]
 
-^ Because I can guarantee, the people making the decision on where this technology goes, do not have your best interests in mind
+^ "We Must Pace the Frontier"
+^ -- Dario Amodei
+
+^ The AI sector has been self governing and proclaims their models too dangerous for use
+
+---
+
+[.footer-style: #ffffff, Avenir Next Bold]
+[.footer: businessinsider.com/former-anthropic-openai-jacob-coxon-self-automatation-research-work-2026-10]
+
+![](nuke-scene.jpg)
+
+## Doom with a chance of Terror
+
+^ "Whistleblower" quits job and speculates the probability that AI will kill all humans
+
+^ Hardly whistleblowing if everybody else is saying the same thing
+
+---
+
+[.footer-style: #ffffff, Avenir Next Bold]
+[.footer: theverge.com/ai-artificial-intelligence/1001838/anthropic-ipo-prospectus-ai-safety-threat]
+
+## Anthropic warns of ‘catastrophic’ AI risks in its own IPO filing
+
+^ Surely this warning comes from the goodness of their hearts, and has nothing to do with their upcoming IPO valuation
+
+^ Nothing says profits like my product is too dangerous for you to handle
+
+---
+
+[.footer-style: #ffffff, Avenir Next Bold]
+[.footer: theverge.com/ai-artificial-intelligence/1002584/trump-us-ai-safety-deal-self-regulation-tech-execs]
+
+^ But good news everybody! The companies building frontier models have made a pinkie promise to keep our best interests in mind
+
+^ Now I can sleep safely at night
 
 ---
 
@@ -668,6 +712,18 @@ timeline
 ^ Its hard to say for certain if this is a bubble, and what will happen when it pops
 
 ^ But if the 2008 financial crisis, or the .com bubble are anything to go by
+
+---
+
+[.footer-style: #ffffff, Avenir Next Bold]
+[.footer: timdettmers.com/2025/12/10/why-agi-will-not-happen/]
+
+> Why AGI Will Not Happen
+> -- Tim Dettmers
+
+^ Not to mention the fact that I severely doubt that AGI is even possible
+
+^ Different mechanism of computation
 
 ---
 
@@ -748,9 +804,7 @@ timeline
 
 ^ Most OSS projects are maintained out of love for coding
 
-^ Maintained by people often in their free time
-
-^ 
+^ Maintained by people often in their free time 
 
 ---
 
@@ -911,28 +965,23 @@ timeline
 
 ## ashdavies.dev
 
-^ --- Should Include as New ---
-^ theverge.com/ai-artificial-intelligence/1002584/trump-us-ai-safety-deal-self-regulation-tech-execs
-^ darioamodei.com/post/we-must-pace-the-frontier
 ^ asia.nikkei.com/business/technology/five-us-tech-giants-hidden-debts-soar-to-1.65tn-on-opaque-ai-funding
 ^ lifehacker.com/tech/vibe-coding-apps-dont-have-to-be-a-security-nightmare
 ^ lockwood.dev/ai/2026/07/27/how-is-the-bun-rewrite-in-rust-going.html
 ^ euronews.com/business/2026/06/29/the-ai-boom-propping-up-markets-could-trigger-the-next-crash-central-banks-warn
 ^ AI hallucinations on AI generated content, the last unique thought has already been thought
+^ bivashvlog.com/hidden-ai-debt-1-65-trillion-big-tech-off-balance/
+^ claritx.ai/blog/sp-500-concentration-magnificent-7-risk-2026
 
-^ --- Might Include ---
 ^ hiringlab.indeed.com/2026/07/23/the-labor-market-is-tilting-toward-seniority/
 ^ sophiebits.com/2026/06/25/there-are-no-lossless-transformations-of-natural-language-text
 ^ pluralistic.net/2026/09/12/god-in-the-box/
 ^ en.wikipedia.org/wiki/Chinese_room
 
-^ --- Related to Existing Points ---
 ^ codebridge.tech/articles/the-hidden-costs-of-ai-generated-software-why-it-works-isnt-enough
-^ timdettmers.com/2025/12/10/why-agi-will-not-happen/
 ^ surfingcomplexity.blog/2026/08/22/wild-ai-related-reliability-incidents-are-coming/
 ^ smashingmagazine.com/2026/07/people-dont-want-more-ai/
 
-^ --- Social ---
 ^ bsky.app/profile/dryad.technology/post/3mx3fssnies2m
 ^ androiddev.social/@felipeB@hachyderm.io/117384183999453266
 
@@ -962,8 +1011,7 @@ timeline
 ^ techradar.com/pro/nearly-half-of-all-code-generated-by-ai-found-to-contain-security-flaws-even-big-llms-affected
 ^ blog.theinterviewguys.com/how-29-fewer-starting-positions-are-forcing-gen-z-into-career-workarounds/
 ^ blog.theinterviewguys.com/tech-jobs-have-plummeted-50/
-^ bivashvlog.com/hidden-ai-debt-1-65-trillion-big-tech-off-balance/
-^ claritx.ai/blog/sp-500-concentration-magnificent-7-risk-2026
+^ 
 ^ apnews.com/article/amazon-jassy-ai-alexa-workforce-7eea6387e97b84f1f239af2538de5ee9
 ^ finance.yahoo.com/markets/article/ai-disruption-is-the-hot-topic-of-earnings-calls-130609913.html
 ^ serrarigroup.com/goldman-sachs-ais-hidden-trillion-dollar-spending-wave/
