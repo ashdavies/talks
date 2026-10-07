@@ -1,9 +1,12 @@
 footer: ashdavies.dev
+footer-style: #ffffff, Avenir Next Bold
 build-lists: true
 code-language: Kotlin
 slide-transition: fade(0.5)
 theme: Plex, 2
 time-budget: 40
+quote-author: #aaaaff
+image-corner-radius: 24
 
 [.text: line-height(2)]
 
@@ -23,16 +26,15 @@ time-budget: 40
 
 ---
 
-[.footer-style: #ffffff, Avenir Next Bold]
 [.footer: 20th Television Animation]
 
-![75% corner-radius(24)](end-is-near-simpsons.avif)
+![75%](end-is-near-simpsons.avif)
 
 ^ Is the apocalypse near?
 
 ---
 
-![50% corner-radius(24)](droidcon-berlin-cfp.png)
+![50%](droidcon-berlin-cfp.png)
 
 ^ I thought about this talk back in April
 
@@ -82,7 +84,6 @@ timeline
 
 ---
 
-[.footer-style: #ffffff, Avenir Next Bold]
 [.footer: Anthropic]
 
 ![](anthropic-fable-five.webp)
@@ -91,11 +92,10 @@ timeline
 
 ## Google Earth 🍌
 
-![50% original corner-radius(24)](google-earth-fake-imagery.webp)
+![50% original](google-earth-fake-imagery.webp)
 
 ---
 
-[.footer-style: #ffffff, Avenir Next Bold]
 [.footer: reuters.com/business/retail-consumer/anthropic-tells-investors-it-will-be-profitable-second-straight-quarter-ft-2026-09-13/]
 
 ![fit 10%](anthropic.png)
@@ -106,7 +106,6 @@ timeline
 
 ---
 
-[.footer-style: #ffffff, Avenir Next Bold]
 [.footer: wheresyoured.at/anthropics-profitability-swindle/]
 
 > WeWork claimed to be profitable ... and it turned out that it was only “profitable” if you removed things like “some of the costs of doing business.”
@@ -143,7 +142,7 @@ timeline
 
 # Solutions Looking for a Problem
 
-![75% inline corner-radius(26)](augmented-reality.jpg) ![41% inline corner-radius(26)](bitcoin.jpg) ![23% inline corner-radius(26)](wear-os-companion.avif)
+![75% inline](augmented-reality.jpg) ![41% inline](bitcoin.jpg) ![23% inline](wear-os-companion.avif)
 
 ^ Specific to your sector, some solutions do actually fit
 
@@ -193,7 +192,7 @@ timeline
 
 ## Law of the Instrument
 
-![right 100% corner-radius(24)](law-of-the-instrument.jpeg)
+![right 100%](law-of-the-instrument.jpeg)
 
 > “I suppose it is tempting, if the only tool you have is a hammer, to treat everything as if it were a nail.”
 
@@ -251,7 +250,7 @@ timeline
 [.footer-style: #ffffff]
 [.footer: jamescullimore.dev/5-minute-bedtime-stories-for-android-devs.html]
 
-![right inline corner-radius(26)](5-minute-bedtime-stories.png)
+![right inline](5-minute-bedtime-stories.png)
 
 ### Story Time
 
@@ -293,12 +292,11 @@ timeline
 
 ---
 
-[.footer-style: #ffffff, Avenir Next Bold]
 [.footer: anthropic.com/research/AI-assistance-coding-skills | addyosmani.com/blog/comprehension-debt]
 
 ## Comprehension Debt
 
-![original 15% corner-radius(24)](anthropic-chart-comprehension.webp)
+![original 15%](anthropic-chart-comprehension.webp)
 
 ^ Technical debt is actually easier to measure through mounting friction, slower builds, and tangled dependencies
 
@@ -332,7 +330,6 @@ timeline
 
 ---
 
-[.footer-style: #ffffff, Avenir Next Bold]
 [.footer: Terminator Genisys]
 
 ![](terminator-genisys.webp)
@@ -351,21 +348,23 @@ timeline
 
 ---
 
-[.footer-style: #ffffff, Avenir Next Bold]
 [.footer: Getty Images]
 
 ![](ai-generated-virus.jpg)
 
 ---
 
-[.footer-style: #ffffff, Avenir Next Bold]
 [.footer: x.com/DavidRBellamy/status/2099187370407112758]
 
-![50% corner-radius(24)](david-bellamy.png)
+![50%](david-bellamy.png)
 
 ---
 
-# 
+# Bad Actors 🦹‍♂️
+
+^ There is a much higher likelihood that bad actors will use AI models to take down infrastructure
+
+^ State sponsored attacks
 
 ---
 
@@ -379,7 +378,6 @@ timeline
 
 ---
 
-[.footer-style: #ffffff, Avenir Next Bold]
 [.footer: gitclear.com/ai_assistant_code_quality_2025_research]
 
 ![125% inline](duplicate-by-year-wide.png)
@@ -422,7 +420,6 @@ timeline
 
 ---
 
-[.footer-style: #ffffff, Avenir Next Bold]
 [.footer: getdx.com/blog/ai-productivity-gains-more-modest-than-expected/]
 
 > AI productivity gains: More modest than expected
@@ -431,7 +428,6 @@ timeline
 
 ---
 
-[.footer-style: #ffffff, Avenir Next Bold]
 [.footer: veracode.com/blog/genai-code-security-report/]
 
 > 45% of code samples failed security tests and introduced OWASP Top 10 security vulnerabilities into the code
@@ -454,7 +450,6 @@ timeline
 
 [.background-color: #ffffff]
 
-[.footer-style: #000, Avenir Next Bold]
 [.footer: bloomberg.com/news/features/2025-10-07/openai-s-nvidia-amd-deals-boost-1-trillion-ai-boom-with-circular-deals]
 
 ![40% inline left](nvidia-openai-ai-money.webp)
@@ -467,7 +462,6 @@ timeline
 
 [.background-color: #ffffff]
 
-[.footer-style: #000, Avenir Next Bold]
 [.footer: www.wsj.com/tech/ai/is-the-flurry-of-circular-ai-deals-a-win-winor-sign-of-a-bubble-8a2d70c5]
 
 ![inline](wsj-capital-flows.avif)
@@ -478,14 +472,12 @@ timeline
 
 ---
 
-[.footer-style: #000, Avenir Next Bold]
 [.footer: euronews.com/2026/06/29/the-ai-boom-propping-up-markets-could-trigger-the-next-crash-central-banks-warn]
 
 ^ Bank of international settlements has warning that the enormous spending on AI is accumulating financial vulnerabilities
 
 ---
 
-[.footer-style: #000, Avenir Next Bold]
 [.footer: ipc2u.com/articles/knowledge-base/ram-prices-2026/]
 
 [.background-color: #f3f3ee]
@@ -496,7 +488,6 @@ timeline
 
 ---
 
-[.footer-style: #ffffff, Avenir Next Bold]
 [.footer: android-developers.googleblog.com/2026/08/app-broader-memory-limits.html]
 
 ## ![inline 250%](android.svg) 
@@ -509,7 +500,6 @@ timeline
 
 ---
 
-[.footer-style: #fff, Avenir Next Bold]
 [.footer: futurism.com/future-society/college-critical-thinking-ai]
 
 > Bosses Horrified as “AI Native” College Graduates Hit the Workplace
@@ -544,7 +534,7 @@ timeline
 
 [.footer: youtube.com/watch?v=iitq4Zrphdk]
 
-![inline 50% corner-radius(24)](hannah-fry.jpg)
+![inline 50%](hannah-fry.jpg)
 
 ^ I recommend this video from Hannah Fry (well renowned British mathematician, professor at Cambridge) interview with New Scientist
 
@@ -552,7 +542,6 @@ timeline
 
 ---
 
-[.footer-style: #ffffff, Avenir Next Bold]
 [.footer: pluralistic.net/2023/01/21/potemkin-ai/#hey-guysti]
 
 ## Enshittification
@@ -571,7 +560,7 @@ timeline
 
 ---
 
-![30% corner-radius(26)](bsky-adobe-acrobat.png)
+![30%](bsky-adobe-acrobat.png)
 
 ^ Adobe acrobat mobile website
 
@@ -579,7 +568,7 @@ timeline
 
 ---
 
-![inline 75% corner-radius(26)](the-state-of-ai.png)
+![inline 75%](the-state-of-ai.png)
 
 ^ If you were able to catch Matthias' talk yesterday
 
@@ -592,6 +581,8 @@ timeline
 ## "Claude wrote it, so it should be fine right?"
 
 - No
+
+- GTFO
 
 ^ Don't be that person, using AI so prolifically in the workplace is dangerous
 
@@ -613,7 +604,6 @@ timeline
 
 ---
 
-[.footer-style: #ffffff, Avenir Next Bold]
 [.footer: ky.fyi/posts/ai-burnout]
 
 > Do I belong in tech anymore?
@@ -628,7 +618,6 @@ timeline
 
 ---
 
-[.footer-style: #ffffff, Avenir Next Bold]
 [.footer: androidessence.com/leave-me-behind/]
 
 > Leave Me Behind
@@ -651,6 +640,16 @@ timeline
 
 ---
 
+[.footer: x.com/lukaspet/status/2104634759339298930]
+
+![25%](claude-cheating.png)
+
+^ Sure Lukas, I bet that's exactly what's happening
+
+^ Your maligned chatbot suddenly stopped cheating
+
+---
+
 ![fit 50%](gitHub-actions-uptime.png)
 
 ^ You've probably started to notice the increasing frequency of GitHub outage
@@ -661,33 +660,30 @@ timeline
 
 ---
 
-[.footer-style: #ffffff, Avenir Next Bold]
 [.footer: darioamodei.com/post/we-must-pace-the-frontier]
 
-^ "We Must Pace the Frontier"
-^ -- Dario Amodei
+> "We Must Pace the Frontier"
+> -- Dario Amodei
 
 ^ The AI sector has been self governing and proclaims their models too dangerous for use
 
 ---
 
-[.footer-style: #ffffff, Avenir Next Bold]
 [.footer: businessinsider.com/former-anthropic-openai-jacob-coxon-self-automatation-research-work-2026-10]
 
-![](nuke-scene.jpg)
+![right 20%](Jacob-coxon.webp)
 
-## Doom with a chance of Terror
+> "It is more likely than not that humanity loses control to these AIs, and it could end in human extinction,"
 
 ^ "Whistleblower" quits job and speculates the probability that AI will kill all humans
 
-^ Hardly whistleblowing if everybody else is saying the same thing
+^ Hardly whistleblowing if everybody else is thinking the same thing
 
 ---
 
-[.footer-style: #ffffff, Avenir Next Bold]
 [.footer: theverge.com/ai-artificial-intelligence/1001838/anthropic-ipo-prospectus-ai-safety-threat]
 
-## Anthropic warns of ‘catastrophic’ AI risks in its own IPO filing
+> Anthropic warns of ‘catastrophic’ AI risks in its own IPO filing
 
 ^ Surely this warning comes from the goodness of their hearts, and has nothing to do with their upcoming IPO valuation
 
@@ -695,27 +691,16 @@ timeline
 
 ---
 
-[.footer-style: #ffffff, Avenir Next Bold]
 [.footer: theverge.com/ai-artificial-intelligence/1002584/trump-us-ai-safety-deal-self-regulation-tech-execs]
+
+> ‘Over time, it may make sense to codify these steps into laws or regulations.’
 
 ^ But good news everybody! The companies building frontier models have made a pinkie promise to keep our best interests in mind
 
-^ Now I can sleep safely at night
+^ Despite a number of signatories having already violated such promises, but now I can sleep safely at night
 
 ---
 
-[.footer-style: #ffffff, Avenir Next Bold]
-[.footer: Photo by Braedon McLeod on Unsplash]
-
-![](bubble.avif)
-
-^ Its hard to say for certain if this is a bubble, and what will happen when it pops
-
-^ But if the 2008 financial crisis, or the .com bubble are anything to go by
-
----
-
-[.footer-style: #ffffff, Avenir Next Bold]
 [.footer: timdettmers.com/2025/12/10/why-agi-will-not-happen/]
 
 > Why AGI Will Not Happen
@@ -727,16 +712,43 @@ timeline
 
 ---
 
-[.footer-style: #ffffff, Avenir Next Bold]
+[.footer: functional.computer/blog/llms-cant-program]
+
+> LLMs Can't Program
+> -- Samir Talwar
+
+^ With many people having similar experience with vibe-coding
+
+---
+
+[.footer: asia.nikkei.com/business/technology/five-us-tech-giants-hidden-debts-soar-to-1.65tn-on-opaque-ai-funding]
+
+# Five US tech giants' hidden debts soar to $1.65tn on opaque AI funding
+
+^ But that hasn't stopped the tech industry from going all in
+
+^ Tech companies are very good at hiding bad debts, off balance sheets, hardware leasing
+
+---
+
+[.footer: Photo by Braedon McLeod on Unsplash]
+
+![](bubble.avif)
+
+^ Its hard to say for certain if this is a bubble, and what will happen when it pops
+
+^ But if the 2008 financial crisis, or the .com bubble are anything to go by
+
+---
+
 [.footer: 20th Television Animation]
 
-![inline 50% corner-radius(24)](think-of-the-shareholders.png)
+![inline 50%](think-of-the-shareholders.png)
 
 ^ It won't be the shareholders who pay the price
 
 ---
 
-[.footer-style: #ffffff, Avenir Next Bold]
 [.footer: federalreservehistory.org/essays/great-recession-and-its-aftermath | pbs.org/newshour/economy/business-jan-june08-mortgage_06-19] 
 
 # 2008 Sub-Prime Mortgage Crisis
@@ -756,7 +768,7 @@ timeline
 
 ![right](ellie-tunnel.jpg)
 
-# What Can We Do?
+# What the fuck can we do?
 
 ^ AI has become so widespread, it's hard to escape it, but there are some ways to refresh your palette
 
@@ -780,7 +792,6 @@ timeline
 
 ---
 
-[.footer-style: #ffffff, Avenir Next Bold]
 [.footer: © Thünen-Institut/Johan Schütte]
 
 ![](sheep-farming-in-germany.jpg)
@@ -789,7 +800,6 @@ timeline
 
 ---
 
-[.footer-style: #ffffff, Avenir Next Bold]
 [.footer: Getty Images]
 
 ![](german-farmers-blockade-berlin.webp)
@@ -874,7 +884,6 @@ timeline
 
 ---
 
-[.footer-style: #ffffff, Avenir Next Bold]
 [.footer: Photo by Ash Davies]
 
 ![](berlaymont.jpg)
@@ -899,7 +908,6 @@ timeline
 
 ---
 
-[.footer-style: #ffffff, Avenir Next Bold]
 [.footer: aleckazakova.com/posts/please-stop-authoring-with-ai/]
 
 ![](campfire.avif)
@@ -926,10 +934,9 @@ timeline
 
 ---
 
-[.footer-style: #ffffff, Avenir Next Bold]
 [.footer: 20th Television Animation]
 
-![250% corner-radius(24)](end-is-near-50th-anniversary.png)
+![250%](end-is-near-50th-anniversary.png)
 
 ^ I might be wrong, much is speculative, local models may prove useful
 
@@ -939,7 +946,18 @@ timeline
 
 ---
 
-[.footer-style: #ffffff, Avenir Next Bold]
+[.footer: Photo by Hulki Okan Tabak on Unsplash]
+
+![left inline 10%](zoltar-speaks.jpg)
+
+^ If I had to predict what will happen, probably not much, LLMs probably aren't going away
+
+^ They will become more expensive as tech firms stop run out of investor capital
+
+^ Stay in use in enterprise, but fall out of favour in consumer settings
+
+---
+
 [.footer: jonas.do/writing/2026-06-06-your-tech-job/]
 
 > It's hard to be good at your tech job right now
@@ -956,7 +974,6 @@ timeline
 
 ---
 
-[.footer-style: #ffffff, Avenir Next Bold]
 [.footer: xkcd.com/2228/]
 
 # [fit] Thank You!
@@ -988,7 +1005,6 @@ timeline
 ^ autonomousapps.com/blog/cowards-silicon-valley/post/
 ^ blog.jim-nielsen.com/2026/intelligence-isnt-enough/
 ^ brettcodes.com/im-done-using-ai/
-^ functional.computer/blog/llms-cant-program
 ^ ludic.mataroa.blog/blog/ai-mania-is-eviscerating-global-decision-making/
 ^ 404media.co/luddite-events-nyc-off-tech-summer-of-ludd/?ref=daily-stories-newsletter
 ^ bbc.com/news/articles/c235n47g8g8o
