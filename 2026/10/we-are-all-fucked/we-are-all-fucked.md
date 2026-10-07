@@ -365,6 +365,10 @@ timeline
 
 ---
 
+# 
+
+---
+
 ![](old-man-yells-at-cloud.jpg)
 
 ^ If you think I'm just an aging developer angry and technology
@@ -674,6 +678,22 @@ timeline
 
 ^ It won't be the shareholders who pay the price
 
+---
+
+[.footer-style: #ffffff, Avenir Next Bold]
+[.footer: federalreservehistory.org/essays/great-recession-and-its-aftermath | pbs.org/newshour/economy/business-jan-june08-mortgage_06-19] 
+
+# 2008 Sub-Prime Mortgage Crisis
+
+- 8.8 million U.S. jobs lost (unemployment rose to 10%)
+- 10 million U.S. homes lost (house prices dropped by 20-30%)
+- $700 billion rescue package ($11.3 billion misused)
+- ~ 400 low level lenders prosecuted
+- 1 Wall St. exec jailed
+- 0 CEOs arrested
+
+^ 11.3 misused through fraud and corruption recovered (actual amount unknown)
+
 ^ But in the meantime...
 
 ---
@@ -844,6 +864,8 @@ timeline
 
 ## Stay Curious, Stay Creative
 
+![right](kotti-py-sleepy.jpeg)
+
 ^ Keep the spark of imagination, keep your own creative ability sharp
 
 ^ Because...
@@ -880,11 +902,12 @@ timeline
 
 ---
 
-[.footer: ]
-
-![right](kotti-py-sleepy.jpeg)
+[.footer-style: #ffffff, Avenir Next Bold]
+[.footer: xkcd.com/2228/]
 
 # [fit] Thank You!
+
+![right 75%](machine_learning_captcha.png)
 
 ## ashdavies.dev
 
@@ -895,6 +918,7 @@ timeline
 ^ lifehacker.com/tech/vibe-coding-apps-dont-have-to-be-a-security-nightmare
 ^ lockwood.dev/ai/2026/07/27/how-is-the-bun-rewrite-in-rust-going.html
 ^ euronews.com/business/2026/06/29/the-ai-boom-propping-up-markets-could-trigger-the-next-crash-central-banks-warn
+^ AI hallucinations on AI generated content, the last unique thought has already been thought
 
 ^ --- Might Include ---
 ^ hiringlab.indeed.com/2026/07/23/the-labor-market-is-tilting-toward-seniority/
